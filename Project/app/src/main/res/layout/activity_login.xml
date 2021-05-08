@@ -70,14 +70,38 @@
         android:text="@string/error_pass"
         android:visibility="invisible"
         />
-    <Spinner
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
         android:layout_weight="1"
-        android:entries="@array/array_role"
+        android:background="@drawable/background_spinner"
+        android:orientation="horizontal">
 
-        style="@style/spinner_style"
-        />
+        <Spinner
+            android:id="@+id/spinner_role"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:layout_marginLeft="5dp"
+            android:spinnerMode="dropdown" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_keyboard_arrow_down_24" />
+
+    </RelativeLayout>
+
+
 
     <CheckBox
         android:id="@+id/cb_remember_me"
