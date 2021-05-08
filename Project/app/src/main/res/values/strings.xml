@@ -33,7 +33,7 @@
         <item>Trainee</item>
         <item>Trainer</item>
     </string-array>
-
+    <string name="remember_pass">Remember Password</string>
 
 
 </resources>
