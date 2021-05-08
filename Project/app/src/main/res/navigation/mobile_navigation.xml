@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_homepage">
+
+    <fragment
+        android:id="@+id/nav_homepage"
+        android:name="com.gaf.project.fragment.HomePageFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home_page" />
+
+    <fragment
+        android:id="@+id/nav_assignment"
+        android:name="com.gaf.project.fragment.AssignmentFragment"
+        android:label="@string/menu_assignment"
+        tools:layout="@layout/fragment_assignment" />
+
+    <fragment
+        android:id="@+id/nav_class"
+        android:name="com.gaf.project.fragment.ClassFragment"
+        android:label="@string/menu_class"
+        tools:layout="@layout/fragment_class" />
+
+    <fragment
+        android:id="@+id/nav_module"
+        android:name="com.gaf.project.fragment.ClassFragment"
+        android:label="@string/menu_module"
+        tools:layout="@layout/fragment_module" />
+
+    <fragment
+        android:id="@+id/nav_enrollment"
+        android:name="com.gaf.project.fragment.ClassFragment"
+        android:label="@string/menu_enrollment"
+        tools:layout="@layout/fragment_enrollment" />
+
+    <fragment
+        android:id="@+id/nav_feedback"
+        android:name="com.gaf.project.fragment.ClassFragment"
+        android:label="@string/menu_feedback"
+        tools:layout="@layout/fragment_feed_back" />
+
+    <fragment
+        android:id="@+id/nav_result"
+        android:name="com.gaf.project.fragment.ClassFragment"
+        android:label="@string/menu_result"
+        tools:layout="@layout/fragment_result" />
+
+    <fragment
+        android:id="@+id/nav_question"
+        android:name="com.gaf.project.fragment.ClassFragment"
+        android:label="@string/menu_question"
+        tools:layout="@layout/fragment_question" />
+
+    <fragment
+        android:id="@+id/nav_contact"
+        android:name="com.gaf.project.fragment.ClassFragment"
+        android:label="@string/menu_contact"
+        tools:layout="@layout/fragment_contact" />
+
+    <fragment
+        android:id="@+id/nav_log_out"
+        android:name="com.gaf.project.fragment.ClassFragment"
+        android:label="@string/menu_log_out"
+        tools:layout="@layout/fragment_log_out" />
+
+</navigation>

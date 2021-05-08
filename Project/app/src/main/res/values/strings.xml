@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Project</string>
+
+    <string name="navigation_drawer_open">Open the navigation drawer</string>
+    <string name="navigation_drawer_close">Close the navigation drawer</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">HOME PAGE</string>
+    <string name="menu_assignment">ASSIGNMENT</string>
+    <string name="menu_class">CLASS</string>
+    <string name="menu_module">MODULE</string>
+    <string name="menu_enrollment">ENROLLMENT</string>
+    <string name="menu_feedback">FEEDBACK</string>
+    <string name="menu_result">RESULT</string>
+    <string name="menu_question">QUESTION</string>
+    <string name="menu_contact">CONTACT</string>
+    <string name="menu_log_out">LOG OUT</string>
+    <string name="menu_join">JOIN</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
