@@ -46,11 +46,13 @@ public class LoginController {
                 x.equals(SystemConstant.TRAINEE_ROLE)||
                 x.equals(SystemConstant.TRAINER_ROLE)){
                 SystemConstant.USER = role;
+                return true;
             }
             return false;
         };
 
         if (!checkRole.test(role)){
+        
             throw new Exception("Incorrect ROLE");
         }
 
