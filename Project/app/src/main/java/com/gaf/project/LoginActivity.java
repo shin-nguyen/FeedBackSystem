@@ -36,13 +36,13 @@ public class LoginActivity extends AppCompatActivity {
     //set event for views
     public void addEvent(){
 
-        pnRole = findViewById(R.id.spinner_role);
-        String[] role = {SystemConstant.ADMIN_ROLE,SystemConstant.TRAINEE_ROLE,SystemConstant.TRAINER_ROLE};
-        ArrayAdapter<CharSequence> roleAdapter = new ArrayAdapter<CharSequence>(getApplication(),
-                R.layout.simple_spinner_item_role, role );
-
-        roleAdapter.setDropDownViewResource(R.layout.simple_list_item_dropdown);
-        pnRole.setAdapter(roleAdapter);
+//        pnRole = findViewById(R.id.spinner_role);
+//        String[] role = {SystemConstant.ADMIN_ROLE,SystemConstant.TRAINEE_ROLE,SystemConstant.TRAINER_ROLE};
+//        ArrayAdapter<CharSequence> roleAdapter = new ArrayAdapter<CharSequence>(getApplication(),
+//                R.layout.simple_spinner_item_role, role );
+//
+//        roleAdapter.setDropDownViewResource(R.layout.simple_list_item_dropdown);
+//        pnRole.setAdapter(roleAdapter);
 
         //pull user from session -- userSession
 //        User userSession = AppDatabase.getAppDatabase(getApplicationContext())
