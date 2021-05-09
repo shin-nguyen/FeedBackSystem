@@ -6,17 +6,59 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.gaf.project.R;
+import com.gaf.project.adapter.AssignmentAdapter;
+import com.gaf.project.model.Assignment;
 
-public class HomePageFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
+
+public class HomePageFragment extends Fragment implements View.OnClickListener {
+
+    private View view;
+    private RecyclerView recyclerViewAssignment;
+
+    private AssignmentAdapter assignmentAdapter;
+    private List<Assignment> listAssignment;
+
+    public HomePageFragment(){
+
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_home_page, container, false);
+        view = inflater.inflate(R.layout.fragment_home_page, container, false);
 
-        return root;
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        recyclerViewAssignment = view.findViewById(R.id.rcv_dashboard);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
+        recyclerViewAssignment.setLayoutManager(linearLayoutManager);
+
+        listAssignment = new ArrayList<>();
+        listAssignment.add(new Assignment(1,".NET","Class 1","test","Code"));
+        listAssignment.add(new Assignment(2,"java","a1","kai","a123"));
+        listAssignment.add(new Assignment(3,"java","a1","kai","a123"));
+
+        assignmentAdapter = new AssignmentAdapter();
+        assignmentAdapter.setData(listAssignment);
+
+        recyclerViewAssignment.setAdapter(assignmentAdapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

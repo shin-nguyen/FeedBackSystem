@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/action_bar_color"
+    android:background="@color/main_color"
     android:layout_weight="11"
     tools:context=".LoginActivity">
 
@@ -120,7 +120,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:textSize="20dp"
-        android:textColor="@color/action_bar_color"
+        android:textColor="@color/main_color"
         android:layout_gravity="center_vertical|center_horizontal"
         android:background="@drawable/item_format"
         android:text="@string/login_button" />

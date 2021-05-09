@@ -3,6 +3,7 @@ package com.gaf.project.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,11 +41,11 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
             return;
         }
 
-        holder.AssignmentNo.setText(String.valueOf(assignment.getId()));
-        holder.AssignmentClassName.setText(assignment.getClass_name());
-        holder.AssignmentCourseName.setText(assignment.getCourse_name());
-        holder.AssignmentTrainerName.setText(assignment.getTrainer_name());
-        holder.AssignmentRegistrationCode.setText(assignment.getRegistration_code());
+        holder.assignmentNo.setText(String.valueOf(assignment.getId()));
+        holder.assignmentClassName.setText(assignment.getClass_name());
+        holder.assignmentCourseName.setText(assignment.getCourse_name());
+        holder.assignmentTrainerName.setText(assignment.getTrainer_name());
+        holder.assignmentRegistrationCode.setText(assignment.getRegistration_code());
     }
 
     @Override
@@ -57,16 +58,17 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
 
     public class AssignmentViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView AssignmentNo, AssignmentCourseName, AssignmentClassName, AssignmentTrainerName, AssignmentRegistrationCode;
+        private TextView assignmentNo, assignmentCourseName, assignmentClassName, assignmentTrainerName, assignmentRegistrationCode;
+        private Button editButton, deleteButton;
 
         public AssignmentViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            AssignmentNo =itemView.findViewById(R.id.assignment_no);
-            AssignmentCourseName =itemView.findViewById(R.id.assignment_course_name);
-            AssignmentClassName =itemView.findViewById(R.id.assignment_class_name);
-            AssignmentTrainerName =itemView.findViewById(R.id.assignment_trainer_name);
-            AssignmentRegistrationCode =itemView.findViewById(R.id.assignment_registration_code);
+            assignmentNo =itemView.findViewById(R.id.assignment_no);
+            assignmentCourseName =itemView.findViewById(R.id.assignment_course_name);
+            assignmentClassName =itemView.findViewById(R.id.assignment_class_name);
+            assignmentTrainerName =itemView.findViewById(R.id.assignment_trainer_name);
+            assignmentRegistrationCode =itemView.findViewById(R.id.assignment_registration_code);
         }
     }
 }
