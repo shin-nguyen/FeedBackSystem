@@ -23,10 +23,10 @@ public class ModuleServiceImpl implements IModuleService {
     private ModelMapper mapper;
 
     @Override
-    public List<ModuleDto> findAll() {
+    public List<Module> findAll() {
         List<Module> modules = moduleRepository.findAll();
-        List<ModuleDto> moduleDTOS = mapper.map(modules, (Type) ModuleDto.class);
-        return moduleDTOS;
+//        List<ModuleDto> moduleDTOS = mapper.map(modules, (Type) ModuleDto.class);
+        return modules;
     }
 
     @Override
