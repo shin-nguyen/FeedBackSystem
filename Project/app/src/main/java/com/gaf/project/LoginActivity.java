@@ -4,11 +4,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import com.gaf.project.authentication.AuthenticationRequest;
+import com.gaf.project.authentication.AuthenticationResponse;
+import com.gaf.project.constant.SystemConstant;
+import com.gaf.project.service.AuthenticationService;
+import com.gaf.project.utils.ApiUtils;
+
+import java.util.Optional;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -16,6 +29,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnSignIn;
     private CheckBox cbRememberMe;
     private Spinner pnRole;
+    private AuthenticationService authenticationService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +47,8 @@ public class LoginActivity extends AppCompatActivity {
         btnSignIn = findViewById(R.id.btn_sign_in);
         cbRememberMe = findViewById(R.id.cb_remember_me);
         pnRole = findViewById(R.id.spinner_role);
+
+        authenticationService = ApiUtils.getAuthenticationService();
     }
     //set event for views
     public void addEvent(){
@@ -59,60 +76,50 @@ public class LoginActivity extends AppCompatActivity {
 //        }
 
         btnSignIn.setOnClickListener(v -> {
+            edtEmail.setText("Thao");
+            edtPassword.setText("1234");
 
-            final String email = edtEmail.getText().toString().trim();
+            final String username = edtEmail.getText().toString().trim();
             final String password = edtPassword.getText().toString().trim();
 
+
+
+
             //if the user has not entered the complete information
-//            if(!(validateInput_LogIn(email,password))) {
+            if(TextUtils.isEmpty(username)) {
+            }
+            if(TextUtils.isEmpty(password)){
+            }
+            else {
+
+//                AuthenticationRequest authenticationRequest =
+//                        new AuthenticationRequest(username,password,"ADMIN");
 //
-//                Toast.makeText(getApplicationContext(), "Please fill in all the information !", Toast.LENGTH_SHORT).show();
+//                authenticationService.login(authenticationRequest)
+//                        .enqueue(new Callback<AuthenticationResponse>() {
+//                            @Override
+//                            public void onResponse(Call<AuthenticationResponse> call, Response<AuthenticationResponse> response) {
+//                                AuthenticationResponse authenticationResponse = response.body();
 //
-//            } else {
+//                                if(authenticationResponse!=null){
+//                                    SystemConstant.authenticationResponse = authenticationResponse;
 //
-//                new Thread(() -> {
+//                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                                    startActivity(intent);
+//                                }
+//                            }
 //
-//                    //create a user according to the user information entered
-//                    User user = AppDatabase.getAppDatabase(getApplicationContext())
-//                            .userDAO()
-//                            .checkUser(email,password);
+//                            @Override
+//                            public void onFailure(Call<AuthenticationResponse> call, Throwable t) {
 //
-//                    //if the user does not exist
-//                    if(user==null){
-//                        runOnUiThread(() -> {
-//
-//                            Toast.makeText(getApplicationContext(),"Incorrect information!",Toast.LENGTH_SHORT).show();
-//
+//                            }
 //                        });
-//                    } else {
-//
-//                        //set information for the session
-//                        SessionManager.getInstance().setUserId(user.getId());
-//                        SessionManager.getInstance().setIsLogin(true);
-//
-//                        //if the user chooses to remember me
-//                        if (cbRememberMe.isChecked()==true){
-//
-//                            //set the user's email into the session
-//                            SessionManager.getInstance().setRememberMe(true);
-//
-//                        } else {
-//
-//                            //set empty if not selected
-//                            SessionManager.getInstance().setRememberMe(false);
-//
-//                        }
-//
-//                        //switch to the main interface
-//                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                        startActivity(intent);
-//                    }
-//                }).start();
-//            }
+            }
 
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
         });
 
     }
+
 }
