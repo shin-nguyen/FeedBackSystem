@@ -32,9 +32,7 @@ public class AuthenticationRequest {
     }
 
     //need default constructor for JSON Parsing
-    public AuthenticationRequest()
-    {
-
+    public AuthenticationRequest() {
     }
 
     public AuthenticationRequest(String username, String password, String role) {

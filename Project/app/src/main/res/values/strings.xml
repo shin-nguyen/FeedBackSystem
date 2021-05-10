@@ -23,4 +23,17 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="login_tile">Log In</string>
+    <string name="error_pass">Password must have at least 1 character!</string>
+    <string name="username_hint">Username</string>
+    <string name="error_username">Username must have at least 1 character!</string>
+    <string name="pass_hint">Password</string>
+    <string-array name="array_role">
+        <item>Admin</item>
+        <item>Trainee</item>
+        <item>Trainer</item>
+    </string-array>
+    <string name="remember_pass">Remember Password</string>
+
+
 </resources>

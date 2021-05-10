@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -26,69 +25,12 @@
                 style="@style/TextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No. " />
+                android:text="Module ID" />
 
             <TextView
-                android:id="@+id/assignment_no"
+                android:id="@+id/module_id"
                 style="@style/TextItemStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/TextViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Course Name: " />
-
-            <TextView
-                android:id="@+id/assignment_course_name"
-                style="@style/TextItemStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/TextViewStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Class Name: " />
-
-            <TextView
-                android:id="@+id/assignment_class_name"
-                style="@style/TextItemStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/TextViewStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Trainer Name: " />
-
-            <TextView
-                android:id="@+id/assignment_trainer_name"
-                style="@style/TextItemStyle"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
@@ -96,16 +38,127 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Module Name: " />
+
+            <TextView
+                android:id="@+id/module_name"
+                style="@style/TextItemStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 style="@style/TextViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Registration Code: " />
+                android:text="Admin ID: " />
 
             <TextView
-                android:id="@+id/assignment_registration_code"
+                android:id="@+id/module_admin_id"
+                style="@style/TextItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start Date: " />
+
+            <TextView
+                android:id="@+id/module_start_date"
+                style="@style/TextItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="End Date: " />
+
+            <TextView
+                android:id="@+id/module_end_date"
+                style="@style/TextItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Feedback Title: " />
+
+            <TextView
+                android:id="@+id/module_feedback_title"
+                style="@style/TextItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Feedback StartTime: " />
+
+            <TextView
+                android:id="@+id/module_feedback_start_time"
+                style="@style/TextItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Feedback EndTime: " />
+
+            <TextView
+                android:id="@+id/module_feedback_end_time"
                 style="@style/TextItemStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -122,6 +175,7 @@
         android:layout_alignParentRight="true">
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_add_module"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginBottom="5dp"
@@ -137,6 +191,7 @@
             android:backgroundTint="@color/edit_button_color"/>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_edit_module"
             android:layout_width="48dp"
             android:layout_height="48dp"
             style="@style/Widget.MaterialComponents.Button.Icon"

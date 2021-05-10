@@ -10,31 +10,71 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Assignment"
-            android:padding="20dp"
-            android:textSize="40sp"
-            android:textStyle="bold"/>
+            android:orientation="horizontal"
+            android:gravity="center">
 
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            style="@style/Widget.MaterialComponents.Button.Icon"
-            app:icon="@drawable/ic_menu_camera"
-            app:iconSize="24dp"
-            app:iconPadding="0dp"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"
-            app:shapeAppearanceOverlay="@style/ButtonRounded" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Assignment"
+                android:padding="20dp"
+                android:textSize="40sp"
+                android:textStyle="bold"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:id="@+id/btn_add_assignment"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                app:icon="@drawable/ic_menu_camera"
+                app:iconSize="24dp"
+                app:iconPadding="0dp"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                app:shapeAppearanceOverlay="@style/ButtonRounded"
+                android:backgroundTint="@color/add_button_color"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="20dp">
+
+            <EditText
+                android:id="@+id/editTextTextPersonName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:ems="11"
+                android:background="@drawable/search_box_format"
+                android:layout_marginRight="20dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingRight="5dp"
+                android:hint="Search" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="25dp"
+                android:hint="Search"
+                android:textColorHint="@color/white"
+                android:backgroundTint="@color/main_color"/>
+
+        </LinearLayout>
 
     </LinearLayout>
+
 
 
     <androidx.recyclerview.widget.RecyclerView

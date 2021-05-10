@@ -2,6 +2,7 @@ package com.gaf.feedbacksystem.controller;
 
 import com.gaf.feedbacksystem.constant.SystemConstant;
 import com.gaf.feedbacksystem.dto.ModuleDto;
+import com.gaf.feedbacksystem.entity.Module;
 import com.gaf.feedbacksystem.service.IModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,7 +18,7 @@ public class ModuleController {
 
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
     @GetMapping(value = "/loadModuleAdmin")
-    public List<ModuleDto> getListModuleAdmin(){
+    public List<Module> getListModuleAdmin(){
         return moduleService.findAll();
     }
 
