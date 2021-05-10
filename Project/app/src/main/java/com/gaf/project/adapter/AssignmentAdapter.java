@@ -46,11 +46,11 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
             return;
         }
 
-        holder.assignmentNo.setText(String.valueOf(assignment.getId()));
-        holder.assignmentClassName.setText(String.valueOf(assignment.getModuleID()));
-        holder.assignmentCourseName.setText(String.valueOf(assignment.getClassID()));
-        holder.assignmentTrainerName.setText(String.valueOf(assignment.getTrainerID()));
-        holder.assignmentRegistrationCode.setText(assignment.getRegistration_code());
+        holder.assignmentNo.setText("1");
+        holder.assignmentClassName.setText(String.valueOf(assignment.getmClass().getClassName()));
+        holder.assignmentCourseName.setText(String.valueOf(assignment.getModule().getModuleName()));
+        holder.assignmentTrainerName.setText(String.valueOf(assignment.getTrainer().getName()));
+        holder.assignmentRegistrationCode.setText(assignment.getRegistrationCode());
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.gaf.feedbacksystem.dto;
 
-import lombok.Data;
-
 import javax.persistence.Embeddable;
+
+import lombok.Data;
 
 @Data
 @Embeddable

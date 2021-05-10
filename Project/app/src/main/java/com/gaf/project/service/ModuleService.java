@@ -9,6 +9,6 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface ModuleService {
-    @GET("/module/loadModuleAdmin")
+    @GET("module/loadModuleAdmin")
     Call<List<Module>> loadModuleAdmin();
 }

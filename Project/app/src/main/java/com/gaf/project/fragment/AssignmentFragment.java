@@ -1,16 +1,13 @@
 package com.gaf.project.fragment;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.Html;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.Spinner;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,12 +15,23 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.gaf.project.MainActivity;
 import com.gaf.project.R;
 import com.gaf.project.adapter.AssignmentAdapter;
+import com.gaf.project.model.Admin;
 import com.gaf.project.model.Assignment;
+import com.gaf.project.model.AssignmentId;
+import com.gaf.project.model.Class;
+import com.gaf.project.model.Feedback;
+import com.gaf.project.model.Module;
+import com.gaf.project.model.Trainee;
+import com.gaf.project.model.Trainer;
+import com.gaf.project.model.TypeFeedback;
 
+
+import java.security.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 public class AssignmentFragment extends Fragment implements View.OnClickListener{
@@ -59,9 +67,20 @@ public class AssignmentFragment extends Fragment implements View.OnClickListener
         recyclerViewAssignment.setLayoutManager(linearLayoutManager);
 
         listAssignment = new ArrayList<>();
-        listAssignment.add(new Assignment(1,1,1,1,"Code"));
-        listAssignment.add(new Assignment(2,2,2,2,"a123"));
-        listAssignment.add(new Assignment(3,3,3,3,"a123"));
+
+//        Date nowDate = new Date();
+//        Timestamp nowTime = new Timestamp();
+//        Collection<Trainee> trainees  = new ArrayList<>();
+//        Class  mClass = new Class("1", "2", "Ec", nowDate, nowDate, false, trainees);
+//        Admin admin = new Admin("thao","thao","thaole","1234");
+//        TypeFeedback typeFeedback = new TypeFeedback(1,"Ec",false);
+//        Feedback feedback = new Feedback(1,"Ec",admin,false,typeFeedback,new ArrayList<>());
+//        Module module = new Module(1,admin,"Ec",nowDate,nowDate,false,nowTime,nowTime,feedback);
+//        Trainer trainer = new Trainer(1,"Ec")
+//        AssignmentId  assignmentId = new AssignmentId(mClass,module,);
+//        listAssignment.add(new Assignment(1,
+//                ));
+
 
         assignmentAdapter = new AssignmentAdapter();
         assignmentAdapter.setData(listAssignment);

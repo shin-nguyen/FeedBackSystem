@@ -8,6 +8,6 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface AuthenticationService {
-    @POST("/login/")
+    @POST("login/")
     Call<AuthenticationResponse> login(@Body AuthenticationRequest authenticationRequest);
 }

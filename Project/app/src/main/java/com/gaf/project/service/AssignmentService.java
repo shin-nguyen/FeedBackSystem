@@ -11,6 +11,6 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 
 public interface AssignmentService {
-    @GET("/assignment/loadAssignment")
+    @GET("assignment/loadAssignment")
     Call<List<Assignment>> getListAssignment();
 }

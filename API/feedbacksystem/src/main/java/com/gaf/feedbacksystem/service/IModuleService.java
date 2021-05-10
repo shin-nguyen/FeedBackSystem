@@ -1,12 +1,12 @@
 package com.gaf.feedbacksystem.service;
 
 
-import com.gaf.feedbacksystem.dto.ModuleDto;
-import com.gaf.feedbacksystem.entity.Module;
 import java.util.List;
 
+import com.gaf.feedbacksystem.dto.ModuleDto;
+
 public interface IModuleService {
-    List<Module> findAll();
+    List<ModuleDto> findAll();
     ModuleDto findModuleByModuleID(ModuleDto moduleDTO);
     void save(ModuleDto moduleDTO);
     void update(ModuleDto moduleDTO);

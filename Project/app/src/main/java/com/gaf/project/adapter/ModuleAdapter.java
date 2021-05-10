@@ -18,8 +18,17 @@ import java.util.List;
 
 public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ModuleViewHolder>{
 
-    private List<Module> mListModule;
 
+    private ModuleAdapter.IClickItem iClickItem;
+    public interface IClickItem<Module>{
+        void update(Module  item);
+        void delete(Module item);
+    }
+    public ModuleAdapter(ModuleAdapter.IClickItem iClickItem) {
+        this.iClickItem = iClickItem;
+    }
+
+    private List<Module> mListModule;
     public void setData(List<Module> list){
         this.mListModule = list;
         notifyDataSetChanged();
@@ -44,6 +53,7 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ModuleView
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat timeFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
 
+
         holder.moduleId.setText(String.valueOf(module.getModuleID()));
         holder.moduleName.setText(module.getModuleName());
         holder.moduleAdminId.setText(module.getAdmin().getName());
@@ -62,7 +72,7 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ModuleView
         return 0;
     }
 
-    public class ModuleViewHolder extends RecyclerView.ViewHolder{
+    public class ModuleViewHolder extends RecyclerView.ViewHolder {
 
         private TextView moduleId, moduleName, moduleAdminId, moduleStartDate,moduleEndDate;
         private TextView moduleFeedbackTitle,moduldeFeedbackStartTime, moduldeFeedbackEndTime;
@@ -71,15 +81,15 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ModuleView
         public ModuleViewHolder(@NonNull View view) {
             super(view);
 
-            moduleId =view.findViewById(R.id.module_id);
-            moduleName =view.findViewById(R.id.module_name);
-            moduleAdminId =view.findViewById(R.id.module_admin_id);
-            moduleStartDate =view.findViewById(R.id.module_start_date);
-            moduleEndDate =view.findViewById(R.id.module_end_date);
-            moduleFeedbackTitle =  view.findViewById(R.id.module_feedback_title);
+            moduleId = view.findViewById(R.id.module_id);
+            moduleName = view.findViewById(R.id.module_name);
+            moduleAdminId = view.findViewById(R.id.module_admin_id);
+            moduleStartDate = view.findViewById(R.id.module_start_date);
+            moduleEndDate = view.findViewById(R.id.module_end_date);
+            moduleFeedbackTitle = view.findViewById(R.id.module_feedback_title);
             moduldeFeedbackStartTime = view.findViewById(R.id.module_feedback_start_time);
             moduldeFeedbackEndTime = view.findViewById(R.id.module_feedback_end_time);
-
         }
     }
 }
+

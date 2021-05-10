@@ -1,25 +1,24 @@
-package com.gaf.feedbacksystem.entity;
+package com.gaf.project.model;
+
+
+import java.util.Collection;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 @Data
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Trainer extends BaseUserEntity{
+public class Trainee  extends BaseUser {
+
+
     private String phone;
     private String address;
     private boolean isActive;
     private Integer idSkill;
     private String activationCode;
     private String resetPasswordCode;
-    private boolean isReceiveNotification;
+
+    private Collection<Class> classes;
 }

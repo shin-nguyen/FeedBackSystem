@@ -1,5 +1,8 @@
 package com.gaf.project.model;
 
+import com.gaf.project.model.Trainee;
+
+import kotlin.jvm.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,17 +12,15 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 
-public class Assignment{
+public class TraineeComment{
 
-    private static final long serialVersionUID = 1L;
+   TraineeCommentId primaryKey = new TraineeCommentId();
 
-    AssignmentId primaryKey = new AssignmentId();
-
-    private AssignmentId getPrimaryKey(){
+    TraineeCommentId getPrimaryKey(){
         return primaryKey;
     }
+
     public Class getmClass() {
         return getPrimaryKey().getMClass();
     }
@@ -36,15 +37,22 @@ public class Assignment{
     }
 
 
-    public Trainer getTrainer() {
-        return getPrimaryKey().getTrainer();
+    public Trainee getTraine() {
+        return getPrimaryKey().getTrainee();
     }
-    public void setTrainer(Trainer trainer) {
-        getPrimaryKey().setTrainer(trainer);
+    public void setTrainee(Trainee trainee) {
+        getPrimaryKey().setTrainee(trainee);
     }
 
 
-    private String registrationCode;
+    private String comment;
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
 }
 

@@ -52,7 +52,6 @@ public class LoginController {
         };
 
         if (!checkRole.test(role)){
-        
             throw new Exception("Incorrect ROLE");
         }
 

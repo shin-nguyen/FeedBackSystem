@@ -1,44 +1,30 @@
-package com.gaf.feedbacksystem.entity;
+package com.gaf.project.model;
 
 
-import javax.persistence.AssociationOverride;
-import javax.persistence.AssociationOverrides;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import com.gaf.project.model.AnswerID;
+import com.gaf.project.model.Module;
+import com.gaf.project.model.Question;
+import com.gaf.project.model.Trainee;
 
+import kotlin.jvm.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+
 @Data
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Table
-@AssociationOverrides({
-        @AssociationOverride(name = "primaryKey.class",
-                joinColumns = @JoinColumn(name = "classID")),
-        @AssociationOverride(name = "primaryKey.trainee",
-                joinColumns = @JoinColumn(name = "traineeID",referencedColumnName = "username")),
-        @AssociationOverride(name = "primaryKey.module",
-                joinColumns = @JoinColumn(name = "moduleID")),
-        @AssociationOverride(name = "primaryKey.question",
-                joinColumns = @JoinColumn(name = "questionID")),
-})
+
 public class Answer{
-    @EmbeddedId
     AnswerID primaryKey = new AnswerID();
 
-    private  AnswerID getPrimaryKey(){
+    private AnswerID getPrimaryKey(){
         return primaryKey;
     }
-    @Transient
+
     public Class getmClass() {
         return getPrimaryKey().getMClass();
     }
@@ -46,7 +32,6 @@ public class Answer{
         getPrimaryKey().setMClass(mClass);
     }
 
-    @Transient
     public Module getModule() {
         return getPrimaryKey().getModule();
     }
@@ -54,7 +39,7 @@ public class Answer{
         getPrimaryKey().setModule(module);
     }
 
-    @Transient
+
     public Trainee getTrainee() {
         return getPrimaryKey().getTrainee();
     }
@@ -62,7 +47,6 @@ public class Answer{
         getPrimaryKey().setTrainee(trainee);
     }
 
-    @Transient
     public Question getQuestion() {
         return getPrimaryKey().getQuestion();
     }
@@ -79,3 +63,4 @@ public class Answer{
         this.value = value;
     }
 }
+
