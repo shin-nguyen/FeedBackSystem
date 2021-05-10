@@ -124,6 +124,7 @@
         <com.google.android.material.button.MaterialButton
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:id="@+id/btn_edit_assignment"
             android:layout_marginBottom="5dp"
             style="@style/Widget.MaterialComponents.Button.Icon"
             app:icon="@drawable/ic_menu_camera"
@@ -139,6 +140,7 @@
         <com.google.android.material.button.MaterialButton
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:id="@+id/btn_delete_assignment"
             style="@style/Widget.MaterialComponents.Button.Icon"
             app:icon="@drawable/ic_menu_camera"
             app:iconSize="24dp"
