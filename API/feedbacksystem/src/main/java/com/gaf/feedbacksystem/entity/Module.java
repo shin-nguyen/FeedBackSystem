@@ -1,14 +1,18 @@
 package com.gaf.feedbacksystem.entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.sql.Date;
-import java.sql.Timestamp;
-
 
 @Data
 @Entity
@@ -26,13 +30,17 @@ public class Module {
     @Column(length = 50)
     private String moduleName;
 
-    private Date startTime;
-    private Date endTime;
+    @Column(name="startTime",columnDefinition = "DATE")
+    private LocalDate  startTime;
+    @Column(name="endTime",columnDefinition = "DATE")
+    private LocalDate  endTime;
 
     private boolean isDeleted;
 
-    private Timestamp feedbackStartTime;
-    private Timestamp feedbackEndTime;
+    @Column(name = "feedbackStartTime")
+    private LocalDateTime  feedbackStartTime;
+    @Column(name = "feedbackEndTime")
+    private LocalDateTime  feedbackEndTime;
 
     @ManyToOne
     private Feedback feedback;

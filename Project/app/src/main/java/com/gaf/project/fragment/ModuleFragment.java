@@ -44,13 +44,7 @@ public class ModuleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_module, container, false);
-        return  view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        view = inflater.inflate(R.layout.fragment_module, container, false);
         rcvModule = view.findViewById(R.id.rcv_module);
         //Set layout manager -> recyclerView Status
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
@@ -72,6 +66,8 @@ public class ModuleFragment extends Fragment {
 
         //Set value adapter for Adapter
         moduleList = new ArrayList<>();
+        showToast("Error");
+
 
         moduleService = ApiUtils.getModuleService();
         moduleService.loadModuleAdmin()
@@ -88,6 +84,13 @@ public class ModuleFragment extends Fragment {
                         showToast("Error");
                     }
                 });
+        return  view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
     }
 
     private void clickUpdateStatus(View view, Module item) {
