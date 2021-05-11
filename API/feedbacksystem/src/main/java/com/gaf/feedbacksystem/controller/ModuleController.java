@@ -18,7 +18,7 @@ public class ModuleController {
 
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
     @GetMapping(value = "/loadModuleAdmin")
-    public List<Module> getListModuleAdmin(){
+    public List<ModuleDto> getListModuleAdmin(){
         return moduleService.findAll();
     }
 

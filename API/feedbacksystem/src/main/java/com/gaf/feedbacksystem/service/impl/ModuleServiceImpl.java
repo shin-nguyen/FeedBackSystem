@@ -1,17 +1,20 @@
 package com.gaf.feedbacksystem.service.impl;
 
 
-import com.gaf.feedbacksystem.dto.ModuleDto;
-import com.gaf.feedbacksystem.entity.Module;
-import com.gaf.feedbacksystem.repository.ModuleRepository;
-import com.gaf.feedbacksystem.service.IModuleService;
+import java.lang.reflect.Type;
+import java.util.List;
+
+import javax.transaction.Transactional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.lang.reflect.Type;
-import java.util.List;
+import com.gaf.feedbacksystem.dto.ModuleDto;
+import com.gaf.feedbacksystem.entity.Module;
+import com.gaf.feedbacksystem.repository.ModuleRepository;
+import com.gaf.feedbacksystem.service.IModuleService;
+import com.gaf.feedbacksystem.utils.ObjectMapperUtils;
 
 @Service
 @Transactional
@@ -22,12 +25,7 @@ public class ModuleServiceImpl implements IModuleService {
     @Autowired
     private ModelMapper mapper;
 
-    @Override
-    public List<Module> findAll() {
-        List<Module> modules = moduleRepository.findAll();
-//        List<ModuleDto> moduleDTOS = mapper.map(modules, (Type) ModuleDto.class);
-        return modules;
-    }
+  
 
     @Override
     public ModuleDto findModuleByModuleID(ModuleDto moduleDTO) {
@@ -48,4 +46,11 @@ public class ModuleServiceImpl implements IModuleService {
 
         moduleRepository.save(oldModule);
     }
+
+	@Override
+	public List<ModuleDto> findAll() {
+		 List<Module> modules = moduleRepository.findAll();
+	        List<ModuleDto> moduleDTOS = ObjectMapperUtils.mapAll(modules,ModuleDto.class);
+	        return moduleDTOS;
+	}
 }

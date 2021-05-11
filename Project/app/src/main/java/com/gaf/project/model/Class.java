@@ -1,22 +1,24 @@
-package com.gaf.feedbacksystem.dto;
+package com.gaf.project.model;
 
-import com.gaf.feedbacksystem.entity.Trainee;
 import lombok.*;
 
-import javax.persistence.*;
-import java.sql.Date;
+
+import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ClassDto {
+public class Class {
+
     private String classID;
     private String className;
     private String capacity;
     private LocalDate startTime;
     private LocalDate endTime;
     private boolean isDeleted = false;
-    private Collection<TraineeDto> trainees;
+
+    private Collection<Trainee> trainees;
 }

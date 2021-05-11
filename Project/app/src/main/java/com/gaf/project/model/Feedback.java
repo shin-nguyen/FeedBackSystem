@@ -10,13 +10,11 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class Feedback{
-    @NonNull
     private Integer feedbackID;
-    @NonNull
     private  String title;
-    @NonNull
     private Admin admin;
     private boolean isDeleted;
     private TypeFeedback typeFeedback;

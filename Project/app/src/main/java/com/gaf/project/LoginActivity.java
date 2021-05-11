@@ -10,10 +10,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.gaf.project.authentication.AuthenticationRequest;
 import com.gaf.project.authentication.AuthenticationResponse;
 import com.gaf.project.constant.SystemConstant;
+import com.gaf.project.fragment.ModuleFragment;
 import com.gaf.project.service.AuthenticationService;
 import com.gaf.project.utils.ApiUtils;
 
@@ -37,8 +39,22 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         addControls();
+        addValues();
         addEvent();
     }
+
+    private void addValues() {
+        edtEmail.setText("thao");
+        edtPassword.setText("1234");
+
+        String[] role = {SystemConstant.ADMIN_ROLE,SystemConstant.TRAINEE_ROLE,SystemConstant.TRAINER_ROLE};
+        ArrayAdapter<CharSequence> roleAdapter = new ArrayAdapter<CharSequence>(getApplication(),
+                R.layout.simple_spinner_item_role, role );
+
+        roleAdapter.setDropDownViewResource(R.layout.simple_list_item_dropdown);
+        pnRole.setAdapter(roleAdapter);
+    }
+
     //get all view in activity
     public void addControls(){
 
@@ -53,37 +69,10 @@ public class LoginActivity extends AppCompatActivity {
     //set event for views
     public void addEvent(){
 
-//        pnRole = findViewById(R.id.spinner_role);
-//        String[] role = {SystemConstant.ADMIN_ROLE,SystemConstant.TRAINEE_ROLE,SystemConstant.TRAINER_ROLE};
-//        ArrayAdapter<CharSequence> roleAdapter = new ArrayAdapter<CharSequence>(getApplication(),
-//                R.layout.simple_spinner_item_role, role );
-//
-//        roleAdapter.setDropDownViewResource(R.layout.simple_list_item_dropdown);
-//        pnRole.setAdapter(roleAdapter);
-
-        //pull user from session -- userSession
-//        User userSession = AppDatabase.getAppDatabase(getApplicationContext())
-//                .userDAO()
-//                .getById(SessionManager.getInstance().getUserId());
-
-//        if(userSession!=null && SessionManager.getInstance().getRememberMe()==true){
-//
-//            //show the email and password of user in the previous session if any
-//            edtEmail.setText(userSession.getEmail());
-//            edtPassword.setText(userSession.getPassword());
-//
-//            cbRememberMe.setChecked(true);
-//        }
-
         btnSignIn.setOnClickListener(v -> {
-            edtEmail.setText("Thao");
-            edtPassword.setText("1234");
 
             final String username = edtEmail.getText().toString().trim();
             final String password = edtPassword.getText().toString().trim();
-
-
-
 
             //if the user has not entered the complete information
             if(TextUtils.isEmpty(username)) {
@@ -92,34 +81,37 @@ public class LoginActivity extends AppCompatActivity {
             }
             else {
 
-//                AuthenticationRequest authenticationRequest =
-//                        new AuthenticationRequest(username,password,"ADMIN");
-//
-//                authenticationService.login(authenticationRequest)
-//                        .enqueue(new Callback<AuthenticationResponse>() {
-//                            @Override
-//                            public void onResponse(Call<AuthenticationResponse> call, Response<AuthenticationResponse> response) {
-//                                AuthenticationResponse authenticationResponse = response.body();
-//
-//                                if(authenticationResponse!=null){
-//                                    SystemConstant.authenticationResponse = authenticationResponse;
-//
-//                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                                    startActivity(intent);
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onFailure(Call<AuthenticationResponse> call, Throwable t) {
-//
-//                            }
-//                        });
+                AuthenticationRequest authenticationRequest =
+                        new AuthenticationRequest(username,password,"ADMIN");
+
+                authenticationService.login(authenticationRequest)
+                        .enqueue(new Callback<AuthenticationResponse>() {
+                            @Override
+                            public void onResponse(Call<AuthenticationResponse> call, Response<AuthenticationResponse> response) {
+                                AuthenticationResponse authenticationResponse = response.body();
+
+                                if(authenticationResponse!=null){
+                                    SystemConstant.authenticationResponse = authenticationResponse;
+
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<AuthenticationResponse> call, Throwable t) {
+                                showToast("Error");
+                            }
+                        });
             }
 
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
         });
 
+    }
+    public void showToast(String string){
+        Toast.makeText(getApplication(),string,Toast.LENGTH_LONG).show();
     }
 
 }

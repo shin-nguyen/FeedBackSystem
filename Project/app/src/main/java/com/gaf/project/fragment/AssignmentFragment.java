@@ -1,16 +1,13 @@
 package com.gaf.project.fragment;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.Html;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.Spinner;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,12 +15,25 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.gaf.project.MainActivity;
 import com.gaf.project.R;
 import com.gaf.project.adapter.AssignmentAdapter;
+import com.gaf.project.model.Admin;
 import com.gaf.project.model.Assignment;
+import com.gaf.project.model.AssignmentId;
+import com.gaf.project.model.Class;
+import com.gaf.project.model.Feedback;
+import com.gaf.project.model.Module;
+import com.gaf.project.model.Trainee;
+import com.gaf.project.model.Trainer;
+import com.gaf.project.model.TypeFeedback;
 
+
+import java.security.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 public class AssignmentFragment extends Fragment implements View.OnClickListener{
@@ -59,9 +69,21 @@ public class AssignmentFragment extends Fragment implements View.OnClickListener
         recyclerViewAssignment.setLayoutManager(linearLayoutManager);
 
         listAssignment = new ArrayList<>();
-        listAssignment.add(new Assignment(1,".NET","Class 1","test","Code"));
-        listAssignment.add(new Assignment(2,"java","a2","kai","a123"));
-        listAssignment.add(new Assignment(3,"java","a3","kai","a123"));
+
+        LocalDate nowDate = LocalDate.now();
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Collection<Trainee> trainees  = new ArrayList<>();
+        Class  mClass = new Class("1", "2", "Ec", nowDate, nowDate, false, trainees);
+        Admin admin = new Admin("thao","thao","thaole","1234");
+        TypeFeedback typeFeedback = new TypeFeedback(1,"Ec",false);
+        Feedback feedback = new Feedback(1,"Ec",admin,false,typeFeedback,new ArrayList<>());
+        Module module = new Module(1,admin,"Ec",nowDate,nowDate,false,localDateTime,localDateTime,feedback);
+        Trainer trainer = new Trainer("thao","thao","thao","1234","0918948074","VT",false,1,"Ec","1234",true);
+        
+        AssignmentId  assignmentId = new AssignmentId(mClass,module,trainer);
+        Assignment assignment = new Assignment(assignmentId,"Ec");
+        listAssignment.add(assignment);
+
 
         assignmentAdapter = new AssignmentAdapter();
         assignmentAdapter.setData(listAssignment);
@@ -72,52 +94,8 @@ public class AssignmentFragment extends Fragment implements View.OnClickListener
         btnAddAssignment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DisplayAddAssignment();
-            }
-        });
-    }
-
-    public void DisplayAddAssignment(){
-
-        //get
-        LayoutInflater inflater= this.getLayoutInflater();
-        View alertLayout = inflater.inflate(R.layout.add_assignment,null);
-
-        //
-        AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext(),android.R.style.Theme_Material_Light);
-        alert.setView(alertLayout);
-        AlertDialog dialog = alert.create();
-
-        alert.setNegativeButton(Html.fromHtml("<font color='#26AC33'>CANCEL</font>"), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
 
             }
         });
-
-        alert.setPositiveButton(Html.fromHtml("<font color='#26AC33'>ADD</font>"), new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
-        //
-//        final Spinner sprMail = (Spinner) alertLayout.findViewById(R.id.sprMail);
-//        String[] items_sprMail= new String[]{"sinh@gmail.com", "nguyen@gmail.com", "quyet@gmail.com"};
-//        //create an adapter to describe how the items are displayed, adapters are used in several places in android.
-//        //There are multiple variations of this, but this is the basic variant.
-//        ArrayAdapter<String> adapter_sprMail = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items_sprMail);
-//        //set the spinners adapter to the previously created one.
-//        sprMail.setAdapter(adapter_sprMail);
-//
-//        final Spinner sprTimeZone = (Spinner) alertLayout.findViewById(R.id.sprTimeZone);
-//        String[] items_sprTimeZone= new String[]{"Pacific Standard Time", "One", "Two"};
-//        ArrayAdapter<String> adapter_sprTimeZone = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items_sprTimeZone);
-//        sprTimeZone.setAdapter(adapter_sprTimeZone);
-
-        //Show dialog
-        dialog.show();
     }
 }

@@ -19,6 +19,7 @@ import com.gaf.project.R;
 import com.gaf.project.adapter.FeedbackAdapter;
 import com.gaf.project.model.Admin;
 import com.gaf.project.model.Feedback;
+import com.gaf.project.model.TypeFeedback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,9 +56,13 @@ public class FeedBackFragment extends Fragment implements View.OnClickListener{
         Admin ad = new Admin("user", "hung", "hung@gmail.com", "123");
 
         listFeedBack = new ArrayList<>();
-        listFeedBack.add(new Feedback(1, "Feedback1", ad));
-        listFeedBack.add(new Feedback(2, "Feedback2", ad));
-        listFeedBack.add(new Feedback(3, "Feedback3", ad));
+
+        TypeFeedback typeFeedback = new TypeFeedback(1,"Ec",false);
+        Admin admin = new Admin("thao","thao","thaole","1234");
+
+        listFeedBack.add(new Feedback(1,"Ec",admin,false,typeFeedback,new ArrayList<>()));
+        listFeedBack.add(new Feedback(2,"Ec",admin,false,typeFeedback,new ArrayList<>()));
+        listFeedBack.add(new Feedback(3,"Ec",admin,false,typeFeedback,new ArrayList<>()));
 
         feedBackAdapter = new FeedbackAdapter();
         feedBackAdapter.setData(listFeedBack);

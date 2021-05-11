@@ -1,11 +1,24 @@
+
 package com.gaf.feedbacksystem.entity;
 
-import lombok.*;
-
-import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 @Data
@@ -19,8 +32,13 @@ public class Class {
     private String classID;
     private String className;
     private String capacity;
-    private Date startTime;
-    private Date endTime;
+    
+    @Column(name = "startTime",columnDefinition = "DATE")
+    private LocalDate  startTime;
+    
+    @Column(name ="endTime",columnDefinition = "DATE")
+    private LocalDate  endTime;
+    
     private boolean isDeleted = false;
 
 
