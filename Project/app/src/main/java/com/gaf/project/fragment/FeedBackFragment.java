@@ -2,65 +2,90 @@ package com.gaf.project.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.gaf.project.R;
+import com.gaf.project.adapter.FeedbackAdapter;
+import com.gaf.project.model.Admin;
+import com.gaf.project.model.Feedback;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FeedBackFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class FeedBackFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class FeedBackFragment extends Fragment implements View.OnClickListener{
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private View view;
+    private NavController navigation;
+    private RecyclerView recyclerViewFeedback;
+    private FeedbackAdapter feedBackAdapter;
+    private List<Feedback> listFeedBack;
+    private Button btnAddFeedBack;
 
-    public FeedBackFragment() {
-        // Required empty public constructor
-    }
+    public FeedBackFragment(){
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FeedBackFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FeedBackFragment newInstance(String param1, String param2) {
-        FeedBackFragment fragment = new FeedBackFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_feed_back, container, false);
+        view = inflater.inflate(R.layout.fragment_feed_back, container, false);
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        recyclerViewFeedback = view.findViewById(R.id.rcv_feedback);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
+        recyclerViewFeedback.setLayoutManager(linearLayoutManager);
+
+        Admin ad = new Admin("user", "hung", "hung@gmail.com", "123");
+
+        listFeedBack = new ArrayList<>();
+        listFeedBack.add(new Feedback(1, "Feedback1", ad));
+        listFeedBack.add(new Feedback(2, "Feedback2", ad));
+        listFeedBack.add(new Feedback(3, "Feedback3", ad));
+
+        feedBackAdapter = new FeedbackAdapter();
+        feedBackAdapter.setData(listFeedBack);
+
+        recyclerViewFeedback.setAdapter(feedBackAdapter);
+
+        navigation = Navigation.findNavController(view);
+
+        btnAddFeedBack = view.findViewById(R.id.btn_add_feedback);
+        btnAddFeedBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DisplayAddFragment();
+            }
+        });
+    }
+
+    private void DisplayAddFragment() {
+
+        //get
+//        LayoutInflater inflater= this.getLayoutInflater();
+//        View alertLayout = inflater.inflate(R.layout.add_feedback,null);
+
+        navigation.navigate(R.id.action_nav_feedback_to_add_feedback_fragment);
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

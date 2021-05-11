@@ -37,9 +37,13 @@
 
     <fragment
         android:id="@+id/nav_feedback"
-        android:name="com.gaf.project.fragment.ClassFragment"
-        android:label="@string/menu_feedback"
-        tools:layout="@layout/fragment_feed_back" />
+        android:name="com.gaf.project.fragment.FeedBackFragment"
+        android:label="fragment_feed_back"
+        tools:layout="@layout/fragment_feed_back" >
+        <action
+            android:id="@+id/action_nav_feedback_to_add_feedback_fragment"
+            app:destination="@id/add_feedback_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_result"
@@ -64,5 +68,12 @@
         android:name="com.gaf.project.fragment.ClassFragment"
         android:label="@string/menu_log_out"
         tools:layout="@layout/fragment_log_out" />
+
+    <fragment
+        android:id="@+id/add_feedback_fragment"
+        android:name="com.gaf.project.fragment.AddFeedBackFragment"
+        android:label="AddFeedBackFragment"
+        tools:layout="@layout/add_feedback"/>
+
 
 </navigation>
