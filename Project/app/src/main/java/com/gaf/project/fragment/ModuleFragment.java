@@ -32,10 +32,10 @@ import retrofit2.Response;
 public class ModuleFragment extends Fragment {
 
     private View view;
-    private RecyclerView rcvModule;
-    private ModuleAdapter adapter;
-    private List<Module> moduleList;
-    private ModuleService moduleService;
+//    private RecyclerView rcvModule;
+//    private ModuleAdapter adapter;
+//    private List<Module> moduleList;
+//    private ModuleService moduleService;
 
     public ModuleFragment() {
         // Required empty public constructor
@@ -44,61 +44,61 @@ public class ModuleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_module, container, false);
+        view = inflater.inflate(R.layout.fragment_module, container, false);
         return  view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        rcvModule = view.findViewById(R.id.rcv_module);
-        //Set layout manager -> recyclerView Status
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
-        rcvModule.setLayoutManager(linearLayoutManager);
-
-        adapter = new ModuleAdapter(new ModuleAdapter.IClickItem<Module>() {
-            @Override
-            public void update(Module item) {
-                clickUpdateStatus(view,item);
-            }
-
-            @Override
-            public void delete(Module item) {
-                clickDeleteAbstract(view,item);
-            }
-        });
+//        rcvModule = view.findViewById(R.id.rcv_module);
+//        //Set layout manager -> recyclerView Status
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
+//        rcvModule.setLayoutManager(linearLayoutManager);
+//
+//        adapter = new ModuleAdapter(new ModuleAdapter.IClickItem<Module>() {
+//            @Override
+//            public void update(Module item) {
+//                clickUpdateStatus(view,item);
+//            }
+//
+//            @Override
+//            public void delete(Module item) {
+//                clickDeleteAbstract(view,item);
+//            }
+//        });
 
 
 
         //Set value adapter for Adapter
-        moduleList = new ArrayList<>();
-
-        moduleService = ApiUtils.getModuleService();
-        moduleService.loadModuleAdmin()
-                .enqueue(new Callback<List<Module>>() {
-                    @Override
-                    public void onResponse(Call<List<Module>> call, Response<List<Module>> response) {
-                        moduleList = response.body();
-                        adapter.setData(moduleList);
-                        rcvModule.setAdapter(adapter);
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Module>> call, Throwable t) {
-                        showToast("Error");
-                    }
-                });
+//        moduleList = new ArrayList<>();
+//
+//        moduleService = ApiUtils.getModuleService();
+//        moduleService.loadModuleAdmin()
+//                .enqueue(new Callback<List<Module>>() {
+//                    @Override
+//                    public void onResponse(Call<List<Module>> call, Response<List<Module>> response) {
+//                        moduleList = response.body();
+//                        adapter.setData(moduleList);
+//                        rcvModule.setAdapter(adapter);
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<List<Module>> call, Throwable t) {
+//                        showToast("Error");
+//                    }
+//                });
     }
 
-    private void clickUpdateStatus(View view, Module item) {
-
-    }
-
-    private void clickDeleteAbstract(View view, Module item){
-    }
-
-    public void showToast(String string){
-        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
-    }
+//    private void clickUpdateStatus(View view, Module item) {
+//
+//    }
+//
+//    private void clickDeleteAbstract(View view, Module item){
+//    }
+//
+//    public void showToast(String string){
+//        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
+//    }
 
 }

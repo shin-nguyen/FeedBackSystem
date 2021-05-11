@@ -22,47 +22,45 @@
         android:name="com.gaf.project.fragment.ClassFragment"
         android:label="@string/menu_class"
         tools:layout="@layout/fragment_class" />
-
     <fragment
         android:id="@+id/nav_module"
-        android:name="com.gaf.project.fragment.ClassFragment"
-        android:label="@string/menu_module"
+        android:name="com.gaf.project.fragment.ModuleFragment"
+        android:label="fragment_module"
         tools:layout="@layout/fragment_module" />
-
-    <fragment
-        android:id="@+id/nav_enrollment"
-        android:name="com.gaf.project.fragment.ClassFragment"
-        android:label="@string/menu_enrollment"
-        tools:layout="@layout/fragment_enrollment" />
-
-    <fragment
-        android:id="@+id/nav_feedback"
-        android:name="com.gaf.project.fragment.ClassFragment"
-        android:label="@string/menu_feedback"
-        tools:layout="@layout/fragment_feed_back" />
-
-    <fragment
-        android:id="@+id/nav_result"
-        android:name="com.gaf.project.fragment.ClassFragment"
-        android:label="@string/menu_result"
-        tools:layout="@layout/fragment_result" />
-
-    <fragment
-        android:id="@+id/nav_question"
-        android:name="com.gaf.project.fragment.ClassFragment"
-        android:label="@string/menu_question"
-        tools:layout="@layout/fragment_question" />
-
     <fragment
         android:id="@+id/nav_contact"
-        android:name="com.gaf.project.fragment.ClassFragment"
-        android:label="@string/menu_contact"
+        android:name="com.gaf.project.fragment.ContactFragment"
+        android:label="fragment_contact"
         tools:layout="@layout/fragment_contact" />
-
+    <fragment
+        android:id="@+id/nav_enrollment"
+        android:name="com.gaf.project.fragment.EnrollmentFragment"
+        android:label="fragment_enrollment"
+        tools:layout="@layout/fragment_enrollment" />
+    <fragment
+        android:id="@+id/nav_feedback"
+        android:name="com.gaf.project.fragment.FeedBackFragment"
+        android:label="fragment_feed_back"
+        tools:layout="@layout/fragment_feed_back" />
+    <fragment
+        android:id="@+id/nav_join"
+        android:name="com.gaf.project.fragment.JoinFragment"
+        android:label="fragment_join"
+        tools:layout="@layout/fragment_join" />
     <fragment
         android:id="@+id/nav_log_out"
-        android:name="com.gaf.project.fragment.ClassFragment"
-        android:label="@string/menu_log_out"
+        android:name="com.gaf.project.fragment.LogOutFragment"
+        android:label="fragment_log_out"
         tools:layout="@layout/fragment_log_out" />
+    <fragment
+        android:id="@+id/nav_result"
+        android:name="com.gaf.project.fragment.ResultFragment"
+        android:label="fragment_result"
+        tools:layout="@layout/fragment_result" />
+    <fragment
+        android:id="@+id/nav_question"
+        android:name="com.gaf.project.fragment.QuestionFragment"
+        android:label="fragment_question"
+        tools:layout="@layout/fragment_question" />
 
 </navigation>

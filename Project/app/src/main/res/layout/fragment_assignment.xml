@@ -50,12 +50,11 @@
             android:paddingBottom="20dp">
 
             <EditText
-                android:id="@+id/editTextTextPersonName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:ems="10"
-                    android:layout_weight="1"
+                android:layout_weight="1"
                 android:background="@drawable/search_box_format"
                 android:layout_marginRight="20dp"
                 android:paddingLeft="20dp"
