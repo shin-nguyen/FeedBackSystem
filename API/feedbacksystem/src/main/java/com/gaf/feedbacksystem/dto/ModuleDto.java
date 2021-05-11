@@ -1,15 +1,15 @@
 package com.gaf.feedbacksystem.dto;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import com.gaf.feedbacksystem.entity.Admin;
 import com.gaf.feedbacksystem.entity.Feedback;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.sql.Date;
-import java.sql.Timestamp;
 
 @Data
 @AllArgsConstructor
@@ -19,10 +19,10 @@ public class ModuleDto {
     private Integer moduleID;
     private Admin admin;
     private String moduleName;
-    private Date startTime;
-    private Date endTime;
+    private LocalDate startTime;
+    private LocalDate endTime;
     private boolean isDeleted;
-    private Timestamp feedbackStartTime;
-    private Timestamp feedbackEndTime;
+    private LocalDateTime feedbackStartTime;
+    private LocalDateTime feedbackEndTime;
     private Feedback feedback;
 }

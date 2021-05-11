@@ -15,8 +15,8 @@ public class ClassDto {
     private String classID;
     private String className;
     private String capacity;
-    private Date startTime;
-    private Date endTime;
+    private LocalDate startTime;
+    private LocalDate endTime;
     private boolean isDeleted = false;
     private Collection<TraineeDto> trainees;
 }

@@ -32,10 +32,10 @@ import retrofit2.Response;
 public class ModuleFragment extends Fragment {
 
     private View view;
-//    private RecyclerView rcvModule;
-//    private ModuleAdapter adapter;
-//    private List<Module> moduleList;
-//    private ModuleService moduleService;
+    private RecyclerView rcvModule;
+    private ModuleAdapter adapter;
+    private List<Module> moduleList;
+    private ModuleService moduleService;
 
     public ModuleFragment() {
         // Required empty public constructor
@@ -45,6 +45,12 @@ public class ModuleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_module, container, false);
+        return  view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         rcvModule = view.findViewById(R.id.rcv_module);
         //Set layout manager -> recyclerView Status
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
@@ -66,7 +72,7 @@ public class ModuleFragment extends Fragment {
 
         //Set value adapter for Adapter
         moduleList = new ArrayList<>();
-        showToast("Error");
+
 
 
         moduleService = ApiUtils.getModuleService();
@@ -84,13 +90,6 @@ public class ModuleFragment extends Fragment {
                         showToast("Error");
                     }
                 });
-        return  view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
     }
 
     private void clickUpdateStatus(View view, Module item) {
@@ -100,15 +99,8 @@ public class ModuleFragment extends Fragment {
     private void clickDeleteAbstract(View view, Module item){
     }
 
-//    private void clickUpdateStatus(View view, Module item) {
-//
-//    }
-//
-//    private void clickDeleteAbstract(View view, Module item){
-//    }
-//
-//    public void showToast(String string){
-//        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
-//    }
+    public void showToast(String string){
+        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
+    }
 
 }
