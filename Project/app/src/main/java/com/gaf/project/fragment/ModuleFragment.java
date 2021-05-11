@@ -32,10 +32,10 @@ import retrofit2.Response;
 public class ModuleFragment extends Fragment {
 
     private View view;
-    private RecyclerView rcvModule;
-    private ModuleAdapter adapter;
-    private List<Module> moduleList;
-    private ModuleService moduleService;
+//    private RecyclerView rcvModule;
+//    private ModuleAdapter adapter;
+//    private List<Module> moduleList;
+//    private ModuleService moduleService;
 
     public ModuleFragment() {
         // Required empty public constructor
@@ -100,8 +100,15 @@ public class ModuleFragment extends Fragment {
     private void clickDeleteAbstract(View view, Module item){
     }
 
-    public void showToast(String string){
-        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
-    }
+//    private void clickUpdateStatus(View view, Module item) {
+//
+//    }
+//
+//    private void clickDeleteAbstract(View view, Module item){
+//    }
+//
+//    public void showToast(String string){
+//        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
+//    }
 
 }
