@@ -17,5 +17,19 @@ public class Trainer extends BaseUser {
     private Integer idSkill;
     private String activationCode;
     private String resetPasswordCode;
+
+    public Trainer(String userName, String name, String email, String password, String phone, String address, boolean isActive, Integer idSkill, String activationCode, String resetPasswordCode, boolean isReceiveNotification) {
+        super(userName, name, email, password);
+        this.phone = phone;
+        this.address = address;
+        this.isActive = isActive;
+        this.idSkill = idSkill;
+        this.activationCode = activationCode;
+        this.resetPasswordCode = resetPasswordCode;
+        this.isReceiveNotification = isReceiveNotification;
+    }
+
     private boolean isReceiveNotification;
+
+
 }

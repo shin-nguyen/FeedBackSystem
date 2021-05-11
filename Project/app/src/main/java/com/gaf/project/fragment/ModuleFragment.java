@@ -41,19 +41,10 @@ public class ModuleFragment extends Fragment {
         // Required empty public constructor
     }
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         View view = inflater.inflate(R.layout.fragment_module, container, false);
-
         return  view;
     }
 
@@ -61,6 +52,9 @@ public class ModuleFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         rcvModule = view.findViewById(R.id.rcv_module);
+        //Set layout manager -> recyclerView Status
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
+        rcvModule.setLayoutManager(linearLayoutManager);
 
         adapter = new ModuleAdapter(new ModuleAdapter.IClickItem<Module>() {
             @Override
@@ -74,6 +68,8 @@ public class ModuleFragment extends Fragment {
             }
         });
 
+
+
         //Set value adapter for Adapter
         moduleList = new ArrayList<>();
 
@@ -83,6 +79,8 @@ public class ModuleFragment extends Fragment {
                     @Override
                     public void onResponse(Call<List<Module>> call, Response<List<Module>> response) {
                         moduleList = response.body();
+                        adapter.setData(moduleList);
+                        rcvModule.setAdapter(adapter);
                     }
 
                     @Override
@@ -90,13 +88,6 @@ public class ModuleFragment extends Fragment {
                         showToast("Error");
                     }
                 });
-        adapter.setData(moduleList);
-
-        //Set layout manager -> recyclerView Status
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
-        rcvModule.setLayoutManager(linearLayoutManager);
-        rcvModule.setAdapter(adapter);
-
     }
 
     private void clickUpdateStatus(View view, Module item) {
