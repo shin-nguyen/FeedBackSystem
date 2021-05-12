@@ -11,10 +11,9 @@
 
     <color name="main_color">#fd3c01</color>
     <color name="item_background">#ffeacb</color>
+    <color name="detail_button_color">#9C27B0</color>
     <color name="add_button_color">#3466ff</color>
     <color name="edit_button_color">#51f656</color>
     <color name="delete_button_color">#ff0000</color>
     <color name="search_box_border">#ffe066</color>
-
-
 </resources>

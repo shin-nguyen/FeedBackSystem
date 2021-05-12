@@ -22,11 +22,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
@@ -45,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_homepage, R.id.nav_assignment, R.id.nav_class, R.id.nav_module,
                 R.id.nav_enrollment,R.id.nav_feedback, R.id.nav_result, R.id.nav_question,
-                R.id.nav_contact,R.id.nav_log_out)
+                R.id.nav_contact,R.id.nav_log_out, R.id.add_feedback_fragment, R.id.add_assignment_fragment)
                 .setDrawerLayout(drawer)
                 .build();
 

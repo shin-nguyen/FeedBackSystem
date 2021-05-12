@@ -1,14 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.QuestionFragment">
+    android:orientation="vertical"
+    tools:context=".fragment.AssignmentFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Question List"
+                android:padding="20dp"
+                android:textSize="40sp"
+                android:textStyle="bold"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:id="@+id/btn_add_assignment"
+                app:icon="@drawable/ic_baseline_add_24"
+                app:iconSize="40dp"
+                app:iconPadding="0dp"
+                android:paddingLeft="4dp"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                app:shapeAppearanceOverlay="@style/ButtonRounded"
+                android:backgroundTint="@color/add_button_color"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingBottom="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Topic Name: "
+                android:paddingLeft="25dp"
+                android:textStyle="bold"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/common_box"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/spinner_class"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:spinnerMode="dropdown"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_arrow_drop_up_24"
+                        android:layout_marginBottom="-3dp"
+                        android:layout_marginTop="-17dp"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_arrow_drop_down_24"
+                        android:layout_marginTop="-15dp"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcv_assignment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_margin="5dp"/>
 
-</FrameLayout>
+</LinearLayout>
