@@ -73,16 +73,16 @@ public class AssignmentFragment extends Fragment implements View.OnClickListener
         LocalDate nowDate = LocalDate.now();
         LocalDateTime localDateTime = LocalDateTime.now();
         Collection<Trainee> trainees  = new ArrayList<>();
-        Class  mClass = new Class("1", "2", "Ec", nowDate, nowDate, false, trainees);
-        Admin admin = new Admin("thao","thao","thaole","1234");
-        TypeFeedback typeFeedback = new TypeFeedback(1,"Ec",false);
-        Feedback feedback = new Feedback(1,"Ec",admin,false,typeFeedback,new ArrayList<>());
-        Module module = new Module(1,admin,"Ec",nowDate,nowDate,false,localDateTime,localDateTime,feedback);
-        Trainer trainer = new Trainer("thao","thao","thao","1234","0918948074","VT",false,1,"Ec","1234",true);
-        
-        AssignmentId  assignmentId = new AssignmentId(mClass,module,trainer);
-        Assignment assignment = new Assignment(assignmentId,"Ec");
-        listAssignment.add(assignment);
+//        Class  mClass = new Class("1", "2", "Ec", nowDate, nowDate, false,trainees);
+//        Admin admin = new Admin("thao","thao","thaole","1234");
+//        TypeFeedback typeFeedback = new TypeFeedback(1,"Ec",false);
+//        Feedback feedback = new Feedback(1,"Ec",admin,false,typeFeedback,new ArrayList<>());
+//        Module module = new Module(1,admin,"Ec",nowDate,nowDate,false,localDateTime,localDateTime,feedback);
+//        Trainer trainer = new Trainer("thao","thao","thao","1234","0918948074","VT",false,1,"Ec","1234",true);
+//
+//        AssignmentId  assignmentId = new AssignmentId(mClass,module,trainer);
+//        Assignment assignment = new Assignment(assignmentId,"Ec");
+//        listAssignment.add(assignment);
 
 
         assignmentAdapter = new AssignmentAdapter();

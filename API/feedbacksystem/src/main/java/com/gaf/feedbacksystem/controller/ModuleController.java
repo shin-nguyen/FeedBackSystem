@@ -1,14 +1,21 @@
 package com.gaf.feedbacksystem.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.gaf.feedbacksystem.constant.SystemConstant;
 import com.gaf.feedbacksystem.dto.ModuleDto;
-import com.gaf.feedbacksystem.entity.Module;
 import com.gaf.feedbacksystem.service.IModuleService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/module")
@@ -18,8 +25,14 @@ public class ModuleController {
 
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
     @GetMapping(value = "/loadModuleAdmin")
-    public List<ModuleDto> getListModuleAdmin(){
-        return moduleService.findAll();
+    public ResponseEntity<Iterable<ModuleDto>> getListModuleAdmin(){
+    	try {
+			Iterable<ModuleDto> moduleList = moduleService.findAll();
+			return new ResponseEntity<Iterable<ModuleDto>>(moduleList, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Iterable<ModuleDto>>(HttpStatus.BAD_REQUEST);
+		}
+   
     }
 
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
