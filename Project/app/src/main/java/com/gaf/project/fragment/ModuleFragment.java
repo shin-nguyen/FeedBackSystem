@@ -68,12 +68,8 @@ public class ModuleFragment extends Fragment {
             }
         });
 
-
-
         //Set value adapter for Adapter
         moduleList = new ArrayList<>();
-
-
 
         moduleService = ApiUtils.getModuleService();
         moduleService.loadModuleAdmin()

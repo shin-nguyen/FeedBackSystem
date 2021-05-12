@@ -21,7 +21,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Question"
+                android:text="Question List"
                 android:padding="20dp"
                 android:textSize="40sp"
                 android:textStyle="bold"/>
@@ -30,10 +30,10 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:id="@+id/btn_add_assignment"
-                style="@style/Widget.MaterialComponents.Button.Icon"
-                app:icon="@drawable/ic_menu_camera"
-                app:iconSize="24dp"
+                app:icon="@drawable/ic_baseline_add_24"
+                app:iconSize="40dp"
                 app:iconPadding="0dp"
+                android:paddingLeft="4dp"
                 android:insetLeft="0dp"
                 android:insetTop="0dp"
                 android:insetRight="0dp"
@@ -46,30 +46,60 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:gravity="center"
             android:paddingBottom="20dp">
 
-            <EditText
-                android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:ems="10"
-                android:layout_weight="1"
-                android:background="@drawable/search_box_format"
-                android:layout_marginRight="20dp"
-                android:paddingLeft="20dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingRight="5dp"
-                android:hint="Search" />
+                android:text="Topic Name: "
+                android:paddingLeft="25dp"
+                android:textStyle="bold"/>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:hint="Search"
-                android:textColorHint="@color/white"
-                android:backgroundTint="@color/main_color"/>
+                android:layout_weight="1"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/common_box"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/spinner_class"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:spinnerMode="dropdown"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_arrow_drop_up_24"
+                        android:layout_marginBottom="-3dp"
+                        android:layout_marginTop="-17dp"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_arrow_drop_down_24"
+                        android:layout_marginTop="-15dp"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
 
         </LinearLayout>
 

@@ -84,13 +84,15 @@ public class AssignmentFragment extends Fragment implements View.OnClickListener
         Trainer trainer = new Trainer("thao","thao","thao","1234","0918948074","VT",false,1,"Ec","1234",true);
 
         AssignmentId  assignmentId = new AssignmentId(mClass,module,trainer);
-        Assignment assignment = new Assignment(assignmentId,"Ec");
+         Assignment assignment = new Assignment(assignmentId,"Ec");
         listAssignment.add(assignment);
 
         assignmentAdapter = new AssignmentAdapter();
         assignmentAdapter.setData(listAssignment);
 
         recyclerViewAssignment.setAdapter(assignmentAdapter);
+
+        navigation = Navigation.findNavController(view);
 
         btnAddAssignment = view.findViewById(R.id.btn_add_assignment);
 //        btnAddAssignment.setVisibility(View.GONE);//hide button
