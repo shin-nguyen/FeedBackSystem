@@ -15,7 +15,11 @@
         android:id="@+id/nav_assignment"
         android:name="com.gaf.project.fragment.AssignmentFragment"
         android:label="@string/menu_assignment"
-        tools:layout="@layout/fragment_assignment" />
+        tools:layout="@layout/fragment_assignment" >
+        <action
+            android:id="@+id/action_nav_assignment_to_add_assignment_fragment"
+            app:destination="@id/add_assignment_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_class"
@@ -72,21 +76,15 @@
         tools:layout="@layout/fragment_question" />
 
     <fragment
-        android:id="@+id/nav_contact"
-        android:name="com.gaf.project.fragment.ClassFragment"
-        android:label="@string/menu_contact"
-        tools:layout="@layout/fragment_contact" />
-
-    <fragment
-        android:id="@+id/nav_log_out"
-        android:name="com.gaf.project.fragment.ClassFragment"
-        android:label="@string/menu_log_out"
-        tools:layout="@layout/fragment_log_out" />
-
-    <fragment
         android:id="@+id/add_feedback_fragment"
         android:name="com.gaf.project.fragment.AddFeedBackFragment"
         android:label="AddFeedBackFragment"
         tools:layout="@layout/add_feedback"/>
+
+    <fragment
+        android:id="@+id/add_assignment_fragment"
+        android:name="com.gaf.project.fragment.AddAssignmentFragment"
+        android:label="AddAssignmentFragment"
+        tools:layout="@layout/add_assignment"/>
 
 </navigation>

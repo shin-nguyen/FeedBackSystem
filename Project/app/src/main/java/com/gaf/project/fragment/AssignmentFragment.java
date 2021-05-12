@@ -12,6 +12,8 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,6 +41,7 @@ import java.util.List;
 public class AssignmentFragment extends Fragment implements View.OnClickListener{
 
     private View view;
+    private NavController navigation;
     private RecyclerView recyclerViewAssignment;
     private AssignmentAdapter assignmentAdapter;
     private List<Assignment> listAssignment;
@@ -79,11 +82,10 @@ public class AssignmentFragment extends Fragment implements View.OnClickListener
         Feedback feedback = new Feedback(1,"Ec",admin,false,typeFeedback,new ArrayList<>());
         Module module = new Module(1,admin,"Ec",nowDate,nowDate,false,localDateTime,localDateTime,feedback);
         Trainer trainer = new Trainer("thao","thao","thao","1234","0918948074","VT",false,1,"Ec","1234",true);
-        
+
         AssignmentId  assignmentId = new AssignmentId(mClass,module,trainer);
         Assignment assignment = new Assignment(assignmentId,"Ec");
         listAssignment.add(assignment);
-
 
         assignmentAdapter = new AssignmentAdapter();
         assignmentAdapter.setData(listAssignment);
@@ -91,10 +93,12 @@ public class AssignmentFragment extends Fragment implements View.OnClickListener
         recyclerViewAssignment.setAdapter(assignmentAdapter);
 
         btnAddAssignment = view.findViewById(R.id.btn_add_assignment);
+//        btnAddAssignment.setVisibility(View.GONE);//hide button
+//        btnAddAssignment.setVisibility(View.VISIBLE);//show button
         btnAddAssignment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                navigation.navigate(R.id.action_nav_assignment_to_add_assignment_fragment);
             }
         });
     }

@@ -46,7 +46,7 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
             return;
         }
 
-        holder.assignmentNo.setText("1");
+        holder.assignmentNo.setText(String.valueOf(assignment.getModule().getModuleID()));
         holder.assignmentClassName.setText(String.valueOf(assignment.getmClass().getClassName()));
         holder.assignmentCourseName.setText(String.valueOf(assignment.getModule().getModuleName()));
         holder.assignmentTrainerName.setText(String.valueOf(assignment.getTrainer().getName()));
