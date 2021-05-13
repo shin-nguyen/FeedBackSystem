@@ -7,6 +7,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +15,8 @@ import com.gaf.feedbacksystem.dto.ModuleDto;
 import com.gaf.feedbacksystem.entity.Module;
 import com.gaf.feedbacksystem.repository.ModuleRepository;
 import com.gaf.feedbacksystem.service.IModuleService;
-import com.gaf.feedbacksystem.utils.ObjectMapperUtils;
 
 @Service
-@Transactional
 public class ModuleServiceImpl implements IModuleService {
     @Autowired
     ModuleRepository moduleRepository;
@@ -48,9 +47,14 @@ public class ModuleServiceImpl implements IModuleService {
     }
 
 	@Override
-	public List<ModuleDto> findAll() {
+	public Iterable<ModuleDto> findAll() {
 		 List<Module> modules = moduleRepository.findAll();
-	        List<ModuleDto> moduleDTOS = ObjectMapperUtils.mapAll(modules,ModuleDto.class);
+//	        List<ModuleDto> moduleDTOS = ObjectMapperUtils.mapAll(modules,ModuleDto.class);
+		 
+		 Type listType = new TypeToken<List<ModuleDto>>(){}.getType();
+		 List<ModuleDto> moduleDTOS = mapper.map(modules,listType);
+		 
+		 
 	        return moduleDTOS;
 	}
 }

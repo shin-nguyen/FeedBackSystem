@@ -1,17 +1,20 @@
 package com.gaf.feedbacksystem.dto;
 
-import com.gaf.feedbacksystem.entity.Trainee;
-import lombok.*;
-
-import javax.persistence.*;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
+
+import com.fasterxml.jackson.annotation.JsonRootName;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
 public class ClassDto {
     private String classID;
     private String className;

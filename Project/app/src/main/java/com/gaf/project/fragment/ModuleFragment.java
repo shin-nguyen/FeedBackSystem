@@ -1,33 +1,32 @@
 package com.gaf.project.fragment;
 
-import android.app.AlertDialog;
+
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
 import com.gaf.project.R;
 import com.gaf.project.adapter.ModuleAdapter;
+import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Module;
 import com.gaf.project.service.ModuleService;
 import com.gaf.project.utils.ApiUtils;
-import com.gaf.project.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 
 public class ModuleFragment extends Fragment {
 
@@ -39,6 +38,12 @@ public class ModuleFragment extends Fragment {
 
     public ModuleFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -68,24 +73,29 @@ public class ModuleFragment extends Fragment {
             }
         });
 
-        //Set value adapter for Adapter
-        moduleList = new ArrayList<>();
 
         moduleService = ApiUtils.getModuleService();
-        moduleService.loadModuleAdmin()
-                .enqueue(new Callback<List<Module>>() {
-                    @Override
-                    public void onResponse(Call<List<Module>> call, Response<List<Module>> response) {
-                        moduleList = response.body();
-                        adapter.setData(moduleList);
-                        rcvModule.setAdapter(adapter);
-                    }
 
-                    @Override
-                    public void onFailure(Call<List<Module>> call, Throwable t) {
-                        showToast("Error");
-                    }
-                });
+        //Set value adapter for Adapter
+        moduleList = new ArrayList<>();
+        Call<List<Module>> call =  moduleService.loadModuleAdmin(
+                "Bearer "+ SystemConstant.authenticationResponse.getJwt());
+        call.enqueue(new Callback<List<Module>>() {
+            @Override
+            public void onResponse(Call<List<Module>> call, Response<List<Module>> response) {
+                showToast("Hihi");
+                Log.e("HiHiiiiiiiiiii",response.body().toString());
+//                if (response.isSuccessful()){
+//
+//                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Module>> call, Throwable t) {
+                showToast("Ec");
+                Log.e("Ec",t.getLocalizedMessage());
+            }
+        });
     }
 
     private void clickUpdateStatus(View view, Module item) {

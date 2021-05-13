@@ -1,0 +1,14 @@
+package com.gaf.project.service;
+
+import com.gaf.project.response.ClassResponse;
+
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
+
+public interface ClassService {
+    @Headers({"Content-Type: application/json"})
+    @GET("class/loadListClass")
+    Call<ClassResponse> loadListClass(@Header("Authorization") String auth);
+}

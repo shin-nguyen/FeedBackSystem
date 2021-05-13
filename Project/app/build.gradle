@@ -43,13 +43,18 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation 'com.squareup.retrofit:converter-jackson:1.9.0'
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
-    implementation 'com.squareup.okhttp:okhttp:2.7.5'
-//    implementation 'com.auth0.android:auth0:1.10.0'
+
     implementation 'com.auth0.android:jwtdecode:1.1.1'
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
+
+    implementation 'com.squareup.okhttp3:okhttp:3.2.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
     implementation 'com.auth0:java-jwt:3.4.0'
+
+
 
 }
