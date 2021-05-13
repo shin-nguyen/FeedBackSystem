@@ -54,7 +54,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener{
 
         listQuestion = new ArrayList<>();
         Topic topic = new Topic(1,"Kai");
-        Question question = new Question(1,topic,"question",false);
+        Question question = new Question(1,topic,"question",false,null);
         listQuestion.add(question);
 
         questionAdapter = new QuestionAdapter();

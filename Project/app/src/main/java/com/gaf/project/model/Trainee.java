@@ -44,7 +44,7 @@ public class Trainee  {
     @SerializedName("resetPasswordCode")
     private String resetPasswordCode;
 
-//    @SerializedName("classes")
-//    @Expose
-//    private Collection<Class> classes = null;
+    @SerializedName("classes")
+    @Expose
+    private Collection<Class> classes = null;
 }
