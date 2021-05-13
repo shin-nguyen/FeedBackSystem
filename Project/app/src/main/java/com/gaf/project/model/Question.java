@@ -16,5 +16,5 @@ public class Question{
     private Topic topic;
     private  String questionContent;
     private  boolean isDeleted;
-    private Collection<Feedback> feedbacks;
+//    private Collection<Feedback> feedbacks;
 }

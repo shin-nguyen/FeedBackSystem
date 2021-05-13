@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:id="@+id/warning_dialog"
+    android:padding="30dp"
+    android:layout_margin="30dp"
+    android:background="@drawable/dialog_format">
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/success_icon"
+        android:paddingBottom="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Success!"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:paddingBottom="10dp"
+        android:id="@+id/txt_success_content"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/add_button_color"
+        android:hint="OK"
+        android:textColorHint="@color/white"
+        android:id="@+id/btn_ok"/>
+
+</LinearLayout>

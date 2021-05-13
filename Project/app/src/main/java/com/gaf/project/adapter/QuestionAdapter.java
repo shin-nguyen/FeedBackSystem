@@ -2,96 +2,93 @@ package com.gaf.project.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.gaf.project.MainActivity;
 import com.gaf.project.R;
 import com.gaf.project.model.Assignment;
+import com.gaf.project.model.Question;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.AssignmentViewHolder> {
+public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.QuestionViewHolder> {
 
-    private List<Assignment> mListAssignment;
+    private List<Question> mListQuestion;
     private Context mContext;
 
-    public void setData(List<Assignment> list, Context context){
-        this.mListAssignment = list;
+    public void setData(List<Question> list, Context context){
+        this.mListQuestion = list;
         this.mContext= context;
         notifyDataSetChanged();
     }
 
     @NonNull
+    @NotNull
     @Override
-    public AssignmentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public QuestionViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_assignment,parent,false);
-
-        return new AssignmentViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_question,parent,false);
+        return new QuestionViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AssignmentViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull @NotNull QuestionViewHolder holder, int position) {
 
-        Assignment assignment =mListAssignment.get(position);
+        Question question = mListQuestion.get(position);
 
-        if(assignment==null){
+        if(question==null){
             return;
         }
 
-        holder.assignmentNo.setText(String.valueOf(assignment.getModule().getModuleID()));
-        holder.className.setText(String.valueOf(assignment.getmClass().getClassName()));
-        holder.courseName.setText(String.valueOf(assignment.getModule().getModuleName()));
-        holder.trainerName.setText(String.valueOf(assignment.getTrainer().getName()));
-        holder.registrationCode.setText(assignment.getRegistrationCode());
+        holder.topicId.setText(String.valueOf(question.getTopic().getTopicID()));
+        holder.topicName.setText(String.valueOf(question.getTopic().getTopicName()));
+        holder.questionId.setText(String.valueOf(question.getQuestionID()));
+        holder.questionContent.setText(String.valueOf(question.getQuestionContent()));
+
     }
 
     @Override
     public int getItemCount() {
-        if (mListAssignment != null){
-            return mListAssignment.size();
+        if (mListQuestion != null){
+            return mListQuestion.size();
         }
         return 0;
     }
 
-    public class AssignmentViewHolder extends RecyclerView.ViewHolder{
+    public class QuestionViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView assignmentNo, courseName, className, trainerName, registrationCode;
-        private Button editAssignment, deleteAssignment;
+        private TextView topicId, topicName, questionId, questionContent;
+        private Button editQuestion, deleteQuestion;
 
-        public AssignmentViewHolder(@NonNull View itemView) {
+        public QuestionViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
 
-            assignmentNo =itemView.findViewById(R.id.assignment_no);
-            courseName =itemView.findViewById(R.id.assignment_course_name);
-            className =itemView.findViewById(R.id.assignment_class_name);
-            trainerName =itemView.findViewById(R.id.assignment_trainer_name);
-            registrationCode =itemView.findViewById(R.id.assignment_registration_code);
-            editAssignment=itemView.findViewById(R.id.btn_edit_assignment);
-            deleteAssignment=itemView.findViewById(R.id.btn_delete_assignment);
+            topicId=itemView.findViewById(R.id.question_topic_id);
+            topicName=itemView.findViewById(R.id.question_topic_name);
+            questionId=itemView.findViewById(R.id.question_question_id);
+            questionContent=itemView.findViewById(R.id.question_question_content);
 
-            editAssignment.setOnClickListener(new View.OnClickListener() {
+            editQuestion=itemView.findViewById(R.id.btn_edit_question);
+            deleteQuestion=itemView.findViewById(R.id.btn_delete_question);
+
+            editQuestion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                 }
             });
 
-            deleteAssignment.setOnClickListener(new View.OnClickListener() {
+            deleteQuestion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
                     View view=LayoutInflater.from(mContext).inflate(R.layout.warning_dialog,null);
 
@@ -101,7 +98,7 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
                     warningDialog.show();
 
                     TextView warningContent = view.findViewById(R.id.txt_warning_content);
-                    warningContent.setText("Do you want to delete this Assignment?");
+                    warningContent.setText("Do you want to delete this Question?");
 
                     Button btnCancel = view.findViewById(R.id.btn_cancel);
                     btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -136,10 +133,12 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
                                     successDialog.dismiss();
                                 }
                             });
+
                         }
                     });
                 }
             });
+
         }
     }
 }

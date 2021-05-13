@@ -88,7 +88,7 @@ public class AssignmentFragment extends Fragment implements View.OnClickListener
         listAssignment.add(assignment);
 
         assignmentAdapter = new AssignmentAdapter();
-        assignmentAdapter.setData(listAssignment);
+        assignmentAdapter.setData(listAssignment,getContext());
 
         recyclerViewAssignment.setAdapter(assignmentAdapter);
 

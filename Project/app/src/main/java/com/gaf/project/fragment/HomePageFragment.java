@@ -51,7 +51,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
 
 
         assignmentAdapter = new AssignmentAdapter();
-        assignmentAdapter.setData(listAssignment);
+        assignmentAdapter.setData(listAssignment,getContext());
 
         recyclerViewAssignment.setAdapter(assignmentAdapter);
     }
