@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface TraineeRepository extends JpaRepository<Trainee,String> {
 
-    Optional<Trainee> findByUserName(String s);
+    Trainee findByUserName(String s);
 
 }

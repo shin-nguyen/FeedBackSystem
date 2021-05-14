@@ -6,8 +6,8 @@ import java.util.List;
 import com.gaf.feedbacksystem.dto.ModuleDto;
 
 public interface IModuleService {
-	Iterable<ModuleDto> findAll();
-    ModuleDto findModuleByModuleID(ModuleDto moduleDTO);
-    void save(ModuleDto moduleDTO);
-    void update(ModuleDto moduleDTO);
+	List<ModuleDto> findAll();
+    ModuleDto save(ModuleDto moduleDTO);
+    ModuleDto update(ModuleDto moduleDTO);
+    void deleteById(Integer id);
 }

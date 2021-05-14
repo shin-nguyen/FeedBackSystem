@@ -42,8 +42,9 @@ public class AssignmentController {
             @ApiResponse(responseCode  = "403", description = "Truy cập bị cấm"),
             @ApiResponse(responseCode  = "404", description = "Không tìm thấy")
     })
-    @PreAuthorize("hasAnyRole(\"" + SystemConstant.ADMIN_ROLE + "\",\"" + SystemConstant.TRAINER_ROLE + "\")")
-    @GetMapping(value = "/loadAssignment")
+    @PreAuthorize("hasAnyRole(\"" + SystemConstant.ADMIN_ROLE + "\"," +
+                            "\"" + SystemConstant.TRAINER_ROLE + "\")")
+    @GetMapping(value = "/")
     public ResponseEntity<List<AssignmentDto>> getListAssignment(){
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
@@ -62,11 +63,10 @@ public class AssignmentController {
 
         return null;
     }
-    @DeleteMapping("/")
-    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
-    public ResponseEntity delete(@RequestBody AssignmentIdDto assignmentIdDto) {
-        return  ResponseEntity.ok().body(assignmentService.delete(assignmentIdDto));
-
-    }
+//    @DeleteMapping("/")
+//    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+//    public ResponseEntity delete(@RequestBody AssignmentIdDto assignmentIdDto) {
+////        return  ResponseEntity.ok().body(assignmentService.deleteById(assignmentIdDto););
+//    }
 
 }

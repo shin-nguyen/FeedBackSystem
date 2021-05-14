@@ -26,13 +26,13 @@ public class Class {
     @Expose
     private String capacity;
 
-    @SerializedName("startTime")
-    @Expose
-    private LocalDate startTime;
+//    @SerializedName("startTime")
+//    @Expose
+//    private LocalDate startTime;
 
     @SerializedName("endTime")
     @Expose
-    private LocalDate endTime;
+    private String endTime;
 
     @SerializedName("deleted")
     @Expose

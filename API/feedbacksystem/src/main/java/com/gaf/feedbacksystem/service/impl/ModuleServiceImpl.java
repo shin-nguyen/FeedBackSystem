@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.gaf.feedbacksystem.utils.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,40 +22,31 @@ public class ModuleServiceImpl implements IModuleService {
     @Autowired
     ModuleRepository moduleRepository;
 
-    @Autowired
-    private ModelMapper mapper;
-
-  
 
     @Override
-    public ModuleDto findModuleByModuleID(ModuleDto moduleDTO) {
-        return null;
+    public ModuleDto save(ModuleDto moduleDTO) {
+        return  null;
     }
 
     @Override
-    public void save(ModuleDto moduleDTO) {
-
+    public ModuleDto update(ModuleDto moduleDTO) {
+//        Module oldModule=  moduleRepository.findModuleByModuleID(moduleDTO.getModuleID());
+//        oldModule.setModuleName(moduleDTO.getModuleName());
+//        return  moduleRepository.save(oldModule);
+        return  null;
     }
 
     @Override
-    public void update(ModuleDto moduleDTO) {
-        Module oldModule=  moduleRepository.findModuleByModuleID(moduleDTO.getModuleID());
+    public void deleteById(Integer id) {
 
-
-        oldModule.setModuleName(moduleDTO.getModuleName());
-
-        moduleRepository.save(oldModule);
     }
 
-	@Override
-	public Iterable<ModuleDto> findAll() {
+
+    @Override
+	public List<ModuleDto> findAll() {
 		 List<Module> modules = moduleRepository.findAll();
-//	        List<ModuleDto> moduleDTOS = ObjectMapperUtils.mapAll(modules,ModuleDto.class);
+		 List<ModuleDto> moduleDTOS = ObjectMapperUtils.mapAll(modules,ModuleDto.class);
 		 
-		 Type listType = new TypeToken<List<ModuleDto>>(){}.getType();
-		 List<ModuleDto> moduleDTOS = mapper.map(modules,listType);
-		 
-		 
-	        return moduleDTOS;
+		 return moduleDTOS;
 	}
 }

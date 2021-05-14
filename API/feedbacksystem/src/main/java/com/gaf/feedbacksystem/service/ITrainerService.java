@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ITrainerService {
-    Optional<List<TrainerDto>> findAll();
+    List<TrainerDto> findAll();
     void save(TrainerDto trainer);
-    Optional<TrainerDto> findByUserName(String userName);
+    TrainerDto findByUserName(String userName);
 }

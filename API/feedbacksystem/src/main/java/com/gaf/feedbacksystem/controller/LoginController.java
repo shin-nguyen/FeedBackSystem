@@ -31,8 +31,8 @@ public class LoginController {
     @Autowired
     private UserDetailsServiceImpl userAdminDetailsService ;
 
-    @RequestMapping(value = "/test",method = RequestMethod.GET)
-    public String getTest(){
+    @RequestMapping(value = "/{username}",method = RequestMethod.GET)
+    public String getTest(@PathVariable String username ){
         return "TangYuCheng";
     }
 

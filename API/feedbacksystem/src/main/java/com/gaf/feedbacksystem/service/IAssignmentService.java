@@ -12,5 +12,5 @@ public interface IAssignmentService {
     void save(AssignmentDto assignment);
     List<AssignmentDto> findByTrainerUserName(String username);
     void update(AssignmentDto Assignment);
-    boolean delete(AssignmentIdDto assignmentIdDto);
+    void deleteById(AssignmentIdDto assignmentIdDto);
 }

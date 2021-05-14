@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.time.LocalDate;
 
 import okhttp3.Headers;
@@ -56,6 +57,7 @@ public class RetrofitConfig {
         gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
 
         Gson gson = gsonBuilder
+                .setDateFormat("dd/MM/yyyy")
                 .setPrettyPrinting()
                 .create();
 //        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();

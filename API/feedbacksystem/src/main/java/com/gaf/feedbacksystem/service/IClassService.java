@@ -2,6 +2,12 @@ package com.gaf.feedbacksystem.service;
 
 import com.gaf.feedbacksystem.dto.ClassDto;
 
+import java.util.List;
+
 public interface IClassService {
-	Iterable<ClassDto> findAll();
+	List<ClassDto> findAll();
+	ClassDto findById(String classId);
+	ClassDto update(ClassDto classDto);
+	ClassDto save(ClassDto classDto);
+	void deleteById(Integer id);
 }

@@ -5,6 +5,7 @@ import com.gaf.feedbacksystem.entity.Admin;
 
 import com.gaf.feedbacksystem.repository.AdminRepository;
 import com.gaf.feedbacksystem.service.IAdminService;
+import com.gaf.feedbacksystem.utils.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,40 +20,38 @@ import java.util.List;
 public class AdminServiceImpl implements IAdminService {
 
     @Autowired
-    private  ModelMapper mapper;
-
-    @Autowired
     private AdminRepository adminRepository;
 
     @Override
     public AdminDto findByUserName(String userName) {
         Admin admin= adminRepository.findByUserName(userName);
-        AdminDto adminDTO = mapper.map(admin, (Type) AdminDto.class);
+        AdminDto adminDTO = ObjectMapperUtils.map(admin,AdminDto.class);
+
         return adminDTO;
     }
 
     @Override
-    public void update(AdminDto admin) {
+    public AdminDto update(AdminDto admin) {
         Admin oldAdmin=  adminRepository.findByUserName(admin.getUserName());
 
         oldAdmin.setName(admin.getName());
         oldAdmin.setEmail(admin.getEmail());
-        adminRepository.save(oldAdmin);
+
+        return ObjectMapperUtils.map(adminRepository.save(oldAdmin),AdminDto.class);
     }
 
 
     public List<AdminDto> findAll(){
         List<Admin> admins= adminRepository.findAll();
-        List<AdminDto>  adminDto = mapper.map(admins, (Type) AdminDto.class);
+        List<AdminDto>  adminDto = ObjectMapperUtils.mapAll(admins,AdminDto.class);
+
         return adminDto;
     }
 
     @Override
-    public void save(AdminDto adminDTO) {
-        Admin admin = mapper.map(adminDTO,Admin.class);
-        adminRepository.save(admin);
+    public AdminDto save(AdminDto adminDTO) {
+        Admin admin = ObjectMapperUtils.map(adminDTO,Admin.class);
+
+        return ObjectMapperUtils.map(adminRepository.save(admin),AdminDto.class);
     }
-
-
-
 }
