@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,10 +33,12 @@ public class Class {
     private String classID;
     private String className;
     private String capacity;
-    
+
+    @JsonFormat(pattern="dd-MM-yyyy")
     @Column(name = "startTime",columnDefinition = "DATE")
     private LocalDate  startTime;
     
+    @JsonFormat(pattern="dd-MM-yyyy")
     @Column(name ="endTime",columnDefinition = "DATE")
     private LocalDate  endTime;
     

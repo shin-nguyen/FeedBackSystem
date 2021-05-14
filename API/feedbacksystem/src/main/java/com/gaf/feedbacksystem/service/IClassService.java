@@ -9,5 +9,5 @@ public interface IClassService {
 	ClassDto findById(String classId);
 	ClassDto update(ClassDto classDto);
 	ClassDto save(ClassDto classDto);
-	void deleteById(Integer id);
+	void deleteById(String id);
 }

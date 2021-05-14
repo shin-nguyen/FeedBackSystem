@@ -87,7 +87,7 @@ public class ClassController {
 
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
-    public Map<String, Boolean> delete(@RequestParam (name = "id") Integer id){
+    public Map<String, Boolean> delete(@RequestParam (name = "id") String id){
         try {
             Map<String, Boolean> response = new HashMap<>();
             try {

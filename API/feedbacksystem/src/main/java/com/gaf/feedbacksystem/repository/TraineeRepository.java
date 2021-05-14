@@ -12,5 +12,4 @@ import java.util.Optional;
 public interface TraineeRepository extends JpaRepository<Trainee,String> {
 
     Trainee findByUserName(String s);
-
 }
