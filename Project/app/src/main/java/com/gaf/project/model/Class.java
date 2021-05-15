@@ -1,5 +1,6 @@
 package com.gaf.project.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -28,11 +29,11 @@ public class Class {
 
     @SerializedName("startTime")
     @Expose
-    private Date startTime;
+    private LocalDate startTime;
 
     @SerializedName("endTime")
     @Expose
-    private Date endTime;
+    private LocalDate endTime;
 
     @SerializedName("deleted")
     @Expose

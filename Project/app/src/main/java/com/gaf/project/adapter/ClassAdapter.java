@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gaf.project.R;
 import com.gaf.project.model.Class;
-import com.gaf.project.model.Module;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -78,9 +77,11 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
 
             id = view.findViewById(R.id.txt_class_id);
             name = view.findViewById(R.id.txt_class_name);
-            capacity = view.findViewById(R.id.txt_capaity);
-            startDate = view.findViewById(R.id.txt_class_start_date);
-            endDate = view.findViewById(R.id.txt_class_end_date);
+            capacity = view.findViewById(R.id.txt_capacity);
+            startDate = view.findViewById(R.id.txt_start_date);
+            endDate = view.findViewById(R.id.txt_end_date);
+            btnEdit = view.findViewById(R.id.btn_edit_class);
+            btnDelete = view.findViewById(R.id.btn_delete_class);
         }
     }
 }

@@ -5,11 +5,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,7 +37,8 @@ public class ClassFragment extends Fragment {
     private RecyclerView rcvClass;
     private ClassService classService;
     private List<Class> classList;
-
+    private NavController navigation;
+    private Button btnAddClass;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,17 +48,23 @@ public class ClassFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_class, container, false);
+        navigation = Navigation.findNavController(view);
+        btnAddClass = view.findViewById(R.id.btn_add_class);
 
         rcvClass = view.findViewById(R.id.rcv_class);
         adapter =new ClassAdapter(new ClassAdapter.IClickItem() {
             @Override
             public void update(Class item) {
-                clickUpdate(view,item);
+                clickUpdate(item);
             }
             @Override
             public void delete(Class item) {
                 clickDelete(view,item);
             }
+        });
+
+        btnAddClass.setOnClickListener(v ->{
+            navigation.navigate(R.id.action_nav_class_to_add_class_fragment);
         });
 
         //Set layout manager -> recyclerView Status
@@ -86,8 +96,9 @@ public class ClassFragment extends Fragment {
         return view;
     }
 
-    private void clickUpdate(View view, Class item) {
-
+    private void clickUpdate(Class item) {
+        Bundle bundle = new Bundle();
+        navigation.navigate(R.id.action_nav_feedback_to_add_feedback_fragment,bundle);
     }
 
     private void clickDelete(View view, Class item){
@@ -96,4 +107,5 @@ public class ClassFragment extends Fragment {
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }
+
 }

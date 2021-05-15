@@ -25,7 +25,12 @@
         android:id="@+id/nav_class"
         android:name="com.gaf.project.fragment.ClassFragment"
         android:label="@string/menu_class"
-        tools:layout="@layout/fragment_class" />
+        tools:layout="@layout/fragment_class" >
+        <action
+            android:id="@+id/action_nav_class_to_add_class_fragment"
+            app:destination="@id/add_class_fragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/nav_module"
         android:name="com.gaf.project.fragment.ModuleFragment"
@@ -85,6 +90,7 @@
         android:label="AddFeedBackFragment"
         tools:layout="@layout/add_feedback"/>
 
+
     <fragment
         android:id="@+id/add_assignment_fragment"
         android:name="com.gaf.project.fragment.AddAssignmentFragment"
@@ -94,5 +100,11 @@
         android:id="@+id/add_question_fragment"
         android:name="com.gaf.project.fragment.AddQuestionFragment"
         android:label="AddQuestionFragment" />
+
+    <fragment
+        android:id="@+id/add_class_fragment"
+        android:name="com.gaf.project.fragment.AddClassFragment"
+        android:label="fragment_add_class"
+        tools:layout="@layout/fragment_add_class" />
 
 </navigation>

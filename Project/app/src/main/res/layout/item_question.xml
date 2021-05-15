@@ -104,20 +104,20 @@
         android:layout_alignParentRight="true">
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_edit_question"
+            style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:id="@+id/btn_edit_question"
             android:layout_marginBottom="5dp"
-            style="@style/Widget.MaterialComponents.Button.Icon"
-            app:icon="@drawable/ic_menu_camera"
-            app:iconSize="24dp"
-            app:iconPadding="0dp"
+            android:backgroundTint="@color/edit_button_color"
             android:insetLeft="0dp"
             android:insetTop="0dp"
             android:insetRight="0dp"
             android:insetBottom="0dp"
-            app:shapeAppearanceOverlay="@style/ButtonRounded"
-            android:backgroundTint="@color/edit_button_color"/>
+            app:icon="@drawable/ic_menu_camera"
+            app:iconPadding="0dp"
+            app:iconSize="24dp"
+            app:shapeAppearanceOverlay="@style/ButtonRounded" />
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="48dp"
