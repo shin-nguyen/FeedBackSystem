@@ -57,7 +57,7 @@ public class RetrofitConfig {
         gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
 
         Gson gson = gsonBuilder
-                .setDateFormat("dd/MM/yyyy")
+                .setDateFormat("dd-MM-yyyy")
                 .setPrettyPrinting()
                 .create();
 //        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();

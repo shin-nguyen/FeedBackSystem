@@ -1,5 +1,6 @@
 package com.gaf.feedbacksystem.controller;
 
+import com.gaf.feedbacksystem.MyResourceNotFoundException;
 import com.gaf.feedbacksystem.constant.SystemConstant;
 import com.gaf.feedbacksystem.dto.*;
 import com.gaf.feedbacksystem.entity.Admin;
@@ -13,15 +14,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/assignment")
@@ -45,15 +47,28 @@ public class AssignmentController {
     @PreAuthorize("hasAnyRole(\"" + SystemConstant.ADMIN_ROLE + "\"," +
                             "\"" + SystemConstant.TRAINER_ROLE + "\")")
     @GetMapping(value = "/")
-    public ResponseEntity<List<AssignmentDto>> getListAssignment(){
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
+    public ResponseEntity<Map<String, List<?>>> getListAssignment(){
+        try {
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                    .getPrincipal();
 
-        if (userDetails.getAuthorities().contains(SystemConstant.TRAINER_ROLE)){
-            return ResponseEntity.ok().body(assignmentService.findByTrainerUserName(userDetails.getUsername()));
+            List<AssignmentDto> assignmentList = new ArrayList<>();
+
+            if (userDetails.getAuthorities().contains(SystemConstant.TRAINER_ROLE)) {
+                assignmentList =  assignmentService.findByTrainerUserName(userDetails.getUsername());
+            } else{
+                assignmentList = assignmentService.findAll();
+            }
+            if ( assignmentList.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            Map result = new HashMap();
+            result.put("assignmentList", assignmentList);
+            return ResponseEntity.ok().body(result);
         }
-
-        return ResponseEntity.ok().body(assignmentService.findAll());
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Assignment Not Found", exc);
+        }
     }
 
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")

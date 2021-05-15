@@ -30,7 +30,9 @@ public class Module {
     @Column(length = 50)
     private String moduleName;
 
+
     @Column(name="startTime",columnDefinition = "DATE")
+
     private LocalDate  startTime;
     @Column(name="endTime",columnDefinition = "DATE")
     private LocalDate  endTime;

@@ -103,7 +103,10 @@ public class LoginActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(Call<AuthenticationResponse> call, Throwable t) {
+                                Log.e("Ec",t.getLocalizedMessage());
+
                                 showToast("Error");
+
                             }
                         });
             }

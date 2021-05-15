@@ -10,7 +10,7 @@ import com.gaf.project.service.ModuleService;
 public class ApiUtils {
 
     //Dia chi may host
-    public static final String BASE_URL = "http://192.168.31.93:8080/";
+    public static final String BASE_URL = "http://192.168.43.238:8080/";
 
     public static AuthenticationService getAuthenticationService() {
         return RetrofitConfig.getInstance().buildRetrofit().create(AuthenticationService.class);
