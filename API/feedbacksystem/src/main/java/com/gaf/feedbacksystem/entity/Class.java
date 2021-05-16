@@ -30,11 +30,11 @@ public class Class {
     private String className;
     private String capacity;
 
-    @JsonFormat(pattern="dd-MM-yyyy")
+    @JsonFormat(pattern="dd/MM/yyyy")
     @Column(name = "startTime",columnDefinition = "DATE")
     private LocalDate  startTime;
     
-    @JsonFormat(pattern="dd-MM-yyyy")
+    @JsonFormat(pattern="dd/MM/yyyy")
     @Column(name ="endTime",columnDefinition = "DATE")
     private LocalDate  endTime;
 

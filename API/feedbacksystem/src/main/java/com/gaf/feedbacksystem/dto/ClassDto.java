@@ -19,9 +19,9 @@ public class ClassDto {
     private Integer classID;
     private String className;
     private String capacity;
-    @JsonFormat(pattern="dd-MM-yyyy")
+    @JsonFormat(pattern="dd/MM/yyyy")
     private LocalDate startTime;
-    @JsonFormat(pattern="dd-MM-yyyy")
+    @JsonFormat(pattern="dd/MM/yyyy")
     private LocalDate endTime;
     private boolean isDeleted = false;
     private Collection<TraineeDto> trainees;

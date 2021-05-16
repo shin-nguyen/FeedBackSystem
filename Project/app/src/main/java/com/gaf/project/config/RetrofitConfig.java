@@ -31,19 +31,6 @@ public class RetrofitConfig {
     }
 
     public Retrofit buildRetrofit(){
-//        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
-//
-//        Interceptor interceptor = new Interceptor() {
-//            @Override
-//            public Response intercept(Chain chain) throws IOException {
-//                Request request = chain.request();
-//                Headers headers = request.headers().newBuilder().add("Content-Type", "application/json").build();
-//                request = request.newBuilder().headers(headers).build();
-//                return chain.proceed(request);
-//            }
-//        };
-//        clientBuilder.addInterceptor(interceptor);
-
         return new Retrofit.Builder().baseUrl(ApiUtils.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -51,13 +38,12 @@ public class RetrofitConfig {
 
     public Retrofit  builderRetrofitAuth(String token){
 
-
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateSerializer());
         gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
 
         Gson gson = gsonBuilder
-                .setDateFormat("dd-MM-yyyy")
+                .setDateFormat("dd/MM/yyyy")
                 .setPrettyPrinting()
                 .create();
 //        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
