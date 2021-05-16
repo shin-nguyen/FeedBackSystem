@@ -22,7 +22,7 @@ public class ClassServiceImpl implements IClassService  {
     
 	@Override
 	public List<ClassDto> findAll() {
-		 List<Class> clazz = classRepository.findAll();
+		 List<Class> clazz = classRepository.findAllByDeletedIsFalse();
 	     List<ClassDto> classDtos = ObjectMapperUtils.mapAll(clazz,ClassDto.class);		 
 	     return classDtos;
 	}
@@ -52,7 +52,7 @@ public class ClassServiceImpl implements IClassService  {
 	}
 
 	@Override
-	public void deleteById(String id) {
+	public void deleteById(Integer id) {
 		classRepository.deleteByClassId(id);
 	}
 }

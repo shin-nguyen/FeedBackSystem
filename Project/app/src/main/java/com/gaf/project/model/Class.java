@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.*;
 
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
@@ -14,7 +15,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Class {
+public class Class implements Serializable {
     @SerializedName("classID")
     @Expose
     private Integer classID;

@@ -29,7 +29,10 @@
 
         <action
             android:id="@+id/action_nav_class_to_add_class_fragment"
-            app:destination="@id/add_class_fragment" />
+            app:destination="@id/add_class_fragment">
+
+            
+        </action>
     </fragment>
 
     <fragment

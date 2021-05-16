@@ -60,14 +60,18 @@ public class AddClassFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup parent, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_class, parent, false);
-
-//        String classId = getArguments().getString("classId","");
         initComponents(view);
-//
-//        if (classId.isEmpty()){
-//
-//        }
 
+        try {
+            Class mClassEdit = (Class) getArguments().getSerializable("mClass");
+
+            if (mClassEdit != null) {
+                showToast("Success");
+            }
+        }
+        catch (Exception ex){
+            Log.e("Huhu",ex.getLocalizedMessage());
+        }
         btnSave.setOnClickListener(v->{
             String name = mName.getText().toString().trim();
             String capicity = mCapacity.getText().toString().trim();
@@ -76,7 +80,7 @@ public class AddClassFragment extends Fragment {
 
             Date startDate = new Date();
             try {
-                startDate = df.parse(mStartDate.getText().toString());
+                 startDate = df.parse(mStartDate.getText().toString());
             } catch (ParseException e) {
                 e.printStackTrace();
             }

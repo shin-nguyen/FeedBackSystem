@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -25,6 +26,7 @@ import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Class;
 import com.gaf.project.model.Module;
 import com.gaf.project.response.ClassResponse;
+import com.gaf.project.response.DeleteResponse;
 import com.gaf.project.service.ClassService;
 import com.gaf.project.utils.ApiUtils;
 
@@ -40,7 +42,7 @@ public class ClassFragment extends Fragment {
     private RecyclerView rcvClass;
     private ClassService classService;
     private List<Class> classList;
-    private NavController navigation;
+
     private Button btnAddClass;
     private  View view;
     @Override
@@ -78,8 +80,7 @@ public class ClassFragment extends Fragment {
         });
 
         btnAddClass.setOnClickListener(v ->{
-            navigation = Navigation.findNavController(view);
-            navigation.navigate(R.id.action_nav_class_to_add_class_fragment);
+            Navigation.findNavController(view).navigate(R.id.action_nav_class_to_add_class_fragment);
         });
 
 
@@ -87,12 +88,13 @@ public class ClassFragment extends Fragment {
         //Set value adapter for Adapter
         classList = new ArrayList<>();
         Call<ClassResponse> call =  classService.loadListClass(
-                "Bearer "+ SystemConstant.authenticationResponse.getJwt());
+                "Bearer "+ SystemConstant.authenticationResponse.getJwt()
+        );
 
         call.enqueue(new Callback<ClassResponse>() {
             @Override
             public void onResponse(Call<ClassResponse> call, Response<ClassResponse> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()&&response.body()!=null){
                     classList = response.body().getClasss();
                     adapter.setData(classList);
                 }
@@ -110,8 +112,10 @@ public class ClassFragment extends Fragment {
     }
 
     private void clickUpdate(Class item) {
-//        Bundle bundle = new Bundle();
-//        navigation.navigate(R.id.action_nav_feedback_to_add_feedback_fragment,bundle);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("mClass", item);
+
+        Navigation.findNavController(view).navigate(R.id.action_nav_class_to_add_class_fragment,bundle);
     }
 
     private void clickDelete(Class item){
@@ -137,23 +141,42 @@ public class ClassFragment extends Fragment {
         btnYes.setOnClickListener(v->{
             warningDialog.dismiss();
 
-            AlertDialog.Builder builderSuccess=new AlertDialog.Builder(getContext());
-            View viewBuilderSuccess=LayoutInflater.from(getContext()).inflate(R.layout.success_dialog,null);
+            Call<DeleteResponse> call =  classService.delete(
+                    "Bearer "+ SystemConstant.authenticationResponse.getJwt(),
+                    item.getClassID()
+                    );
+           call.enqueue(new Callback<DeleteResponse>() {
+               @Override
+               public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
+                   if (response.isSuccessful()&&response.body().getDeleted()){
+                       AlertDialog.Builder builderSuccess=new AlertDialog.Builder(getContext());
+                       View viewBuilderSuccess=LayoutInflater.from(getContext()).inflate(R.layout.success_dialog,null);
 
-            builder.setView(viewBuilderSuccess);
+                       builder.setView(viewBuilderSuccess);
 
-            TextView warningSuccessContent = viewBuilderSuccess.findViewById(R.id.txt_success_content);
-            warningSuccessContent.setText("Delete Success!");
+                       TextView warningSuccessContent = viewBuilderSuccess.findViewById(R.id.txt_success_content);
+                       warningSuccessContent.setText("Delete Success!");
 
 
 
-            final AlertDialog successDialog=builder.create();
-            successDialog.show();
+                       final AlertDialog successDialog=builder.create();
+                       successDialog.show();
 
-            Button btnSuccessCancel = viewBuilderSuccess.findViewById(R.id.btn_ok);
-            btnSuccessCancel.setOnClickListener(vi -> {
-                successDialog.dismiss();
-            });
+                       Button btnSuccessCancel = viewBuilderSuccess.findViewById(R.id.btn_ok);
+                       btnSuccessCancel.setOnClickListener(vi -> {
+                           successDialog.dismiss();
+                       });
+
+                   }
+
+               }
+
+               @Override
+               public void onFailure(Call<DeleteResponse> call, Throwable t) {
+
+               }
+           });
+
         });
 
     }
@@ -161,5 +184,11 @@ public class ClassFragment extends Fragment {
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }
+    //switch to another fragment
+//    private void replaceFragment(Fragment fragment){
+//        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id., fragment);
+//        fragmentTransaction.commit();
+//    }
 
 }
