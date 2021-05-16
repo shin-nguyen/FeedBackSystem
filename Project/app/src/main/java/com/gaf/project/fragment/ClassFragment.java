@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,10 +49,15 @@ public class ClassFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_class, container, false);
+
+        //Set layout manager -> recyclerView Status
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
+        rcvClass = view.findViewById(R.id.rcv_class);
+        rcvClass.setLayoutManager(linearLayoutManager);
+
         navigation = Navigation.findNavController(view);
         btnAddClass = view.findViewById(R.id.btn_add_class);
 
-        rcvClass = view.findViewById(R.id.rcv_class);
         adapter =new ClassAdapter(new ClassAdapter.IClickItem() {
             @Override
             public void update(Class item) {
@@ -67,9 +73,7 @@ public class ClassFragment extends Fragment {
             navigation.navigate(R.id.action_nav_class_to_add_class_fragment);
         });
 
-        //Set layout manager -> recyclerView Status
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
-        rcvClass.setLayoutManager(linearLayoutManager);
+
 
         //Set value adapter for Adapter
         classList = new ArrayList<>();
@@ -97,8 +101,8 @@ public class ClassFragment extends Fragment {
     }
 
     private void clickUpdate(Class item) {
-        Bundle bundle = new Bundle();
-        navigation.navigate(R.id.action_nav_feedback_to_add_feedback_fragment,bundle);
+//        Bundle bundle = new Bundle();
+//        navigation.navigate(R.id.action_nav_feedback_to_add_feedback_fragment,bundle);
     }
 
     private void clickDelete(View view, Class item){

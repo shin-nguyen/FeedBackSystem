@@ -24,9 +24,9 @@ public class Module {
     @SerializedName("moduleName")
     private String moduleName;
     @SerializedName("startTime")
-    private LocalDate startTime;
+    private Date startTime;
     @SerializedName("endTime")
-    private LocalDate endTime;
+    private Date endTime;
     @SerializedName("deleted")
     private boolean isDeleted;
     @SerializedName("feedbackStartTime")

@@ -29,11 +29,11 @@ public class Class {
 
     @SerializedName("startTime")
     @Expose
-    private LocalDate startTime;
+    private Date startTime;
 
     @SerializedName("endTime")
     @Expose
-    private LocalDate endTime;
+    private Date endTime;
 
     @SerializedName("deleted")
     @Expose
@@ -42,4 +42,6 @@ public class Class {
     @SerializedName("trainees")
     @Expose
     private Collection<Trainee> trainees = null;
+
+
 }

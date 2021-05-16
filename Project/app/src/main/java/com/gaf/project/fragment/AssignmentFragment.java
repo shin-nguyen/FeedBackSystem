@@ -73,7 +73,7 @@ public class AssignmentFragment extends Fragment implements View.OnClickListener
 
         listAssignment = new ArrayList<>();
 
-        LocalDate nowDate = LocalDate.now();
+        Date nowDate = new Date();
         LocalDateTime localDateTime = LocalDateTime.now();
         Collection<Trainee> trainees  = new ArrayList<>();
         Class  mClass = new Class("1", "2", "Ec", nowDate, nowDate, false,trainees);
@@ -86,7 +86,7 @@ public class AssignmentFragment extends Fragment implements View.OnClickListener
         AssignmentId  assignmentId = new AssignmentId(mClass,module,trainer);
         Assignment assignment = new Assignment(assignmentId,"Ec");
         listAssignment.add(assignment);
-   
+
 
         assignmentAdapter = new AssignmentAdapter();
         assignmentAdapter.setData(listAssignment,getContext());

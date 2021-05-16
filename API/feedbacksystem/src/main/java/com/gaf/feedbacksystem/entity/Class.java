@@ -4,14 +4,7 @@ package com.gaf.feedbacksystem.entity;
 import java.time.LocalDate;
 import java.util.Collection;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -20,6 +13,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Generated;
 
 
 @Data
@@ -30,6 +24,7 @@ import lombok.ToString;
 
 public class Class {
     @Id
+    @GeneratedValue
     private String classID;
     private String className;
     private String capacity;
