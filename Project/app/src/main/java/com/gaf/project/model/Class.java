@@ -10,7 +10,6 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Class {
 
     private String classID;

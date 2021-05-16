@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_homepage, R.id.nav_assignment, R.id.nav_class, R.id.nav_module,
                 R.id.nav_enrollment,R.id.nav_feedback, R.id.nav_result, R.id.nav_question,
-                R.id.nav_contact,R.id.nav_log_out, R.id.add_feedback_fragment)
+                R.id.nav_contact,R.id.nav_log_out, R.id.add_feedback_fragment, R.id.review_feedback_fragment)
                 .setDrawerLayout(drawer)
                 .build();
 

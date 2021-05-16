@@ -32,11 +32,13 @@
         android:name="com.gaf.project.fragment.ContactFragment"
         android:label="fragment_contact"
         tools:layout="@layout/fragment_contact" />
+
     <fragment
         android:id="@+id/nav_enrollment"
         android:name="com.gaf.project.fragment.EnrollmentFragment"
         android:label="fragment_enrollment"
         tools:layout="@layout/fragment_enrollment" />
+
     <fragment
         android:id="@+id/nav_feedback"
         android:name="com.gaf.project.fragment.FeedBackFragment"
@@ -45,6 +47,9 @@
         <action
             android:id="@+id/action_nav_feedback_to_add_feedback_fragment"
             app:destination="@id/add_feedback_fragment" />
+        <action
+            android:id="@+id/action_nav_feedback_to_review_feedback_fragment"
+            app:destination="@id/review_feedback_fragment" />
     </fragment>
 
     <fragment
@@ -72,21 +77,19 @@
         tools:layout="@layout/fragment_question" />
 
     <fragment
-        android:id="@+id/nav_contact"
-        android:name="com.gaf.project.fragment.ClassFragment"
-        android:label="@string/menu_contact"
-        tools:layout="@layout/fragment_contact" />
-
-    <fragment
-        android:id="@+id/nav_log_out"
-        android:name="com.gaf.project.fragment.ClassFragment"
-        android:label="@string/menu_log_out"
-        tools:layout="@layout/fragment_log_out" />
-
-    <fragment
         android:id="@+id/add_feedback_fragment"
         android:name="com.gaf.project.fragment.AddFeedBackFragment"
         android:label="AddFeedBackFragment"
-        tools:layout="@layout/add_feedback"/>
+        tools:layout="@layout/add_feedback">
+        <action
+            android:id="@+id/action_add_feedback_fragment_to_review_feedback_fragment"
+            app:destination="@id/review_feedback_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/review_feedback_fragment"
+        android:name="com.gaf.project.fragment.ReviewFeedbackFragment"
+        android:label="review_feeback"
+        tools:layout="@layout/review_feeback" />
 
 </navigation>

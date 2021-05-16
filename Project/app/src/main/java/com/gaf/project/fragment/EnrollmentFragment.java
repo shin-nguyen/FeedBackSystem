@@ -2,65 +2,69 @@ package com.gaf.project.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.gaf.project.R;
+import com.gaf.project.adapter.EnrollmentAdapter;
+import com.gaf.project.model.BaseUser;
+import com.gaf.project.model.Class;
+import com.gaf.project.model.Trainee;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link EnrollmentFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 public class EnrollmentFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private View view;
+    private NavController navigation;
+    private RecyclerView recyclerViewEnrollment;
+    private EnrollmentAdapter EnrollmentAdapter;
+    private List<Class> listClass;
+    private List<Trainee> listTrainee;
 
     public EnrollmentFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment EnrollmentFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static EnrollmentFragment newInstance(String param1, String param2) {
-        EnrollmentFragment fragment = new EnrollmentFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_enrollment, container, false);
+        view = inflater.inflate(R.layout.fragment_enrollment, container, false);
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        recyclerViewEnrollment = view.findViewById(R.id.rcv_enrollment);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
+        recyclerViewEnrollment.setLayoutManager(linearLayoutManager);
+
+        listClass = new ArrayList<>();
+        listTrainee = new ArrayList<>();
+
+
+        Class clazz = new Class("1", "class1", "50", LocalDate.now(), LocalDate.now(), false, new ArrayList<>());
+        Trainee trainee = new Trainee("hungdo", "hung", "hung@gmail.com", "123", "0123", "Dong Nai", true, 1, "123", "123", new ArrayList<>());
+
+        listTrainee.add(trainee);
+        listClass.add(clazz);
+
+        EnrollmentAdapter enrollmentAdapter = new EnrollmentAdapter();
+        enrollmentAdapter.setClassData(listClass);
+        enrollmentAdapter.setTraineeData(listTrainee);
+
+        recyclerViewEnrollment.setAdapter(enrollmentAdapter);
     }
 }

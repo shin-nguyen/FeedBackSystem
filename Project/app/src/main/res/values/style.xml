@@ -30,5 +30,6 @@
     <style name="spinnerDropDownItemStyle" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
         <item name="android:textStyle">bold</item>
     </style>
+
     <string name="login_button">LOGIN</string>
 </resources>

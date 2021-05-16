@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
-    android:id="@+id/item_feeback"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -29,10 +28,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Feedback ID: " />
+                android:text="Trainee ID: " />
 
             <TextView
-                android:id="@+id/feedback_id"
+                android:id="@+id/trainee_id"
                 style="@style/TextItemStyle"
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
@@ -49,10 +48,10 @@
                 style="@style/TextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Title: " />
+                android:text="Trainee Name: " />
 
             <TextView
-                android:id="@+id/feedback_title"
+                android:id="@+id/trainee_name"
                 style="@style/TextItemStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -68,17 +67,36 @@
                 style="@style/TextViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="Admin ID: " />
+                android:text="Class ID: " />
 
             <TextView
-                android:id="@+id/feedback_admin_id"
+                android:id="@+id/class_id"
                 style="@style/TextItemStyle"
                 android:layout_width="match_parent"
-                android:layout_marginBottom="10dp"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Class Name: " />
+
+            <TextView
+                android:id="@+id/class_name"
+                style="@style/TextItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -92,7 +110,6 @@
         <com.google.android.material.button.MaterialButton
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:id="@+id/btn_feedback_detail"
             android:layout_marginBottom="5dp"
             style="@style/Widget.MaterialComponents.Button.Icon"
             app:icon="@drawable/ic_menu_camera"
@@ -108,7 +125,6 @@
         <com.google.android.material.button.MaterialButton
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:id="@+id/btn_edit_feedback"
             android:layout_marginBottom="5dp"
             style="@style/Widget.MaterialComponents.Button.Icon"
             app:icon="@drawable/ic_menu_camera"
