@@ -24,8 +24,9 @@ import org.hibernate.annotations.Generated;
 
 public class Class {
     @Id
-    @GeneratedValue
-    private String classID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "classID", unique = true, nullable = false)
+    private Integer classID;
     private String className;
     private String capacity;
 
@@ -36,9 +37,8 @@ public class Class {
     @JsonFormat(pattern="dd-MM-yyyy")
     @Column(name ="endTime",columnDefinition = "DATE")
     private LocalDate  endTime;
-    
-    private boolean isDeleted = false;
 
+    private boolean isDeleted = false;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     // Quan hệ n-n với đối tượng ở dưới (Person) (1 địa điểm có nhiều người ở)

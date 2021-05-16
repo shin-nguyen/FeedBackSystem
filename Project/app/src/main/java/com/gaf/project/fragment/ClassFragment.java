@@ -40,22 +40,28 @@ public class ClassFragment extends Fragment {
     private List<Class> classList;
     private NavController navigation;
     private Button btnAddClass;
+    private  View view;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         classService = ApiUtils.getClassService();
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_class, container, false);
+         view = inflater.inflate(R.layout.fragment_class, container, false);
 
         //Set layout manager -> recyclerView Status
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         rcvClass = view.findViewById(R.id.rcv_class);
         rcvClass.setLayoutManager(linearLayoutManager);
 
-        navigation = Navigation.findNavController(view);
+
         btnAddClass = view.findViewById(R.id.btn_add_class);
 
         adapter =new ClassAdapter(new ClassAdapter.IClickItem() {
@@ -70,6 +76,7 @@ public class ClassFragment extends Fragment {
         });
 
         btnAddClass.setOnClickListener(v ->{
+            navigation = Navigation.findNavController(view);
             navigation.navigate(R.id.action_nav_class_to_add_class_fragment);
         });
 

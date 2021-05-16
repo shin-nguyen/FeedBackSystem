@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ClassDto {
-    private String classID;
+    private Integer classID;
     private String className;
     private String capacity;
     @JsonFormat(pattern="dd-MM-yyyy")

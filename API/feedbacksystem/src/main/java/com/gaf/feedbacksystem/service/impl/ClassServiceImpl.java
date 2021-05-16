@@ -28,7 +28,7 @@ public class ClassServiceImpl implements IClassService  {
 	}
 
 	@Override
-	public ClassDto findById(String classId) {
+	public ClassDto findById(Integer classId) {
 		Class mClass = classRepository.findByClassID(classId);
 		ClassDto classDto = ObjectMapperUtils.map(mClass,ClassDto.class);
 		return classDto;

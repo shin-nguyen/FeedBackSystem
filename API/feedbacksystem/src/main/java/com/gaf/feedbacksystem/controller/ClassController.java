@@ -30,7 +30,7 @@ public class ClassController {
 
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
     @GetMapping("/classes/{id}")
-    public ResponseEntity<ClassDto> getClass(@PathVariable(value = "id") String classID) {
+    public ResponseEntity<ClassDto> getClass(@PathVariable(value = "id") Integer classID) {
         try{
             final ClassDto classDto = classService.findById(classID);
             if (classDto==null){

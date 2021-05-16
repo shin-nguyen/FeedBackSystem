@@ -8,10 +8,10 @@ import org.springframework.stereotype.Repository;
 import com.gaf.feedbacksystem.entity.Class;
 
 @Repository
-public interface ClazzRepository extends JpaRepository<Class, String> {
+public interface ClazzRepository extends JpaRepository<Class, Integer> {
     Class save(Class aClazz);
 
-    Class findByClassID(String classID);
+    Class findByClassID(Integer classID);
 
     @Query("update Class set isDeleted =true where classID = :id ")
     void deleteByClassId(@Param("id") String id);

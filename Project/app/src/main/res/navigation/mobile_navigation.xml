@@ -26,6 +26,7 @@
         android:name="com.gaf.project.fragment.ClassFragment"
         android:label="@string/menu_class"
         tools:layout="@layout/fragment_class" >
+
         <action
             android:id="@+id/action_nav_class_to_add_class_fragment"
             app:destination="@id/add_class_fragment" />

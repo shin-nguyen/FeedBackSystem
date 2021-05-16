@@ -76,7 +76,7 @@ public class AssignmentFragment extends Fragment implements View.OnClickListener
         Date nowDate = new Date();
         LocalDateTime localDateTime = LocalDateTime.now();
         Collection<Trainee> trainees  = new ArrayList<>();
-        Class  mClass = new Class("1", "2", "Ec", nowDate, nowDate, false,trainees);
+        Class  mClass = new Class(1, "2", "Ec", nowDate, nowDate, false,trainees);
         Admin admin = new Admin("thao","thao","thaole","1234");
         TypeFeedback typeFeedback = new TypeFeedback(1,"Ec",false);
         Feedback feedback = new Feedback(1,"Ec",admin,false,typeFeedback,new ArrayList<>());

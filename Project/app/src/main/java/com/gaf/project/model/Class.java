@@ -17,11 +17,18 @@ import java.util.Date;
 public class Class {
     @SerializedName("classID")
     @Expose
-    private String classID;
+    private Integer classID;
 
     @SerializedName("className")
     @Expose
     private String className;
+
+    public Class(String className, String capacity, Date startTime, Date endTime) {
+        this.className = className;
+        this.capacity = capacity;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 
     @SerializedName("capacity")
     @Expose
@@ -42,6 +49,7 @@ public class Class {
     @SerializedName("trainees")
     @Expose
     private Collection<Trainee> trainees = null;
+
 
 
 }

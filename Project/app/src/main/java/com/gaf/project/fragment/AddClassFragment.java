@@ -7,15 +7,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gaf.project.R;
+import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Class;
+import com.gaf.project.response.ClassResponse;
+import com.gaf.project.service.ClassService;
+import com.gaf.project.utils.ApiUtils;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -23,17 +31,29 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class AddClassFragment extends Fragment {
 
     private EditText mName, mId, mCapacity;
-    private EditText mStartDate,mEndDate;
-    private Button btnStartDate, btnEndDate;
+    private TextView mStartDate,mEndDate;
+    private ImageButton btnStartDate, btnEndDate;
     private Button btnSave, btnBack;
     private Calendar calendar;
     private DatePickerDialog datePickerDialog;
     private Date planDate;
+    private ClassService classService;
+
     public AddClassFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        classService = ApiUtils.getClassService();
     }
 
     @Nullable
@@ -68,7 +88,28 @@ public class AddClassFragment extends Fragment {
                 e.printStackTrace();
             }
 
-           // Class mClass = new Class(name,capicity,);
+            Class mClass = new Class(name,capicity,startDate,endDate);
+            Call<Class> call =  classService.create(
+                    "Bearer "+ SystemConstant.authenticationResponse.getJwt(),
+                    mClass
+                    );
+            call.enqueue(new Callback<Class>() {
+                @Override
+                public void onResponse(Call<Class> call, Response<Class> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body()!=null){
+                            showToast("Success");
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Class> call, Throwable t) {
+                    Log.e("Error",t.getLocalizedMessage());
+                    showToast("Error");
+                }
+            });
+
         });
 
         //Select plan date
@@ -120,10 +161,14 @@ public class AddClassFragment extends Fragment {
         mStartDate = view.findViewById(R.id.txt_start_date);
         mEndDate = view.findViewById(R.id.txt_end_date);
 
-        btnSave  =view.findViewById(R.id.btn_save_class);
-        btnBack  = view.findViewById(R.id.btn_back);
+        btnSave  =(Button)view.findViewById(R.id.btn_save_class);
+        btnBack  = (Button)view.findViewById(R.id.btn_back);
 
-        btnStartDate = view.findViewById(R.id.btn_add_start_date);
-        btnEndDate = view.findViewById(R.id.btn_add_end_date);
+        btnStartDate =(ImageButton) view.findViewById(R.id.btn_add_start_date);
+        btnEndDate =(ImageButton) view.findViewById(R.id.btn_add_end_date);
+    }
+
+    public void showToast(String string){
+        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }
 }
