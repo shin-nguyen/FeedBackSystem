@@ -57,6 +57,13 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
         holder.startDate.setText(dateFormat.format(mClass.getStartTime()));
         holder.endDate.setText(dateFormat.format(mClass.getEndTime()));
 
+
+        holder.btnEdit.setOnClickListener(v->{
+            iClickItem.update(mClass);
+        });
+        holder.btnDelete.setOnClickListener(v->{
+            iClickItem.delete(mClass);
+        });
     }
 
     @Override
@@ -74,7 +81,10 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
 
         public ClassViewHolder(@NonNull View view) {
             super(view);
+            initView(view);
+        }
 
+        private void initView(View view) {
             id = view.findViewById(R.id.txt_class_id);
             name = view.findViewById(R.id.txt_class_name);
             capacity = view.findViewById(R.id.txt_capacity);

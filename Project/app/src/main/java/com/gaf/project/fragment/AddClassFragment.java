@@ -72,7 +72,7 @@ public class AddClassFragment extends Fragment {
             String name = mName.getText().toString().trim();
             String capicity = mCapacity.getText().toString().trim();
 
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 
             Date startDate = new Date();
             try {
@@ -124,7 +124,7 @@ public class AddClassFragment extends Fragment {
                         calendar.set(mYear, mMonth, mDayOfMonth);
                         planDate = calendar.getTime();
 
-                        mStartDate.setText(new SimpleDateFormat("dd/MM/yyyy").format(planDate));
+                        mStartDate.setText(new SimpleDateFormat("MM/dd/yyyy").format(planDate));
                     }
                     , year, month, day);
 
@@ -143,7 +143,7 @@ public class AddClassFragment extends Fragment {
                         calendar.set(mYear, mMonth, mDayOfMonth);
                         planDate = calendar.getTime();
 
-                        mEndDate.setText(new SimpleDateFormat("dd/MM/yyyy").format(planDate));
+                        mEndDate.setText(new SimpleDateFormat("MM/dd/yyyy").format(planDate));
                     }
                     , year, month, day);
 

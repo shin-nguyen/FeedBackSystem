@@ -1,11 +1,13 @@
 package com.gaf.project.fragment;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -71,7 +73,7 @@ public class ClassFragment extends Fragment {
             }
             @Override
             public void delete(Class item) {
-                clickDelete(view,item);
+                clickDelete(item);
             }
         });
 
@@ -112,7 +114,48 @@ public class ClassFragment extends Fragment {
 //        navigation.navigate(R.id.action_nav_feedback_to_add_feedback_fragment,bundle);
     }
 
-    private void clickDelete(View view, Class item){
+    private void clickDelete(Class item){
+        AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
+        View viewBuilder=LayoutInflater.from(getContext()).inflate(R.layout.warning_dialog,null);
+
+        builder.setView(viewBuilder);
+
+        final AlertDialog warningDialog=builder.create();
+
+
+        TextView warningContent = viewBuilder.findViewById(R.id.txt_warning_content);
+        warningContent.setText("Do you want to delete this Class?");
+
+        warningDialog.show();
+
+        Button btnCancel = viewBuilder.findViewById(R.id.btn_cancel);
+        btnCancel.setOnClickListener(vi->{
+            warningDialog.dismiss();
+        });
+
+        Button btnYes = viewBuilder.findViewById(R.id.btn_yes);
+        btnYes.setOnClickListener(v->{
+            warningDialog.dismiss();
+
+            AlertDialog.Builder builderSuccess=new AlertDialog.Builder(getContext());
+            View viewBuilderSuccess=LayoutInflater.from(getContext()).inflate(R.layout.success_dialog,null);
+
+            builder.setView(viewBuilderSuccess);
+
+            TextView warningSuccessContent = viewBuilderSuccess.findViewById(R.id.txt_success_content);
+            warningSuccessContent.setText("Delete Success!");
+
+
+
+            final AlertDialog successDialog=builder.create();
+            successDialog.show();
+
+            Button btnSuccessCancel = viewBuilderSuccess.findViewById(R.id.btn_ok);
+            btnSuccessCancel.setOnClickListener(vi -> {
+                successDialog.dismiss();
+            });
+        });
+
     }
 
     public void showToast(String string){
