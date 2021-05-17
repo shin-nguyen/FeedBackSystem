@@ -85,13 +85,7 @@ public class AddAssignmentFragment extends Fragment {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnBack.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        getActivity().onBackPressed();
-                    }
-                });
-                Toast.makeText(getContext(),"back",Toast.LENGTH_LONG).show();
+                getActivity().onBackPressed();
             }
         });
 
