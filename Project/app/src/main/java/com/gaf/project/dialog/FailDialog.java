@@ -31,10 +31,7 @@ public class FailDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fail_dialog, null);
 
-        Button confirmBtn = view.findViewById(R.id.confirm_button);
-        confirmBtn.setOnClickListener(v -> dismiss());
-
-        TextView message = view.findViewById(R.id.dialog_message);
+        TextView message = view.findViewById(R.id.txt_fail_dialog_message);
         if (mission == SystemConstant.ADD){
             message.setText("Add Success!");
         }
@@ -44,6 +41,10 @@ public class FailDialog extends DialogFragment {
         else if (mission == SystemConstant.DELETE) {
             message.setText("Delete Success!");
         }
+
+        Button confirmBtn = view.findViewById(R.id.btn_fail_confirm);
+        confirmBtn.setOnClickListener(v -> dismiss());
+
 //        if (getArguments() != null)
 //        {
 //            TextView message = view.findViewById(R.id.dialog_message);

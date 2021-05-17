@@ -6,8 +6,7 @@ import java.util.List;
 
 public interface IAdminService {
     List<AdminDto> findAll();
-    void save(AdminDto admin);
+    AdminDto save(AdminDto admin);
     AdminDto findByUserName(String userName);
-    void update(AdminDto admin);
-
+    AdminDto update(AdminDto admin);
 }

@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 
 public class Assignment{
 
@@ -20,6 +19,7 @@ public class Assignment{
     private AssignmentId getPrimaryKey(){
         return primaryKey;
     }
+
     public Class getmClass() {
         return getPrimaryKey().getMClass();
     }

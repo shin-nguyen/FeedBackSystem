@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:id="@+id/warning_dialog"
+    android:padding="30dp"
+    android:layout_margin="30dp"
+    android:background="@drawable/dialog_format">
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/warning_icon"
+        android:paddingBottom="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Are you sure?"
+        android:textSize="25sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Do you want to delete this ... ?"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:id="@+id/txt_warning_content"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:paddingTop="10dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:backgroundTint="@color/add_button_color"
+            android:hint="Yes!"
+            android:textColorHint="@color/white"
+            android:id="@+id/btn_yes"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:backgroundTint="@color/delete_button_color"
+            android:hint="Cancel!"
+            android:textColorHint="@color/white"
+            android:id="@+id/btn_cancel"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

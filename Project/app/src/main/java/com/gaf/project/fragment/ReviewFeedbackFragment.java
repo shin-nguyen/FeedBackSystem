@@ -22,7 +22,7 @@ public class ReviewFeedbackFragment extends Fragment {
 
     private View view;
     private String mission;
-    Button saveOrButton;
+    Button saveOrEditButton;
 
     @Nullable
     @Override
@@ -32,7 +32,7 @@ public class ReviewFeedbackFragment extends Fragment {
         Button backButton = view.findViewById(R.id.btn_back);
         backButton.setOnClickListener(v -> getActivity().onBackPressed());
 
-        saveOrButton = view.findViewById(R.id.btn_save_or_edit);
+        saveOrEditButton = view.findViewById(R.id.btn_save_or_edit);
         TextView title = view.findViewById(R.id.feedback_review_title);
 
         mission = getArguments().getString("mission");
@@ -45,12 +45,11 @@ public class ReviewFeedbackFragment extends Fragment {
         }
         else if (mission == SystemConstant.DETAIL){
             title.setText("Detail Feedback");
-            saveOrButton.setText("Edit");
+            saveOrEditButton.setText("Edit");
         }
 
 
-        saveOrButton.setOnClickListener(v -> showDialog());
-
+        saveOrEditButton.setOnClickListener(v -> showDialog());
         return view;
     }
 

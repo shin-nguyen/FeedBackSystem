@@ -19,6 +19,4 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Assignme
 //    List<Assignment> findByTrainer(Optional<TrainerDto> trainer);
     @Query("SELECT a FROM Assignment a WHERE a.primaryKey.trainer.userName= :username")
     List<Assignment> findByTrainerUserName(@Param("username") String username);
-
-
 }

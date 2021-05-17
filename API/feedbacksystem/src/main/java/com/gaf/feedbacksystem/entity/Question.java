@@ -28,6 +28,5 @@ public class Question {
     @ManyToMany(mappedBy = "questions")
     // LAZY để tránh việc truy xuất dữ liệu không cần thiết. Lúc nào cần thì mới query
     @EqualsAndHashCode.Exclude
-
     private Collection<Feedback> feedbacks;
 }

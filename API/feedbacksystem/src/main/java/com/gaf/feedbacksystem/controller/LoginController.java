@@ -32,7 +32,9 @@ public class LoginController {
     private UserDetailsServiceImpl userAdminDetailsService ;
 
     @RequestMapping(value = "/test",method = RequestMethod.GET)
-    public String getTest(){
+    public String getTest(
+//            @PathVariable String username
+    ){
         return "TangYuCheng";
     }
 

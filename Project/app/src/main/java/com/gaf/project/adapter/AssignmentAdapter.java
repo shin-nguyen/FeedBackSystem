@@ -1,9 +1,7 @@
 package com.gaf.project.adapter;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.text.Html;
-import android.view.Gravity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.gaf.project.MainActivity;
 import com.gaf.project.R;
 import com.gaf.project.model.Assignment;
 
@@ -22,9 +19,11 @@ import java.util.List;
 public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.AssignmentViewHolder> {
 
     private List<Assignment> mListAssignment;
+    private Context mContext;
 
-    public void setData(List<Assignment> list){
+    public void setData(List<Assignment> list, Context context){
         this.mListAssignment = list;
+        this.mContext= context;
         notifyDataSetChanged();
     }
 
@@ -46,11 +45,11 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
             return;
         }
 
-        holder.assignmentNo.setText("1");
-        holder.assignmentClassName.setText(String.valueOf(assignment.getmClass().getClassName()));
-        holder.assignmentCourseName.setText(String.valueOf(assignment.getModule().getModuleName()));
-        holder.assignmentTrainerName.setText(String.valueOf(assignment.getTrainer().getName()));
-        holder.assignmentRegistrationCode.setText(assignment.getRegistrationCode());
+        holder.assignmentNo.setText(String.valueOf(assignment.getModule().getModuleID()));
+        holder.className.setText(String.valueOf(assignment.getmClass().getClassName()));
+        holder.courseName.setText(String.valueOf(assignment.getModule().getModuleName()));
+        holder.trainerName.setText(String.valueOf(assignment.getTrainer().getName()));
+        holder.registrationCode.setText(assignment.getRegistrationCode());
     }
 
     @Override
@@ -63,17 +62,17 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
 
     public class AssignmentViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView assignmentNo, assignmentCourseName, assignmentClassName, assignmentTrainerName, assignmentRegistrationCode;
+        private TextView assignmentNo, courseName, className, trainerName, registrationCode;
         private Button editAssignment, deleteAssignment;
 
         public AssignmentViewHolder(@NonNull View itemView) {
             super(itemView);
 
             assignmentNo =itemView.findViewById(R.id.assignment_no);
-            assignmentCourseName =itemView.findViewById(R.id.assignment_course_name);
-            assignmentClassName =itemView.findViewById(R.id.assignment_class_name);
-            assignmentTrainerName =itemView.findViewById(R.id.assignment_trainer_name);
-            assignmentRegistrationCode =itemView.findViewById(R.id.assignment_registration_code);
+            courseName =itemView.findViewById(R.id.assignment_course_name);
+            className =itemView.findViewById(R.id.assignment_class_name);
+            trainerName =itemView.findViewById(R.id.assignment_trainer_name);
+            registrationCode =itemView.findViewById(R.id.assignment_registration_code);
             editAssignment=itemView.findViewById(R.id.btn_edit_assignment);
             deleteAssignment=itemView.findViewById(R.id.btn_delete_assignment);
 
@@ -87,36 +86,55 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
             deleteAssignment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    displayDeleteDialog();
+
+                    AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
+                    View view=LayoutInflater.from(mContext).inflate(R.layout.warning_dialog,null);
+
+                    builder.setView(view);
+
+                    final AlertDialog warningDialog=builder.create();
+                    warningDialog.show();
+
+                    TextView warningContent = view.findViewById(R.id.txt_warning_content);
+                    warningContent.setText("Do you want to delete this Assignment?");
+
+                    Button btnCancel = view.findViewById(R.id.btn_cancel);
+                    btnCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            warningDialog.dismiss();
+                        }
+                    });
+
+                    Button btnYes = view.findViewById(R.id.btn_yes);
+                    btnYes.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            warningDialog.dismiss();
+
+                            AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
+                            View view=LayoutInflater.from(mContext).inflate(R.layout.successful_dialog,null);
+
+                            builder.setView(view);
+
+                            final AlertDialog successDialog=builder.create();
+                            successDialog.show();
+
+                            TextView warningContent = view.findViewById(R.id.txt_success_dialog_message);
+                            warningContent.setText("Delete Success!");
+
+                            Button btnCancel = view.findViewById(R.id.btn_success_confirm);
+                            btnCancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    successDialog.dismiss();
+                                }
+                            });
+                        }
+                    });
                 }
             });
-        }
-
-        public void displayDeleteDialog(){
-            AlertDialog.Builder alert = new AlertDialog.Builder(itemView.getContext());
-
-            alert.setTitle("Details");
-            alert.setMessage("Enter your basic details");
-            alert.setCancelable(false);
-
-
-            alert.setNegativeButton(Html.fromHtml("<font color='#26AC33'>CANCEL</font>"), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-
-            alert.setPositiveButton(Html.fromHtml("<font color='#26AC33'>ADD</font>"), new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-
-            AlertDialog dialog = alert.create();
-            dialog.show();
         }
     }
 }

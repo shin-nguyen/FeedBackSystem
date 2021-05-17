@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="35dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/item_format"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Topic ID:  " />
+
+            <TextView
+                android:id="@+id/question_topic_id"
+                style="@style/TextItemStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Topic Name: " />
+
+            <TextView
+                android:id="@+id/question_topic_name"
+                style="@style/TextItemStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Question ID: " />
+
+            <TextView
+                android:id="@+id/question_question_id"
+                style="@style/TextItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Question Content: " />
+
+            <TextView
+                android:id="@+id/question_question_content"
+                style="@style/TextItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginRight="10dp"
+        android:layout_centerInParent="true"
+        android:layout_alignParentRight="true">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_edit_question"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="5dp"
+            android:backgroundTint="@color/edit_button_color"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            app:icon="@drawable/ic_menu_camera"
+            app:iconPadding="0dp"
+            app:iconSize="24dp"
+            app:shapeAppearanceOverlay="@style/ButtonRounded" />
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:id="@+id/btn_delete_question"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            app:icon="@drawable/ic_menu_camera"
+            app:iconSize="24dp"
+            app:iconPadding="0dp"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            app:shapeAppearanceOverlay="@style/ButtonRounded"
+            android:backgroundTint="@color/delete_button_color"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

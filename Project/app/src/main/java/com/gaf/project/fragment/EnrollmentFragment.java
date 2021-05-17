@@ -15,7 +15,6 @@ import android.widget.Button;
 
 import com.gaf.project.R;
 import com.gaf.project.adapter.EnrollmentAdapter;
-import com.gaf.project.model.BaseUser;
 import com.gaf.project.model.Class;
 import com.gaf.project.model.Trainee;
 
@@ -55,11 +54,11 @@ public class EnrollmentFragment extends Fragment {
         listTrainee = new ArrayList<>();
 
 
-        Class clazz = new Class("1", "class1", "50", LocalDate.now(), LocalDate.now(), false, new ArrayList<>());
+        //Class clazz = new Class("1", "class1", "50", LocalDate.now(), LocalDate.now(), false, new ArrayList<>());
         Trainee trainee = new Trainee("hungdo", "hung", "hung@gmail.com", "123", "0123", "Dong Nai", true, 1, "123", "123", new ArrayList<>());
 
         listTrainee.add(trainee);
-        listClass.add(clazz);
+        //listClass.add(clazz);
 
         EnrollmentAdapter enrollmentAdapter = new EnrollmentAdapter();
         enrollmentAdapter.setClassData(listClass);

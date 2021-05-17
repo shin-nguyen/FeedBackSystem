@@ -29,12 +29,9 @@ public class SuccessDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.success_dialog, null);
+        View view = inflater.inflate(R.layout.successful_dialog, null);
 
-        Button confirmBtn = view.findViewById(R.id.confirm_button);
-        confirmBtn.setOnClickListener(v -> dismiss());
-
-        TextView message = view.findViewById(R.id.dialog_message);
+        TextView message = view.findViewById(R.id.txt_success_dialog_message);
         if (mission == SystemConstant.ADD){
             message.setText("Add Success!");
         }
@@ -49,6 +46,9 @@ public class SuccessDialog extends DialogFragment {
 //            TextView message = view.findViewById(R.id.dialog_message);
 //            message.setText(getArguments().getString("placeholder", ""));
 //        }
+
+        Button confirmBtn = view.findViewById(R.id.btn_success_confirm);
+        confirmBtn.setOnClickListener(v -> dismiss());
 
         builder.setView(view);
         return builder.create();

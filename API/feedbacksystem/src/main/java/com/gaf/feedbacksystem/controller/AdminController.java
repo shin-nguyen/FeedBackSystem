@@ -1,10 +1,10 @@
 package com.gaf.feedbacksystem.controller;
 
+import com.gaf.feedbacksystem.MyResourceNotFoundException;
 import com.gaf.feedbacksystem.constant.SystemConstant;
 import com.gaf.feedbacksystem.dto.AdminDto;
-import com.gaf.feedbacksystem.entity.Admin;
+import com.gaf.feedbacksystem.entity.*;
 import com.gaf.feedbacksystem.entity.Class;
-import com.gaf.feedbacksystem.entity.Trainee;
 import com.gaf.feedbacksystem.service.IAdminService;
 
 import com.gaf.feedbacksystem.service.impl.AdminServiceImpl;
@@ -18,13 +18,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.Collection;
 
 
 @RestController
@@ -52,31 +55,29 @@ public class AdminController {
     public ResponseEntity<AdminDto> getAdmin(){
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
-
-        return  ResponseEntity.ok().body(adminService.findByUserName(userDetails.getUsername()));
+        final AdminDto  adminDto = adminService.findByUserName(userDetails.getUsername());
+        return  ResponseEntity.ok().body(adminDto);
     }
 
 
-    @PutMapping(value = "/updateProfile")
+    @PutMapping(value = "/")
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
-    public boolean updateAdmin(
+    public ResponseEntity<AdminDto> update(
             @Valid
-            @Parameter(description = "Update Admin", required = true, schema = @Schema(implementation = Admin.class))
+            @Parameter(description = "Update Admin", required = true, schema = @Schema(implementation = AdminDto.class))
             @RequestBody AdminDto adminDTO){
-
+        try{
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
 
-
-        try{
             if (adminDTO.getUserName().equals(userDetails.getUsername())){
-                adminService.update(adminDTO);
-                return true;
+               final AdminDto updateAdmin =  adminService.update(adminDTO);
+               return ResponseEntity.ok(updateAdmin);
             }
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        catch (Exception exception){
-
+        catch (MyResourceNotFoundException exc){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
         }
-        return  false;
     }
 }

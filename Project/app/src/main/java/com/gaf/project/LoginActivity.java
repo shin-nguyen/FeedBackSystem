@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -37,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+//        getActionBar().hide();
 
         addControls();
         addValues();
@@ -84,15 +86,16 @@ public class LoginActivity extends AppCompatActivity {
                 AuthenticationRequest authenticationRequest =
                         new AuthenticationRequest(username,password,"ADMIN");
 
+
                 authenticationService.login(authenticationRequest)
-                        .enqueue(new Callback<AuthenticationResponse>() {
+                        .enqueue( new Callback<AuthenticationResponse>() {
                             @Override
                             public void onResponse(Call<AuthenticationResponse> call, Response<AuthenticationResponse> response) {
                                 AuthenticationResponse authenticationResponse = response.body();
 
-                                if(authenticationResponse!=null){
+                                if (response.isSuccessful()){
                                     SystemConstant.authenticationResponse = authenticationResponse;
-
+                                    Log.e("Huhu",authenticationResponse.getJwt());
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
                                 }
@@ -100,7 +103,10 @@ public class LoginActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(Call<AuthenticationResponse> call, Throwable t) {
+                                Log.e("Ec",t.getLocalizedMessage());
+
                                 showToast("Error");
+
                             }
                         });
             }
