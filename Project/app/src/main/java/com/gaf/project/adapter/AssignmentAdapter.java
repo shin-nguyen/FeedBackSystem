@@ -9,21 +9,32 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gaf.project.R;
+import com.gaf.project.fragment.AddAssignmentFragment;
 import com.gaf.project.model.Assignment;
+import com.gaf.project.model.Class;
 
 import java.util.List;
 
 public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.AssignmentViewHolder> {
 
     private List<Assignment> mListAssignment;
-    private Context mContext;
 
-    public void setData(List<Assignment> list, Context context){
+    private AssignmentAdapter.IClickItem iClickItem;
+    public interface IClickItem{
+        void update(Assignment item);
+        void delete(Assignment item);
+    }
+    public AssignmentAdapter(AssignmentAdapter.IClickItem iClickItem) {
+        this.iClickItem = iClickItem;
+    }
+
+    public void setData(List<Assignment> list){
         this.mListAssignment = list;
-        this.mContext= context;
         notifyDataSetChanged();
     }
 
@@ -32,7 +43,6 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
     public AssignmentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_assignment,parent,false);
-
         return new AssignmentViewHolder(view);
     }
 
@@ -50,6 +60,13 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
         holder.courseName.setText(String.valueOf(assignment.getModule().getModuleName()));
         holder.trainerName.setText(String.valueOf(assignment.getTrainer().getName()));
         holder.registrationCode.setText(assignment.getRegistrationCode());
+
+        holder.btnEdit.setOnClickListener(v->{
+            iClickItem.update(assignment);
+        });
+        holder.btnDelete.setOnClickListener(v->{
+            iClickItem.delete(assignment);
+        });
     }
 
     @Override
@@ -63,7 +80,7 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
     public class AssignmentViewHolder extends RecyclerView.ViewHolder{
 
         private TextView assignmentNo, courseName, className, trainerName, registrationCode;
-        private Button editAssignment, deleteAssignment;
+        private Button btnEdit, btnDelete;
 
         public AssignmentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -73,68 +90,9 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
             className =itemView.findViewById(R.id.assignment_class_name);
             trainerName =itemView.findViewById(R.id.assignment_trainer_name);
             registrationCode =itemView.findViewById(R.id.assignment_registration_code);
-            editAssignment=itemView.findViewById(R.id.btn_edit_assignment);
-            deleteAssignment=itemView.findViewById(R.id.btn_delete_assignment);
+            btnEdit=itemView.findViewById(R.id.btn_edit_assignment);
+            btnDelete=itemView.findViewById(R.id.btn_delete_assignment);
 
-            editAssignment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-
-            deleteAssignment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
-                    View view=LayoutInflater.from(mContext).inflate(R.layout.warning_dialog,null);
-
-                    builder.setView(view);
-
-                    final AlertDialog warningDialog=builder.create();
-                    warningDialog.show();
-
-                    TextView warningContent = view.findViewById(R.id.txt_warning_content);
-                    warningContent.setText("Do you want to delete this Assignment?");
-
-                    Button btnCancel = view.findViewById(R.id.btn_cancel);
-                    btnCancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            warningDialog.dismiss();
-                        }
-                    });
-
-                    Button btnYes = view.findViewById(R.id.btn_yes);
-                    btnYes.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            warningDialog.dismiss();
-
-                            AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
-                            View view=LayoutInflater.from(mContext).inflate(R.layout.successful_dialog,null);
-
-                            builder.setView(view);
-
-                            final AlertDialog successDialog=builder.create();
-                            successDialog.show();
-
-                            TextView warningContent = view.findViewById(R.id.txt_success_dialog_message);
-                            warningContent.setText("Delete Success!");
-
-                            Button btnCancel = view.findViewById(R.id.btn_success_confirm);
-                            btnCancel.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    successDialog.dismiss();
-                                }
-                            });
-                        }
-                    });
-                }
-            });
         }
     }
 }

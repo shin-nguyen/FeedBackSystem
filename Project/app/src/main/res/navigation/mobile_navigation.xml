@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_nav_assignment_to_add_assignment_fragment"
             app:destination="@id/add_assignment_fragment" />
+        <action
+            android:id="@+id/action_nav_assignment_to_edit_assignment_fragment"
+            app:destination="@id/edit_assignment_fragment" />
     </fragment>
 
     <fragment
@@ -124,5 +127,9 @@
         android:name="com.gaf.project.fragment.AddClassFragment"
         android:label="fragment_add_class"
         tools:layout="@layout/fragment_add_class" />
+    <fragment
+        android:id="@+id/edit_assignment_fragment"
+        android:name="com.gaf.project.fragment.EditAssignmentFragment"
+        android:label="EditAssignmentFragment" />
 
 </navigation>
