@@ -31,6 +31,13 @@ public class Class implements Serializable {
         this.startTime = startTime;
         this.endTime = endTime;
     }
+    public Class(Integer classID,String className, String capacity, Date startTime, Date endTime) {
+        this.classID = classID;
+        this.className = className;
+        this.capacity = capacity;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 
     @SerializedName("capacity")
     @Expose

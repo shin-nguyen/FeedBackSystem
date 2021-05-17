@@ -45,7 +45,7 @@ public class AddClassFragment extends Fragment {
     private DatePickerDialog datePickerDialog;
     private Date planDate;
     private ClassService classService;
-
+    private Integer idClass = -1;
     public AddClassFragment() {
         // Required empty public constructor
     }
@@ -61,12 +61,20 @@ public class AddClassFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup parent, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_class, parent, false);
         initComponents(view);
+        Class mClassEdit = null;
 
         try {
-            Class mClassEdit = (Class) getArguments().getSerializable("mClass");
+            mClassEdit = (Class) getArguments().getSerializable("mClass");
 
             if (mClassEdit != null) {
-                showToast("Success");
+                SimpleDateFormat myFra = new SimpleDateFormat("MM/dd/yyyy");
+                idClass = mClassEdit.getClassID();
+                mName.setText(mClassEdit.getClassName());
+                mCapacity.setText(mClassEdit.getCapacity());
+                mStartDate.setText(myFra.format(mClassEdit.getStartTime()));
+                mEndDate.setText(myFra.format(mClassEdit.getEndTime()));
+
+                showToast("Get Class Success");
             }
         }
         catch (Exception ex){
@@ -75,12 +83,10 @@ public class AddClassFragment extends Fragment {
         btnSave.setOnClickListener(v->{
             String name = mName.getText().toString().trim();
             String capicity = mCapacity.getText().toString().trim();
-
-            DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
             Date startDate = new Date();
             try {
-                 startDate = df.parse(mStartDate.getText().toString());
+                startDate = df.parse(mStartDate.getText().toString());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -92,6 +98,30 @@ public class AddClassFragment extends Fragment {
                 e.printStackTrace();
             }
 
+            if (idClass !=-1){
+                Class mClass = new Class(idClass,name,capicity,startDate,endDate)   ;
+                Call<Class> call =  classService.update(
+                        "Bearer "+ SystemConstant.authenticationResponse.getJwt(),
+                        mClass
+                );
+                call.enqueue(new Callback<Class>() {
+                    @Override
+                    public void onResponse(Call<Class> call, Response<Class> response) {
+                        if (response.isSuccessful()&&response.body()!=null) {
+                            showToast("Success");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Class> call, Throwable t) {
+                        Log.e("Error",t.getLocalizedMessage());
+                        showToast("Error");
+                    }
+                });
+                showToast("finalMClassEdit");
+            }
+            else{
+
             Class mClass = new Class(name,capicity,startDate,endDate);
             Call<Class> call =  classService.create(
                     "Bearer "+ SystemConstant.authenticationResponse.getJwt(),
@@ -100,10 +130,8 @@ public class AddClassFragment extends Fragment {
             call.enqueue(new Callback<Class>() {
                 @Override
                 public void onResponse(Call<Class> call, Response<Class> response) {
-                    if (response.isSuccessful()) {
-                        if (response.body()!=null){
+                    if (response.isSuccessful()&&response.body()!=null) {
                             showToast("Success");
-                        }
                     }
                 }
 
@@ -113,8 +141,10 @@ public class AddClassFragment extends Fragment {
                     showToast("Error");
                 }
             });
+            }
 
         });
+
 
         //Select plan date
         btnStartDate.setOnClickListener(v -> {

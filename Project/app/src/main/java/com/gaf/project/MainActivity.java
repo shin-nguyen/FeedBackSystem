@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_homepage, R.id.nav_assignment, R.id.nav_class, R.id.nav_module,
                 R.id.nav_enrollment, R.id.nav_feedback, R.id.nav_result, R.id.nav_question,
                 R.id.nav_contact, R.id.nav_log_out, R.id.add_feedback_fragment, R.id.review_feedback_fragment,
-                R.id.add_assignment_fragment, R.id.add_question_fragment)
+                R.id.add_assignment_fragment, R.id.add_question_fragment, R.id.add_class_fragment)
                 .setDrawerLayout(drawer)
                 .build();
 

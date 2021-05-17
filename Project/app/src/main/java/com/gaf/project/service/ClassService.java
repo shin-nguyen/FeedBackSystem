@@ -12,15 +12,14 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 //@Rest(rootUrl = Constants.Services.UserApi.ServiceBase, converters = {MyHttpMessageConverter.class})
 public interface ClassService {
     @Headers({"Content-Type: application/json"})
     @GET("class/loadListClass")
-    Call<ClassResponse> loadListClass(
-            @Header("Authorization") String auth
-    );
+    Call<ClassResponse> loadListClass(@Header("Authorization") String auth);
 
     @Headers({"Content-Type: application/json"})
     @POST("class/")
@@ -29,4 +28,8 @@ public interface ClassService {
     @Headers({"Content-Type: application/json"})
     @DELETE("class/{id}")
     Call<DeleteResponse> delete(@Header("Authorization") String auth, @Path("id") Integer id);
+
+    @Headers({"Content-Type: application/json"})
+    @PUT("class/")
+    Call<Class> update(@Header("Authorization") String auth,@Body Class mClass);
 }

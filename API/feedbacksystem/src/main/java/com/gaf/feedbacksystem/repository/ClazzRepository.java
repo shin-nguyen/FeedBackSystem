@@ -16,6 +16,7 @@ public interface ClazzRepository extends JpaRepository<Class, Integer> {
 
     @Query("from Class  where isDeleted=false")
     List<Class> findAllByDeletedIsFalse();
+
     Class save(Class aClazz);
     Class findByClassID(Integer classID);
     @Transactional

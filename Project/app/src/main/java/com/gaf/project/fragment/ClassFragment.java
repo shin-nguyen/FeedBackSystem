@@ -79,8 +79,6 @@ public class ClassFragment extends Fragment {
             Navigation.findNavController(view).navigate(R.id.action_nav_class_to_add_class_fragment);
         });
 
-
-
         //Set value adapter for Adapter
         classList = new ArrayList<>();
         Call<ClassResponse> call =  classService.loadListClass(

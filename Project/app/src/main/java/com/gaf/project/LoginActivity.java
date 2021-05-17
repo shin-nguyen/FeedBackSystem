@@ -86,15 +86,16 @@ public class LoginActivity extends AppCompatActivity {
                 AuthenticationRequest authenticationRequest =
                         new AuthenticationRequest(username,password,"ADMIN");
 
-
                 authenticationService.login(authenticationRequest)
                         .enqueue( new Callback<AuthenticationResponse>() {
                             @Override
                             public void onResponse(Call<AuthenticationResponse> call, Response<AuthenticationResponse> response) {
-                                AuthenticationResponse authenticationResponse = response.body();
 
-                                if (response.isSuccessful()){
+                                if (response.isSuccessful()&&response.body()!=null){
+                                    AuthenticationResponse authenticationResponse = response.body();
+
                                     SystemConstant.authenticationResponse = authenticationResponse;
+
                                     Log.e("Huhu",authenticationResponse.getJwt());
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
@@ -106,7 +107,6 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.e("Ec",t.getLocalizedMessage());
 
                                 showToast("Error");
-
                             }
                         });
             }
