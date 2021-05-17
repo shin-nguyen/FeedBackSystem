@@ -192,7 +192,8 @@
             android:layout_marginRight="20dp"
             android:backgroundTint="@color/add_button_color"
             android:hint="Save"
-            android:textColorHint="@color/white"/>
+            android:textColorHint="@color/white"
+            android:id="@+id/btn_save"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -200,7 +201,8 @@
             android:layout_marginRight="40dp"
             android:backgroundTint="@color/delete_button_color"
             android:hint="Back"
-            android:textColorHint="@color/white"/>
+            android:textColorHint="@color/white"
+            android:id="@+id/btn_back"/>
 
     </LinearLayout>
 

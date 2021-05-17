@@ -1,21 +1,28 @@
 package com.gaf.project.fragment;
 
 import android.app.AlertDialog;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gaf.project.R;
+import com.gaf.project.constant.SystemConstant;
+import com.gaf.project.dialog.FailDialog;
+import com.gaf.project.dialog.ShowDialog;
+import com.gaf.project.dialog.SuccessDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,17 +74,25 @@ public class AddAssignmentFragment extends Fragment {
 
         final Spinner sprModule = (Spinner) view.findViewById(R.id.spinner_module);
         String[] items_sprMail= new String[]{"sinh@gmail.com", "nguyen@gmail.com", "quyet@gmail.com"};
-        //create an adapter to describe how the items are displayed, adapters are used in several places in android.
-        //There are multiple variations of this, but this is the basic variant.
         ArrayAdapter<String> adapter_sprMail = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items_sprMail);
-        //set the spinners adapter to the previously created one.
         sprModule.setAdapter(adapter_sprMail);
+
+        final Spinner sprClass = (Spinner) view.findViewById(R.id.spinner_class);
+        String[] items_sprClass= new String[]{"sinh@gmail.com", "nguyen@gmail.com", "quyet@gmail.com"};
+        ArrayAdapter<String> adapter_sprClass = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items_sprClass);
+        sprClass.setAdapter(adapter_sprClass);
+
+        final Spinner sprTrainer = (Spinner) view.findViewById(R.id.spinner_trainer);
+        String[] items_sprTrainer= new String[]{"sinh@gmail.com", "nguyen@gmail.com", "quyet@gmail.com"};
+        ArrayAdapter<String> adapter_sprTrainer = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items_sprTrainer);
+        sprTrainer.setAdapter(adapter_sprTrainer);
 
         btnSave = view.findViewById(R.id.btn_save);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"save",Toast.LENGTH_LONG).show();
+                showSuccessDialog("Add Success!");
+                showFailDialog("Assignment already exist!");
             }
         });
 
@@ -90,5 +105,17 @@ public class AddAssignmentFragment extends Fragment {
         });
 
         return view;
+    }
+
+    public void showSuccessDialog(String message){
+        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+        SuccessDialog newFragment = new SuccessDialog(message);
+        newFragment.show(ft, "dialog success");
+    }
+
+    public void showFailDialog(String message){
+        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+        FailDialog newFragment = new FailDialog(message);
+        newFragment.show(ft, "dialog fail");
     }
 }

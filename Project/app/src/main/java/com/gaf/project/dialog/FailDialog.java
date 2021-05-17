@@ -17,10 +17,10 @@ import com.gaf.project.constant.SystemConstant;
 
 public class FailDialog extends DialogFragment {
 
-    private String mission;
+    private String message;
 
-    public FailDialog(String mission) {
-        this.mission = mission;
+    public FailDialog(String message) {
+        this.message = message;
     }
 
     @NonNull
@@ -31,16 +31,8 @@ public class FailDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fail_dialog, null);
 
-        TextView message = view.findViewById(R.id.txt_fail_dialog_message);
-        if (mission == SystemConstant.ADD){
-            message.setText("Add Success!");
-        }
-        else if (mission == SystemConstant.UPDATE){
-            message.setText("Update Success!");
-        }
-        else if (mission == SystemConstant.DELETE) {
-            message.setText("Delete Success!");
-        }
+        TextView dialogMessage = view.findViewById(R.id.txt_fail_dialog_message);
+        dialogMessage.setText(message);
 
         Button confirmBtn = view.findViewById(R.id.btn_fail_confirm);
         confirmBtn.setOnClickListener(v -> dismiss());

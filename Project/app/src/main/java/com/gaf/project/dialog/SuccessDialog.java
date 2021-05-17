@@ -17,10 +17,10 @@ import com.gaf.project.constant.SystemConstant;
 
 public class SuccessDialog extends DialogFragment {
 
-    private String mission;
+    private String message;
 
-    public SuccessDialog(String mission) {
-        this.mission = mission;
+    public SuccessDialog(String message) {
+        this.message = message;
     }
 
     @NonNull
@@ -31,21 +31,8 @@ public class SuccessDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.successful_dialog, null);
 
-        TextView message = view.findViewById(R.id.txt_success_dialog_message);
-        if (mission == SystemConstant.ADD){
-            message.setText("Add Success!");
-        }
-        else if (mission == SystemConstant.UPDATE){
-            message.setText("Update Success!");
-        }
-        else if (mission == SystemConstant.DELETE) {
-            message.setText("Delete Success!");
-        }
-//        if (getArguments() != null)
-//        {
-//            TextView message = view.findViewById(R.id.dialog_message);
-//            message.setText(getArguments().getString("placeholder", ""));
-//        }
+        TextView dialogMessage = view.findViewById(R.id.txt_success_dialog_message);
+        dialogMessage.setText(message);
 
         Button confirmBtn = view.findViewById(R.id.btn_success_confirm);
         confirmBtn.setOnClickListener(v -> dismiss());
