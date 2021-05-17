@@ -49,14 +49,14 @@ public class ReviewFeedbackFragment extends Fragment {
         }
 
 
-        saveOrEditButton.setOnClickListener(v -> showDialog());
+        saveOrEditButton.setOnClickListener(v -> showDialog(mission));
         return view;
     }
 
-    public void showDialog() {
+    public void showDialog(String mission) {
 
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        SuccessDialog dialog = new SuccessDialog(SystemConstant.ADD);
+        SuccessDialog dialog = new SuccessDialog(mission);
         //change dialog message using bundle
 //        Bundle bundle = new Bundle();
 //        bundle.putString("placeholder", "Update success");

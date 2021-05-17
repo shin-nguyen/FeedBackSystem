@@ -25,6 +25,7 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
     private List<Assignment> mListAssignment;
 
     private AssignmentAdapter.IClickItem iClickItem;
+
     public interface IClickItem{
         void update(Assignment item);
         void delete(Assignment item);
