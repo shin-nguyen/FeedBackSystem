@@ -56,12 +56,12 @@ public class ReviewFeedbackFragment extends Fragment {
     public void showDialog() {
 
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        SuccessDialog newFragment = new SuccessDialog(SystemConstant.ADD);
+        SuccessDialog dialog = new SuccessDialog(SystemConstant.ADD);
         //change dialog message using bundle
 //        Bundle bundle = new Bundle();
 //        bundle.putString("placeholder", "Update success");
 //
 //        newFragment.setArguments(bundle);
-        newFragment.show(ft, "dialog add success");
+        dialog.show(ft, "dialog add success");
     }
 }
