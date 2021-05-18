@@ -82,7 +82,7 @@ public class ClassFragment extends Fragment {
         //Set value adapter for Adapter
         classList = new ArrayList<>();
         Call<ClassResponse> call =  classService.loadListClass(
-                "Bearer "+ SystemConstant.authenticationResponse.getJwt()
+//                "Bearer "+ SystemConstant.authenticationResponse.getJwt()
         );
 
         call.enqueue(new Callback<ClassResponse>() {
@@ -135,10 +135,7 @@ public class ClassFragment extends Fragment {
         btnYes.setOnClickListener(v->{
             warningDialog.dismiss();
 
-            Call<DeleteResponse> call =  classService.delete(
-                    "Bearer "+ SystemConstant.authenticationResponse.getJwt(),
-                    item.getClassID()
-                    );
+            Call<DeleteResponse> call =  classService.delete(item.getClassID());
            call.enqueue(new Callback<DeleteResponse>() {
                @Override
                public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {

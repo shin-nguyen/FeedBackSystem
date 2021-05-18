@@ -84,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
             else {
 
                 AuthenticationRequest authenticationRequest =
-                        new AuthenticationRequest(username,password,"ADMIN");
+                        new AuthenticationRequest(username,password, pnRole.getSelectedItem().toString());
 
                 authenticationService.login(authenticationRequest)
                         .enqueue( new Callback<AuthenticationResponse>() {
@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                     SystemConstant.authenticationResponse = authenticationResponse;
 
-                                    Log.e("Huhu",authenticationResponse.getJwt());
+                                    Log.e("Success",authenticationResponse.getJwt());
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
                                 }
@@ -104,15 +104,14 @@ public class LoginActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(Call<AuthenticationResponse> call, Throwable t) {
-                                Log.e("Ec",t.getLocalizedMessage());
-
+                                Log.e("Error",t.getLocalizedMessage());
                                 showToast("Error");
                             }
                         });
             }
 
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//            startActivity(intent);
         });
 
     }

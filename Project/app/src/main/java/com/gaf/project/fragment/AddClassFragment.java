@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,8 @@ import android.widget.Toast;
 
 import com.gaf.project.R;
 import com.gaf.project.constant.SystemConstant;
+import com.gaf.project.dialog.FailDialog;
+import com.gaf.project.dialog.SuccessDialog;
 import com.gaf.project.model.Class;
 import com.gaf.project.response.ClassResponse;
 import com.gaf.project.service.ClassService;
@@ -80,6 +83,7 @@ public class AddClassFragment extends Fragment {
         catch (Exception ex){
             Log.e("Huhu",ex.getLocalizedMessage());
         }
+
         btnSave.setOnClickListener(v->{
             String name = mName.getText().toString().trim();
             String capicity = mCapacity.getText().toString().trim();
@@ -100,10 +104,7 @@ public class AddClassFragment extends Fragment {
 
             if (idClass !=-1){
                 Class mClass = new Class(idClass,name,capicity,startDate,endDate)   ;
-                Call<Class> call =  classService.update(
-                        "Bearer "+ SystemConstant.authenticationResponse.getJwt(),
-                        mClass
-                );
+                Call<Class> call =  classService.update( mClass );
                 call.enqueue(new Callback<Class>() {
                     @Override
                     public void onResponse(Call<Class> call, Response<Class> response) {
@@ -118,15 +119,12 @@ public class AddClassFragment extends Fragment {
                         showToast("Error");
                     }
                 });
-                showToast("finalMClassEdit");
+                Log.e("Success","Send Class success");
             }
             else{
 
             Class mClass = new Class(name,capicity,startDate,endDate);
-            Call<Class> call =  classService.create(
-                    "Bearer "+ SystemConstant.authenticationResponse.getJwt(),
-                    mClass
-                    );
+            Call<Class> call =  classService.create( mClass );
             call.enqueue(new Callback<Class>() {
                 @Override
                 public void onResponse(Call<Class> call, Response<Class> response) {
@@ -204,5 +202,17 @@ public class AddClassFragment extends Fragment {
 
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
+    }
+
+    public void showSuccessDialog(String message){
+        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+        SuccessDialog newFragment = new SuccessDialog(message);
+        newFragment.show(ft, "dialog success");
+    }
+
+    public void showFailDialog(String message){
+        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+        FailDialog newFragment = new FailDialog(message);
+        newFragment.show(ft, "dialog fail");
     }
 }
