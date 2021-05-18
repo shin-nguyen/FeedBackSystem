@@ -46,7 +46,7 @@ public class AssignmentController {
     })
     @PreAuthorize("hasAnyRole(\"" + SystemConstant.ADMIN_ROLE + "\"," +
                             "\"" + SystemConstant.TRAINER_ROLE + "\")")
-    @GetMapping(value = "/")
+    @GetMapping(value = "/loadListAssignment")
     public ResponseEntity<Map<String, List<?>>> getListAssignment(){
         try {
             UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()

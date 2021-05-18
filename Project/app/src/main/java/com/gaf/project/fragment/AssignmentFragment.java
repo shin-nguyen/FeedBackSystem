@@ -3,6 +3,7 @@ package com.gaf.project.fragment;
 import android.app.AlertDialog;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +24,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gaf.project.R;
 import com.gaf.project.adapter.AssignmentAdapter;
+import com.gaf.project.constant.SystemConstant;
+import com.gaf.project.dialog.SuccessDialog;
 import com.gaf.project.model.Admin;
 import com.gaf.project.model.Assignment;
 import com.gaf.project.model.AssignmentId;
@@ -31,6 +35,8 @@ import com.gaf.project.model.Module;
 import com.gaf.project.model.Trainee;
 import com.gaf.project.model.Trainer;
 import com.gaf.project.model.TypeFeedback;
+import com.gaf.project.response.AssignmentResponse;
+import com.gaf.project.response.ClassResponse;
 import com.gaf.project.service.AssignmentService;
 import com.gaf.project.utils.ApiUtils;
 
@@ -43,11 +49,15 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class AssignmentFragment extends Fragment{
 
     private View view;
     private NavController navigation;
-//    private AssignmentService assignmentService;
+    private AssignmentService assignmentService;
     private RecyclerView recyclerViewAssignment;
     private AssignmentAdapter assignmentAdapter;
     private List<Assignment> listAssignment;
@@ -57,11 +67,11 @@ public class AssignmentFragment extends Fragment{
 
     }
 
-//    @Override
-//    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        assignmentService = ApiUtils.getAssignmentService();
-//    }
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        assignmentService = ApiUtils.getAssignmentService();
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -90,23 +100,46 @@ public class AssignmentFragment extends Fragment{
             }
         });
 
-        listAssignment = new ArrayList<>();
+        try {
+            //Set value adapter for Adapter
+            listAssignment = new ArrayList<>();
+            Call<AssignmentResponse> call =  assignmentService.loadListAssignment(
+                    "Bearer "+ SystemConstant.authenticationResponse.getJwt()
+            );
 
-        Date nowDate = new Date();
-        LocalDateTime localDateTime = LocalDateTime.now();
-        Collection<Trainee> trainees  = new ArrayList<>();
-        Class  mClass = new Class(1, "2", "Ec", nowDate, nowDate, false,trainees);
-        Admin admin = new Admin("thao","thao","thaole","1234");
-        TypeFeedback typeFeedback = new TypeFeedback(1,"Ec",false);
-        Feedback feedback = new Feedback(1,"Ec",admin,false,typeFeedback,new ArrayList<>());
-        Module module = new Module(1,admin,"Ec",nowDate,nowDate,false,localDateTime,localDateTime,feedback);
-        Trainer trainer = new Trainer("thao","thao","thao","1234","0918948074","VT",false,1,"Ec","1234",true);
+            call.enqueue(new Callback<AssignmentResponse>() {
+                @Override
+                public void onResponse(Call<AssignmentResponse> call, Response<AssignmentResponse> response) {
+                    if (response.isSuccessful()&&response.body()!=null){
+                        listAssignment = response.body().getAssignments();
+                        assignmentAdapter.setData(listAssignment);
+                    }
+                }
 
-        AssignmentId  assignmentId = new AssignmentId(mClass,module,trainer);
-        Assignment assignment = new Assignment(assignmentId,"Ec");
-        listAssignment.add(assignment);
-
-        assignmentAdapter.setData(listAssignment);
+                @Override
+                public void onFailure(Call<AssignmentResponse> call, Throwable t) {
+                    Log.e("Error",t.getLocalizedMessage());
+                    showToast("Call API fail!");
+                }
+            });
+        }
+        catch (Exception ex){
+//            Date nowDate = new Date();
+//            LocalDateTime localDateTime = LocalDateTime.now();
+//            Collection<Trainee> trainees  = new ArrayList<>();
+//            Class  mClass = new Class(1, "2", "Ec", nowDate, nowDate, false,trainees);
+//            Admin admin = new Admin("thao","thao","thaole","1234");
+//            TypeFeedback typeFeedback = new TypeFeedback(1,"Ec",false);
+//            Feedback feedback = new Feedback(1,"Ec",admin,false,typeFeedback,new ArrayList<>());
+//            Module module = new Module(1,admin,"Ec",nowDate,nowDate,false,localDateTime,localDateTime,feedback);
+//            Trainer trainer = new Trainer("thao","thao","thao","1234","0918948074","VT",false,1,"Ec","1234",true);
+//
+//            AssignmentId  assignmentId = new AssignmentId(mClass,module,trainer);
+//            Assignment assignment = new Assignment(assignmentId,"Ec");
+//            listAssignment.add(assignment);
+//
+//            assignmentAdapter.setData(listAssignment);
+        }
 
         recyclerViewAssignment.setAdapter(assignmentAdapter);
 
@@ -118,14 +151,20 @@ public class AssignmentFragment extends Fragment{
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigation.navigate(R.id.action_nav_assignment_to_add_assignment_fragment);
+                Bundle bundle = new Bundle();
+                bundle.putString("mission", SystemConstant.ADD);
+
+                navigation.navigate(R.id.action_nav_assignment_to_add_assignment_fragment,bundle);
             }
         });
     }
 
     private void clickUpdate(Assignment item) {
-//        Bundle bundle = new Bundle();
-        navigation.navigate(R.id.action_nav_assignment_to_edit_assignment_fragment);
+        Bundle bundle = new Bundle();
+        bundle.putString("mission", SystemConstant.UPDATE);
+        bundle.putSerializable("item", item);
+
+        navigation.navigate(R.id.action_nav_assignment_to_edit_assignment_fragment,bundle);
     }
 
     private void clickDelete(Assignment item){
@@ -148,22 +187,12 @@ public class AssignmentFragment extends Fragment{
 
         Button btnYes = viewBuilder.findViewById(R.id.btn_yes);
         btnYes.setOnClickListener(v->{
+
             warningDialog.dismiss();
 
-            View viewBuilderSuccess=LayoutInflater.from(getContext()).inflate(R.layout.successful_dialog,null);
-
-            builder.setView(viewBuilderSuccess);
-
-            TextView warningSuccessContent = viewBuilderSuccess.findViewById(R.id.txt_success_dialog_message);
-            warningSuccessContent.setText("Delete Success!");
-
-            final AlertDialog successDialog=builder.create();
-            successDialog.show();
-
-            Button btnSuccessCancel = viewBuilderSuccess.findViewById(R.id.btn_success_confirm);
-            btnSuccessCancel.setOnClickListener(vi -> {
-                successDialog.dismiss();
-            });
+            FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+            SuccessDialog newFragment = new SuccessDialog("Delete success!");
+            newFragment.show(ft, "dialog success");
         });
     }
 

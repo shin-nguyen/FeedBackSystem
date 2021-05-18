@@ -37,7 +37,7 @@
             android:orientation="horizontal">
 
             <Spinner
-                android:id="@+id/spinner_module"
+                android:id="@+id/spinner_module_name"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_centerVertical="true"
@@ -84,7 +84,7 @@
             android:orientation="horizontal">
 
             <Spinner
-                android:id="@+id/spinner_class"
+                android:id="@+id/spinner_class_name"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_centerVertical="true"
@@ -131,7 +131,7 @@
             android:orientation="horizontal">
 
             <Spinner
-                android:id="@+id/spinner_trainer"
+                android:id="@+id/spinner_trainer_id"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_centerVertical="true"

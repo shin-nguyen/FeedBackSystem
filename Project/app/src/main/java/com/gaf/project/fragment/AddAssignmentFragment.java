@@ -4,11 +4,13 @@ import android.app.AlertDialog;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,47 +25,44 @@ import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.ShowDialog;
 import com.gaf.project.dialog.SuccessDialog;
+import com.gaf.project.model.Admin;
+import com.gaf.project.model.Assignment;
+import com.gaf.project.model.AssignmentId;
+import com.gaf.project.model.Class;
+import com.gaf.project.model.Feedback;
+import com.gaf.project.model.Module;
+import com.gaf.project.model.Question;
+import com.gaf.project.model.Trainee;
+import com.gaf.project.model.Trainer;
+import com.gaf.project.model.TypeFeedback;
+import com.gaf.project.response.AssignmentResponse;
+import com.gaf.project.service.AssignmentService;
+import com.gaf.project.utils.ApiUtils;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddAssignmentFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class AddAssignmentFragment extends Fragment {
 
     private View view;
+    private String mission;
     private Button btnSave,btnBack;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private AssignmentService assignmentService;
 
     public AddAssignmentFragment() {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static AddAssignmentFragment newInstance(String param1, String param2) {
-        AddAssignmentFragment fragment = new AddAssignmentFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        assignmentService = ApiUtils.getAssignmentService();
     }
 
     @Override
@@ -72,27 +71,32 @@ public class AddAssignmentFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.add_assignment, container, false);
 
-        final Spinner sprModule = (Spinner) view.findViewById(R.id.spinner_module);
+        Assignment assignment= null;
+
+        Bundle bundle = new Bundle();
+        mission = getArguments().getString("mission");
+        assignment = (Assignment) getArguments().getSerializable("item");
+
+        final Spinner sprModuleName = (Spinner) view.findViewById(R.id.spinner_module_name);
         String[] items_sprMail= new String[]{"sinh@gmail.com", "nguyen@gmail.com", "quyet@gmail.com"};
         ArrayAdapter<String> adapter_sprMail = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items_sprMail);
-        sprModule.setAdapter(adapter_sprMail);
+        sprModuleName.setAdapter(adapter_sprMail);
 
-        final Spinner sprClass = (Spinner) view.findViewById(R.id.spinner_class);
+        final Spinner sprClassName = (Spinner) view.findViewById(R.id.spinner_class_name);
         String[] items_sprClass= new String[]{"sinh@gmail.com", "nguyen@gmail.com", "quyet@gmail.com"};
         ArrayAdapter<String> adapter_sprClass = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items_sprClass);
-        sprClass.setAdapter(adapter_sprClass);
+        sprClassName.setAdapter(adapter_sprClass);
 
-        final Spinner sprTrainer = (Spinner) view.findViewById(R.id.spinner_trainer);
+        final Spinner sprTrainerId = (Spinner) view.findViewById(R.id.spinner_trainer_id);
         String[] items_sprTrainer= new String[]{"sinh@gmail.com", "nguyen@gmail.com", "quyet@gmail.com"};
         ArrayAdapter<String> adapter_sprTrainer = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items_sprTrainer);
-        sprTrainer.setAdapter(adapter_sprTrainer);
+        sprTrainerId.setAdapter(adapter_sprTrainer);
 
         btnSave = view.findViewById(R.id.btn_save);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSuccessDialog("Add Success!");
-                showFailDialog("Assignment already exist!");
+
             }
         });
 

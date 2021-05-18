@@ -54,7 +54,17 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHol
             listQuestion.add(new Question(2, topic, "content2", false, new ArrayList<>()));
         }
 
-        QuestionAdapter questionAdapter = new QuestionAdapter();
+        QuestionAdapter questionAdapter = new QuestionAdapter(new QuestionAdapter.IClickItem() {
+            @Override
+            public void update(Question item) {
+
+            }
+
+            @Override
+            public void delete(Question item) {
+
+            }
+        });
         //questionAdapter.setData(listQuestion);
         holder.questionRecyclerView.setAdapter(questionAdapter);
     }
