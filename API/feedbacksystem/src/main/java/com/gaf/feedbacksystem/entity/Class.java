@@ -28,7 +28,7 @@ public class Class {
     @Column(name = "classID", unique = true, nullable = false)
     private Integer classID;
     private String className;
-    private String capacity;
+    private Integer capacity;
 
     @JsonFormat(pattern="dd/MM/yyyy")
     @Column(name = "startTime",columnDefinition = "DATE")

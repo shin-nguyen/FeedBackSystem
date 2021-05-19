@@ -25,13 +25,13 @@ public class Class implements Serializable {
     @Expose
     private String className;
 
-    public Class(String className, String capacity, Date startTime, Date endTime) {
+    public Class(String className, Integer capacity, Date startTime, Date endTime) {
         this.className = className;
         this.capacity = capacity;
         this.startTime = startTime;
         this.endTime = endTime;
     }
-    public Class(Integer classID,String className, String capacity, Date startTime, Date endTime) {
+    public Class(Integer classID,String className, Integer capacity, Date startTime, Date endTime) {
         this.classID = classID;
         this.className = className;
         this.capacity = capacity;
@@ -41,7 +41,7 @@ public class Class implements Serializable {
 
     @SerializedName("capacity")
     @Expose
-    private String capacity;
+    private Integer capacity;
 
     @SerializedName("startTime")
     @Expose
@@ -58,7 +58,4 @@ public class Class implements Serializable {
     @SerializedName("trainees")
     @Expose
     private Collection<Trainee> trainees = null;
-
-
-
 }

@@ -54,8 +54,6 @@ public class LoginActivity extends AppCompatActivity {
 
         roleAdapter.setDropDownViewResource(R.layout.simple_list_item_dropdown);
         pnRole.setAdapter(roleAdapter);
-
-
     }
 
     //get all view in activity
@@ -96,8 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                                 if (response.isSuccessful()&&response.body()!=null){
                                     AuthenticationResponse authenticationResponse = response.body();
 
-                                    SystemConstant.authenticationResponse = authenticationResponse;
-                                    SystemConstant.USER = role;
+                                    setValue(authenticationResponse, role);
                                     Log.e("Success",authenticationResponse.getJwt());
 
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -118,6 +115,16 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+
+    private void setValue(AuthenticationResponse authenticationResponse, String role) {
+        SystemConstant.authenticationResponse = authenticationResponse;
+        SystemConstant.USER = role;
+
+        edtPassword.setText("");
+        edtEmail.setText("");
+    }
+
+
     public void showToast(String string){
         Toast.makeText(getApplication(),string,Toast.LENGTH_LONG).show();
     }

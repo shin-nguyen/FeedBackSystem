@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,8 +49,9 @@ public class AddClassFragment extends Fragment {
     private DatePickerDialog datePickerDialog;
     private Date planDate;
     private ClassService classService;
-    private Integer idClass = -1;
     private String mission;
+    private TextView mTitle;
+    Integer idClass;
 
     public AddClassFragment() {
         // Required empty public constructor
@@ -80,17 +82,19 @@ public class AddClassFragment extends Fragment {
                 mStartDate.setText(myFra.format(mClassEdit.getStartTime()));
                 mEndDate.setText(myFra.format(mClassEdit.getEndTime()));
 
-                showToast("Get Class Success");
+                Log.e("Error","Get Class Success");
             }
         }
         catch (Exception ex){
-            Log.e("Huhu",ex.getLocalizedMessage());
+            Log.e("Error",ex.getLocalizedMessage());
         }
+
+
 
         btnSave.setOnClickListener(v->{
             String name = mName.getText().toString().trim();
-            String capicity = mCapacity.getText().toString().trim();
-//            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            Integer capicity = Integer.valueOf(mCapacity.getText().toString());
+
             DateFormat dfs = new SimpleDateFormat("MM/dd/yyyy");
             Date startDate = new Date();
             try {
@@ -106,45 +110,48 @@ public class AddClassFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            if (idClass !=-1){
+            if(mission.equals(SystemConstant.UPDATE)){
+                mTitle.setText("Edit Question");
+
                 Class mClass = new Class(idClass,name,capicity,startDate,endDate)   ;
                 Call<Class> call =  classService.update( mClass );
                 call.enqueue(new Callback<Class>() {
                     @Override
                     public void onResponse(Call<Class> call, Response<Class> response) {
                         if (response.isSuccessful()&&response.body()!=null) {
-                            showToast("Success");
+                            showSuccessDialog("Edit Success!");
+                            Log.e("Success","Update Class success");
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Class> call, Throwable t) {
                         Log.e("Error",t.getLocalizedMessage());
-                        showToast("Error");
+                        showFailDialog("Error");
                     }
                 });
                 Log.e("Success","Send Class success");
             }
-            else{
+            else if(mission.equals(SystemConstant.ADD)){
+                mTitle.setText("Add Class");
 
-            Class mClass = new Class(name,capicity,startDate,endDate);
-            Call<Class> call =  classService.create( mClass );
-            call.enqueue(new Callback<Class>() {
-                @Override
-                public void onResponse(Call<Class> call, Response<Class> response) {
-                    if (response.isSuccessful()&&response.body()!=null) {
-                            showToast("Success");
+                Class mClass = new Class(name,capicity,startDate,endDate);
+                Call<Class> call =  classService.create( mClass );
+                call.enqueue(new Callback<Class>() {
+                    @Override
+                    public void onResponse(Call<Class> call, Response<Class> response) {
+                     if (response.isSuccessful()&&response.body()!=null) {
+                        showSuccessDialog("Add Success!");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Class> call, Throwable t) {
                     Log.e("Error",t.getLocalizedMessage());
-                    showToast("Error");
+                    showFailDialog("Error");
                 }
             });
             }
-
         });
 
 
@@ -186,11 +193,15 @@ public class AddClassFragment extends Fragment {
             datePickerDialog.show();
         });
 
+        btnBack.setOnClickListener(vi->{
+            getActivity().onBackPressed();
+        });
 
         return view;
     }
 
     private void initComponents(View view) {
+        mTitle = view.findViewById(R.id.txt_title);
         mCapacity = view.findViewById(R.id.txt_capacity);
         mName = view.findViewById(R.id.txt_class_name);
 
@@ -202,10 +213,6 @@ public class AddClassFragment extends Fragment {
 
         btnStartDate =(ImageButton) view.findViewById(R.id.btn_add_start_date);
         btnEndDate =(ImageButton) view.findViewById(R.id.btn_add_end_date);
-    }
-
-    public void showToast(String string){
-        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }
 
     public void showSuccessDialog(String message){

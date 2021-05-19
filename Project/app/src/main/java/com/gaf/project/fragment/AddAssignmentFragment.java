@@ -1,52 +1,24 @@
 package com.gaf.project.fragment;
 
-import android.app.AlertDialog;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gaf.project.R;
-import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
-import com.gaf.project.dialog.ShowDialog;
 import com.gaf.project.dialog.SuccessDialog;
-import com.gaf.project.model.Admin;
 import com.gaf.project.model.Assignment;
-import com.gaf.project.model.AssignmentId;
-import com.gaf.project.model.Class;
-import com.gaf.project.model.Feedback;
-import com.gaf.project.model.Module;
-import com.gaf.project.model.Question;
-import com.gaf.project.model.Trainee;
-import com.gaf.project.model.Trainer;
-import com.gaf.project.model.TypeFeedback;
-import com.gaf.project.response.AssignmentResponse;
 import com.gaf.project.service.AssignmentService;
 import com.gaf.project.utils.ApiUtils;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class AddAssignmentFragment extends Fragment {
 
