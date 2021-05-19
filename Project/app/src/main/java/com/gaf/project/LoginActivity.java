@@ -38,7 +38,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-//        getActionBar().hide();
 
         addControls();
         addValues();
@@ -55,11 +54,13 @@ public class LoginActivity extends AppCompatActivity {
 
         roleAdapter.setDropDownViewResource(R.layout.simple_list_item_dropdown);
         pnRole.setAdapter(roleAdapter);
+
+
     }
 
     //get all view in activity
     public void addControls(){
-
+        getSupportActionBar().hide();
         edtEmail = findViewById(R.id.edt_email);
         edtPassword = findViewById(R.id.edt_password);
         btnSignIn = findViewById(R.id.btn_sign_in);
@@ -75,6 +76,8 @@ public class LoginActivity extends AppCompatActivity {
 
             final String username = edtEmail.getText().toString().trim();
             final String password = edtPassword.getText().toString().trim();
+            final Boolean remember = cbRememberMe.isChecked();
+            final String role = pnRole.getSelectedItem().toString();
 
             //if the user has not entered the complete information
             if(TextUtils.isEmpty(username)) {
@@ -82,9 +85,8 @@ public class LoginActivity extends AppCompatActivity {
             if(TextUtils.isEmpty(password)){
             }
             else {
-
                 AuthenticationRequest authenticationRequest =
-                        new AuthenticationRequest(username,password, pnRole.getSelectedItem().toString());
+                        new AuthenticationRequest(username,password,role,remember);
 
                 authenticationService.login(authenticationRequest)
                         .enqueue( new Callback<AuthenticationResponse>() {
@@ -95,8 +97,9 @@ public class LoginActivity extends AppCompatActivity {
                                     AuthenticationResponse authenticationResponse = response.body();
 
                                     SystemConstant.authenticationResponse = authenticationResponse;
-
+                                    SystemConstant.USER = role;
                                     Log.e("Success",authenticationResponse.getJwt());
+
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
                                 }

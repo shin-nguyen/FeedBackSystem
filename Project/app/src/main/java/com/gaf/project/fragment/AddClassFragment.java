@@ -49,6 +49,8 @@ public class AddClassFragment extends Fragment {
     private Date planDate;
     private ClassService classService;
     private Integer idClass = -1;
+    private String mission;
+
     public AddClassFragment() {
         // Required empty public constructor
     }
@@ -66,9 +68,10 @@ public class AddClassFragment extends Fragment {
         initComponents(view);
         Class mClassEdit = null;
 
+        mission = getArguments().getString("mission");
+
         try {
             mClassEdit = (Class) getArguments().getSerializable("mClass");
-
             if (mClassEdit != null) {
                 SimpleDateFormat myFra = new SimpleDateFormat("MM/dd/yyyy");
                 idClass = mClassEdit.getClassID();
@@ -87,17 +90,18 @@ public class AddClassFragment extends Fragment {
         btnSave.setOnClickListener(v->{
             String name = mName.getText().toString().trim();
             String capicity = mCapacity.getText().toString().trim();
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+//            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            DateFormat dfs = new SimpleDateFormat("MM/dd/yyyy");
             Date startDate = new Date();
             try {
-                startDate = df.parse(mStartDate.getText().toString());
+                startDate = dfs.parse(mStartDate.getText().toString());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
 
             Date endDate = new Date();
             try {
-                endDate = df.parse(mEndDate.getText().toString());
+                endDate = dfs.parse(mEndDate.getText().toString());
             } catch (ParseException e) {
                 e.printStackTrace();
             }

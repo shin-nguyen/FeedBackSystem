@@ -13,5 +13,5 @@ public class AuthenticationRequest implements Serializable {
     private String username;
     private String password;
     private String role;
-    private String remember;
+    private Boolean remember = false;
 }

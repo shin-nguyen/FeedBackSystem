@@ -10,7 +10,7 @@ public class SystemConstant {
     public static final String TRAINER_ROLE = "TRAINER";
     public static String USER = ADMIN_ROLE;
 
-    public static final String ADD = "ADD";
+    public static final String ADD    = "ADD";
     public static final String UPDATE = "UPDATE";
     public static final String DELETE = "DELETE";
     public static final String DETAIL = "DETAIL";

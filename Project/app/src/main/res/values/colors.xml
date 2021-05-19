@@ -13,6 +13,7 @@
     <color name="green">#51f656</color>
     <color name="gray_200">#f2f2f2</color>
 
+    <color name="remember_check_color">#BCC7C3</color>
     <color name="main_color">#fd3c01</color>
     <color name="item_background">#ffeacb</color>
     <color name="detail_button_color">#9C27B0</color>

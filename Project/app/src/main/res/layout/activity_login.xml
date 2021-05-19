@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:theme="@style/AppTheme"
+    android:theme="@style/Theme.Project.NoActionBar"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -76,8 +76,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:layout_weight="1"
         android:background="@drawable/background_spinner"
         android:orientation="horizontal">
@@ -90,19 +90,20 @@
             android:layout_gravity="center"
             android:background="@android:color/transparent"
             android:gravity="center"
+            android:paddingLeft="10dp"
             android:layout_marginLeft="5dp"
             android:spinnerMode="dropdown" />
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
             android:layout_centerVertical="true"
             android:layout_gravity="center"
             android:src="@drawable/ic_baseline_keyboard_arrow_down_24" />
 
     </RelativeLayout>
-
 
 
     <CheckBox
@@ -111,10 +112,14 @@
         android:layout_height="0dp"
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_weight="1"
+        android:buttonTint="@color/remember_check_color"
+
+        android:buttonTintMode="src_in"
+        android:paddingLeft="10dp"
         android:text="@string/remember_pass"
         android:textSize="15dp"
-        android:textStyle="bold" />
 
+        android:textStyle="bold" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_sign_in"

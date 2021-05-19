@@ -39,8 +39,7 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest
-                                                       )
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest )
             throws Exception {
         String role =authenticationRequest.getRole();
         Predicate<String> checkRole = x->{
@@ -70,7 +69,7 @@ public class LoginController {
         final UserDetails userDetails = userAdminDetailsService
                 .loadUserByUsername(authenticationRequest.getUsername());
 
-        final String jwt = jwtTokenUtil.generateToken(userDetails);
+        final String jwt = jwtTokenUtil.generateToken(userDetails,authenticationRequest.getRemember());
 
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
