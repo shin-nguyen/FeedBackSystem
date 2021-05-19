@@ -24,7 +24,4 @@ public class Question implements Serializable {
     private  String questionContent;
     @SerializedName("deleted")
     private  boolean isDeleted;
-    @SerializedName("feedbacks")
-    @Expose
-    private Collection<Feedback> feedbacks;
 }

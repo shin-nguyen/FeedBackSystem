@@ -47,19 +47,4 @@ public class Trainee  {
     @SerializedName("resetPasswordCode")
     private String resetPasswordCode;
 
-//    public Trainee(String userName, String name, String email, String password, String phone, String address, boolean isActive, Integer idSkill, String activationCode, String resetPasswordCode, Collection<Class> classes) {
-//        super(userName, name, email, password);
-//        this.phone = phone;
-//        this.address = address;
-//        this.isActive = isActive;
-//        this.idSkill = idSkill;
-//        this.activationCode = activationCode;
-//        this.resetPasswordCode = resetPasswordCode;
-//        this.classes = classes;
-//    }
-
-//    @SerializedName("classes")
-//    @Expose
-//    private Collection<Class> classes = null;
-
 }

@@ -22,8 +22,6 @@ public class Question {
     private  String questionContent;
     private  boolean isDeleted;
 
-
-
     // mappedBy trỏ tới tên biến  ở trong .
     @ManyToMany(mappedBy = "questions")
     // LAZY để tránh việc truy xuất dữ liệu không cần thiết. Lúc nào cần thì mới query

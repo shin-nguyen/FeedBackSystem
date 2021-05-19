@@ -106,6 +106,7 @@ public class ClassFragment extends Fragment {
         });
 
         rcvClass.setAdapter(adapter);
+
         return view;
     }
 
@@ -133,7 +134,6 @@ public class ClassFragment extends Fragment {
                                 showSuccessDialog("Delete success!");
                             }
                         }
-
                         @Override
                         public void onFailure(Call<DeleteResponse> call, Throwable t) {
                             showFailDialog("Delete success!");
@@ -161,5 +161,4 @@ public class ClassFragment extends Fragment {
         FailDialog newFragment = new FailDialog(message);
         newFragment.show(ft, "dialog fail");
     }
-
 }

@@ -60,7 +60,7 @@ public class QuestionFragment extends Fragment {
 
         listQuestion = new ArrayList<>();
         Topic topic = new Topic(1,"Kai");
-        Question question = new Question(1,topic,"question",false,null);
+        Question question = new Question(1,topic,"question",false);
         listQuestion.add(question);
 
         questionAdapter = new QuestionAdapter(new QuestionAdapter.IClickItem() {
