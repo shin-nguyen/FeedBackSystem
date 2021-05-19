@@ -71,11 +71,11 @@ public class EditAssignmentFragment extends Fragment {
         mission = getArguments().getString("mission");
         assignment = (Assignment) getArguments().getSerializable("item");
 
-        Class mClass = assignment.getmClass();
+        Class mClass = assignment.getMClass();
         Module module = assignment.getModule();
 
-        classId.setText(String.valueOf(assignment.getmClass().getClassID()));
-        className.setText(String.valueOf(assignment.getmClass().getClassName()));
+        classId.setText(String.valueOf(assignment.getMClass().getClassID()));
+        className.setText(String.valueOf(assignment.getMClass().getClassName()));
         moduleId.setText(String.valueOf(assignment.getModule().getModuleID()));
         moduleName.setText(String.valueOf(assignment.getModule().getModuleName()));
 
@@ -84,13 +84,9 @@ public class EditAssignmentFragment extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AssignmentId assignmentId = new AssignmentId(mClass,module,trainer);
-                Assignment assignment = new Assignment(assignmentId,"random123");
+                Assignment assignment = new Assignment("1234",module,trainer,mClass);
 
-                Call<Assignment> call =  assignmentService.create(
-                        "Bearer "+ SystemConstant.authenticationResponse.getJwt(),
-                        assignment
-                );
+                Call<Assignment> call =  assignmentService.create(assignment);
                 call.enqueue(new Callback<Assignment>() {
                     @Override
                     public void onResponse(Call<Assignment> call, Response<Assignment> response) {

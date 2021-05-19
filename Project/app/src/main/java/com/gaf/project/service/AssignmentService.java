@@ -22,18 +22,18 @@ import retrofit2.http.Path;
 public interface AssignmentService {
     @Headers({"Content-Type: application/json"})
     @GET("assignment/loadListAssignment")
-    Call<AssignmentResponse> loadListAssignment(@Header("Authorization") String auth);
+    Call<AssignmentResponse> loadListAssignment();
 
     @Headers({"Content-Type: application/json"})
     @POST("assignment/")
-    Call<Assignment> create(@Header("Authorization") String auth, @Body Assignment assignment);
+    Call<Assignment> create(@Body Assignment assignment);
 
     @Headers({"Content-Type: application/json"})
     @DELETE("assignment/{id}")
-    Call<DeleteResponse> delete(@Header("Authorization") String auth, @Path("id") Integer id);
+    Call<DeleteResponse> delete(@Path("id") Integer id);
 
     @Headers({"Content-Type: application/json"})
     @PUT("assignment/")
-    Call<Assignment> update(@Header("Authorization") String auth,@Body Assignment assignment);
+    Call<Assignment> update(@Body Assignment assignment);
 
 }

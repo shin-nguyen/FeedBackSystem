@@ -56,7 +56,6 @@ import retrofit2.Response;
 public class AssignmentFragment extends Fragment{
 
     private View view;
-    private NavController navigation;
     private AssignmentService assignmentService;
     private RecyclerView recyclerViewAssignment;
     private AssignmentAdapter assignmentAdapter;
@@ -64,7 +63,6 @@ public class AssignmentFragment extends Fragment{
     private Button btnAdd;
 
     public AssignmentFragment(){
-
     }
 
     @Override
@@ -77,12 +75,6 @@ public class AssignmentFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_assignment, container, false);
-        return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
 
         recyclerViewAssignment = view.findViewById(R.id.rcv_assignment);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
@@ -100,12 +92,9 @@ public class AssignmentFragment extends Fragment{
             }
         });
 
-        try {
             //Set value adapter for Adapter
             listAssignment = new ArrayList<>();
-            Call<AssignmentResponse> call =  assignmentService.loadListAssignment(
-                    "Bearer "+ SystemConstant.authenticationResponse.getJwt()
-            );
+            Call<AssignmentResponse> call =  assignmentService.loadListAssignment();
 
             call.enqueue(new Callback<AssignmentResponse>() {
                 @Override
@@ -113,6 +102,7 @@ public class AssignmentFragment extends Fragment{
                     if (response.isSuccessful()&&response.body()!=null){
                         listAssignment = response.body().getAssignments();
                         assignmentAdapter.setData(listAssignment);
+                        Log.e("Success","Assigment get success");
                     }
                 }
 
@@ -122,41 +112,21 @@ public class AssignmentFragment extends Fragment{
                     showToast("Call API fail!");
                 }
             });
-        }
-        catch (Exception ex){
-//            Date nowDate = new Date();
-//            LocalDateTime localDateTime = LocalDateTime.now();
-//            Collection<Trainee> trainees  = new ArrayList<>();
-//            Class  mClass = new Class(1, "2", "Ec", nowDate, nowDate, false,trainees);
-//            Admin admin = new Admin("thao","thao","thaole","1234");
-//            TypeFeedback typeFeedback = new TypeFeedback(1,"Ec",false);
-//            Feedback feedback = new Feedback(1,"Ec",admin,false,typeFeedback,new ArrayList<>());
-//            Module module = new Module(1,admin,"Ec",nowDate,nowDate,false,localDateTime,localDateTime,feedback);
-//            Trainer trainer = new Trainer("thao","thao","thao","1234","0918948074","VT",false,1,"Ec","1234",true);
-//
-//            AssignmentId  assignmentId = new AssignmentId(mClass,module,trainer);
-//            Assignment assignment = new Assignment(assignmentId,"Ec");
-//            listAssignment.add(assignment);
-//
-//            assignmentAdapter.setData(listAssignment);
-        }
 
         recyclerViewAssignment.setAdapter(assignmentAdapter);
-
-        navigation = Navigation.findNavController(view);
 
         btnAdd = view.findViewById(R.id.btn_add_assignment);
 //        btnAddAssignment.setVisibility(View.GONE);//hide button
 //        btnAddAssignment.setVisibility(View.VISIBLE);//show button
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putString("mission", SystemConstant.ADD);
 
-                navigation.navigate(R.id.action_nav_assignment_to_add_assignment_fragment,bundle);
-            }
+        btnAdd.setOnClickListener(v->{
+            Bundle bundle = new Bundle();
+            bundle.putString("mission", SystemConstant.ADD);
+
+            Navigation.findNavController(view).navigate(R.id.action_nav_assignment_to_add_assignment_fragment,bundle);
         });
+
+        return view;
     }
 
     private void clickUpdate(Assignment item) {
@@ -164,7 +134,7 @@ public class AssignmentFragment extends Fragment{
         bundle.putString("mission", SystemConstant.UPDATE);
         bundle.putSerializable("item", item);
 
-        navigation.navigate(R.id.action_nav_assignment_to_edit_assignment_fragment,bundle);
+        Navigation.findNavController(view).navigate(R.id.action_nav_assignment_to_edit_assignment_fragment,bundle);
     }
 
     private void clickDelete(Assignment item){

@@ -63,7 +63,7 @@ public class AssignmentController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             Map result = new HashMap();
-            result.put("assignmentList", assignmentList);
+            result.put("assignments", assignmentList);
             return ResponseEntity.ok().body(result);
         }
         catch (MyResourceNotFoundException exc) {

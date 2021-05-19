@@ -29,10 +29,11 @@ public class Module {
     private Date endTime;
     @SerializedName("deleted")
     private boolean isDeleted;
+
     @SerializedName("feedbackStartTime")
-    private LocalDateTime feedbackStartTime;
+    private Date feedbackStartTime;
     @SerializedName("feedbackEndTime")
-    private LocalDateTime feedbackEndTime;
+    private Date feedbackEndTime;
     @SerializedName("feedback")
     private Feedback feedback;
 }
