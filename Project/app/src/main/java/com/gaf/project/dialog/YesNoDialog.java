@@ -38,6 +38,7 @@ public class YesNoDialog extends DialogFragment {
         Button btnOke = viewBuilder.findViewById(R.id.btn_yes);
 
         btnOke.setOnClickListener(v->{
+            dismiss();
             iClickItem.update();
         });
 

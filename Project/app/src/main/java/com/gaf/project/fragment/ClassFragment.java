@@ -125,6 +125,7 @@ public class ClassFragment extends Fragment {
         final YesNoDialog dialog = new YesNoDialog(
                 () -> {
                     Call<DeleteResponse> call =  classService.delete(item.getClassID());
+
                     call.enqueue(new Callback<DeleteResponse>() {
                         @Override
                         public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
@@ -142,10 +143,9 @@ public class ClassFragment extends Fragment {
                 },
                 "Do you want to delete this Class?");
 
+
         dialog.show(ft, "dialog success");
     }
-
-
 
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();

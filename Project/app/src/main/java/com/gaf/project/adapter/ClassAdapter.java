@@ -53,7 +53,7 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
 
         holder.id.setText(String.valueOf(mClass.getClassID()));
         holder.name.setText(mClass.getClassName());
-        holder.capacity.setText(mClass.getCapacity());
+        holder.capacity.setText(mClass.getCapacity().toString());
         holder.startDate.setText(dateFormat.format(mClass.getStartTime()));
         holder.endDate.setText(dateFormat.format(mClass.getEndTime()));
 
