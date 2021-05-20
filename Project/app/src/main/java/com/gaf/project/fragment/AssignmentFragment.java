@@ -114,7 +114,6 @@ public class AssignmentFragment extends Fragment{
 
     private void clickUpdate(Assignment item) {
         Bundle bundle = new Bundle();
-        bundle.putString("mission", SystemConstant.UPDATE);
         bundle.putSerializable("item", item);
 
         Navigation.findNavController(view).navigate(R.id.action_nav_assignment_to_edit_assignment_fragment,bundle);
@@ -142,7 +141,7 @@ public class AssignmentFragment extends Fragment{
                         }
                     });
                 },
-                "Do you want to delete this Class?");
+                "Do you want to delete this Assignment?");
 
 
         dialog.show(ft, "dialog success");

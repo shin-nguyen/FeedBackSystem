@@ -1,5 +1,7 @@
 package com.gaf.project.model;
 
+import androidx.annotation.NonNull;
+
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.gson.annotations.Expose;
@@ -15,6 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class Assignment implements Serializable{
 
     @SerializedName("registrationCode")
@@ -30,5 +33,9 @@ public class Assignment implements Serializable{
     @Expose
     private Class mClass;
 
-
+    @NonNull
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

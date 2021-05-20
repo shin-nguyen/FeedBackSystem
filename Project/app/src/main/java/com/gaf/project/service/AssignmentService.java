@@ -27,9 +27,9 @@ public interface AssignmentService {
     Call<Assignment> create(@Body Assignment assignment);
 
     @DELETE("assignment/{idClass}/{idModule}/{userName}")
-    Call<DeleteResponse> delete(@Path("idClass") Integer idClass, @Path("idModlue") Integer idModule, @Path("userName") String userName );
+    Call<DeleteResponse> delete(@Path("idClass") Integer idClass, @Path("idModule") Integer idModule, @Path("userName") String userName );
 
     @PUT("assignment/")
-    Call<Assignment> update(@Body Assignment assignment);
+    Call<Assignment> update(@Body Assignment oldAssignment,@Body Assignment newAssignment);
 
 }

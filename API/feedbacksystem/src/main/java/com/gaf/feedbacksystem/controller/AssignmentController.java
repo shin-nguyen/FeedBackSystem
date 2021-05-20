@@ -92,5 +92,38 @@ public class AssignmentController {
         }
     }
 
+    @PutMapping(value = "/")
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    public ResponseEntity<AssignmentDto> update(@Valid  @RequestBody AssignmentDto assignmentDto,
+                                                @Valid @RequestBody AssignmentDto newAssignment){
+        try {
+            final AssignmentDto assignment = assignmentService.update(assignmentDto,newAssignment);
+
+            return ResponseEntity.ok(assignment);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+        }
+    }
+    @DeleteMapping(value = "/{idClass}/{idModule}/{userName}")
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    public Map<String, Boolean> delete(@PathVariable (name = "idClass") Integer idClass,
+                                       @PathVariable (name = "idModule") Integer idModule,
+                                       @PathVariable(name="userName") String userName){
+        try {
+            Map<String, Boolean> response = new HashMap<>();
+            try {
+                assignmentService.deleteById(idClass,idModule,userName);
+                response.put("deleted", Boolean.TRUE);
+
+            } catch (Exception exception) {
+                response.put("deleted", Boolean.FALSE);
+            }
+            return response;
+        }  catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+        }
+
+    }
 
 }
