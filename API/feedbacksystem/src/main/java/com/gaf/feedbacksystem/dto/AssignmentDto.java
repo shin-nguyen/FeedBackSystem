@@ -41,7 +41,7 @@ public class AssignmentDto {
         getPrimaryKey().setTrainer(trainer);
     }
 
-    private String registrationCode;
+    private String registrationCode="";
 
 }
 

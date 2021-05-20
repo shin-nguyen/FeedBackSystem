@@ -47,6 +47,7 @@ public class AddAssignmentFragment extends Fragment {
     private ModuleService moduleService;
     private ClassService classService;
     private TrainerService trainerService;
+
     List<Module> moduleList;
     List<Class> classList;
     List<Trainer> trainerList;
@@ -100,12 +101,13 @@ public class AddAssignmentFragment extends Fragment {
         callClass.enqueue(new Callback<ClassResponse>() {
             @Override
             public void onResponse(Call<ClassResponse> call, Response<ClassResponse> response) {
+                new Thread(()-> {
                 if (response.isSuccessful()&& response.body()!=null){
                     classList = response.body().getClasss();
                      adapterClass =
                             new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, classList);
                     spnClass.setAdapter(adapterClass);
-                }
+                }}).run();
             }
             @Override
             public void onFailure(Call<ClassResponse> call, Throwable t) {
@@ -120,13 +122,13 @@ public class AddAssignmentFragment extends Fragment {
         callTrainer.enqueue(new Callback<TrainerReponse>() {
             @Override
             public void onResponse(Call<TrainerReponse> call, Response<TrainerReponse> response) {
-
+                new Thread(()-> {
                 if (response.isSuccessful()&& response.body()!=null){
                     trainerList = response.body().getTrainers();
                     adapterTrainer =
                             new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, trainerList);
                     spnTrainer.setAdapter(adapterTrainer);
-                }
+                }}).run();
             }
             @Override
             public void onFailure(Call<TrainerReponse> call, Throwable t) {
@@ -136,11 +138,28 @@ public class AddAssignmentFragment extends Fragment {
         });
 
         btnSave = view.findViewById(R.id.btn_save);
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnSave.setOnClickListener(v->{
+            Module module = (Module) spnModule.getSelectedItem();
+            Class mClass = (Class) spnClass.getSelectedItem();
+            Trainer trainer = (Trainer) spnTrainer.getSelectedItem();
+            String code = "CL" + mClass.getClassID() +"M" + module.getModuleID() + "T"+ System.currentTimeMillis();
 
-            }
+            Assignment assignment = new Assignment(code,module,trainer,mClass);
+            Call<Assignment> call = assignmentService.create(assignment);
+            call.enqueue(new Callback<Assignment>() {
+                @Override
+                public void onResponse(Call<Assignment> call, Response<Assignment> response) {
+                    if (response.isSuccessful()&&response.body()!=null) {
+                        showSuccessDialog("Add Success!");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Assignment> call, Throwable t) {
+                    Log.e("Error",t.getLocalizedMessage());
+                    showFailDialog("Error");
+                }
+            });
         });
 
         btnBack= view.findViewById(R.id.btn_back);

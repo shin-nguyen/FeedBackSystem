@@ -29,4 +29,6 @@ public class Assignment implements Serializable{
     @SerializedName("mClass")
     @Expose
     private Class mClass;
+
+
 }

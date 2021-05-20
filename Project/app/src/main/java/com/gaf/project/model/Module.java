@@ -34,10 +34,10 @@ public class Module implements  Serializable{
     private boolean isDeleted;
 
     @SerializedName("feedbackStartTime")
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern="dd/MM/yyyy")
     private Date feedbackStartTime;
     @SerializedName("feedbackEndTime")
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern="dd/MM/yyyy")
     private Date feedbackEndTime;
     @SerializedName("feedback")
     private Feedback feedback;

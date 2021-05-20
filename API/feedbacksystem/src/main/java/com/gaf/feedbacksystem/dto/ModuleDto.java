@@ -29,10 +29,10 @@ public class ModuleDto {
 
     private boolean isDeleted;
 
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern="dd/MM/yyyy")
     private Date feedbackStartTime;
 
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern="dd/MM/yyyy")
     private Date feedbackEndTime;
-    private Feedback feedback;
+    private FeedbackDto feedback;
 }

@@ -83,7 +83,7 @@ public class AssignmentController {
 
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
     @PostMapping(value = "/")
-    public AssignmentDto create(@Valid @RequestBody AssignmentDto assignmentDto){
+    public AssignmentDto create(@RequestBody AssignmentDto assignmentDto){
         try{
             return  assignmentService.save(assignmentDto);
         }
