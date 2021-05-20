@@ -4,8 +4,8 @@ import com.gaf.feedbacksystem.entity.Admin;
 
 public class AdminUser implements BaseUser<Admin> {
 
-    Admin admin;
 
+    Admin admin = new Admin();
 
     @Override
     public void setUser(Admin user) {

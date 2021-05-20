@@ -50,6 +50,9 @@ public class AddAssignmentFragment extends Fragment {
     List<Module> moduleList;
     List<Class> classList;
     List<Trainer> trainerList;
+    ArrayAdapter<Module> adapterModule;
+    ArrayAdapter<Class> adapterClass;
+    ArrayAdapter<Trainer> adapterTrainer;
     public AddAssignmentFragment() {
         // Required empty public constructor
     }
@@ -70,17 +73,18 @@ public class AddAssignmentFragment extends Fragment {
         view = inflater.inflate(R.layout.add_assignment, container, false);
 
         final Spinner spnModule = (Spinner) view.findViewById(R.id.spinner_module_name);
-        ArrayAdapter<Module> adapterModule;
+
         Call<ModuleResponse> callModule =  moduleService.loadModuleAdmin();
         callModule.enqueue(new Callback<ModuleResponse>() {
             @Override
             public void onResponse(Call<ModuleResponse> call, Response<ModuleResponse> response) {
-                if (response.isSuccessful()&& response.body()!=null){
+                new Thread(()-> {
+                    if (response.isSuccessful()&& response.body()!=null){
                     moduleList = response.body().getModules();
-                    ArrayAdapter<Module> adapterModule =
+                    adapterModule =
                             new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, moduleList);
                     spnModule.setAdapter(adapterModule);
-                }
+                }}).run();
             }
             @Override
             public void onFailure(Call<ModuleResponse> call, Throwable t) {
@@ -92,14 +96,13 @@ public class AddAssignmentFragment extends Fragment {
 
 
         final Spinner spnClass = (Spinner) view.findViewById(R.id.spinner_class_name);
-        ArrayAdapter<Class> adapterClass;
         Call<ClassResponse> callClass =  classService.loadListClass();
         callClass.enqueue(new Callback<ClassResponse>() {
             @Override
             public void onResponse(Call<ClassResponse> call, Response<ClassResponse> response) {
                 if (response.isSuccessful()&& response.body()!=null){
                     classList = response.body().getClasss();
-                    ArrayAdapter<Class> adapterClass =
+                     adapterClass =
                             new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, classList);
                     spnClass.setAdapter(adapterClass);
                 }
@@ -112,14 +115,15 @@ public class AddAssignmentFragment extends Fragment {
         });
 
         final Spinner spnTrainer = (Spinner) view.findViewById(R.id.spinner_trainer_id);
-        ArrayAdapter<Trainer> adapterTrainer;
+
         Call<TrainerReponse> callTrainer =  trainerService.loadListTrainer();
         callTrainer.enqueue(new Callback<TrainerReponse>() {
             @Override
             public void onResponse(Call<TrainerReponse> call, Response<TrainerReponse> response) {
+
                 if (response.isSuccessful()&& response.body()!=null){
                     trainerList = response.body().getTrainers();
-                    ArrayAdapter<Trainer> adapterTrainer =
+                    adapterTrainer =
                             new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, trainerList);
                     spnTrainer.setAdapter(adapterTrainer);
                 }

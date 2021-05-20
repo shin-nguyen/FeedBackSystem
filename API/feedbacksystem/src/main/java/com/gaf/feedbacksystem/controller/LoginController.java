@@ -4,8 +4,7 @@ import com.gaf.feedbacksystem.authentication.AuthenticationRequest;
 import com.gaf.feedbacksystem.authentication.AuthenticationResponse;
 import com.gaf.feedbacksystem.constant.SystemConstant;
 import com.gaf.feedbacksystem.service.impl.UserDetailsServiceImpl;
-import com.gaf.feedbacksystem.user.AdminUser;
-import com.gaf.feedbacksystem.user.TraineeUser;
+
 import com.gaf.feedbacksystem.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

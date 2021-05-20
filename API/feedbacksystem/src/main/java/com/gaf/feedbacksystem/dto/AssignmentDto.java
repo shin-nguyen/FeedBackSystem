@@ -24,8 +24,10 @@ public class AssignmentDto {
     }
 
     public ModuleDto getModule() {
+
         return getPrimaryKey().getModule();
     }
+    @JsonSetter("module")
     public void setModule(ModuleDto module) {
         getPrimaryKey().setModule(module);
     }
@@ -34,6 +36,7 @@ public class AssignmentDto {
     public TrainerDto getTrainer() {
         return getPrimaryKey().getTrainer();
     }
+    @JsonSetter("trainer")
     public void setTrainer(TrainerDto trainer) {
         getPrimaryKey().setTrainer(trainer);
     }

@@ -79,11 +79,7 @@ public class AssignmentController {
 
         return null;
     }
-//    @DeleteMapping("/")
-//    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
-//    public ResponseEntity delete(@RequestBody AssignmentIdDto assignmentIdDto) {
-////        return  ResponseEntity.ok().body(assignmentService.deleteById(assignmentIdDto););
-//    }
+
 
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
     @PostMapping(value = "/")
@@ -92,7 +88,7 @@ public class AssignmentController {
             return  assignmentService.save(assignmentDto);
         }
         catch (MyResourceNotFoundException exc) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Assignment Not Found", exc);
         }
     }
 

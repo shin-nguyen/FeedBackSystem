@@ -11,6 +11,7 @@ public class UserFactory {
     static {
         map.put(SystemConstant.ADMIN_ROLE, AdminUser::new);
         map.put(SystemConstant.TRAINEE_ROLE, TraineeUser::new);
+        map.put(SystemConstant.TRAINER_ROLE,TrainerUser::new);
     }
     private  UserFactory(){
 
