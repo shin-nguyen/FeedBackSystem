@@ -92,18 +92,12 @@ public class EditAssignmentFragment extends Fragment {
         });
 
         btnSave.setOnClickListener(v->{
-            Assignment oldAssignment = null;
-
-            try {
-                oldAssignment = (Assignment) assignment.clone();
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
+            String oldTrainer = assignment.getTrainer().getUserName();
 
             Trainer trainer = (Trainer) spnTrainer.getSelectedItem();
             assignment.setTrainer(trainer);
 
-            Call<Assignment> call =  assignmentService.update(oldAssignment,assignment);
+            Call<Assignment> call =  assignmentService.update(oldTrainer,assignment);
                     call.enqueue(new Callback<Assignment>() {
                         @Override
                         public void onResponse(Call<Assignment> call, Response<Assignment> response) {

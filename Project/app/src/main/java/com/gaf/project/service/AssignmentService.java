@@ -29,7 +29,7 @@ public interface AssignmentService {
     @DELETE("assignment/{idClass}/{idModule}/{userName}")
     Call<DeleteResponse> delete(@Path("idClass") Integer idClass, @Path("idModule") Integer idModule, @Path("userName") String userName );
 
-    @PUT("assignment/")
-    Call<Assignment> update(@Body Assignment oldAssignment,@Body Assignment newAssignment);
+    @PUT("assignment/{userName}")
+    Call<Assignment> update(@Path("userName") String userName,@Body Assignment newAssignment);
 
 }

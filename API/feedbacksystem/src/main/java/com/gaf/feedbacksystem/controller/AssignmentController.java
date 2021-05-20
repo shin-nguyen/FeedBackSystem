@@ -4,6 +4,7 @@ import com.gaf.feedbacksystem.MyResourceNotFoundException;
 import com.gaf.feedbacksystem.constant.SystemConstant;
 import com.gaf.feedbacksystem.dto.*;
 import com.gaf.feedbacksystem.entity.Admin;
+import com.gaf.feedbacksystem.entity.Trainer;
 import com.gaf.feedbacksystem.service.IAssignmentService;
 import com.gaf.feedbacksystem.service.ITrainerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +33,8 @@ public class AssignmentController {
 
     @Autowired
     private IAssignmentService assignmentService;
-
+    @Autowired
+    private  ITrainerService trainerService;
 
     @Operation(description = "Thao tac Assignment", responses = {
             @ApiResponse(
@@ -72,14 +74,6 @@ public class AssignmentController {
         }
     }
 
-    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
-    @PutMapping(value = "/updateAssignment/{id}")
-    public ResponseEntity updateAssignmentByTrainer (@RequestBody AssignmentIdDto assignmentIdDto, @PathVariable Integer trainerId){
-
-
-        return null;
-    }
-
 
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
     @PostMapping(value = "/")
@@ -92,18 +86,21 @@ public class AssignmentController {
         }
     }
 
-    @PutMapping(value = "/")
+    @PutMapping(value = "/{userName}")
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
-    public ResponseEntity<AssignmentDto> update(@Valid  @RequestBody AssignmentDto assignmentDto,
-                                                @Valid @RequestBody AssignmentDto newAssignment){
-        try {
-            final AssignmentDto assignment = assignmentService.update(assignmentDto,newAssignment);
+    public ResponseEntity<AssignmentDto> update(@Valid @PathVariable(name = "userName") String userName,@Valid @RequestBody AssignmentDto newAssignment){
+//        try {
+            TrainerDto trainer = trainerService.findByUserName(userName);
+            if (trainer==null)
+                throw new MyResourceNotFoundException();
+
+            final AssignmentDto assignment = assignmentService.update(userName,newAssignment);
 
             return ResponseEntity.ok(assignment);
-        }
-        catch (MyResourceNotFoundException exc) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
-        }
+//        }
+//        catch (MyResourceNotFoundException exc) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+//        }
     }
     @DeleteMapping(value = "/{idClass}/{idModule}/{userName}")
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")

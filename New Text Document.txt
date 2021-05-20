@@ -14,8 +14,11 @@ select * from feedback;
 insert feedback value(1,false,"Ec","thao",1);
 select * from module;
 select * from class;
-insert class value(1,"2","Ec",curdate(),false,curdate());
+insert class value(1,2,"Ec",curdate(),false,curdate());
+insert class value(2,3,"Lop1A",curdate(),false,curdate());
 insert module value(1,curdate(),curdate(),curdate(),false,"HiHi",curdate(),"thao",1);
 select * from type_feedback;
 select * from assignment;
 insert assignment value ('1234',1,1,'thanh');
+insert trainer value('thao','thaole301000@gmail.com','thao','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
+'1234','TanThanh',1,true,true,'0918948074','1234');

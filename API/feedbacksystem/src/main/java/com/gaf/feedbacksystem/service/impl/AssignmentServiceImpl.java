@@ -47,12 +47,10 @@ public class AssignmentServiceImpl implements IAssignmentService {
 
     @Override
     @Transactional
-    public AssignmentDto update(AssignmentDto assignmentDto,AssignmentDto newAssignment) {
-//        deleteById(new AssignmentIdDto());
-//        Assignment assignment = ObjectMapperUtils.map(assignmentDto,Assignment.class);
-//
-//        return ObjectMapperUtils.map(assignmentRepository.save(assignment),AssignmentDto.class);
-        return null;
+    public AssignmentDto update(String userName,AssignmentDto newAssignment) {
+        deleteById(newAssignment.getmClass().getClassID(),newAssignment.getModule().getModuleID(),userName);
+        Assignment assignment = ObjectMapperUtils.map(newAssignment,Assignment.class);
+        return ObjectMapperUtils.map(assignmentRepository.save(assignment),AssignmentDto.class);
     }
 
     @Override

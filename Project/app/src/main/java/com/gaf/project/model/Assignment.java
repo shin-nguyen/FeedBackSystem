@@ -33,9 +33,4 @@ public class Assignment implements Serializable{
     @Expose
     private Class mClass;
 
-    @NonNull
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
 }
