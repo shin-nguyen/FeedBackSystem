@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
@@ -30,6 +31,7 @@ import com.gaf.project.response.AssignmentResponse;
 import com.gaf.project.response.DeleteResponse;
 import com.gaf.project.service.AssignmentService;
 import com.gaf.project.utils.ApiUtils;
+import com.gaf.project.utils.SessionManager;
 
 
 import java.util.ArrayList;
@@ -46,7 +48,9 @@ public class AssignmentFragment extends Fragment{
     private RecyclerView recyclerViewAssignment;
     private AssignmentAdapter assignmentAdapter;
     private List<Assignment> listAssignment;
+    private LinearLayout searchFiled;
     private Button btnAdd;
+    private Boolean homeRole;
 
     public AssignmentFragment(){
     }
@@ -61,6 +65,23 @@ public class AssignmentFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_assignment, container, false);
+
+        try{
+            homeRole = getArguments().getBoolean("home_role");
+            searchFiled = view.findViewById(R.id.search_field);
+
+            if(homeRole==true){
+                searchFiled.setVisibility(View.GONE);
+            }
+        }catch (Exception ex){
+
+        }
+
+
+        String userRole = SessionManager.getInstance().getUserRole();
+        if(!userRole.equals(SystemConstant.ADMIN_ROLE)){
+            btnAdd.setVisibility(View.GONE);
+        }
 
         recyclerViewAssignment = view.findViewById(R.id.rcv_assignment);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());

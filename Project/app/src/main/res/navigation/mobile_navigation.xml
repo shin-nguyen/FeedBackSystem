@@ -9,7 +9,14 @@
         android:id="@+id/nav_homepage"
         android:name="com.gaf.project.fragment.HomePageFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home_page" />
+        tools:layout="@layout/fragment_home_page" >
+        <action
+            android:id="@+id/action_nav_homepage_to_nav_assignment"
+            app:destination="@id/nav_assignment" />
+        <action
+            android:id="@+id/action_nav_homepage_to_nav_trainee_home_fragment"
+            app:destination="@id/nav_trainee_home_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_assignment"
@@ -133,5 +140,10 @@
         android:id="@+id/edit_assignment_fragment"
         android:name="com.gaf.project.fragment.EditAssignmentFragment"
         android:label="EditAssignmentFragment" />
+    <fragment
+        android:id="@+id/nav_trainee_home_fragment"
+        android:name="com.gaf.project.TraineeHomeFragment"
+        android:label="fragment_trainee_home"
+        tools:layout="@layout/fragment_trainee_home" />
 
 </navigation>

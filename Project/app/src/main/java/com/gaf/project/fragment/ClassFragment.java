@@ -29,9 +29,11 @@ import com.gaf.project.response.ClassResponse;
 import com.gaf.project.response.DeleteResponse;
 import com.gaf.project.service.ClassService;
 import com.gaf.project.utils.ApiUtils;
+import com.gaf.project.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PrimitiveIterator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,7 +44,7 @@ public class ClassFragment extends Fragment {
     private RecyclerView rcvClass;
     private ClassService classService;
     private List<Class> classList;
-
+    private TextView title;
     private Button btnAddClass;
     private  View view;
     @Override
@@ -60,13 +62,49 @@ public class ClassFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
          view = inflater.inflate(R.layout.fragment_class, container, false);
 
+        title = view.findViewById(R.id.txt_title);
+
+        String userRole = SessionManager.getInstance().getUserRole();
+
+        if(userRole.equals(SystemConstant.ADMIN_ROLE)){
+
+            title.setText("Class List");
+            //Set value adapter for Adapter
+            classList = new ArrayList<>();
+            Call<ClassResponse> call =  classService.loadListClass();
+
+            call.enqueue(new Callback<ClassResponse>() {
+                @Override
+                public void onResponse(Call<ClassResponse> call, Response<ClassResponse> response) {
+                    if (response.isSuccessful()&&response.body()!=null){
+                        classList = response.body().getClasss();
+                        adapter.setData(classList);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ClassResponse> call, Throwable t) {
+                    Log.e("Error",t.getLocalizedMessage());
+                    showToast("Error");
+                }
+            });
+
+        }else if(userRole.equals(SystemConstant.TRAINER_ROLE)){
+
+            title.setText("List Class");
+            btnAddClass.setVisibility(View.GONE);
+
+        }else if(userRole.equals(SystemConstant.TRAINEE_ROLE)){
+
+            title.setText("Class List");
+            btnAddClass.setVisibility(View.GONE);
+
+        }
+
         //Set layout manager -> recyclerView Status
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         rcvClass = view.findViewById(R.id.rcv_class);
         rcvClass.setLayoutManager(linearLayoutManager);
-
-
-        btnAddClass = view.findViewById(R.id.btn_add_class);
 
         adapter =new ClassAdapter(new ClassAdapter.IClickItem() {
             @Override
@@ -79,30 +117,12 @@ public class ClassFragment extends Fragment {
             }
         });
 
+        btnAddClass = view.findViewById(R.id.btn_add_class);
+
         btnAddClass.setOnClickListener(v ->{
             Bundle bundle = new Bundle();
             bundle.putString("mission", SystemConstant.ADD);
             Navigation.findNavController(view).navigate(R.id.action_nav_class_to_add_class_fragment,bundle);
-        });
-
-        //Set value adapter for Adapter
-        classList = new ArrayList<>();
-        Call<ClassResponse> call =  classService.loadListClass();
-
-        call.enqueue(new Callback<ClassResponse>() {
-            @Override
-            public void onResponse(Call<ClassResponse> call, Response<ClassResponse> response) {
-                if (response.isSuccessful()&&response.body()!=null){
-                    classList = response.body().getClasss();
-                    adapter.setData(classList);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ClassResponse> call, Throwable t) {
-                Log.e("Error",t.getLocalizedMessage());
-                showToast("Error");
-            }
         });
 
         rcvClass.setAdapter(adapter);
@@ -150,6 +170,7 @@ public class ClassFragment extends Fragment {
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }
+
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         SuccessDialog newFragment = new SuccessDialog(message);

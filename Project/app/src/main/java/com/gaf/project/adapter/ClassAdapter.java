@@ -10,7 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gaf.project.R;
+import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Class;
+import com.gaf.project.utils.SessionManager;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -77,7 +79,7 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
     public class ClassViewHolder extends RecyclerView.ViewHolder {
 
         private TextView id, name, capacity, startDate,endDate;
-        private Button btnEdit, btnDelete;
+        private Button btnEdit, btnDelete, btnDetail;
 
         public ClassViewHolder(@NonNull View view) {
             super(view);
@@ -92,6 +94,16 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
             endDate = view.findViewById(R.id.txt_end_date);
             btnEdit = view.findViewById(R.id.btn_edit_class);
             btnDelete = view.findViewById(R.id.btn_delete_class);
+            btnDetail = view.findViewById(R.id.btn_view_detail);
+
+            String userRole = SessionManager.getInstance().getUserRole();
+            if(userRole.equals(SystemConstant.ADMIN_ROLE)){
+                btnDetail.setVisibility(View.GONE);
+            }
+            else {
+                btnEdit.setVisibility(View.GONE);
+                btnDelete.setVisibility(View.GONE);
+            }
         }
     }
 }

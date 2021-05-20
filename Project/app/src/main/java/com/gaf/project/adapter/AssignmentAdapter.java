@@ -14,9 +14,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gaf.project.R;
+import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.fragment.AddAssignmentFragment;
 import com.gaf.project.model.Assignment;
 import com.gaf.project.model.Class;
+import com.gaf.project.utils.SessionManager;
 
 import java.util.List;
 
@@ -93,6 +95,11 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
             btnEdit=itemView.findViewById(R.id.btn_edit_assignment);
             btnDelete=itemView.findViewById(R.id.btn_delete_assignment);
 
+            String userRole = SessionManager.getInstance().getUserRole();
+            if(!userRole.equals(SystemConstant.ADMIN_ROLE)){
+                btnDelete.setVisibility(View.GONE);
+                btnEdit.setVisibility(View.GONE);
+            }
         }
     }
 }

@@ -121,6 +121,22 @@
         android:layout_alignParentRight="true">
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_view_detail"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="5dp"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            app:icon="@drawable/ic_menu_camera"
+            app:iconSize="24dp"
+            app:iconPadding="0dp"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            app:shapeAppearanceOverlay="@style/ButtonRounded"
+            android:backgroundTint="@color/detail_button_color"/>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_edit_class"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -150,6 +166,10 @@
             android:insetBottom="0dp"
             app:shapeAppearanceOverlay="@style/ButtonRounded"
             android:backgroundTint="@color/delete_button_color"/>
+
+
+
+
 
     </LinearLayout>
 

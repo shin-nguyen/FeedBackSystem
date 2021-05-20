@@ -4,9 +4,10 @@ import android.content.Context;
 
 public class SessionManager {
 
-    private static final String USER_ID ="USER_ID";
+    private static final String USER_NAME ="USER_NAME";
     private static final String REMEMBER_ME ="REMEMBER_ME";
     private static final String IS_LOGIN ="IS_LOGIN";
+    private static final String USER_ROLE ="USER_ROLE";
 
     private MySharedPreferences mySharedPreferences;
     private static SessionManager instance;
@@ -23,12 +24,12 @@ public class SessionManager {
         return instance;
     }
 
-    public void setUserId(Integer userId) {
-        SessionManager.getInstance().mySharedPreferences.putIntValue(USER_ID,userId);
+    public void setUserName(String userName) {
+        SessionManager.getInstance().mySharedPreferences.putStringValue(USER_NAME,userName);
     }
 
-    public Integer getUserId() {
-        return SessionManager.getInstance().mySharedPreferences.getIntValue(USER_ID);
+    public String getUserName() {
+        return SessionManager.getInstance().mySharedPreferences.getStringValue(USER_NAME);
     }
 
     public void setRememberMe(Boolean rememberMe) {
@@ -45,5 +46,13 @@ public class SessionManager {
 
     public Boolean getIsLogin() {
         return SessionManager.getInstance().mySharedPreferences.getBooleanValue(IS_LOGIN);
+    }
+
+    public void setUserRole(String role) {
+        SessionManager.getInstance().mySharedPreferences.putStringValue(USER_ROLE,role);
+    }
+
+    public String getUserRole() {
+        return SessionManager.getInstance().mySharedPreferences.getStringValue(USER_ROLE);
     }
 }

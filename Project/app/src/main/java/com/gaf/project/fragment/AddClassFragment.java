@@ -42,7 +42,7 @@ import retrofit2.Response;
 public class AddClassFragment extends Fragment {
 
     private EditText mName, mId, mCapacity;
-    private TextView mStartDate,mEndDate;
+    private TextView mStartDate,mEndDate, mNameWarning, mCapacityWarning, mStartDateWaring, mEndDateWarning;
     private ImageButton btnStartDate, btnEndDate;
     private Button btnSave, btnBack;
     private Calendar calendar;
@@ -71,6 +71,12 @@ public class AddClassFragment extends Fragment {
         Class mClassEdit = null;
 
         mission = getArguments().getString("mission");
+        if(mission.equals(SystemConstant.ADD)){
+            mTitle.setText("Add Class");
+        }
+        if(mission.equals(SystemConstant.UPDATE)){
+            mTitle.setText("Edit Class");
+        }
 
         try {
             mClassEdit = (Class) getArguments().getSerializable("mClass");
@@ -90,68 +96,99 @@ public class AddClassFragment extends Fragment {
             Log.e("Error",ex.getLocalizedMessage());
         }
 
-
-
         btnSave.setOnClickListener(v->{
-            String name = mName.getText().toString().trim();
-            Integer capicity = Integer.valueOf(mCapacity.getText().toString());
 
-            DateFormat dfs = new SimpleDateFormat("MM/dd/yyyy");
-            Date startDate = new Date();
-            try {
-                startDate = dfs.parse(mStartDate.getText().toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
+            mNameWarning.setVisibility(View.GONE);
+            mCapacityWarning.setVisibility(View.GONE);
+            mStartDateWaring.setVisibility(View.GONE);
+            mEndDateWarning.setVisibility(View.GONE);
+
+            Boolean validateFlag = true;
+
+            if(mName.getText().toString().isEmpty()){
+                mNameWarning.setVisibility(View.VISIBLE);
+                validateFlag=false;
             }
 
-            Date endDate = new Date();
-            try {
-                endDate = dfs.parse(mEndDate.getText().toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
+            if(mCapacity.getText().toString().isEmpty()){
+                mCapacityWarning.setVisibility(View.VISIBLE);
+                validateFlag=false;
             }
 
-            if(mission.equals(SystemConstant.UPDATE)){
-                mTitle.setText("Edit Question");
-
-                Class mClass = new Class(idClass,name,capicity,startDate,endDate)   ;
-                Call<Class> call =  classService.update( mClass );
-                call.enqueue(new Callback<Class>() {
-                    @Override
-                    public void onResponse(Call<Class> call, Response<Class> response) {
-                        if (response.isSuccessful()&&response.body()!=null) {
-                            showSuccessDialog("Edit Success!");
-                            Log.e("Success","Update Class success");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Class> call, Throwable t) {
-                        Log.e("Error",t.getLocalizedMessage());
-                        showFailDialog("Error");
-                    }
-                });
-                Log.e("Success","Send Class success");
+            if(mStartDate.getText().toString().isEmpty()){
+                mStartDateWaring.setVisibility(View.VISIBLE);
+                validateFlag=false;
             }
-            else if(mission.equals(SystemConstant.ADD)){
-                mTitle.setText("Add Class");
 
-                Class mClass = new Class(name,capicity,startDate,endDate);
-                Call<Class> call =  classService.create( mClass );
-                call.enqueue(new Callback<Class>() {
-                    @Override
-                    public void onResponse(Call<Class> call, Response<Class> response) {
-                     if (response.isSuccessful()&&response.body()!=null) {
-                        showSuccessDialog("Add Success!");
+            if(mEndDate.getText().toString().isEmpty()){
+                mEndDateWarning.setVisibility(View.VISIBLE);
+                validateFlag=false;
+            }
+
+            if(validateFlag){
+
+                try{
+                    String name = mName.getText().toString().trim();
+                    Integer capacity = Integer.valueOf(mCapacity.getText().toString());
+
+                    DateFormat dfs = new SimpleDateFormat("MM/dd/yyyy");
+                    Date startDate = new Date();
+                    try {
+                        startDate = dfs.parse(mStartDate.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
+
+                    Date endDate = new Date();
+                    try {
+                        endDate = dfs.parse(mEndDate.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    if(mission.equals(SystemConstant.UPDATE)){
+
+                        Class mClass = new Class(idClass,name,capacity,startDate,endDate)   ;
+                        Call<Class> call =  classService.update( mClass );
+                        call.enqueue(new Callback<Class>() {
+                            @Override
+                            public void onResponse(Call<Class> call, Response<Class> response) {
+                                if (response.isSuccessful()&&response.body()!=null) {
+                                    showSuccessDialog("Edit Success!");
+                                    Log.e("Success","Update Class success");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Class> call, Throwable t) {
+                                Log.e("Error",t.getLocalizedMessage());
+                                showFailDialog("Error");
+                            }
+                        });
+                        Log.e("Success","Send Class success");
+                    }
+                    else if(mission.equals(SystemConstant.ADD)){
+
+                        Class mClass = new Class(name,capacity,startDate,endDate);
+                        Call<Class> call =  classService.create( mClass );
+                        call.enqueue(new Callback<Class>() {
+                            @Override
+                            public void onResponse(Call<Class> call, Response<Class> response) {
+                                if (response.isSuccessful()&&response.body()!=null) {
+                                    showSuccessDialog("Add Success!");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Class> call, Throwable t) {
+                                Log.e("Error",t.getLocalizedMessage());
+                                showFailDialog("Error");
+                            }
+                        });
+                    }
+                }catch (Exception ex){
+
                 }
-
-                @Override
-                public void onFailure(Call<Class> call, Throwable t) {
-                    Log.e("Error",t.getLocalizedMessage());
-                    showFailDialog("Error");
-                }
-            });
             }
         });
 
@@ -205,6 +242,11 @@ public class AddClassFragment extends Fragment {
         mTitle = view.findViewById(R.id.txt_title);
         mCapacity = view.findViewById(R.id.txt_capacity);
         mName = view.findViewById(R.id.txt_class_name);
+
+        mNameWarning = view.findViewById(R.id.txt_class_name_warning);
+        mCapacityWarning= view.findViewById(R.id.txt_capacity_warning);
+        mStartDateWaring=view.findViewById(R.id.txt_start_date_warning);
+        mEndDateWarning=view.findViewById(R.id.txt_end_date_warning);
 
         mStartDate = view.findViewById(R.id.txt_start_date);
         mEndDate = view.findViewById(R.id.txt_end_date);

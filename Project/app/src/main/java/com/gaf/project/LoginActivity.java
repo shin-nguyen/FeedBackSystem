@@ -19,6 +19,7 @@ import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.fragment.ModuleFragment;
 import com.gaf.project.service.AuthenticationService;
 import com.gaf.project.utils.ApiUtils;
+import com.gaf.project.utils.SessionManager;
 
 import java.util.Optional;
 
@@ -94,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                                 if (response.isSuccessful()&&response.body()!=null){
                                     AuthenticationResponse authenticationResponse = response.body();
 
-                                    setValue(authenticationResponse, role);
+                                    setSession(authenticationResponse, username, role);
                                     Log.e("Success",authenticationResponse.getJwt());
 
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -116,9 +117,13 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void setValue(AuthenticationResponse authenticationResponse, String role) {
-        SystemConstant.authenticationResponse = authenticationResponse;
-        SystemConstant.USER = role;
+    private void setSession(AuthenticationResponse authenticationResponse, String username, String role) {
+
+        SystemConstant.authenticationResponse = authenticationResponse;// cái này là sao chuyển dô session dc ko
+
+        SessionManager.getInstance().setIsLogin(true);
+        SessionManager.getInstance().setUserName(username);
+        SessionManager.getInstance().setUserRole(role);
 
         edtPassword.setText("");
         edtEmail.setText("");
