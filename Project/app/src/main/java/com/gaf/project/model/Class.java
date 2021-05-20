@@ -23,6 +23,7 @@ public class Class implements Serializable {
 
     @SerializedName("className")
     @Expose
+    @ToString.Include
     private String className;
 
     public Class(String className, Integer capacity, Date startTime, Date endTime) {
@@ -58,4 +59,9 @@ public class Class implements Serializable {
     @SerializedName("trainees")
     @Expose
     private Collection<Trainee> trainees = null;
+
+    @Override
+    public String toString() {
+        return getClassName();
+    }
 }

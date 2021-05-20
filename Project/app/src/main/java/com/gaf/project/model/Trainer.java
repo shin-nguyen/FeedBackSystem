@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @AllArgsConstructor
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class Trainer {
     @SerializedName("userName")
     @Expose
+    @ToString.Include
     private String userName;
     @SerializedName("name")
     @Expose
@@ -44,4 +46,10 @@ public class Trainer {
     @SerializedName("receiveNotification")
     @Expose
     private boolean isReceiveNotification;
+
+    @Override
+    public String toString() {
+        return getUserName();
+    }
+
 }

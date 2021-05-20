@@ -70,6 +70,7 @@ public class AddAssignmentFragment extends Fragment {
         view = inflater.inflate(R.layout.add_assignment, container, false);
 
         final Spinner spnModule = (Spinner) view.findViewById(R.id.spinner_module_name);
+        ArrayAdapter<Module> adapterModule;
         Call<ModuleResponse> callModule =  moduleService.loadModuleAdmin();
         callModule.enqueue(new Callback<ModuleResponse>() {
             @Override
@@ -91,6 +92,7 @@ public class AddAssignmentFragment extends Fragment {
 
 
         final Spinner spnClass = (Spinner) view.findViewById(R.id.spinner_class_name);
+        ArrayAdapter<Class> adapterClass;
         Call<ClassResponse> callClass =  classService.loadListClass();
         callClass.enqueue(new Callback<ClassResponse>() {
             @Override
@@ -110,6 +112,7 @@ public class AddAssignmentFragment extends Fragment {
         });
 
         final Spinner spnTrainer = (Spinner) view.findViewById(R.id.spinner_trainer_id);
+        ArrayAdapter<Trainer> adapterTrainer;
         Call<TrainerReponse> callTrainer =  trainerService.loadListTrainer();
         callTrainer.enqueue(new Callback<TrainerReponse>() {
             @Override

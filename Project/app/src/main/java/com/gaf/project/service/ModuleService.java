@@ -12,6 +12,6 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 
 public interface ModuleService {
-    @GET("module/loadModuleAdmin")
+    @GET("module/loadListModule")
     Call<ModuleResponse> loadModuleAdmin();
 }

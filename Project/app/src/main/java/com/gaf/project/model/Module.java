@@ -1,5 +1,6 @@
 package com.gaf.project.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @AllArgsConstructor
@@ -22,6 +24,7 @@ public class Module implements  Serializable{
     @SerializedName("admin")
     private Admin admin;
     @SerializedName("moduleName")
+    @ToString.Include
     private String moduleName;
     @SerializedName("startTime")
     private Date startTime;
@@ -31,11 +34,14 @@ public class Module implements  Serializable{
     private boolean isDeleted;
 
     @SerializedName("feedbackStartTime")
+    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
     private Date feedbackStartTime;
     @SerializedName("feedbackEndTime")
+    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
     private Date feedbackEndTime;
     @SerializedName("feedback")
     private Feedback feedback;
+
     @Override
     public String toString() {
         return getModuleName();
