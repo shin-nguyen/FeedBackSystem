@@ -78,24 +78,24 @@ public class ModuleFragment extends Fragment {
 
         //Set value adapter for Adapter
         moduleList = new ArrayList<>();
-        Call<List<Module>> call =  moduleService.loadModuleAdmin(
-                "Bearer "+ SystemConstant.authenticationResponse.getJwt());
-        call.enqueue(new Callback<List<Module>>() {
-            @Override
-            public void onResponse(Call<List<Module>> call, Response<List<Module>> response) {
-                showToast("Hihi");
-                Log.e("HiHiiiiiiiiiii",response.body().toString());
-//                if (response.isSuccessful()){
+//        Call<List<Module>> call =  moduleService.loadModuleAdmin(
+//                "Bearer "+ SystemConstant.authenticationResponse.getJwt());
+//        call.enqueue(new Callback<List<Module>>() {
+//            @Override
+//            public void onResponse(Call<List<Module>> call, Response<List<Module>> response) {
+//                showToast("Hihi");
+//                Log.e("HiHiiiiiiiiiii",response.body().toString());
+////                if (response.isSuccessful()){
+////
+////                }
+//            }
 //
-//                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Module>> call, Throwable t) {
-                showToast("Ec");
-                Log.e("Ec",t.getLocalizedMessage());
-            }
-        });
+//            @Override
+//            public void onFailure(Call<List<Module>> call, Throwable t) {
+//                showToast("Ec");
+//                Log.e("Ec",t.getLocalizedMessage());
+//            }
+//        });
     }
 
     private void clickUpdateStatus(View view, Module item) {

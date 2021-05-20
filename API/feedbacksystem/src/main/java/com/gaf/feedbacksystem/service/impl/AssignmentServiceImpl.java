@@ -30,9 +30,9 @@ public class AssignmentServiceImpl implements IAssignmentService {
     }
 
     @Override
-    public void save(AssignmentDto assignmentDto) {
+    public AssignmentDto save(AssignmentDto assignmentDto) {
         Assignment assignment = ObjectMapperUtils.map(assignmentDto,Assignment.class);
-        assignmentRepository.save(assignment);
+        return ObjectMapperUtils.map(assignmentRepository.save(assignment),AssignmentDto.class);
     }
 
     @Override
@@ -44,8 +44,8 @@ public class AssignmentServiceImpl implements IAssignmentService {
     }
 
     @Override
-    public void update(AssignmentDto Assignment) {
-
+    public AssignmentDto update(AssignmentDto Assignment) {
+        return null;
     }
     @Override
     public void deleteById(AssignmentIdDto assignmentIdDto) {

@@ -2,6 +2,7 @@ package com.gaf.project.service;
 
 
 import com.gaf.project.model.Module;
+import com.gaf.project.response.ModuleResponse;
 
 import java.util.List;
 
@@ -11,7 +12,6 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 
 public interface ModuleService {
-    @Headers({"Content-Type: application/json"})
     @GET("module/loadModuleAdmin")
-    Call<List<Module>> loadModuleAdmin(@Header("Authorization") String auth);
+    Call<ModuleResponse> loadModuleAdmin();
 }

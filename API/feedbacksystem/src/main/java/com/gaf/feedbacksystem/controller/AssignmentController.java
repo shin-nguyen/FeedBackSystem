@@ -23,6 +23,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.*;
 
 @RestController
@@ -83,5 +84,17 @@ public class AssignmentController {
 //    public ResponseEntity delete(@RequestBody AssignmentIdDto assignmentIdDto) {
 ////        return  ResponseEntity.ok().body(assignmentService.deleteById(assignmentIdDto););
 //    }
+
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    @PostMapping(value = "/")
+    public AssignmentDto create(@Valid @RequestBody AssignmentDto assignmentDto){
+        try{
+            return  assignmentService.save(assignmentDto);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+        }
+    }
+
 
 }

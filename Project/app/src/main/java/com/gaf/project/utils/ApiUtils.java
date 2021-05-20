@@ -6,6 +6,7 @@ import com.gaf.project.service.AssignmentService;
 import com.gaf.project.service.AuthenticationService;
 import com.gaf.project.service.ClassService;
 import com.gaf.project.service.ModuleService;
+import com.gaf.project.service.TrainerService;
 
 public class ApiUtils {
 
@@ -33,6 +34,10 @@ public class ApiUtils {
                 builderRetrofitAuth()
                 .create(AssignmentService.class);
     }
-
+    public static TrainerService getTrainerService() {
+        return RetrofitConfig.getInstance()
+                .builderRetrofitAuth()
+                .create(TrainerService.class);
+    }
 
 }

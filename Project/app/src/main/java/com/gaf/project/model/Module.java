@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Module {
+public class Module implements  Serializable{
     @SerializedName("moduleID")
     private Integer moduleID;
     @SerializedName("admin")
@@ -36,4 +36,8 @@ public class Module {
     private Date feedbackEndTime;
     @SerializedName("feedback")
     private Feedback feedback;
+    @Override
+    public String toString() {
+        return getModuleName();
+    }
 }

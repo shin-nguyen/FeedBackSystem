@@ -82,7 +82,8 @@ public class AddClassFragment extends Fragment {
                 mStartDate.setText(myFra.format(mClassEdit.getStartTime()));
                 mEndDate.setText(myFra.format(mClassEdit.getEndTime()));
 
-                Log.e("Error","Get Class Success");
+                mStartDate.setEnabled(false);
+                Log.e("Success","Get Class Success");
             }
         }
         catch (Exception ex){

@@ -1,5 +1,6 @@
 package com.gaf.feedbacksystem.dto;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.*;
 
 
@@ -14,10 +15,10 @@ public class AssignmentDto {
         return primaryKey;
     }
 
-
     public ClassDto getmClass() {
         return getPrimaryKey().getMClass();
     }
+    @JsonSetter("mClass")
     public void setmClass(ClassDto mClass) {
         getPrimaryKey().setMClass(mClass);
     }
