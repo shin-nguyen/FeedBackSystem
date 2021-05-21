@@ -68,11 +68,12 @@ public class ClassFragment extends Fragment {
             public void updateAndDetail(Class item) {
                 clickUpdate(item);
             }
+
             @Override
             public void delete(Class item) {
                 clickDelete(item);
             }
-        }, false);
+        });
 
         if(userRole.equals(SystemConstant.ADMIN_ROLE)){
 

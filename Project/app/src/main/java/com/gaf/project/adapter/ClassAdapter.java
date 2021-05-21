@@ -26,12 +26,10 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
         void updateAndDetail(Class item);
         void delete(Class item);
     }
-    public ClassAdapter(ClassAdapter.IClickItem iClickItem, Boolean edit) {
+    public ClassAdapter(ClassAdapter.IClickItem iClickItem) {
         this.iClickItem = iClickItem;
-        this.edit = edit;
     }
 
-    private Boolean edit;
     private List<Class> mListClass;
     public void setData(List<Class> list){
         this.mListClass = list;
@@ -43,7 +41,7 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
     public ClassViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_class,parent,false);
 
-        return new ClassViewHolder(view,edit);
+        return new ClassViewHolder(view);
     }
 
     @Override
@@ -96,12 +94,12 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
         private Button btnEdit, btnDelete, btnDetail;
         private LinearLayout linrNumberofTrainee, lnrInfoAdmin;
 
-        public ClassViewHolder(@NonNull View view, Boolean edit) {
+        public ClassViewHolder(@NonNull View view) {
             super(view);
-            initView(view,edit);
+            initView(view);
         }
 
-        private void initView(View view, Boolean edit) {
+        private void initView(View view) {
             id = view.findViewById(R.id.txt_class_id);
             name = view.findViewById(R.id.txt_class_name);
 
@@ -129,9 +127,6 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
                 btnDelete.setVisibility(View.GONE);
             }
 
-            if (edit){
-                btnEdit.setVisibility(View.GONE);
-            }
         }
     }
 }

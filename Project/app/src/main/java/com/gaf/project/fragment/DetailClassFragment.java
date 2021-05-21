@@ -2,8 +2,10 @@ package com.gaf.project.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -14,25 +16,37 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gaf.project.R;
 import com.gaf.project.adapter.ClassAdapter;
+import com.gaf.project.adapter.TraineeAdapter;
+import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
 import com.gaf.project.model.Class;
+import com.gaf.project.model.Trainee;
+import com.gaf.project.response.ClassResponse;
+import com.gaf.project.service.ClassService;
+import com.gaf.project.utils.ApiUtils;
+import com.gaf.project.utils.SessionManager;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class DetailClassFragment extends Fragment {
-    private EditText mName, mId;
+    private TextView mName, mId;
     private Button  btnBack;
-    private TextView mTitle;
-    private RecyclerView rcvClass;
-    private List<Class> classList;
-    private ClassAdapter adapter;
-
+    private RecyclerView rcvTrainee;
+    private List<Trainee> traineeList;
+    private TraineeAdapter adapter;
+    private  View view;
     public DetailClassFragment() {
         // Required empty public constructor
     }
@@ -41,47 +55,47 @@ public class DetailClassFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =inflater.inflate(R.layout.fragment_detail_class, container, false);
+         view =inflater.inflate(R.layout.fragment_detail_class, container, false);
         initComponents(view);
-        Class mClass =null;
+        Class mClass =new Class();
+        adapter = new TraineeAdapter();
+
+        traineeList = new ArrayList<>();
+
+        btnBack.setOnClickListener(v->{
+            getActivity().onBackPressed();
+        });
+
         try {
             mClass = (Class) getArguments().getSerializable("mClass");
             if (mClass != null) {
-                SimpleDateFormat myFra = new SimpleDateFormat("MM/dd/yyyy");
                 mId.setText(mClass.getClassID().toString());
                 mName.setText(mClass.getClassName());
-
+                traineeList = (List<Trainee>) mClass.getTrainees();
                 Log.e("Success","Get Class Success");
             }
         }
         catch (Exception ex){
             Log.e("Error",ex.getLocalizedMessage());
+            showToast("Error");
         }
 
-        btnBack.setOnClickListener(vi->{
-            getActivity().onBackPressed();
-        });
+        //Set layout manager -> recyclerView Status
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
+        rcvTrainee = view.findViewById(R.id.rcv_info_class);
+        rcvTrainee.setLayoutManager(linearLayoutManager);
 
-        adapter = new ClassAdapter(null,true);
+        adapter.setData(traineeList);
+        rcvTrainee.setAdapter(adapter);
         return  view;
     }
 
+    public void showToast(String string){
+        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
+    }
     private void initComponents(View view) {
-        mTitle = view.findViewById(R.id.txt_title);
-        mId = view.findViewById(R.id.txt_class_id);
-        mName = view.findViewById(R.id.txt_class_name);
+        mId = (TextView)view.findViewById(R.id.txt_class_id);
+        mName = (TextView)view.findViewById(R.id.txt_class_name);
         btnBack  = (Button)view.findViewById(R.id.btn_back);
-    }
-
-    public void showSuccessDialog(String message){
-        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        SuccessDialog newFragment = new SuccessDialog(message);
-        newFragment.show(ft, "dialog success");
-    }
-
-    public void showFailDialog(String message){
-        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        FailDialog newFragment = new FailDialog(message);
-        newFragment.show(ft, "dialog fail");
     }
 }
