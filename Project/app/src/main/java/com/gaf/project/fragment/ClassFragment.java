@@ -1,6 +1,5 @@
 package com.gaf.project.fragment;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +22,7 @@ import com.gaf.project.adapter.ClassAdapter;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
-import com.gaf.project.dialog.YesNoDialog;
+import com.gaf.project.dialog.WarningDialog;
 import com.gaf.project.model.Class;
 import com.gaf.project.response.ClassResponse;
 import com.gaf.project.response.DeleteResponse;
@@ -33,7 +32,6 @@ import com.gaf.project.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PrimitiveIterator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,7 +59,6 @@ public class ClassFragment extends Fragment {
         title = view.findViewById(R.id.txt_title);
 
         userRole = SessionManager.getInstance().getUserRole();
-
 
         adapter =new ClassAdapter(new ClassAdapter.IClickItem() {
             @Override
@@ -91,7 +88,9 @@ public class ClassFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_nav_class_to_add_class_fragment,bundle);
             });
 
-        }else if(userRole.equals(SystemConstant.TRAINER_ROLE)){
+        }
+
+        if(userRole.equals(SystemConstant.TRAINER_ROLE)){
 
             title.setText("List Class");
             btnAddClass.setVisibility(View.GONE);
@@ -111,7 +110,6 @@ public class ClassFragment extends Fragment {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         rcvClass = view.findViewById(R.id.rcv_class);
         rcvClass.setLayoutManager(linearLayoutManager);
-
         rcvClass.setAdapter(adapter);
 
         return view;
@@ -154,7 +152,7 @@ public class ClassFragment extends Fragment {
     private void clickDelete(Class item){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
 
-        final YesNoDialog dialog = new YesNoDialog(
+        final WarningDialog dialog = new WarningDialog(
                 () -> {
                     Call<DeleteResponse> call =  classService.delete(item.getClassID());
 

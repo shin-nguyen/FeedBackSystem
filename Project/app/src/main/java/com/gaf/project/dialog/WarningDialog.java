@@ -10,20 +10,16 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.gaf.project.R;
-import com.gaf.project.adapter.ClassAdapter;
-import com.gaf.project.model.Class;
 
-public class YesNoDialog extends DialogFragment {
+public class WarningDialog extends DialogFragment {
     private String message;
-    private YesNoDialog.IClickItem iClickItem;
+    private WarningDialog.IClickItem iClickItem;
     public interface IClickItem{
-        void update();
+        void execute();
     }
-    public YesNoDialog(YesNoDialog.IClickItem iClickItem,String message) {
+    public WarningDialog(WarningDialog.IClickItem iClickItem, String message) {
         this.iClickItem = iClickItem;
         this.message = message;
     }
@@ -39,7 +35,7 @@ public class YesNoDialog extends DialogFragment {
 
         btnOke.setOnClickListener(v->{
             dismiss();
-            iClickItem.update();
+            iClickItem.execute();
         });
 
         Button btnCancel = viewBuilder.findViewById(R.id.btn_cancel);
