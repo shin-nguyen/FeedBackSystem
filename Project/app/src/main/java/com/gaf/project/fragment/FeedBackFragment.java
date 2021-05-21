@@ -142,13 +142,13 @@ public class FeedBackFragment extends Fragment{
 
 //            });
             FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-            SuccessDialog dialog = new SuccessDialog(SystemConstant.DELETE);
+            SuccessDialog dialog = new SuccessDialog("Delete Success");
             //change dialog message using bundle
 //        Bundle bundle = new Bundle();
 //        bundle.putString("placeholder", "Update success");
 //
 //        newFragment.setArguments(bundle);
-            dialog.show(ft, "dialog add success");
+            dialog.show(ft, "dialog delete success");
         });
     }
 
