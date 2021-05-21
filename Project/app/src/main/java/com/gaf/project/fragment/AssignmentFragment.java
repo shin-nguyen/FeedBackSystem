@@ -79,9 +79,7 @@ public class AssignmentFragment extends Fragment{
 
 
         String userRole = SessionManager.getInstance().getUserRole();
-        if(!userRole.equals(SystemConstant.ADMIN_ROLE)){
-            btnAdd.setVisibility(View.GONE);
-        }
+
 
         recyclerViewAssignment = view.findViewById(R.id.rcv_assignment);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
@@ -123,6 +121,9 @@ public class AssignmentFragment extends Fragment{
         recyclerViewAssignment.setAdapter(assignmentAdapter);
 
         btnAdd = view.findViewById(R.id.btn_add_assignment);
+        if(!userRole.equals(SystemConstant.ADMIN_ROLE)){
+            btnAdd.setVisibility(View.GONE);
+        }
 //        btnAddAssignment.setVisibility(View.GONE);//hide button
 //        btnAddAssignment.setVisibility(View.VISIBLE);//show button
 
