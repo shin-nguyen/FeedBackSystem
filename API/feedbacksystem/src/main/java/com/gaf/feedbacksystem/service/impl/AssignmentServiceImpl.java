@@ -3,6 +3,7 @@ package com.gaf.feedbacksystem.service.impl;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import com.gaf.feedbacksystem.entity.Class;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import com.gaf.feedbacksystem.entity.AssignmentId;
 import com.gaf.feedbacksystem.repository.AssignmentRepository;
 import com.gaf.feedbacksystem.service.IAssignmentService;
 import com.gaf.feedbacksystem.utils.ObjectMapperUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AssignmentServiceImpl implements IAssignmentService {
@@ -30,9 +32,9 @@ public class AssignmentServiceImpl implements IAssignmentService {
     }
 
     @Override
-    public void save(AssignmentDto assignmentDto) {
+    public AssignmentDto save(AssignmentDto assignmentDto) {
         Assignment assignment = ObjectMapperUtils.map(assignmentDto,Assignment.class);
-        assignmentRepository.save(assignment);
+        return ObjectMapperUtils.map(assignmentRepository.save(assignment),AssignmentDto.class);
     }
 
     @Override
@@ -44,12 +46,16 @@ public class AssignmentServiceImpl implements IAssignmentService {
     }
 
     @Override
-    public void update(AssignmentDto Assignment) {
+    @Transactional
+    public AssignmentDto update(String userName,AssignmentDto newAssignment) {
+        deleteById(newAssignment.getmClass().getClassID(),newAssignment.getModule().getModuleID(),userName);
+        Assignment assignment = ObjectMapperUtils.map(newAssignment,Assignment.class);
+        return ObjectMapperUtils.map(assignmentRepository.save(assignment),AssignmentDto.class);
+    }
 
-    }
     @Override
-    public void deleteById(AssignmentIdDto assignmentIdDto) {
-        AssignmentId assignmentId = ObjectMapperUtils.map(assignmentIdDto,AssignmentId.class);
-        assignmentRepository.deleteById(assignmentId);
+    public void deleteById(Integer idClass, Integer idModule, String userName) {
+        assignmentRepository.deleteByMClassAndModuleAndTrainer(idClass,idModule,userName);
     }
+
 }

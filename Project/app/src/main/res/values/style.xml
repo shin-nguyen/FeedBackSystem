@@ -27,7 +27,8 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="spinnerDropDownItemStyle" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+    <style name="spinnerDropDownItemStyle"
+        parent="android:TextAppearance.Widget.TextView.SpinnerItem">
         <item name="android:textStyle">bold</item>
     </style>
 

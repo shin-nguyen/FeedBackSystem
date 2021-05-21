@@ -5,8 +5,10 @@ import com.gaf.feedbacksystem.user.TraineeUser;
 import lombok.*;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.RowId;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.util.Collection;
 
 
@@ -61,8 +63,8 @@ public class Assignment{
     }
 
 
-    @Column(length = 50, nullable = false, unique = true)
-    private String registrationCode;
+    @Column(length = 50)
+    private String registrationCode="";
 
 }
 

@@ -1,17 +1,12 @@
 package com.gaf.project.config;
 
-import com.gaf.project.LocalDateDeserializer;
-import com.gaf.project.LocalDateSerializer;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.utils.ApiUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.time.LocalDate;
 
-import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -36,38 +31,32 @@ public class RetrofitConfig {
                 .build();
     }
 
-    public Retrofit  builderRetrofitAuth(String token){
-
+    public Retrofit  builderRetrofitAuth(){
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateSerializer());
-        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateDeserializer());
 
         Gson gson = gsonBuilder
                 .setDateFormat("dd/MM/yyyy")
                 .setPrettyPrinting()
+                .setLenient()
                 .create();
-//        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-//        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        OkHttpClient httpClient = new OkHttpClient.Builder()
-//                .addInterceptor(logging)
-                .build();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder().addInterceptor(logging);
 
-        httpClient.newBuilder().addInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request.Builder builder = chain.request().newBuilder();
-                builder.addHeader("Authorization", "Bearer " +token);
-                return chain.proceed(builder.build());
-            }
+        httpClient.addInterceptor(chain -> {
+            Request request = chain.request().newBuilder().
+                    addHeader("Authorization", "Bearer " +
+                            SystemConstant.authenticationResponse.getJwt())
+                    .addHeader("Content-Type","application/json")
+                    .build();
+            return chain.proceed(request);
         });
 
-        return new Retrofit.Builder().baseUrl(ApiUtils.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(
-                        gson
-                ))
-                .client(httpClient)
-                .build();
+        return new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .baseUrl(ApiUtils.BASE_URL).client(httpClient.build()).build();
+
     }
 }

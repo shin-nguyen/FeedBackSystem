@@ -1,50 +1,36 @@
 package com.gaf.project.model;
 
+import androidx.annotation.NonNull;
+
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Assignment{
+public class Assignment implements Serializable{
 
-    private static final long serialVersionUID = 1L;
-
-    AssignmentId primaryKey = new AssignmentId();
-
-    private AssignmentId getPrimaryKey(){
-        return primaryKey;
-    }
-
-    public Class getmClass() {
-        return getPrimaryKey().getMClass();
-    }
-    public void setmClass(Class mClass) {
-        getPrimaryKey().setMClass(mClass);
-    }
-
-
-    public Module getModule() {
-        return getPrimaryKey().getModule();
-    }
-    public void setModule(Module module) {
-        getPrimaryKey().setModule(module);
-    }
-
-
-    public Trainer getTrainer() {
-        return getPrimaryKey().getTrainer();
-    }
-    public void setTrainer(Trainer trainer) {
-        getPrimaryKey().setTrainer(trainer);
-    }
-
-
+    @SerializedName("registrationCode")
+    @Expose
     private String registrationCode;
+    @SerializedName("module")
+    @Expose
+    private Module module;
+    @SerializedName("trainer")
+    @Expose
+    private Trainer trainer;
+    @SerializedName("mClass")
+    @Expose
+    private Class mClass;
 
 }
-

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 
+import com.gaf.project.utils.SessionManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -39,20 +40,13 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_enrollment,R.id.nav_feedback, R.id.nav_result, R.id.nav_question,
                 R.id.nav_contact,R.id.nav_log_out,
                 R.id.add_feedback_fragment, R.id.add_assignment_fragment, R.id.add_question_fragment,
-                R.id.edit_assignment_fragment)
+                R.id.edit_assignment_fragment,R.id.add_class_fragment,R.id.nav_trainee_home_fragment)
                 .setDrawerLayout(drawer)
                 .build();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_activity, menu);
-        return true;
     }
 
     @Override

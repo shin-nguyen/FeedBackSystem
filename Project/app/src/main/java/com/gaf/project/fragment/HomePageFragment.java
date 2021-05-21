@@ -8,12 +8,15 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gaf.project.R;
 import com.gaf.project.adapter.AssignmentAdapter;
+import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Assignment;
+import com.gaf.project.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +24,6 @@ import java.util.List;
 public class HomePageFragment extends Fragment implements View.OnClickListener {
 
     private View view;
-    private RecyclerView recyclerViewAssignment;
-
-    private AssignmentAdapter assignmentAdapter;
-    private List<Assignment> listAssignment;
 
     public HomePageFragment(){
 
@@ -42,28 +41,15 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        recyclerViewAssignment = view.findViewById(R.id.rcv_dashboard);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
-        recyclerViewAssignment.setLayoutManager(linearLayoutManager);
+        String userRole = SessionManager.getInstance().getUserRole();
+        if(userRole.equals(SystemConstant.TRAINEE_ROLE)){
+            Navigation.findNavController(view).navigate(R.id.action_nav_homepage_to_nav_trainee_home_fragment);
+        }else {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("home_role", true);
+            Navigation.findNavController(view).navigate(R.id.action_nav_homepage_to_nav_assignment,bundle);
+        }
 
-        listAssignment = new ArrayList<>();
-        //listAssignment.add(new Assignment(1,1,1,1,"Code"));
-
-        assignmentAdapter = new AssignmentAdapter(new AssignmentAdapter.IClickItem() {
-            @Override
-            public void update(Assignment item) {
-
-            }
-
-            @Override
-            public void delete(Assignment item) {
-
-            }
-        });
-
-        assignmentAdapter.setData(listAssignment);
-
-        recyclerViewAssignment.setAdapter(assignmentAdapter);
     }
 
     @Override

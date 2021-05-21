@@ -13,7 +13,8 @@
         android:padding="30dp"
         android:textSize="35sp"
         android:textStyle="bold"
-        android:textAlignment="center"/>
+        android:textAlignment="center"
+        android:id="@+id/txt_title"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +22,7 @@
         android:orientation="vertical"
         android:paddingLeft="40dp"
         android:paddingRight="30dp"
-        android:paddingBottom="30dp">
+        android:paddingBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -41,6 +42,13 @@
             android:inputType="text"
             android:imeOptions="actionDone"
             android:hint="Class name"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Please enter class name and less than 255 character"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            android:id="@+id/txt_class_name_warning"/>
     </LinearLayout>
 
     <LinearLayout
@@ -49,7 +57,7 @@
         android:orientation="vertical"
         android:paddingLeft="40dp"
         android:paddingRight="30dp"
-        android:paddingBottom="30dp">
+        android:paddingBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -69,7 +77,13 @@
             android:id="@+id/txt_capacity"
             android:layout_gravity="center"
             android:hint="Capacity"/>
-
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Please enter capicity in integer and larger than 0"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            android:id="@+id/txt_capacity_warning"/>
     </LinearLayout>
 
     <LinearLayout
@@ -78,7 +92,7 @@
         android:orientation="vertical"
         android:paddingLeft="40dp"
         android:paddingRight="30dp"
-        android:paddingBottom="30dp">
+        android:paddingBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -115,7 +129,13 @@
                 android:src="@drawable/ic_baseline_calendar_today_24" />
 
         </RelativeLayout>
-
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Please choose date or fill mm/dd/yyyy"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            android:id="@+id/txt_start_date_warning"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -123,7 +143,7 @@
         android:orientation="vertical"
         android:paddingLeft="40dp"
         android:paddingRight="30dp"
-        android:paddingBottom="30dp">
+        android:paddingBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -160,7 +180,13 @@
                 android:src="@drawable/ic_baseline_calendar_today_24" />
 
         </RelativeLayout>
-
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Please choose date or fill mm/dd/yyyy"
+            android:textColor="@color/red"
+            android:visibility="gone"
+            android:id="@+id/txt_end_date_warning"/>
     </LinearLayout>
 
     <LinearLayout

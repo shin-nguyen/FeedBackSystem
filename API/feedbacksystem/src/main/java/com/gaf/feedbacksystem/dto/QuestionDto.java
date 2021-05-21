@@ -16,5 +16,4 @@ public class QuestionDto {
     private Topic topic;
     private  String questionContent;
     private  boolean isDeleted;
-    private Collection<FeedbackDto> feedbacks;
 }

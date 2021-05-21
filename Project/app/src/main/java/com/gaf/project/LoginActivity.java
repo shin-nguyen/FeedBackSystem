@@ -19,6 +19,7 @@ import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.fragment.ModuleFragment;
 import com.gaf.project.service.AuthenticationService;
 import com.gaf.project.utils.ApiUtils;
+import com.gaf.project.utils.SessionManager;
 
 import java.util.Optional;
 
@@ -38,7 +39,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-//        getActionBar().hide();
 
         addControls();
         addValues();
@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //get all view in activity
     public void addControls(){
-
+        getSupportActionBar().hide();
         edtEmail = findViewById(R.id.edt_email);
         edtPassword = findViewById(R.id.edt_password);
         btnSignIn = findViewById(R.id.btn_sign_in);
@@ -75,6 +75,8 @@ public class LoginActivity extends AppCompatActivity {
 
             final String username = edtEmail.getText().toString().trim();
             final String password = edtPassword.getText().toString().trim();
+            final Boolean remember = cbRememberMe.isChecked();
+            final String role = pnRole.getSelectedItem().toString();
 
             //if the user has not entered the complete information
             if(TextUtils.isEmpty(username)) {
@@ -82,9 +84,8 @@ public class LoginActivity extends AppCompatActivity {
             if(TextUtils.isEmpty(password)){
             }
             else {
-
                 AuthenticationRequest authenticationRequest =
-                        new AuthenticationRequest(username,password,"ADMIN");
+                        new AuthenticationRequest(username,password,role,remember);
 
                 authenticationService.login(authenticationRequest)
                         .enqueue( new Callback<AuthenticationResponse>() {
@@ -94,9 +95,9 @@ public class LoginActivity extends AppCompatActivity {
                                 if (response.isSuccessful()&&response.body()!=null){
                                     AuthenticationResponse authenticationResponse = response.body();
 
-                                    SystemConstant.authenticationResponse = authenticationResponse;
+                                    setSession(authenticationResponse, username, role);
+                                    Log.e("Success",authenticationResponse.getJwt());
 
-                                    Log.e("Huhu",authenticationResponse.getJwt());
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
                                 }
@@ -104,18 +105,31 @@ public class LoginActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(Call<AuthenticationResponse> call, Throwable t) {
-                                Log.e("Ec",t.getLocalizedMessage());
-
+                                Log.e("Error",t.getLocalizedMessage());
                                 showToast("Error");
                             }
                         });
             }
 
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//            startActivity(intent);
         });
 
     }
+
+    private void setSession(AuthenticationResponse authenticationResponse, String username, String role) {
+
+        SystemConstant.authenticationResponse = authenticationResponse;// cái này là sao chuyển dô session dc ko
+
+        SessionManager.getInstance().setIsLogin(true);
+        SessionManager.getInstance().setUserName(username);
+        SessionManager.getInstance().setUserRole(role);
+
+        edtPassword.setText("");
+        edtEmail.setText("");
+    }
+
+
     public void showToast(String string){
         Toast.makeText(getApplication(),string,Toast.LENGTH_LONG).show();
     }

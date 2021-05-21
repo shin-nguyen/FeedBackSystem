@@ -4,6 +4,7 @@ import com.gaf.feedbacksystem.MyResourceNotFoundException;
 import com.gaf.feedbacksystem.constant.SystemConstant;
 import com.gaf.feedbacksystem.dto.*;
 import com.gaf.feedbacksystem.entity.Admin;
+import com.gaf.feedbacksystem.entity.Trainer;
 import com.gaf.feedbacksystem.service.IAssignmentService;
 import com.gaf.feedbacksystem.service.ITrainerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.*;
 
 @RestController
@@ -31,7 +33,8 @@ public class AssignmentController {
 
     @Autowired
     private IAssignmentService assignmentService;
-
+    @Autowired
+    private  ITrainerService trainerService;
 
     @Operation(description = "Thao tac Assignment", responses = {
             @ApiResponse(
@@ -46,7 +49,7 @@ public class AssignmentController {
     })
     @PreAuthorize("hasAnyRole(\"" + SystemConstant.ADMIN_ROLE + "\"," +
                             "\"" + SystemConstant.TRAINER_ROLE + "\")")
-    @GetMapping(value = "/")
+    @GetMapping(value = "/loadListAssignment")
     public ResponseEntity<Map<String, List<?>>> getListAssignment(){
         try {
             UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
@@ -63,7 +66,7 @@ public class AssignmentController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             Map result = new HashMap();
-            result.put("assignmentList", assignmentList);
+            result.put("assignments", assignmentList);
             return ResponseEntity.ok().body(result);
         }
         catch (MyResourceNotFoundException exc) {
@@ -71,17 +74,53 @@ public class AssignmentController {
         }	
     }
 
+
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
-    @PutMapping(value = "/updateAssignment/{id}")
-    public ResponseEntity updateAssignmentByTrainer (@RequestBody AssignmentIdDto assignmentIdDto, @PathVariable Integer trainerId){
-
-
-        return null;
+    @PostMapping(value = "/")
+    public AssignmentDto create(@RequestBody AssignmentDto assignmentDto){
+        try{
+            return  assignmentService.save(assignmentDto);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Assignment Not Found", exc);
+        }
     }
-//    @DeleteMapping("/")
-//    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
-//    public ResponseEntity delete(@RequestBody AssignmentIdDto assignmentIdDto) {
-////        return  ResponseEntity.ok().body(assignmentService.deleteById(assignmentIdDto););
-//    }
+
+    @PutMapping(value = "/{userName}")
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    public ResponseEntity<AssignmentDto> update(@Valid @PathVariable(name = "userName") String userName,@Valid @RequestBody AssignmentDto newAssignment){
+//        try {
+            TrainerDto trainer = trainerService.findByUserName(userName);
+            if (trainer==null)
+                throw new MyResourceNotFoundException();
+
+            final AssignmentDto assignment = assignmentService.update(userName,newAssignment);
+
+            return ResponseEntity.ok(assignment);
+//        }
+//        catch (MyResourceNotFoundException exc) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+//        }
+    }
+    @DeleteMapping(value = "/{idClass}/{idModule}/{userName}")
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    public Map<String, Boolean> delete(@PathVariable (name = "idClass") Integer idClass,
+                                       @PathVariable (name = "idModule") Integer idModule,
+                                       @PathVariable(name="userName") String userName){
+        try {
+            Map<String, Boolean> response = new HashMap<>();
+            try {
+                assignmentService.deleteById(idClass,idModule,userName);
+                response.put("deleted", Boolean.TRUE);
+
+            } catch (Exception exception) {
+                response.put("deleted", Boolean.FALSE);
+            }
+            return response;
+        }  catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+        }
+
+    }
 
 }

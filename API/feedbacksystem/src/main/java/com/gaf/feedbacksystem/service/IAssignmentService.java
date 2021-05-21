@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface IAssignmentService {
     List<AssignmentDto> findAll();
-    void save(AssignmentDto assignment);
+    AssignmentDto save(AssignmentDto assignment);
     List<AssignmentDto> findByTrainerUserName(String username);
-    void update(AssignmentDto Assignment);
-    void deleteById(AssignmentIdDto assignmentIdDto);
+    AssignmentDto update(String userName,AssignmentDto newAssignment);
+    void deleteById(Integer idClass,Integer idModule,String userName);
 }

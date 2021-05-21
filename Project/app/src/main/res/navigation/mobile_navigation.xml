@@ -9,7 +9,14 @@
         android:id="@+id/nav_homepage"
         android:name="com.gaf.project.fragment.HomePageFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home_page" />
+        tools:layout="@layout/fragment_home_page" >
+        <action
+            android:id="@+id/action_nav_homepage_to_nav_assignment"
+            app:destination="@id/nav_assignment" />
+        <action
+            android:id="@+id/action_nav_homepage_to_nav_trainee_home_fragment"
+            app:destination="@id/nav_trainee_home_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_assignment"
@@ -86,13 +93,14 @@
         tools:layout="@layout/fragment_result" />
 
     <fragment
-        android:id="@+id/navquestion"
+        android:id="@+id/nav_question"
         android:name="com.gaf.project.fragment.QuestionFragment"
         android:label="fragment_question"
-        tools:layout="@layout/fragment_question" />
+        tools:layout="@layout/fragment_question" >
         <action
             android:id="@+id/action_nav_question_to_add_question_fragment"
             app:destination="@id/add_question_fragment" />
+    </fragment>
 <!--    </fragment>-->
 
     <fragment
@@ -124,7 +132,8 @@
     <fragment
         android:id="@+id/add_question_fragment"
         android:name="com.gaf.project.fragment.AddQuestionFragment"
-        android:label="AddQuestionFragment" />
+        android:label="AddQuestionFragment"
+        tools:layout="@layout/add_question"/>
 
     <fragment
         android:id="@+id/add_class_fragment"
@@ -135,5 +144,10 @@
         android:id="@+id/edit_assignment_fragment"
         android:name="com.gaf.project.fragment.EditAssignmentFragment"
         android:label="EditAssignmentFragment" />
+    <fragment
+        android:id="@+id/nav_trainee_home_fragment"
+        android:name="com.gaf.project.TraineeHomeFragment"
+        android:label="fragment_trainee_home"
+        tools:layout="@layout/fragment_trainee_home" />
 
 </navigation>

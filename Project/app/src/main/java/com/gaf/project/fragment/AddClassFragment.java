@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,11 +16,14 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gaf.project.R;
 import com.gaf.project.constant.SystemConstant;
+import com.gaf.project.dialog.FailDialog;
+import com.gaf.project.dialog.SuccessDialog;
 import com.gaf.project.model.Class;
 import com.gaf.project.response.ClassResponse;
 import com.gaf.project.service.ClassService;
@@ -38,14 +42,17 @@ import retrofit2.Response;
 public class AddClassFragment extends Fragment {
 
     private EditText mName, mId, mCapacity;
-    private TextView mStartDate,mEndDate;
+    private TextView mStartDate,mEndDate, mNameWarning, mCapacityWarning, mStartDateWaring, mEndDateWarning;
     private ImageButton btnStartDate, btnEndDate;
     private Button btnSave, btnBack;
     private Calendar calendar;
     private DatePickerDialog datePickerDialog;
     private Date planDate;
     private ClassService classService;
-    private Integer idClass = -1;
+    private String mission;
+    private TextView mTitle;
+    Integer idClass;
+
     public AddClassFragment() {
         // Required empty public constructor
     }
@@ -63,9 +70,16 @@ public class AddClassFragment extends Fragment {
         initComponents(view);
         Class mClassEdit = null;
 
+        mission = getArguments().getString("mission");
+        if(mission.equals(SystemConstant.ADD)){
+            mTitle.setText("Add Class");
+        }
+        if(mission.equals(SystemConstant.UPDATE)){
+            mTitle.setText("Edit Class");
+        }
+
         try {
             mClassEdit = (Class) getArguments().getSerializable("mClass");
-
             if (mClassEdit != null) {
                 SimpleDateFormat myFra = new SimpleDateFormat("MM/dd/yyyy");
                 idClass = mClassEdit.getClassID();
@@ -74,75 +88,108 @@ public class AddClassFragment extends Fragment {
                 mStartDate.setText(myFra.format(mClassEdit.getStartTime()));
                 mEndDate.setText(myFra.format(mClassEdit.getEndTime()));
 
-                showToast("Get Class Success");
+                mStartDate.setEnabled(false);
+                Log.e("Success","Get Class Success");
             }
         }
         catch (Exception ex){
-            Log.e("Huhu",ex.getLocalizedMessage());
+            Log.e("Error",ex.getLocalizedMessage());
         }
+
         btnSave.setOnClickListener(v->{
-            String name = mName.getText().toString().trim();
-            String capicity = mCapacity.getText().toString().trim();
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-            Date startDate = new Date();
-            try {
-                startDate = df.parse(mStartDate.getText().toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
+
+            mNameWarning.setVisibility(View.GONE);
+            mCapacityWarning.setVisibility(View.GONE);
+            mStartDateWaring.setVisibility(View.GONE);
+            mEndDateWarning.setVisibility(View.GONE);
+
+            Boolean validateFlag = true;
+
+            if(mName.getText().toString().isEmpty()){
+                mNameWarning.setVisibility(View.VISIBLE);
+                validateFlag=false;
             }
 
-            Date endDate = new Date();
-            try {
-                endDate = df.parse(mEndDate.getText().toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
+            if(mCapacity.getText().toString().isEmpty()){
+                mCapacityWarning.setVisibility(View.VISIBLE);
+                validateFlag=false;
             }
 
-            if (idClass !=-1){
-                Class mClass = new Class(idClass,name,capicity,startDate,endDate)   ;
-                Call<Class> call =  classService.update(
-                        "Bearer "+ SystemConstant.authenticationResponse.getJwt(),
-                        mClass
-                );
-                call.enqueue(new Callback<Class>() {
-                    @Override
-                    public void onResponse(Call<Class> call, Response<Class> response) {
-                        if (response.isSuccessful()&&response.body()!=null) {
-                            showToast("Success");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Class> call, Throwable t) {
-                        Log.e("Error",t.getLocalizedMessage());
-                        showToast("Error");
-                    }
-                });
-                showToast("finalMClassEdit");
+            if(mStartDate.getText().toString().isEmpty()){
+                mStartDateWaring.setVisibility(View.VISIBLE);
+                validateFlag=false;
             }
-            else{
 
-            Class mClass = new Class(name,capicity,startDate,endDate);
-            Call<Class> call =  classService.create(
-                    "Bearer "+ SystemConstant.authenticationResponse.getJwt(),
-                    mClass
-                    );
-            call.enqueue(new Callback<Class>() {
-                @Override
-                public void onResponse(Call<Class> call, Response<Class> response) {
-                    if (response.isSuccessful()&&response.body()!=null) {
-                            showToast("Success");
+            if(mEndDate.getText().toString().isEmpty()){
+                mEndDateWarning.setVisibility(View.VISIBLE);
+                validateFlag=false;
+            }
+
+            if(validateFlag){
+
+                try{
+                    String name = mName.getText().toString().trim();
+                    Integer capacity = Integer.valueOf(mCapacity.getText().toString());
+
+                    DateFormat dfs = new SimpleDateFormat("MM/dd/yyyy");
+                    Date startDate = new Date();
+                    try {
+                        startDate = dfs.parse(mStartDate.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
+
+                    Date endDate = new Date();
+                    try {
+                        endDate = dfs.parse(mEndDate.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    if(mission.equals(SystemConstant.UPDATE)){
+
+                        Class mClass = new Class(idClass,name,capacity,startDate,endDate)   ;
+                        Call<Class> call =  classService.update( mClass );
+                        call.enqueue(new Callback<Class>() {
+                            @Override
+                            public void onResponse(Call<Class> call, Response<Class> response) {
+                                if (response.isSuccessful()&&response.body()!=null) {
+                                    showSuccessDialog("Edit Success!");
+                                    Log.e("Success","Update Class success");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Class> call, Throwable t) {
+                                Log.e("Error",t.getLocalizedMessage());
+                                showFailDialog("Error");
+                            }
+                        });
+                        Log.e("Success","Send Class success");
+                    }
+                    else if(mission.equals(SystemConstant.ADD)){
+
+                        Class mClass = new Class(name,capacity,startDate,endDate);
+                        Call<Class> call =  classService.create( mClass );
+                        call.enqueue(new Callback<Class>() {
+                            @Override
+                            public void onResponse(Call<Class> call, Response<Class> response) {
+                                if (response.isSuccessful()&&response.body()!=null) {
+                                    showSuccessDialog("Add Success!");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Class> call, Throwable t) {
+                                Log.e("Error",t.getLocalizedMessage());
+                                showFailDialog("Error");
+                            }
+                        });
+                    }
+                }catch (Exception ex){
+
                 }
-
-                @Override
-                public void onFailure(Call<Class> call, Throwable t) {
-                    Log.e("Error",t.getLocalizedMessage());
-                    showToast("Error");
-                }
-            });
             }
-
         });
 
 
@@ -184,13 +231,22 @@ public class AddClassFragment extends Fragment {
             datePickerDialog.show();
         });
 
+        btnBack.setOnClickListener(vi->{
+            getActivity().onBackPressed();
+        });
 
         return view;
     }
 
     private void initComponents(View view) {
+        mTitle = view.findViewById(R.id.txt_title);
         mCapacity = view.findViewById(R.id.txt_capacity);
         mName = view.findViewById(R.id.txt_class_name);
+
+        mNameWarning = view.findViewById(R.id.txt_class_name_warning);
+        mCapacityWarning= view.findViewById(R.id.txt_capacity_warning);
+        mStartDateWaring=view.findViewById(R.id.txt_start_date_warning);
+        mEndDateWarning=view.findViewById(R.id.txt_end_date_warning);
 
         mStartDate = view.findViewById(R.id.txt_start_date);
         mEndDate = view.findViewById(R.id.txt_end_date);
@@ -202,7 +258,15 @@ public class AddClassFragment extends Fragment {
         btnEndDate =(ImageButton) view.findViewById(R.id.btn_add_end_date);
     }
 
-    public void showToast(String string){
-        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
+    public void showSuccessDialog(String message){
+        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+        SuccessDialog newFragment = new SuccessDialog(message);
+        newFragment.show(ft, "dialog success");
+    }
+
+    public void showFailDialog(String message){
+        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+        FailDialog newFragment = new FailDialog(message);
+        newFragment.show(ft, "dialog fail");
     }
 }

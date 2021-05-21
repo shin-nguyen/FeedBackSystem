@@ -6,11 +6,12 @@ import com.gaf.project.service.AssignmentService;
 import com.gaf.project.service.AuthenticationService;
 import com.gaf.project.service.ClassService;
 import com.gaf.project.service.ModuleService;
+import com.gaf.project.service.TrainerService;
 
 public class ApiUtils {
 
     //Dia chi may host
-    public static final String BASE_URL = "http://192.168.1.4:8080/";
+    public static final String BASE_URL = "http://192.168.1.198:8080/";
 
     public static AuthenticationService getAuthenticationService() {
         return RetrofitConfig.getInstance().buildRetrofit().create(AuthenticationService.class);
@@ -18,21 +19,25 @@ public class ApiUtils {
 
     public static ModuleService getModuleService() {
         return RetrofitConfig.getInstance()
-                .builderRetrofitAuth(SystemConstant.authenticationResponse.getJwt())
+                .builderRetrofitAuth()
                 .create(ModuleService.class);
     }
 
     public static ClassService getClassService() {
         return RetrofitConfig.getInstance()
-                .builderRetrofitAuth(SystemConstant.authenticationResponse.getJwt())
+                .builderRetrofitAuth()
                 .create(ClassService.class);
     }
 
     public static AssignmentService getAssignmentService() {
         return RetrofitConfig.getInstance().
-                builderRetrofitAuth(SystemConstant.authenticationResponse.getJwt())
+                builderRetrofitAuth()
                 .create(AssignmentService.class);
     }
-
+    public static TrainerService getTrainerService() {
+        return RetrofitConfig.getInstance()
+                .builderRetrofitAuth()
+                .create(TrainerService.class);
+    }
 
 }

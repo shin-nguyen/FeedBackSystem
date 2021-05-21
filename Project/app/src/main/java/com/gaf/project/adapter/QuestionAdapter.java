@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gaf.project.R;
+import com.gaf.project.model.Assignment;
 import com.gaf.project.model.Question;
 
 import java.util.List;
@@ -19,11 +20,18 @@ import java.util.List;
 public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.QuestionViewHolder> {
 
     private List<Question> mListQuestion;
-    private Context mContext;
+
+    private QuestionAdapter.IClickItem iClickItem;
+    public interface IClickItem{
+        void update(Question item);
+        void delete(Question item);
+    }
+    public QuestionAdapter(QuestionAdapter.IClickItem iClickItem) {
+        this.iClickItem = iClickItem;
+    }
 
     public void setData(List<Question> list, Context context){
         this.mListQuestion = list;
-        this.mContext= context;
         notifyDataSetChanged();
     }
 
@@ -49,6 +57,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
         holder.questionId.setText(String.valueOf(question.getQuestionID()));
         holder.questionContent.setText(String.valueOf(question.getQuestionContent()));
 
+        holder.btnEdit.setOnClickListener(v->{
+            iClickItem.update(question);
+        });
+        holder.btnDelete.setOnClickListener(v->{
+            iClickItem.delete(question);
+        });
+
     }
 
     @Override
@@ -61,7 +76,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
 
     public class QuestionViewHolder extends RecyclerView.ViewHolder{
         private TextView topicId, topicName, questionId, questionContent;
-        private Button editQuestion, deleteQuestion;
+        private Button btnEdit, btnDelete;
 
         public QuestionViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -71,68 +86,9 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
             questionId=itemView.findViewById(R.id.question_question_id);
             questionContent=itemView.findViewById(R.id.question_question_content);
 
-            editQuestion=itemView.findViewById(R.id.btn_edit_question);
-            deleteQuestion=itemView.findViewById(R.id.btn_delete_question);
+            btnEdit=itemView.findViewById(R.id.btn_edit_question);
+            btnDelete=itemView.findViewById(R.id.btn_delete_question);
 
-            editQuestion.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-
-            deleteQuestion.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
-                    View view=LayoutInflater.from(mContext).inflate(R.layout.warning_dialog,null);
-
-                    builder.setView(view);
-
-                    final AlertDialog warningDialog=builder.create();
-                    warningDialog.show();
-
-                    TextView warningContent = view.findViewById(R.id.txt_warning_content);
-                    warningContent.setText("Do you want to delete this Question?");
-
-                    Button btnCancel = view.findViewById(R.id.btn_cancel);
-                    btnCancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            warningDialog.dismiss();
-                        }
-                    });
-
-                    Button btnYes = view.findViewById(R.id.btn_yes);
-                    btnYes.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            warningDialog.dismiss();
-
-                            AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
-                            View view=LayoutInflater.from(mContext).inflate(R.layout.successful_dialog,null);
-
-                            builder.setView(view);
-
-                            final AlertDialog successDialog=builder.create();
-                            successDialog.show();
-
-                            TextView warningContent = view.findViewById(R.id.txt_success_dialog_message);
-                            warningContent.setText("Delete Success!");
-
-                            Button btnCancel = view.findViewById(R.id.btn_success_confirm);
-                            btnCancel.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    successDialog.dismiss();
-                                }
-                            });
-
-                        }
-                    });
-                }
-            });
         }
     }
 }

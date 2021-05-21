@@ -55,7 +55,7 @@ public class EnrollmentFragment extends Fragment {
 
 
         //Class clazz = new Class("1", "class1", "50", LocalDate.now(), LocalDate.now(), false, new ArrayList<>());
-        Trainee trainee = new Trainee("hungdo", "hung", "hung@gmail.com", "123", "0123", "Dong Nai", true, 1, "123", "123", new ArrayList<>());
+        Trainee trainee = new Trainee("hungdo", "hung", "hung@gmail.com", "123", "0123", "Dong Nai", true, 1, "123", "123");
 
         listTrainee.add(trainee);
         //listClass.add(clazz);
