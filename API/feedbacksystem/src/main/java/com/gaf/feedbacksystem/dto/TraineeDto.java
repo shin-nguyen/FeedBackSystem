@@ -10,10 +10,7 @@ import javax.persistence.ManyToMany;
 import java.util.Collection;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class TraineeDto extends BaseUserEntity {
+public class TraineeDto extends BaseUserDto {
     private String phone;
     private String address;
     private boolean isActive;

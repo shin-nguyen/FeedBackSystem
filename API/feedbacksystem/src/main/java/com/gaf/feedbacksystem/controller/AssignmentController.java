@@ -89,7 +89,7 @@ public class AssignmentController {
     @PutMapping(value = "/{userName}")
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
     public ResponseEntity<AssignmentDto> update(@Valid @PathVariable(name = "userName") String userName,@Valid @RequestBody AssignmentDto newAssignment){
-//        try {
+        try {
             TrainerDto trainer = trainerService.findByUserName(userName);
             if (trainer==null)
                 throw new MyResourceNotFoundException();
@@ -97,10 +97,10 @@ public class AssignmentController {
             final AssignmentDto assignment = assignmentService.update(userName,newAssignment);
 
             return ResponseEntity.ok(assignment);
-//        }
-//        catch (MyResourceNotFoundException exc) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
-//        }
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+        }
     }
     @DeleteMapping(value = "/{idClass}/{idModule}/{userName}")
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
