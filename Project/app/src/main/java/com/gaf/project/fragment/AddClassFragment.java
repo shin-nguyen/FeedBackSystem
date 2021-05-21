@@ -41,7 +41,7 @@ import retrofit2.Response;
 
 public class AddClassFragment extends Fragment {
 
-    private EditText mName, mId, mCapacity;
+    private EditText mName, mCapacity;
     private TextView mStartDate,mEndDate, mNameWarning, mCapacityWarning, mStartDateWaring, mEndDateWarning;
     private ImageButton btnStartDate, btnEndDate;
     private Button btnSave, btnBack;
