@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.gaf.feedbacksystem.dto.ClassDto;
+import com.gaf.feedbacksystem.entity.Class;
 import com.gaf.feedbacksystem.utils.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -22,10 +24,11 @@ public class ModuleServiceImpl implements IModuleService {
     @Autowired
     ModuleRepository moduleRepository;
 
-
     @Override
     public ModuleDto save(ModuleDto moduleDTO) {
-        return  null;
+        Module mModule = ObjectMapperUtils.map(moduleDTO,Module.class);
+
+        return ObjectMapperUtils.map(moduleRepository.save(mModule), ModuleDto.class);
     }
 
     @Override
@@ -38,13 +41,32 @@ public class ModuleServiceImpl implements IModuleService {
 
     @Override
     public void deleteById(Integer id) {
+        moduleRepository.deleteByModuleId(id);
+    }
 
+
+    /*
+    Loi tut ***
+     */
+    @Override
+    public List<ModuleDto> findAllByTrainee(String userName) {
+        List<Module> modules = moduleRepository.findAllByTrainer(userName);
+        List<ModuleDto> moduleDtos = ObjectMapperUtils.mapAll(modules,ModuleDto.class);
+        return moduleDtos;
+    }
+
+
+    @Override
+    public List<ModuleDto> findAllByTrainer(String userName) {
+        List<Module> modules = moduleRepository.findAllByTrainer(userName);
+        List<ModuleDto> moduleDtos = ObjectMapperUtils.mapAll(modules,ModuleDto.class);
+        return moduleDtos;
     }
 
 
     @Override
 	public List<ModuleDto> findAll() {
-		 List<Module> modules = moduleRepository.findAll();
+		 List<Module> modules = moduleRepository.findAllByDeletedIsFalse();
 		 List<ModuleDto> moduleDTOS = ObjectMapperUtils.mapAll(modules,ModuleDto.class);
 		 
 		 return moduleDTOS;

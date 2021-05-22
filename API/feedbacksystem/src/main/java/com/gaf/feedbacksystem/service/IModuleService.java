@@ -10,4 +10,6 @@ public interface IModuleService {
     ModuleDto save(ModuleDto moduleDTO);
     ModuleDto update(ModuleDto moduleDTO);
     void deleteById(Integer id);
+    List<ModuleDto> findAllByTrainee(String userName);
+    List<ModuleDto> findAllByTrainer(String userName);
 }
