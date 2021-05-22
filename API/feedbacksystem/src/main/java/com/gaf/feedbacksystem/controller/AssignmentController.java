@@ -53,7 +53,7 @@ public class AssignmentController {
     public ResponseEntity<Map<String, List<?>>> getListAssignment(){
         try {
             UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
-                    .getPrincipal();
+                    .getPrincipal();	
 
             List<AssignmentDto> assignmentList = new ArrayList<>();
 
@@ -71,7 +71,7 @@ public class AssignmentController {
         }
         catch (MyResourceNotFoundException exc) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Assignment Not Found", exc);
-        }
+        }	
     }
 
 

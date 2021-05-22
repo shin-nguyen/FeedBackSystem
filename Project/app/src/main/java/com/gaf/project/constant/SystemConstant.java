@@ -14,6 +14,6 @@ public class SystemConstant {
     public static final String DELETE = "DELETE";
     public static final String DETAIL = "DETAIL";
 
-    public static AuthenticationResponse authenticationResponse;
+    public static AuthenticationResponse authenticationResponse = new AuthenticationResponse();
 }
 

@@ -81,22 +81,26 @@ public class ClassController {
         }
     }
 
-//    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
-//    @GetMapping(value = "/loadListClass", produces = "application/json")
-//    public ResponseEntity<Map<String, List<?>>> getListClass(){
-//        try{
-//            List<ClassDto> classList = classService.findAll();
-//            if ( classList.isEmpty()) {
-//                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//            }
-//            Map result = new HashMap();
-//            result.put("classes", classList);
-//            return new ResponseEntity<>(result, HttpStatus.OK);
-//        }
-//        catch (MyResourceNotFoundException exc) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
-//        }
-//    }
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    @GetMapping(value = "/loadListClassByTrainee", produces = "application/json")
+    public ResponseEntity<Map<String, List<?>>> loadListClassByTrainee(){
+        try{
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                    .getPrincipal();
+            String userName = userDetails.getUsername();
+
+            List<ClassDto> classList = classService.findAllByTrainee(userName);
+            if ( classList.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            Map result = new HashMap();
+            result.put("classes", classList);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+        }
+    }
 
 
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
