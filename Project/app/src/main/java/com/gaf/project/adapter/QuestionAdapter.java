@@ -30,7 +30,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
         this.iClickItem = iClickItem;
     }
 
-    public void setData(List<Question> list, Context context){
+    public void setData(List<Question> list){
         this.mListQuestion = list;
         notifyDataSetChanged();
     }

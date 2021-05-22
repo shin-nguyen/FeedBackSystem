@@ -25,7 +25,7 @@ import com.gaf.project.adapter.AssignmentAdapter;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
-import com.gaf.project.dialog.YesNoDialog;
+import com.gaf.project.dialog.WarningDialog;
 import com.gaf.project.model.Assignment;
 import com.gaf.project.response.AssignmentResponse;
 import com.gaf.project.response.DeleteResponse;
@@ -66,20 +66,25 @@ public class AssignmentFragment extends Fragment{
                              ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_assignment, container, false);
 
-        try{
-            homeRole = getArguments().getBoolean("home_role");
-            searchFiled = view.findViewById(R.id.search_field);
+        searchFiled = view.findViewById(R.id.search_field);
+        btnAdd = view.findViewById(R.id.btn_add_assignment);
 
-            if(homeRole==true){
+        try{
+
+            homeRole = getArguments().getBoolean("home_role");
+            String userRole = SessionManager.getInstance().getUserRole();
+
+            if(homeRole==true) {
                 searchFiled.setVisibility(View.GONE);
             }
-        }catch (Exception ex){
+
+            if(!userRole.equals(SystemConstant.ADMIN_ROLE)){
+                btnAdd.setVisibility(View.GONE);
+            }
+
+        }catch (Exception exception){
 
         }
-
-
-        String userRole = SessionManager.getInstance().getUserRole();
-
 
         recyclerViewAssignment = view.findViewById(R.id.rcv_assignment);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
@@ -97,35 +102,27 @@ public class AssignmentFragment extends Fragment{
             }
         });
 
-            //Set value adapter for Adapter
-            listAssignment = new ArrayList<>();
-            Call<AssignmentResponse> call =  assignmentService.loadListAssignment();
-
-            call.enqueue(new Callback<AssignmentResponse>() {
-                @Override
-                public void onResponse(Call<AssignmentResponse> call, Response<AssignmentResponse> response) {
-                    if (response.isSuccessful()&&response.body()!=null){
-                        listAssignment = response.body().getAssignments();
-                        assignmentAdapter.setData(listAssignment);
-                        Log.e("Success","Assigment get success");
-                    }
+        //Set value adapter for Adapter
+        listAssignment = new ArrayList<>();
+        Call<AssignmentResponse> call =  assignmentService.loadListAssignment();
+        call.enqueue(new Callback<AssignmentResponse>() {
+            @Override
+            public void onResponse(Call<AssignmentResponse> call, Response<AssignmentResponse> response) {
+                if (response.isSuccessful()&&response.body()!=null){
+                    listAssignment = response.body().getAssignments();
+                    assignmentAdapter.setData(listAssignment);
+                    Log.e("Success","Assigment get success");
                 }
+            }
 
-                @Override
-                public void onFailure(Call<AssignmentResponse> call, Throwable t) {
-                    Log.e("Error",t.getLocalizedMessage());
-                    showToast("Call API fail!");
-                }
-            });
+            @Override
+            public void onFailure(Call<AssignmentResponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showToast("Call API fail!");
+            }
+        });
 
         recyclerViewAssignment.setAdapter(assignmentAdapter);
-
-        btnAdd = view.findViewById(R.id.btn_add_assignment);
-        if(!userRole.equals(SystemConstant.ADMIN_ROLE)){
-            btnAdd.setVisibility(View.GONE);
-        }
-//        btnAddAssignment.setVisibility(View.GONE);//hide button
-//        btnAddAssignment.setVisibility(View.VISIBLE);//show button
 
         btnAdd.setOnClickListener(v->{
             Navigation.findNavController(view).navigate(R.id.action_nav_assignment_to_add_assignment_fragment);
@@ -134,16 +131,9 @@ public class AssignmentFragment extends Fragment{
         return view;
     }
 
-    private void clickUpdate(Assignment item) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("item", item);
-
-        Navigation.findNavController(view).navigate(R.id.action_nav_assignment_to_edit_assignment_fragment,bundle);
-    }
-
     private void clickDelete(Assignment item){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        final YesNoDialog dialog = new YesNoDialog(
+        final WarningDialog dialog = new WarningDialog(
                 () -> {
                     Call<DeleteResponse> call =  assignmentService.delete(item.getMClass().getClassID(),
                                                                             item.getModule().getModuleID(),
@@ -169,9 +159,17 @@ public class AssignmentFragment extends Fragment{
         dialog.show(ft, "dialog success");
     }
 
+    private void clickUpdate(Assignment item) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("item", item);
+
+        Navigation.findNavController(view).navigate(R.id.action_nav_assignment_to_edit_assignment_fragment,bundle);
+    }
+
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }
+
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         SuccessDialog newFragment = new SuccessDialog(message);

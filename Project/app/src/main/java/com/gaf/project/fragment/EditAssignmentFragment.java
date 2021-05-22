@@ -42,8 +42,9 @@ public class EditAssignmentFragment extends Fragment {
     private TrainerService trainerService;
     private List<Trainer> trainerList;
     private ArrayAdapter<Trainer> adapterTrainer;
-    Spinner spnTrainer;
-    Assignment assignment;
+    private Spinner spnTrainer;
+    private Assignment assignment;
+
     public EditAssignmentFragment() {
         // Required empty public constructor
     }
@@ -66,6 +67,7 @@ public class EditAssignmentFragment extends Fragment {
 
         Class mClass = assignment.getMClass();
         Module module = assignment.getModule();
+        Trainer trainer = assignment.getTrainer();
 
         classId.setText(String.valueOf(mClass.getClassID()));
         className.setText(String.valueOf(mClass.getClassName()));
@@ -82,6 +84,9 @@ public class EditAssignmentFragment extends Fragment {
                         adapterTrainer =
                                 new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, trainerList);
                         spnTrainer.setAdapter(adapterTrainer);
+                        int spnPosition = -1;
+                        spnPosition = adapterTrainer.getPosition(trainer);
+                        spnTrainer.setSelection(spnPosition);
                     }}).run();
             }
             @Override
@@ -94,8 +99,8 @@ public class EditAssignmentFragment extends Fragment {
         btnSave.setOnClickListener(v->{
             String oldTrainer = assignment.getTrainer().getUserName();
 
-            Trainer trainer = (Trainer) spnTrainer.getSelectedItem();
-            assignment.setTrainer(trainer);
+            Trainer selectedTrainer = (Trainer) spnTrainer.getSelectedItem();
+            assignment.setTrainer(selectedTrainer);
 
             Call<Assignment> call =  assignmentService.update(oldTrainer,assignment);
                     call.enqueue(new Callback<Assignment>() {
@@ -142,6 +147,7 @@ public class EditAssignmentFragment extends Fragment {
         FailDialog newFragment = new FailDialog(message);
         newFragment.show(ft, "dialog fail");
     }
+
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }

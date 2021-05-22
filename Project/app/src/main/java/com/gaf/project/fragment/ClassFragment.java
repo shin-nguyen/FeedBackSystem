@@ -1,6 +1,5 @@
 package com.gaf.project.fragment;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +22,7 @@ import com.gaf.project.adapter.ClassAdapter;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
-import com.gaf.project.dialog.YesNoDialog;
+import com.gaf.project.dialog.WarningDialog;
 import com.gaf.project.model.Class;
 import com.gaf.project.response.ClassResponse;
 import com.gaf.project.response.DeleteResponse;
@@ -33,7 +32,6 @@ import com.gaf.project.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PrimitiveIterator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -64,6 +62,14 @@ public class ClassFragment extends Fragment {
 
         title = view.findViewById(R.id.txt_title);
 
+        btnAddClass = view.findViewById(R.id.btn_add_class);
+
+        btnAddClass.setOnClickListener(v ->{
+            Bundle bundle = new Bundle();
+            bundle.putString("mission", SystemConstant.ADD);
+            Navigation.findNavController(view).navigate(R.id.action_nav_class_to_add_class_fragment,bundle);
+        });
+
         String userRole = SessionManager.getInstance().getUserRole();
 
         if(userRole.equals(SystemConstant.ADMIN_ROLE)){
@@ -89,12 +95,16 @@ public class ClassFragment extends Fragment {
                 }
             });
 
-        }else if(userRole.equals(SystemConstant.TRAINER_ROLE)){
+        }
+
+        if(userRole.equals(SystemConstant.TRAINER_ROLE)){
 
             title.setText("List Class");
             btnAddClass.setVisibility(View.GONE);
 
-        }else if(userRole.equals(SystemConstant.TRAINEE_ROLE)){
+        }
+
+        if(userRole.equals(SystemConstant.TRAINEE_ROLE)){
 
             title.setText("Class List");
             btnAddClass.setVisibility(View.GONE);
@@ -117,14 +127,6 @@ public class ClassFragment extends Fragment {
             }
         });
 
-        btnAddClass = view.findViewById(R.id.btn_add_class);
-
-        btnAddClass.setOnClickListener(v ->{
-            Bundle bundle = new Bundle();
-            bundle.putString("mission", SystemConstant.ADD);
-            Navigation.findNavController(view).navigate(R.id.action_nav_class_to_add_class_fragment,bundle);
-        });
-
         rcvClass.setAdapter(adapter);
 
         return view;
@@ -143,7 +145,7 @@ public class ClassFragment extends Fragment {
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
 
 
-        final YesNoDialog dialog = new YesNoDialog(
+        final WarningDialog dialog = new WarningDialog(
                 () -> {
                     Call<DeleteResponse> call =  classService.delete(item.getClassID());
 
