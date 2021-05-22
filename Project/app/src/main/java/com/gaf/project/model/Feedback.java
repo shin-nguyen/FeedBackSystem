@@ -2,6 +2,7 @@ package com.gaf.project.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Feedback{
+public class Feedback implements Serializable {
     @SerializedName("feedbackID")
     private Integer feedbackID;
     @SerializedName("title")

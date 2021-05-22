@@ -11,14 +11,13 @@ import com.gaf.project.service.ModuleService;
 import com.gaf.project.service.QuestionService;
 import com.gaf.project.service.TopicService;
 import com.gaf.project.service.TrainerService;
+import com.gaf.project.service.TypeFeedbackService;
 
 public class ApiUtils {
 
     //Dia chi may host
 
     public static final String BASE_URL = "http://192.168.1.4:8080/";
-
-
 
     public static AuthenticationService getAuthenticationService() {
         return RetrofitConfig.getInstance().buildRetrofit().create(AuthenticationService.class);
@@ -65,5 +64,9 @@ public class ApiUtils {
                 .builderRetrofitAuth()
                 .create(FeedbackService.class);
     }
-
+    public static TypeFeedbackService getTypeFeedbackService() {
+        return RetrofitConfig.getInstance()
+                .builderRetrofitAuth()
+                .create(TypeFeedbackService.class);
+    }
 }
