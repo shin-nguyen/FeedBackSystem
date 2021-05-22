@@ -20,7 +20,7 @@ public interface ClassService {
     Call<ClassResponse> loadListClassByTrainer();
 
     @GET("class/loadListClassByTrainee")
-    Call<ClassResponse>loadListClassByTrainee();
+    Call<ClassResponse> loadListClassByTrainee();
 
     @POST("class/")
     Call<Class> create(@Body Class mClass);

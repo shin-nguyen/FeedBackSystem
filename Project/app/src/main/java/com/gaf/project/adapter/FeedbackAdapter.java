@@ -16,11 +16,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.gaf.project.R;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.fragment.AddFeedBackFragment;
+import com.gaf.project.model.Class;
 import com.gaf.project.model.Feedback;
 
 import java.util.List;
 
 public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.FeedbackViewHolder>{
+
+    private FeedbackAdapter.IClickItem iClickItem;
+    public interface IClickItem{
+        void update(Feedback item);
+        void detail(Feedback item);
+        void delete(Feedback item);
+    }
+    public FeedbackAdapter(FeedbackAdapter.IClickItem iClickItem) {
+        this.iClickItem = iClickItem;
+    }
 
     private List<Feedback> mListFeedback;
     private NavController navigation;
@@ -51,20 +62,17 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.Feedba
         holder.adminId.setText(feedback.getAdmin().getUserName());
 
         holder.detailButton.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putString("mission", SystemConstant.DETAIL);
-
-            navigation = Navigation.findNavController(v);
-            navigation.navigate(R.id.action_nav_feedback_to_review_feedback_fragment, bundle);
+            iClickItem.detail(feedback);
         });
 
         holder.editButton.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putString("mission", SystemConstant.UPDATE);
-
-            navigation = Navigation.findNavController(v);
-            navigation.navigate(R.id.action_nav_feedback_to_add_feedback_fragment, bundle);
+            iClickItem.update(feedback);
         });
+        holder.deleteButton.setOnClickListener(view -> {
+            iClickItem.delete(feedback);
+        });
+
+
     }
 
     @Override
@@ -89,6 +97,7 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.Feedba
 
             detailButton = itemView.findViewById(R.id.btn_feedback_detail);
             editButton = itemView.findViewById(R.id.btn_edit_feedback);
+            deleteButton =itemView.findViewById(R.id.btn_delete_feedback);
         }
     }
 }
