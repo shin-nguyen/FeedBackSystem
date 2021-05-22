@@ -99,7 +99,7 @@ public class ModuleFragment extends Fragment {
             Call<ModuleResponse> call =  moduleService.loadModuleTrainee();
             setAdapter(call);
         }
-
+        rcvModule.setAdapter(adapter);
         return  view;
     }
 

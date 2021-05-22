@@ -22,3 +22,13 @@ select * from assignment;
 insert assignment value ('1234',1,1,'thanh');
 insert trainer value('thao','thaole301000@gmail.com','thao','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
 '1234','TanThanh',1,true,true,'0918948074','1234');
+select * from topic;
+insert topic value(1,"DanhGia");
+insert topic value(2,"ChoDiem");
+select * from question; 
+insert question value (1,false,"Noi Dung Danh Gia GV ",1);
+insert question value (2,false,"Noi Dung Danh Gia SV Hoc  ",1);
+insert question value (3,false,"Danh Gia Ec ",1);
+insert question value (4,false,"Noi Dung Danh Gia GV ",2);
+insert question value (5,false,"Noi Dung Danh Gia SV Hoc  ",2);
+insert question value (6,false,"Danh Gia Ec ",2);

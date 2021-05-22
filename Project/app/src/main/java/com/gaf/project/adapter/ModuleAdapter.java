@@ -98,8 +98,8 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ModuleView
             feedbackStartTime = view.findViewById(R.id.module_feedback_start_time);
             feedbackEndTime = view.findViewById(R.id.module_feedback_end_time);
 
-            btnEdit = view.findViewById(R.id.btn_edit_class);
-            btnDelete = view.findViewById(R.id.btn_delete_class);
+            btnEdit = view.findViewById(R.id.btn_edit_module);
+            btnDelete = view.findViewById(R.id.btn_delete_module);
 
             String userRole = SessionManager.getInstance().getUserRole();
             if(!userRole.equals(SystemConstant.ADMIN_ROLE)){

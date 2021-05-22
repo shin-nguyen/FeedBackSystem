@@ -125,8 +125,8 @@ public class LoginActivity extends AppCompatActivity {
         SessionManager.getInstance().setUserName(username);
         SessionManager.getInstance().setUserRole(role);
 
-        edtPassword.setText("");
-        edtEmail.setText("");
+//        edtPassword.setText("");
+//        edtEmail.setText("");
     }
 
 

@@ -35,8 +35,10 @@ import com.gaf.project.model.Question;
 import com.gaf.project.model.Topic;
 import com.gaf.project.model.TypeFeedback;
 import com.gaf.project.response.ModuleResponse;
+import com.gaf.project.response.TopicResponse;
 import com.gaf.project.response.TypeFeedbackResponse;
 import com.gaf.project.service.FeedbackService;
+import com.gaf.project.service.TopicService;
 import com.gaf.project.service.TypeFeedbackService;
 import com.gaf.project.utils.ApiUtils;
 
@@ -58,6 +60,7 @@ public class AddFeedBackFragment extends Fragment {
     private List<TypeFeedback> typeFeedbacks ;
     private String mission;
     private FeedbackService feedbackService;
+    private TopicService topicService;
     private TypeFeedbackService typeFeedbackService;
     private TextView title;
     private Spinner spnFeedbackType;
@@ -69,6 +72,8 @@ public class AddFeedBackFragment extends Fragment {
         super.onCreate(savedInstanceState);
         feedbackService = ApiUtils.getFeedbackService();
         typeFeedbackService = ApiUtils.getTypeFeedbackService();
+
+        topicService = ApiUtils.getTopicService();
     }
 
     @Nullable
@@ -101,25 +106,25 @@ public class AddFeedBackFragment extends Fragment {
             }
 
         }
-
         Call<TypeFeedbackResponse> callTypeFeedback =  typeFeedbackService.loadListTypeFeedback();
-        callTypeFeedback.enqueue(new Callback<TypeFeedbackResponse>() {
+        new Thread(()-> {
+            callTypeFeedback.enqueue(new Callback<TypeFeedbackResponse>() {
             @Override
             public void onResponse(Call<TypeFeedbackResponse> call, Response<TypeFeedbackResponse> response) {
-                new Thread(()-> {
+
                     if (response.isSuccessful()&& response.body()!=null){
                         typeFeedbacks = response.body().getTypeFeedbacks();
                         typeFeedbackAdapter =
                                 new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, typeFeedbacks);
                         spnFeedbackType.setAdapter(typeFeedbackAdapter);
-                    }}).run();
+                    }
             }
             @Override
             public void onFailure(Call<TypeFeedbackResponse> call, Throwable t) {
                 Log.e("Error",t.getLocalizedMessage());
                 showToast("Error");
             }
-        });
+        });}).run();
 
         btnBack.setOnClickListener(v -> getActivity().onBackPressed());
 
@@ -128,16 +133,29 @@ public class AddFeedBackFragment extends Fragment {
             navigation.navigate(R.id.action_add_feedback_fragment_to_review_feedback_fragment, bundle);
         });
 
-        listTopic = new ArrayList<>();
-
-
         recyclerTopic = view.findViewById(R.id.rcv_topic_in_feedback);
-        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(view.getContext());
-        recyclerTopic.setLayoutManager(linearLayoutManager2);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
+        recyclerTopic.setLayoutManager(linearLayoutManager);
+
 
         topicAdapter = new TopicAdapter();
-        topicAdapter.setData(listTopic);
+        listTopic = new ArrayList<>();
+        Call<TopicResponse> topicCall = topicService.loadListTopic();
+        topicCall.enqueue(new Callback<TopicResponse>() {
+            @Override
+            public void onResponse(Call<TopicResponse> call, Response<TopicResponse> response) {
+                if (response.isSuccessful()&&response.body()!=null){
+                    listTopic = response.body().getTopic();
+                    topicAdapter.setData(listTopic);
+                }
+            }
 
+            @Override
+            public void onFailure(Call<TopicResponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showToast("Error");
+            }
+        });
         recyclerTopic.setAdapter(topicAdapter);
 
         return view;

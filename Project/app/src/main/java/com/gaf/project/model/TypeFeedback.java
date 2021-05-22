@@ -19,4 +19,9 @@ public class TypeFeedback {
     private String typeName;
     @SerializedName("deleted")
     private  boolean isDeleted;
+
+    @Override
+    public String toString() {
+        return getTypeName();
+    }
 }
