@@ -69,19 +69,16 @@ public class AssignmentFragment extends Fragment{
         searchFiled = view.findViewById(R.id.search_field);
         btnAdd = view.findViewById(R.id.btn_add_assignment);
 
+        String userRole = SessionManager.getInstance().getUserRole();
+        if(!userRole.equals(SystemConstant.ADMIN_ROLE)){
+            btnAdd.setVisibility(View.GONE);
+        }
+
         try{
-
             homeRole = getArguments().getBoolean("home_role");
-            String userRole = SessionManager.getInstance().getUserRole();
-
             if(homeRole==true) {
                 searchFiled.setVisibility(View.GONE);
             }
-
-            if(!userRole.equals(SystemConstant.ADMIN_ROLE)){
-                btnAdd.setVisibility(View.GONE);
-            }
-
         }catch (Exception exception){
 
         }
