@@ -29,10 +29,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Feedback ID: " />
+                android:text="Feedback Title: " />
 
             <TextView
-                android:id="@+id/feedback_id"
+                android:id="@+id/feedback_title"
                 style="@style/TextItemStyle"
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
@@ -49,10 +49,10 @@
                 style="@style/TextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Title: " />
+                android:text="Class ID: " />
 
             <TextView
-                android:id="@+id/feedback_title"
+                android:id="@+id/class_id"
                 style="@style/TextItemStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -68,17 +68,92 @@
                 style="@style/TextViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="Admin ID: " />
+                android:text="Class Name: " />
 
             <TextView
-                android:id="@+id/feedback_admin_id"
+                android:id="@+id/class_name"
                 style="@style/TextItemStyle"
                 android:layout_width="match_parent"
-                android:layout_marginBottom="10dp"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Module ID: " />
+
+            <TextView
+                android:id="@+id/module_id"
+                style="@style/TextItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Module Name: " />
+
+            <TextView
+                android:id="@+id/module_name"
+                style="@style/TextItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="End Time: " />
+
+            <TextView
+                android:id="@+id/module_feedback_end_time"
+                style="@style/TextItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Status: " />
+
+            <TextView
+                android:id="@+id/status"
+                style="@style/TextItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -92,23 +167,7 @@
         <com.google.android.material.button.MaterialButton
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:id="@+id/btn_feedback_detail"
-            android:layout_marginBottom="5dp"
-            style="@style/Widget.MaterialComponents.Button.Icon"
-            app:icon="@drawable/ic_menu_camera"
-            app:iconSize="24dp"
-            app:iconPadding="0dp"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"
-            app:shapeAppearanceOverlay="@style/ButtonRounded"
-            android:backgroundTint="@color/detail_button_color"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:id="@+id/btn_edit_feedback"
+            android:id="@+id/btn_do_feedback"
             android:layout_marginBottom="5dp"
             style="@style/Widget.MaterialComponents.Button.Icon"
             app:icon="@drawable/ic_menu_camera"
@@ -120,21 +179,6 @@
             android:insetBottom="0dp"
             app:shapeAppearanceOverlay="@style/ButtonRounded"
             android:backgroundTint="@color/edit_button_color"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:id="@+id/btn_delete_feedback"
-            style="@style/Widget.MaterialComponents.Button.Icon"
-            app:icon="@drawable/ic_menu_camera"
-            app:iconSize="24dp"
-            app:iconPadding="0dp"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"
-            app:shapeAppearanceOverlay="@style/ButtonRounded"
-            android:backgroundTint="@color/delete_button_color"/>
 
     </LinearLayout>
 

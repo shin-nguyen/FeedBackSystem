@@ -15,7 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +34,9 @@ import com.gaf.project.model.Topic;
 import com.gaf.project.response.ClassResponse;
 import com.gaf.project.response.DeleteResponse;
 import com.gaf.project.response.QuestionResponse;
+import com.gaf.project.response.TopicResponse;
 import com.gaf.project.service.QuestionService;
+import com.gaf.project.service.TopicService;
 import com.gaf.project.utils.ApiUtils;
 
 import java.util.ArrayList;
@@ -47,10 +51,14 @@ public class QuestionFragment extends Fragment {
     private View view;
     private NavController navigation;
     private QuestionService questionService;
+    private TopicService topicService;
     private RecyclerView recyclerViewQuestion;
     private QuestionAdapter questionAdapter;
     private List<Question> listQuestion;
     private Button btnAdd;
+    private ArrayAdapter<Topic> topicArrayAdapter;
+    private List<Topic> topicList;
+    private Spinner sprTopic;
 
     public QuestionFragment() {
         // Required empty public constructor
@@ -60,6 +68,7 @@ public class QuestionFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         questionService = ApiUtils.getQuestionService();
+        topicService = ApiUtils.getTopicService();
     }
 
     @Override
@@ -91,6 +100,26 @@ public class QuestionFragment extends Fragment {
 
             @Override
             public void onFailure(Call<QuestionResponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showToast("Error");
+            }
+        });
+
+        sprTopic = view.findViewById(R.id.spinner_topic_name);
+        Call<TopicResponse> callTopic = topicService.loadListTopic();
+        callTopic.enqueue(new Callback<TopicResponse>() {
+            @Override
+            public void onResponse(Call<TopicResponse> call, Response<TopicResponse> response) {
+                new Thread(()-> {
+                    if (response.isSuccessful()&& response.body()!=null){
+                        topicList= response.body().getTopic();
+                        topicArrayAdapter =
+                                new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, topicList);
+                        sprTopic.setAdapter(topicArrayAdapter);
+                    }}).run();
+            }
+            @Override
+            public void onFailure(Call<TopicResponse> call, Throwable t) {
                 Log.e("Error",t.getLocalizedMessage());
                 showToast("Error");
             }

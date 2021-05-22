@@ -16,4 +16,8 @@ public class Topic{
     private Integer topicID;
     @SerializedName("topicName")
     private String topicName;
+    @Override
+    public String toString() {
+        return getTopicName();
+    }
 }

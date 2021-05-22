@@ -123,8 +123,12 @@
     <fragment
         android:id="@+id/review_feedback_fragment"
         android:name="com.gaf.project.fragment.ReviewFeedbackFragment"
-        android:label="review_feeback"
-        tools:layout="@layout/review_feeback" />
+        android:label="review_feedback"
+        tools:layout="@layout/review_feedback" >
+        <action
+            android:id="@+id/action_review_feedback_fragment_to_add_feedback_fragment"
+            app:destination="@id/add_feedback_fragment" />
+    </fragment>
 
 
     <fragment
@@ -149,7 +153,7 @@
         android:label="EditAssignmentFragment" />
     <fragment
         android:id="@+id/nav_trainee_home_fragment"
-        android:name="com.gaf.project.TraineeHomeFragment"
+        android:name="com.gaf.project.fragment.TraineeHomeFragment"
         android:label="fragment_trainee_home"
         tools:layout="@layout/fragment_trainee_home" />
     <fragment

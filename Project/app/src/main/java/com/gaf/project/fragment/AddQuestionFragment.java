@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gaf.project.R;
 import com.gaf.project.constant.SystemConstant;
@@ -24,9 +25,13 @@ import com.gaf.project.dialog.SuccessDialog;
 import com.gaf.project.model.Class;
 import com.gaf.project.model.Question;
 import com.gaf.project.model.Topic;
+import com.gaf.project.response.TopicResponse;
 import com.gaf.project.response.TrainerReponse;
 import com.gaf.project.service.QuestionService;
+import com.gaf.project.service.TopicService;
 import com.gaf.project.utils.ApiUtils;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,11 +42,15 @@ public class AddQuestionFragment extends Fragment {
     private View view;
     private String mission;
     private QuestionService questionService;
+    private TopicService topicService;
     private TextView title, topicName;
     private EditText questionContent;
     private Spinner sprTopic;
     private RelativeLayout topicLayoutBox;
     private Button btnSave, btnBack;
+    private Question question;
+    private ArrayAdapter<Topic> topicArrayAdapter;
+    private List<Topic> topicList;
 
     public AddQuestionFragment() {
         // Required empty public constructor
@@ -51,6 +60,8 @@ public class AddQuestionFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         questionService = ApiUtils.getQuestionService();
+        topicService = ApiUtils.getTopicService();
+
     }
 
     @Override
@@ -59,11 +70,15 @@ public class AddQuestionFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.add_question, container, false);
 
-        Question question = null;
-
         Bundle bundle = new Bundle();
         mission = getArguments().getString("mission");
-        question= (Question) getArguments().getSerializable("item");
+
+        try {
+            question= (Question) getArguments().getSerializable("item");
+        }
+        catch (Exception ex){
+
+        }
 
         title = view.findViewById(R.id.txt_title);
         sprTopic = view.findViewById(R.id.spinner_topic_name);
@@ -73,12 +88,28 @@ public class AddQuestionFragment extends Fragment {
         btnBack = view.findViewById(R.id.btn_back);
         btnSave = view.findViewById(R.id.btn_save);
 
-        String content= questionContent.getText().toString().trim();
-        Topic topic = question.getTopic();
-
         if(mission.equals(SystemConstant.ADD)){
             title.setText("Add Question");
             topicName.setVisibility(View.GONE);
+
+            Call<TopicResponse> callTopic = topicService.loadListTopic();
+            callTopic.enqueue(new Callback<TopicResponse>() {
+                @Override
+                public void onResponse(Call<TopicResponse> call, Response<TopicResponse> response) {
+                    new Thread(()-> {
+                        if (response.isSuccessful()&& response.body()!=null){
+                            topicList= response.body().getTopic();
+                            topicArrayAdapter =
+                                    new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, topicList);
+                            sprTopic.setAdapter(topicArrayAdapter);
+                        }}).run();
+                }
+                @Override
+                public void onFailure(Call<TopicResponse> call, Throwable t) {
+                    Log.e("Error",t.getLocalizedMessage());
+                    showToast("Error");
+                }
+            });
 
             btnSave.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -94,49 +125,27 @@ public class AddQuestionFragment extends Fragment {
             topicName.setText(String.valueOf(question.getTopic().getTopicID()));
             questionContent.setText(question.getQuestionContent());
 
-//            Call<TopicReponse> callTrainer =  trainerService.loadListTrainer();
-//            callTrainer.enqueue(new Callback<TrainerReponse>() {
-//                @Override
-//                public void onResponse(Call<TrainerReponse> call, Response<TrainerReponse> response) {
-//                    new Thread(()-> {
-//                        if (response.isSuccessful()&& response.body()!=null){
-//                            topicList = response.body().getTrainers();
-//                            adapterTopic =
-//                                    new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, topicList);
-//                            sprTopic.setAdapter(adapterTopic);
-//                            int spnPosition = -1;
-//                            spnPosition = adapterTopic.getPosition(topic);
-//                            sprTopic.setSelection(spnPosition);
-//                        }}).run();
-//                }
-//                @Override
-//                public void onFailure(Call<TrainerReponse> call, Throwable t) {
-//                    Log.e("Error",t.getLocalizedMessage());
-//                    showToast("Error");
-//                }
-//            });
-
             btnSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Question questionUpdated = new Question(1,topic,content,false);
-                    Call<Question> call =  questionService.update( questionUpdated );
-                    call.enqueue(new Callback<Question>() {
-                        @Override
-                        public void onResponse(Call<Question> call, Response<Question> response) {
-                            if (response.isSuccessful()&&response.body()!=null) {
-                                showSuccessDialog("Edit Success!");
-                                Log.e("Success","Update Class success");
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Question> call, Throwable t) {
-                            Log.e("Error",t.getLocalizedMessage());
-                            showFailDialog("Error");
-                        }
-                    });
-                    Log.e("Success","Send Class success");
+//                    Question questionUpdated = new Question(1,topic,content,false);
+//                    Call<Question> call =  questionService.update( questionUpdated );
+//                    call.enqueue(new Callback<Question>() {
+//                        @Override
+//                        public void onResponse(Call<Question> call, Response<Question> response) {
+//                            if (response.isSuccessful()&&response.body()!=null) {
+//                                showSuccessDialog("Edit Success!");
+//                                Log.e("Success","Update Class success");
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Call<Question> call, Throwable t) {
+//                            Log.e("Error",t.getLocalizedMessage());
+//                            showFailDialog("Error");
+//                        }
+//                    });
+//                    Log.e("Success","Send Class success");
                 }
             });
         }
@@ -161,5 +170,9 @@ public class AddQuestionFragment extends Fragment {
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         FailDialog newFragment = new FailDialog(message);
         newFragment.show(ft, "dialog fail");
+    }
+
+    public void showToast(String string){
+        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }
 }

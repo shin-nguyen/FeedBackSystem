@@ -1,10 +1,7 @@
 package com.gaf.feedbacksystem.service.impl;
 
-import com.gaf.feedbacksystem.dto.ClassDto;
 import com.gaf.feedbacksystem.dto.FeedbackDto;
-import com.gaf.feedbacksystem.entity.Class;
 import com.gaf.feedbacksystem.entity.Feedback;
-import com.gaf.feedbacksystem.repository.ClazzRepository;
 import com.gaf.feedbacksystem.repository.FeedbackRepository;
 import com.gaf.feedbacksystem.service.IFeedbackService;
 import com.gaf.feedbacksystem.utils.ObjectMapperUtils;
@@ -22,8 +19,29 @@ public class FeedbackServiceImpl implements IFeedbackService {
     @Override
     public List<FeedbackDto> findAll() {
         List<Feedback> feedbacks = feedbackRepository.findAllByDeletedIsFalse();
-        List<FeedbackDto> feedbackDtos = ObjectMapperUtils.mapAll(feedbacks,FeedbackDto.class);
-        return feedbackDtos;
+        return ObjectMapperUtils.mapAll(feedbacks, FeedbackDto.class);
+    }
+
+    @Override
+    public FeedbackDto findById(Integer feedbackId) {
+        Feedback mFeedback = feedbackRepository.findByFeedbackID(feedbackId);
+        return ObjectMapperUtils.map(mFeedback, FeedbackDto.class);
+    }
+
+    @Override
+    public FeedbackDto update(FeedbackDto feedbackDto) {
+        Feedback oldFeedback = feedbackRepository.findByFeedbackID(feedbackDto.getFeedbackID());
+
+        oldFeedback.setTitle(feedbackDto.getTitle());
+
+        return ObjectMapperUtils.map(feedbackRepository.save(oldFeedback), FeedbackDto.class);
+    }
+
+    @Override
+    public FeedbackDto save(FeedbackDto feedbackDto) {
+        Feedback mFeedback = ObjectMapperUtils.map(feedbackDto, Feedback.class);
+
+        return ObjectMapperUtils.map(feedbackRepository.save(mFeedback), FeedbackDto.class);
     }
 
     @Override
