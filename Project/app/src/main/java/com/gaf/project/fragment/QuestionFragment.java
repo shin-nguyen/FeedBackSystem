@@ -11,6 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,18 +23,30 @@ import com.gaf.project.R;
 import com.gaf.project.adapter.AssignmentAdapter;
 import com.gaf.project.adapter.QuestionAdapter;
 import com.gaf.project.constant.SystemConstant;
+import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
+import com.gaf.project.dialog.WarningDialog;
 import com.gaf.project.model.Assignment;
 import com.gaf.project.model.Question;
 import com.gaf.project.model.Topic;
+import com.gaf.project.response.ClassResponse;
+import com.gaf.project.response.DeleteResponse;
+import com.gaf.project.response.QuestionResponse;
+import com.gaf.project.service.QuestionService;
+import com.gaf.project.utils.ApiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class QuestionFragment extends Fragment {
 
     private View view;
     private NavController navigation;
+    private QuestionService questionService;
     private RecyclerView recyclerViewQuestion;
     private QuestionAdapter questionAdapter;
     private List<Question> listQuestion;
@@ -41,6 +54,12 @@ public class QuestionFragment extends Fragment {
 
     public QuestionFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        questionService = ApiUtils.getQuestionService();
     }
 
     @Override
@@ -59,9 +78,23 @@ public class QuestionFragment extends Fragment {
         recyclerViewQuestion.setLayoutManager(linearLayoutManager);
 
         listQuestion = new ArrayList<>();
-        Topic topic = new Topic(1,"Kai");
-        Question question = new Question(1,topic,"question",false);
-        listQuestion.add(question);
+        Call<QuestionResponse> call =  questionService.loadListQuestion();
+
+        call.enqueue(new Callback<QuestionResponse>() {
+            @Override
+            public void onResponse(Call<QuestionResponse> call, Response<QuestionResponse> response) {
+                if (response.isSuccessful()&&response.body()!=null){
+                    listQuestion = response.body().getQuestions();
+                    questionAdapter.setData(listQuestion);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<QuestionResponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showToast("Error");
+            }
+        });
 
         questionAdapter = new QuestionAdapter(new QuestionAdapter.IClickItem() {
             @Override
@@ -74,15 +107,12 @@ public class QuestionFragment extends Fragment {
                 clickDelete(item);
             }
         });
-        questionAdapter.setData(listQuestion,getContext());
 
         recyclerViewQuestion.setAdapter(questionAdapter);
 
         navigation = Navigation.findNavController(view);
 
         btnAdd = view.findViewById(R.id.btn_add_question);
-//        btnAddAssignment.setVisibility(View.GONE);//hide button
-//        btnAddAssignment.setVisibility(View.VISIBLE);//show button
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,35 +133,46 @@ public class QuestionFragment extends Fragment {
     }
 
     private void clickDelete(Question item){
-        AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
-        View viewBuilder=LayoutInflater.from(getContext()).inflate(R.layout.warning_dialog,null);
 
-        builder.setView(viewBuilder);
+        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
 
-        final AlertDialog warningDialog=builder.create();
+        final WarningDialog dialog = new WarningDialog(
+                () -> {
+                    Call<DeleteResponse> call =  questionService.delete(item.getQuestionID());
 
-        TextView warningContent = viewBuilder.findViewById(R.id.txt_warning_content);
-        warningContent.setText("Do you want to delete this Question?");
+                    call.enqueue(new Callback<DeleteResponse>() {
+                        @Override
+                        public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
+                            if (response.isSuccessful()&&response.body().getDeleted()){
+                                showSuccessDialog("Delete success!");
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<DeleteResponse> call, Throwable t) {
+                            showFailDialog("Delete success!");
+                            Log.e("Error",t.getLocalizedMessage());
+                        }
+                    });
+                },
+                "Do you want to delete this Question?");
 
-        warningDialog.show();
 
-        Button btnCancel = viewBuilder.findViewById(R.id.btn_cancel);
-        btnCancel.setOnClickListener(vi->{
-            warningDialog.dismiss();
-        });
-
-        Button btnYes = viewBuilder.findViewById(R.id.btn_yes);
-        btnYes.setOnClickListener(v->{
-
-            warningDialog.dismiss();
-
-            FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-            SuccessDialog newFragment = new SuccessDialog("Delete success!");
-            newFragment.show(ft, "dialog success");
-        });
+        dialog.show(ft, "dialog success");
     }
 
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
+    }
+
+    public void showSuccessDialog(String message){
+        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+        SuccessDialog newFragment = new SuccessDialog(message);
+        newFragment.show(ft, "dialog success");
+    }
+
+    public void showFailDialog(String message){
+        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+        FailDialog newFragment = new FailDialog(message);
+        newFragment.show(ft, "dialog fail");
     }
 }

@@ -47,13 +47,13 @@ public class AddAssignmentFragment extends Fragment {
     private ModuleService moduleService;
     private ClassService classService;
     private TrainerService trainerService;
+    private List<Module> moduleList;
+    private List<Class> classList;
+    private List<Trainer> trainerList;
+    private ArrayAdapter<Module> adapterModule;
+    private ArrayAdapter<Class> adapterClass;
+    private ArrayAdapter<Trainer> adapterTrainer;
 
-    List<Module> moduleList;
-    List<Class> classList;
-    List<Trainer> trainerList;
-    ArrayAdapter<Module> adapterModule;
-    ArrayAdapter<Class> adapterClass;
-    ArrayAdapter<Trainer> adapterTrainer;
     public AddAssignmentFragment() {
         // Required empty public constructor
     }
@@ -74,7 +74,6 @@ public class AddAssignmentFragment extends Fragment {
         view = inflater.inflate(R.layout.add_assignment, container, false);
 
         final Spinner spnModule = (Spinner) view.findViewById(R.id.spinner_module_name);
-
         Call<ModuleResponse> callModule =  moduleService.loadModuleAdmin();
         callModule.enqueue(new Callback<ModuleResponse>() {
             @Override
@@ -93,8 +92,6 @@ public class AddAssignmentFragment extends Fragment {
                 showToast("Error");
             }
         });
-
-
 
         final Spinner spnClass = (Spinner) view.findViewById(R.id.spinner_class_name);
         Call<ClassResponse> callClass =  classService.loadListClass();
@@ -117,7 +114,6 @@ public class AddAssignmentFragment extends Fragment {
         });
 
         final Spinner spnTrainer = (Spinner) view.findViewById(R.id.spinner_trainer_id);
-
         Call<TrainerReponse> callTrainer =  trainerService.loadListTrainer();
         callTrainer.enqueue(new Callback<TrainerReponse>() {
             @Override
@@ -184,6 +180,7 @@ public class AddAssignmentFragment extends Fragment {
         FailDialog newFragment = new FailDialog(message);
         newFragment.show(ft, "dialog fail");
     }
+
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }

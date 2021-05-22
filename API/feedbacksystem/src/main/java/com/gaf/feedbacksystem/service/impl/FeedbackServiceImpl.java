@@ -2,19 +2,16 @@ package com.gaf.feedbacksystem.service.impl;
 
 import com.gaf.feedbacksystem.dto.FeedbackDto;
 import com.gaf.feedbacksystem.entity.Feedback;
+import com.gaf.feedbacksystem.repository.FeedbackRepository;
 import com.gaf.feedbacksystem.service.IFeedbackService;
 import com.gaf.feedbacksystem.utils.ObjectMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gaf.feedbacksystem.repository.ClazzRepository;
-import com.gaf.feedbacksystem.repository.FeedbackRepository;
-
 import java.util.List;
 
 @Service
 public class FeedbackServiceImpl implements IFeedbackService {
-	
     @Autowired
     FeedbackRepository feedbackRepository;
 

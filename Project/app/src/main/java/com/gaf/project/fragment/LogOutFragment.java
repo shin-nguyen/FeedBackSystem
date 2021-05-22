@@ -1,6 +1,5 @@
 package com.gaf.project.fragment;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -12,14 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gaf.project.LoginActivity;
-import com.gaf.project.MainActivity;
 import com.gaf.project.R;
 import com.gaf.project.authentication.AuthenticationResponse;
 import com.gaf.project.constant.SystemConstant;
-import com.gaf.project.dialog.FailDialog;
-import com.gaf.project.dialog.YesNoDialog;
-import com.gaf.project.dialog.SuccessDialog;
-import com.gaf.project.model.Class;
+import com.gaf.project.dialog.WarningDialog;
 
 public class LogOutFragment extends Fragment {
 
@@ -35,7 +30,7 @@ public class LogOutFragment extends Fragment {
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
 
 
-        final YesNoDialog dialog = new YesNoDialog(
+        final WarningDialog dialog = new WarningDialog(
                 () -> clickOke(),
                 "Do you want to Log Out ?");
 

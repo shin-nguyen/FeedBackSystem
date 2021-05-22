@@ -49,23 +49,23 @@ public class FeedbackController {
 	            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Feedbacks Not Found", exc);
 	        }
 	    }
-	 
-	 @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
-	    @GetMapping(value = "/loadListFeedback", produces = "application/json")
-	    public ResponseEntity<Map<String, List<?>>> getListFeedback(){
-	        try{
-	    	    List<FeedbackDto> feedbackList = feedbackService.findAll();
-	    	        if ( feedbackList.isEmpty()) {
-	    	            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	    	        }
-	    	    Map result = new HashMap();
-	    	    result.put("feedbacks", feedbackList);
-	    	    return new ResponseEntity<>(result, HttpStatus.OK);
-	        }
-	        catch (MyResourceNotFoundException exc) {
-	            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Feedbacks Not Found", exc);
-	        }
-	    }
+
+	@PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+	@GetMapping(value = "/getListFeedback", produces = "application/json")
+	public ResponseEntity<Map<String, List<?>>> getListFeedback(){
+		try{
+			List<FeedbackDto> feedbackList = feedbackService.findAll();
+			if ( feedbackList.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			Map result = new HashMap();
+			result.put("feedbacks", feedbackList);
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}
+		catch (MyResourceNotFoundException exc) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+		}
+	}
 	 
 	 @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
 	    @PostMapping(value = "/")

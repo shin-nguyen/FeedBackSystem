@@ -9,9 +9,8 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface FeedbackService {
-
-    @GET("feedback/loadListFeedback")
-    Call<FeedbackResponse> loadListFeedback();
+    @GET("feedback/getListFeedback")
+    Call<FeedbackResponse> getListFeedback();
 
     @DELETE("feedback/{id}")
     Call<DeleteResponse> delete( @Path("id") Integer id);

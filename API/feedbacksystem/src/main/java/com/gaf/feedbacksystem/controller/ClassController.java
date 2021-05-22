@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import com.gaf.feedbacksystem.constant.SystemConstant;
 import com.gaf.feedbacksystem.dto.ClassDto;
-import com.gaf.feedbacksystem.dto.ModuleDto;
 import com.gaf.feedbacksystem.service.IClassService;
-import com.gaf.feedbacksystem.service.IModuleService;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
@@ -59,6 +59,49 @@ public class ClassController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
         }
     }
+
+    @PreAuthorize("hasRole(\"" + SystemConstant.TRAINER_ROLE + "\")")
+    @GetMapping(value = "/loadListClassByTrainer", produces = "application/json")
+    public ResponseEntity<Map<String, List<?>>> loadListClassByTrainer(){
+        try{
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                    .getPrincipal();
+            String userName = userDetails.getUsername();
+
+            List<ClassDto> classList = classService.findAllByTrainer(userName);
+            if ( classList.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            Map result = new HashMap();
+            result.put("classes", classList);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+        }
+    }
+
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    @GetMapping(value = "/loadListClassByTrainee", produces = "application/json")
+    public ResponseEntity<Map<String, List<?>>> loadListClassByTrainee(){
+        try{
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                    .getPrincipal();
+            String userName = userDetails.getUsername();
+
+            List<ClassDto> classList = classService.findAllByTrainee(userName);
+            if ( classList.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            Map result = new HashMap();
+            result.put("classes", classList);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+        }
+    }
+
 
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
     @PostMapping(value = "/")

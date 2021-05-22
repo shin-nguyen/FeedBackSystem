@@ -31,9 +31,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
         view = inflater.inflate(R.layout.fragment_home_page, container, false);
-
         return view;
     }
 
@@ -49,7 +47,6 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
             bundle.putBoolean("home_role", true);
             Navigation.findNavController(view).navigate(R.id.action_nav_homepage_to_nav_assignment,bundle);
         }
-
     }
 
     @Override

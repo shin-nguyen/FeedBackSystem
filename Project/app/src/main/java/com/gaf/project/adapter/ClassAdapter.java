@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,7 +23,7 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
 
     private ClassAdapter.IClickItem iClickItem;
     public interface IClickItem{
-        void update(Class item);
+        void updateAndDetail(Class item);
         void delete(Class item);
     }
     public ClassAdapter(ClassAdapter.IClickItem iClickItem) {
@@ -50,22 +51,33 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
         if(mClass==null){
             return;
         }
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String userRole = SessionManager.getInstance().getUserRole();
 
         holder.id.setText(String.valueOf(mClass.getClassID()));
         holder.name.setText(mClass.getClassName());
-        holder.capacity.setText(mClass.getCapacity().toString());
-        holder.startDate.setText(dateFormat.format(mClass.getStartTime()));
-        holder.endDate.setText(dateFormat.format(mClass.getEndTime()));
 
+        if(userRole.equals(SystemConstant.ADMIN_ROLE)) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-        holder.btnEdit.setOnClickListener(v->{
-            iClickItem.update(mClass);
-        });
-        holder.btnDelete.setOnClickListener(v->{
-            iClickItem.delete(mClass);
-        });
+            holder.capacity.setText(mClass.getCapacity().toString());
+            holder.startDate.setText(dateFormat.format(mClass.getStartTime()));
+            holder.endDate.setText(dateFormat.format(mClass.getEndTime()));
+
+            holder.btnEdit.setOnClickListener(v->{
+                iClickItem.updateAndDetail(mClass);
+            });
+
+            holder.btnDelete.setOnClickListener(v->{
+                iClickItem.delete(mClass);
+            });
+        }
+        else {
+            holder.numberOfTrainee.setText(String.valueOf(mClass.getTrainees().size()));
+            holder.btnDetail.setOnClickListener(v->{
+                iClickItem.updateAndDetail(mClass);
+            });
+
+        }
     }
 
     @Override
@@ -78,8 +90,9 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
 
     public class ClassViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView id, name, capacity, startDate,endDate;
+        private TextView id, name, capacity, startDate,endDate,numberOfTrainee;
         private Button btnEdit, btnDelete, btnDetail;
+        private LinearLayout linrNumberofTrainee, lnrInfoAdmin;
 
         public ClassViewHolder(@NonNull View view) {
             super(view);
@@ -89,21 +102,31 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
         private void initView(View view) {
             id = view.findViewById(R.id.txt_class_id);
             name = view.findViewById(R.id.txt_class_name);
-            capacity = view.findViewById(R.id.txt_capacity);
-            startDate = view.findViewById(R.id.txt_start_date);
-            endDate = view.findViewById(R.id.txt_end_date);
+
+            btnDetail = view.findViewById(R.id.btn_view_detail);
             btnEdit = view.findViewById(R.id.btn_edit_class);
             btnDelete = view.findViewById(R.id.btn_delete_class);
-            btnDetail = view.findViewById(R.id.btn_view_detail);
+
+            linrNumberofTrainee = view.findViewById(R.id.lnr_number_of_trainee);
+            lnrInfoAdmin = view.findViewById(R.id.lnr_admin);
 
             String userRole = SessionManager.getInstance().getUserRole();
             if(userRole.equals(SystemConstant.ADMIN_ROLE)){
+                capacity = view.findViewById(R.id.txt_capacity);
+                startDate = view.findViewById(R.id.txt_start_date);
+                endDate = view.findViewById(R.id.txt_end_date);
+
+                linrNumberofTrainee.setVisibility(View.GONE);
                 btnDetail.setVisibility(View.GONE);
             }
             else {
+                numberOfTrainee = view.findViewById(R.id.txt_number_of_trainee);
+
+                lnrInfoAdmin.setVisibility(View.GONE);
                 btnEdit.setVisibility(View.GONE);
                 btnDelete.setVisibility(View.GONE);
             }
+
         }
     }
 }

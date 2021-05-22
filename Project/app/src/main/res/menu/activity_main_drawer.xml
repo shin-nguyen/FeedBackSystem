@@ -48,6 +48,10 @@
             android:title="CONTACT"
             android:icon="@drawable/ic_baseline_group_24"/>
         <item
+            android:id="@+id/nav_join"
+            android:title="JOIN"
+            android:icon="@drawable/ic_baseline_group_24"/>
+        <item
             android:id="@+id/nav_log_out"
             android:icon="@drawable/ic_baseline_group_24"
             android:title="LOGOUT" />

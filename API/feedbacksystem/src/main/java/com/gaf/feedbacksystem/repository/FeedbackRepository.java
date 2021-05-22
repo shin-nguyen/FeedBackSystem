@@ -21,7 +21,6 @@ public interface FeedbackRepository extends JpaRepository<Feedback,Integer> {
     Feedback save(Feedback feedback);
     
     Feedback findByFeedbackID(Integer feedbackID);
-    
     @Transactional
     @Modifying
     @Query("update Feedback set isDeleted =true where feedbackID = :id ")

@@ -16,6 +16,12 @@ public interface ClassService {
     @GET("class/loadListClass")
     Call<ClassResponse> loadListClass();
 
+    @GET("class/loadListClassByTrainer")
+    Call<ClassResponse> loadListClassByTrainer();
+
+    @GET("class/loadListClassByTrainee")
+    Call<ClassResponse> loadListClassByTrainee();
+
     @POST("class/")
     Call<Class> create(@Body Class mClass);
 

@@ -16,4 +16,10 @@ public interface IFeedbackService {
 	
 	void deleteById(Integer id);
 
+//    List<ClassDto> findAllByTrainer(String userName);
+//    List<ClassDto> findAllByTrainee(String userName);
+//    ClassDto findById(Integer classId);
+//    ClassDto update(ClassDto classDto);
+//    ClassDto save(ClassDto classDto);
+
 }

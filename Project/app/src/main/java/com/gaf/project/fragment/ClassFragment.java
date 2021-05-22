@@ -1,6 +1,5 @@
 package com.gaf.project.fragment;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +22,7 @@ import com.gaf.project.adapter.ClassAdapter;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
-import com.gaf.project.dialog.YesNoDialog;
+import com.gaf.project.dialog.WarningDialog;
 import com.gaf.project.model.Class;
 import com.gaf.project.response.ClassResponse;
 import com.gaf.project.response.DeleteResponse;
@@ -33,7 +32,6 @@ import com.gaf.project.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PrimitiveIterator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,6 +44,7 @@ public class ClassFragment extends Fragment {
     private List<Class> classList;
     private TextView title;
     private Button btnAddClass;
+    private  String userRole;
     private  View view;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,18 +52,25 @@ public class ClassFragment extends Fragment {
         classService = ApiUtils.getClassService();
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-         view = inflater.inflate(R.layout.fragment_class, container, false);
-
+        view = inflater.inflate(R.layout.fragment_class, container, false);
+        btnAddClass = view.findViewById(R.id.btn_add_class);
         title = view.findViewById(R.id.txt_title);
 
-        String userRole = SessionManager.getInstance().getUserRole();
+        userRole = SessionManager.getInstance().getUserRole();
+
+        adapter =new ClassAdapter(new ClassAdapter.IClickItem() {
+            @Override
+            public void updateAndDetail(Class item) {
+                clickUpdate(item);
+            }
+
+            @Override
+            public void delete(Class item) {
+                clickDelete(item);
+            }
+        });
 
         if(userRole.equals(SystemConstant.ADMIN_ROLE)){
 
@@ -73,77 +79,80 @@ public class ClassFragment extends Fragment {
             classList = new ArrayList<>();
             Call<ClassResponse> call =  classService.loadListClass();
 
-            call.enqueue(new Callback<ClassResponse>() {
-                @Override
-                public void onResponse(Call<ClassResponse> call, Response<ClassResponse> response) {
-                    if (response.isSuccessful()&&response.body()!=null){
-                        classList = response.body().getClasss();
-                        adapter.setData(classList);
-                    }
-                }
+            setAdapter(call);
 
-                @Override
-                public void onFailure(Call<ClassResponse> call, Throwable t) {
-                    Log.e("Error",t.getLocalizedMessage());
-                    showToast("Error");
-                }
+
+            btnAddClass.setOnClickListener(v ->{
+                Bundle bundle = new Bundle();
+                bundle.putString("mission", SystemConstant.ADD);
+                Navigation.findNavController(view).navigate(R.id.action_nav_class_to_add_class_fragment,bundle);
             });
 
-        }else if(userRole.equals(SystemConstant.TRAINER_ROLE)){
+        }
+
+        if(userRole.equals(SystemConstant.TRAINER_ROLE)){
 
             title.setText("List Class");
             btnAddClass.setVisibility(View.GONE);
 
+            Call<ClassResponse> call =  classService.loadListClassByTrainer();
+            setAdapter(call);
         }else if(userRole.equals(SystemConstant.TRAINEE_ROLE)){
 
             title.setText("Class List");
             btnAddClass.setVisibility(View.GONE);
 
+            Call<ClassResponse> call =  classService.loadListClassByTrainee();
+            setAdapter(call);
         }
 
         //Set layout manager -> recyclerView Status
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         rcvClass = view.findViewById(R.id.rcv_class);
         rcvClass.setLayoutManager(linearLayoutManager);
-
-        adapter =new ClassAdapter(new ClassAdapter.IClickItem() {
-            @Override
-            public void update(Class item) {
-                clickUpdate(item);
-            }
-            @Override
-            public void delete(Class item) {
-                clickDelete(item);
-            }
-        });
-
-        btnAddClass = view.findViewById(R.id.btn_add_class);
-
-        btnAddClass.setOnClickListener(v ->{
-            Bundle bundle = new Bundle();
-            bundle.putString("mission", SystemConstant.ADD);
-            Navigation.findNavController(view).navigate(R.id.action_nav_class_to_add_class_fragment,bundle);
-        });
-
         rcvClass.setAdapter(adapter);
 
         return view;
     }
 
     private void clickUpdate(Class item) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("mClass", item);
-        bundle.putString("mission", SystemConstant.UPDATE);
+        if(userRole.equals(SystemConstant.ADMIN_ROLE)) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("mClass", item);
+            bundle.putString("mission", SystemConstant.UPDATE);
 
-        Navigation.findNavController(view).navigate(R.id.action_nav_class_to_add_class_fragment,bundle);
+            Navigation.findNavController(view).navigate(R.id.action_nav_class_to_add_class_fragment, bundle);
+        }
+        else{
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("mClass", item);
+            Navigation.findNavController(view).navigate(R.id.action_nav_class_to_detailClassFragment, bundle);
+        }
+
     }
 
-    private void clickDelete(Class item){
+    private void setAdapter(Call<ClassResponse> call){
 
+        call.enqueue(new Callback<ClassResponse>() {
+            @Override
+            public void onResponse(Call<ClassResponse> call, Response<ClassResponse> response) {
+                if (response.isSuccessful()&&response.body()!=null){
+                    classList = response.body().getClasss();
+                    adapter.setData(classList);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ClassResponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showToast("Error");
+            }
+        });
+    }
+    private void clickDelete(Class item){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
 
-
-        final YesNoDialog dialog = new YesNoDialog(
+        final WarningDialog dialog = new WarningDialog(
                 () -> {
                     Call<DeleteResponse> call =  classService.delete(item.getClassID());
 
@@ -162,8 +171,6 @@ public class ClassFragment extends Fragment {
                     });
                 },
                 "Do you want to delete this Class?");
-
-
         dialog.show(ft, "dialog success");
     }
 
