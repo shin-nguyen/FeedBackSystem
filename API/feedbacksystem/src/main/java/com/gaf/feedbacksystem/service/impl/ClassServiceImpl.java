@@ -28,6 +28,15 @@ public class ClassServiceImpl implements IClassService  {
 	}
 
 	@Override
+	public List<ClassDto> findAllByTrainer(String userName) {
+		List<Class> clazz = classRepository.findAllByTrainer(userName);
+
+		List<ClassDto> classDtos = ObjectMapperUtils.mapAll(clazz,ClassDto.class);
+
+		return classDtos;
+	}
+
+	@Override
 	public ClassDto findById(Integer classId) {
 		Class mClass = classRepository.findByClassID(classId);
 		ClassDto classDto = ObjectMapperUtils.map(mClass,ClassDto.class);

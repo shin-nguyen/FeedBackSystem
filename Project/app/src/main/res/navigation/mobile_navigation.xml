@@ -41,6 +41,9 @@
             android:id="@+id/action_nav_class_to_add_class_fragment"
             app:destination="@id/add_class_fragment">
         </action>
+        <action
+            android:id="@+id/action_nav_class_to_detailClassFragment"
+            app:destination="@id/detailClassFragment" />
     </fragment>
 
     <fragment
@@ -145,5 +148,10 @@
         android:name="com.gaf.project.TraineeHomeFragment"
         android:label="fragment_trainee_home"
         tools:layout="@layout/fragment_trainee_home" />
+    <fragment
+        android:id="@+id/detailClassFragment"
+        android:name="com.gaf.project.fragment.DetailClassFragment"
+        android:label="fragment_detail_class"
+        tools:layout="@layout/fragment_detail_class" />
 
 </navigation>
