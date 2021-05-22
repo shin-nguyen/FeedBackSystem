@@ -5,20 +5,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gaf.project.R;
-import com.gaf.project.model.Class;
 import com.gaf.project.model.Question;
 import com.gaf.project.model.Topic;
 import com.gaf.project.response.QuestionResponse;
 import com.gaf.project.service.QuestionService;
 import com.gaf.project.utils.ApiUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,12 +26,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHolder>{
-
-    public List<Question> mListQuestion;
     private List<Topic> mListTopic;
     private View view;
     private  List<Question> listQuestion;
     private QuestionService questionService = ApiUtils.getQuestionService();
+    private List<Question> mListQuestion = new ArrayList<>();
+
+
+    public  List<Question> getmListQuestion() {
+        return mListQuestion;
+    }
     public void setData(List<Topic> list){
         this.mListTopic = list;
         notifyDataSetChanged();
@@ -84,7 +87,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHol
 
     private void checkItem(Question item, Boolean b) {
         if (b){
-         mListQuestion.add(item);
+            mListQuestion.add(item);
         }else{
             mListQuestion.remove(item);
         }

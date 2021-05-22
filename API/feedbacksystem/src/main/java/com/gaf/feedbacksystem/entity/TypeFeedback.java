@@ -22,5 +22,5 @@ public class TypeFeedback {
     @Column(length = 50)
     private String typeName;
 
-    private  boolean isDeleted;
+    private  boolean isDeleted =false;
 }

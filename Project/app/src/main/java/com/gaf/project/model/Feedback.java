@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,15 @@ public class Feedback implements Serializable {
     private Integer feedbackID;
     @SerializedName("title")
     private  String title;
+
+
+    public Feedback(String title, TypeFeedback typeFeedback, List<Question> questions) {
+        this.title = title;
+        this.typeFeedback = typeFeedback;
+        this.questions = questions;
+    }
+
+
     @SerializedName("admin")
     private Admin admin;
     @SerializedName("deleted")

@@ -15,8 +15,8 @@ import java.util.Collection;
 public class FeedbackDto {
     private Integer feedbackID;
     private  String title;
-    private Admin admin;
-    private boolean isDeleted;
-    private TypeFeedback typeFeedback;
-    private Collection<QuestionDto> questions;
+    private AdminDto admin;
+    private boolean isDeleted = false;
+    private TypeFeedbackDto typeFeedback;
+    private Collection<QuestionDto> questions = null;
 }

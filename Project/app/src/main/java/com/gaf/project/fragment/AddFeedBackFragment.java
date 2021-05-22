@@ -28,6 +28,7 @@ import com.gaf.project.adapter.TopicAdapter;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
+import com.gaf.project.model.Admin;
 import com.gaf.project.model.Class;
 import com.gaf.project.model.Feedback;
 import com.gaf.project.model.Module;
@@ -42,6 +43,7 @@ import com.gaf.project.service.TopicService;
 import com.gaf.project.service.TypeFeedbackService;
 import com.gaf.project.utils.ApiUtils;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -107,7 +109,6 @@ public class AddFeedBackFragment extends Fragment {
 
         }
         Call<TypeFeedbackResponse> callTypeFeedback =  typeFeedbackService.loadListTypeFeedback();
-        new Thread(()-> {
             callTypeFeedback.enqueue(new Callback<TypeFeedbackResponse>() {
             @Override
             public void onResponse(Call<TypeFeedbackResponse> call, Response<TypeFeedbackResponse> response) {
@@ -124,13 +125,24 @@ public class AddFeedBackFragment extends Fragment {
                 Log.e("Error",t.getLocalizedMessage());
                 showToast("Error");
             }
-        });}).run();
+        });
 
         btnBack.setOnClickListener(v -> getActivity().onBackPressed());
 
         btnReview.setOnClickListener(v -> {
             navigation = Navigation.findNavController(view);
-            navigation.navigate(R.id.action_add_feedback_fragment_to_review_feedback_fragment, bundle);
+            if (topicAdapter.getmListQuestion().isEmpty()){
+                showToast("Error");
+            }else {
+                if(mission.equals(SystemConstant.ADD)) {
+                    TypeFeedback typeFeedback = (TypeFeedback) spnFeedbackType.getSelectedItem();
+                    List<Question> questionList = topicAdapter.getmListQuestion();
+
+                    Feedback feedback = new Feedback( feedbackTitle.getText().toString(),typeFeedback,questionList);
+                    bundle.putSerializable("feedback", feedback);
+                }
+                navigation.navigate(R.id.action_add_feedback_fragment_to_review_feedback_fragment, bundle);
+            }
         });
 
         recyclerTopic = view.findViewById(R.id.rcv_topic_in_feedback);

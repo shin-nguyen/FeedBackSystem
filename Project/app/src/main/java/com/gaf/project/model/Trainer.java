@@ -3,6 +3,8 @@ package com.gaf.project.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +13,7 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Trainer {
+public class Trainer implements Serializable {
     @SerializedName("userName")
     @Expose
     @ToString.Include

@@ -16,5 +16,5 @@ import javax.persistence.Id;
 public class TypeFeedbackDto {
     private Integer typeID;
     private String typeName;
-    private  boolean isDeleted;
+    private  boolean isDeleted =false;
 }

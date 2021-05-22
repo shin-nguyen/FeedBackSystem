@@ -24,5 +24,5 @@ public class ClassDto {
     @JsonFormat(pattern="dd/MM/yyyy")
     private LocalDate endTime;
     private boolean isDeleted = false;
-    private Collection<TraineeDto> trainees;
+    private Collection<TraineeDto> trainees =null;
 }
