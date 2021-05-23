@@ -2,9 +2,7 @@ package com.gaf.feedbacksystem.controller;
 
 import com.gaf.feedbacksystem.MyResourceNotFoundException;
 import com.gaf.feedbacksystem.constant.SystemConstant;
-import com.gaf.feedbacksystem.dto.ModuleDto;
 import com.gaf.feedbacksystem.dto.TrainerDto;
-import com.gaf.feedbacksystem.service.IModuleService;
 import com.gaf.feedbacksystem.service.ITrainerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

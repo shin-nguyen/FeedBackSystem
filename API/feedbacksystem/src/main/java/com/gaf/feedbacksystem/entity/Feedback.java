@@ -14,8 +14,6 @@ import java.util.Set;
 @Builder
 public class Feedback {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "feedbackID", unique = true, nullable = false)
     private Integer feedbackID;
 
     private  String title;
@@ -23,14 +21,14 @@ public class Feedback {
     @ManyToOne
     @JoinColumn(name = "adminID", nullable = false,referencedColumnName = "username")
     private Admin admin;
-    private boolean isDeleted =false;
+    private boolean isDeleted;
 
     @ManyToOne
     @JoinColumn(name = "typeFeedBackId",referencedColumnName = "typeID")
     private TypeFeedback typeFeedback;
 
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     // Quan hệ n-n với đối tượng ở dưới (Person) (1 địa điểm có nhiều người ở)
     @EqualsAndHashCode.Exclude // không sử dụng trường này trong equals và hashcode
     @ToString.Exclude // Khoonhg sử dụng trong toString()

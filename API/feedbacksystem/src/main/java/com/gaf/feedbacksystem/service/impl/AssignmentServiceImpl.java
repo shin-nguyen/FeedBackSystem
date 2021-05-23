@@ -1,18 +1,12 @@
 package com.gaf.feedbacksystem.service.impl;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
-import com.gaf.feedbacksystem.entity.Class;
-import org.modelmapper.ModelMapper;
+import com.gaf.feedbacksystem.dto.AssignmentDto;
+import com.gaf.feedbacksystem.entity.Assignment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gaf.feedbacksystem.dto.AssignmentDto;
-import com.gaf.feedbacksystem.dto.AssignmentIdDto;
-import com.gaf.feedbacksystem.dto.ClassDto;
-import com.gaf.feedbacksystem.entity.Assignment;
-import com.gaf.feedbacksystem.entity.AssignmentId;
 import com.gaf.feedbacksystem.repository.AssignmentRepository;
 import com.gaf.feedbacksystem.service.IAssignmentService;
 import com.gaf.feedbacksystem.utils.ObjectMapperUtils;

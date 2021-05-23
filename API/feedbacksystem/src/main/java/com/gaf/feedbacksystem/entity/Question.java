@@ -20,7 +20,7 @@ public class Question {
     private Topic topic;
 
     private  String questionContent;
-    private  boolean isDeleted =false;
+    private  boolean isDeleted;
 
     // mappedBy trỏ tới tên biến  ở trong .
     @ManyToMany(mappedBy = "questions")

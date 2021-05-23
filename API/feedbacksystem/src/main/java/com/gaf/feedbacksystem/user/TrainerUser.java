@@ -1,6 +1,5 @@
 package com.gaf.feedbacksystem.user;
 
-import com.gaf.feedbacksystem.entity.Trainee;
 import com.gaf.feedbacksystem.entity.Trainer;
 
 public class TrainerUser implements BaseUser<Trainer>{

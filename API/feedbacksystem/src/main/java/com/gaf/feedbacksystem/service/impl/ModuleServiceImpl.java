@@ -1,23 +1,14 @@
 package com.gaf.feedbacksystem.service.impl;
 
-
-import java.lang.reflect.Type;
-import java.util.List;
-
-import javax.transaction.Transactional;
-
-import com.gaf.feedbacksystem.dto.ClassDto;
-import com.gaf.feedbacksystem.entity.Class;
-import com.gaf.feedbacksystem.utils.ObjectMapperUtils;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.gaf.feedbacksystem.dto.ModuleDto;
 import com.gaf.feedbacksystem.entity.Module;
 import com.gaf.feedbacksystem.repository.ModuleRepository;
 import com.gaf.feedbacksystem.service.IModuleService;
+import com.gaf.feedbacksystem.utils.ObjectMapperUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ModuleServiceImpl implements IModuleService {

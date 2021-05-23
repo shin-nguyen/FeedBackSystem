@@ -1,8 +1,6 @@
 package com.gaf.feedbacksystem.service.impl;
 
-import com.gaf.feedbacksystem.dto.ClassDto;
 import com.gaf.feedbacksystem.dto.TypeFeedbackDto;
-import com.gaf.feedbacksystem.entity.Class;
 import com.gaf.feedbacksystem.entity.TypeFeedback;
 import com.gaf.feedbacksystem.repository.TypeFeedbackRepository;
 import com.gaf.feedbacksystem.service.ITypeFeedback;

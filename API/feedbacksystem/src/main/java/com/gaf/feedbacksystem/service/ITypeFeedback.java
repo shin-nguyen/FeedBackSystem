@@ -1,6 +1,5 @@
 package com.gaf.feedbacksystem.service;
 
-import com.gaf.feedbacksystem.dto.ClassDto;
 import com.gaf.feedbacksystem.dto.TypeFeedbackDto;
 
 import java.util.List;

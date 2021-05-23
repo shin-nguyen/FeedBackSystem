@@ -3,11 +3,8 @@ package com.gaf.feedbacksystem.controller;
 import com.gaf.feedbacksystem.MyResourceNotFoundException;
 import com.gaf.feedbacksystem.constant.SystemConstant;
 import com.gaf.feedbacksystem.dto.AdminDto;
-import com.gaf.feedbacksystem.entity.*;
-import com.gaf.feedbacksystem.entity.Class;
 import com.gaf.feedbacksystem.service.IAdminService;
 
-import com.gaf.feedbacksystem.service.impl.AdminServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -27,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import java.util.Collection;
 
 
 @RestController
