@@ -4,6 +4,7 @@ package com.gaf.project.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Trainee  {
+public class Trainee  implements Serializable {
     @SerializedName("username")
     private String userName;
 

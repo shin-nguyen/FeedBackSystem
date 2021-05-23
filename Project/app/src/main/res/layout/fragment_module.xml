@@ -22,6 +22,7 @@
             android:textStyle="bold"/>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_add_module"
             android:layout_width="48dp"
             android:layout_height="48dp"
             style="@style/Widget.MaterialComponents.Button.Icon"

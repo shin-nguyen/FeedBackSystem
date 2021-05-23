@@ -1,12 +1,8 @@
 package com.gaf.feedbacksystem.dto;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.gaf.feedbacksystem.entity.Admin;
-import com.gaf.feedbacksystem.entity.Feedback;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ModuleDto {
     private Integer moduleID;
-    private Admin admin;
+    private AdminDto admin;
     private String moduleName;
 
     @JsonFormat(pattern="dd/MM/yyyy")

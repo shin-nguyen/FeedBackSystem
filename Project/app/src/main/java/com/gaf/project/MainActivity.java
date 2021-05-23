@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -40,21 +39,36 @@ public class MainActivity extends AppCompatActivity {
 
         switch (userRole){
             case SystemConstant.ADMIN_ROLE:
-                MenuItem menuItemAdmin= menu.getItem(10);
-                menuItemAdmin.setVisible(false);
+                for (int menuItemIndex = 0; menuItemIndex < menu.size(); menuItemIndex++) {
+                    MenuItem menuItem= menu.getItem(menuItemIndex);
+                    if(menuItem.getItemId() == R.id.nav_join){
+                        menuItem.setVisible(false);
+                    }
+                }
                 break;
             case SystemConstant.TRAINER_ROLE:
-                int[]arr_trainer = {5,6,8,10};
-                for (int index : arr_trainer) {
-                    MenuItem menuItemTrainer = menu.getItem(index);
-                    menuItemTrainer.setVisible(false);
+                for (int menuItemIndex = 0; menuItemIndex < menu.size(); menuItemIndex++) {
+                    MenuItem menuItem= menu.getItem(menuItemIndex);
+                    if( menuItem.getItemId() == R.id.nav_enrollment||
+                        menuItem.getItemId() == R.id.nav_feedback||
+                        menuItem.getItemId() == R.id.nav_question||
+                        menuItem.getItemId() == R.id.nav_join){
+
+                        menuItem.setVisible(false);
+                    }
                 }
                 break;
             case SystemConstant.TRAINEE_ROLE:
-                int[]arr_trainee = {2,5,6,7,8};
-                for (int index : arr_trainee) {
-                    MenuItem menuItemTrainer = menu.getItem(index);
-                    menuItemTrainer.setVisible(false);
+                for (int menuItemIndex = 0; menuItemIndex < menu.size(); menuItemIndex++) {
+                    MenuItem menuItem= menu.getItem(menuItemIndex);
+                    if( menuItem.getItemId() == R.id.nav_assignment||
+                        menuItem.getItemId() == R.id.nav_enrollment||
+                        menuItem.getItemId() == R.id.nav_feedback||
+                        menuItem.getItemId() == R.id.nav_result||
+                        menuItem.getItemId() == R.id.nav_question){
+
+                        menuItem.setVisible(false);
+                    }
                 }
                 break;
             default:
@@ -68,7 +82,8 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_enrollment,R.id.nav_feedback, R.id.nav_result, R.id.nav_question,
                 R.id.nav_contact,R.id.nav_join,R.id.nav_log_out,
                 R.id.add_feedback_fragment, R.id.add_assignment_fragment, R.id.add_question_fragment,
-                R.id.edit_assignment_fragment,R.id.add_class_fragment,R.id.nav_trainee_home_fragment,R.id.detailClassFragment)
+                R.id.edit_assignment_fragment,R.id.add_class_fragment,R.id.nav_trainee_home_fragment,R.id.detailClassFragment,
+                R.id.addModuleFragment)
                 .setDrawerLayout(drawer)
                 .build();
 

@@ -19,7 +19,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/txt_feebback"
+                android:id="@+id/txt_title"
                 android:text="Create New Feedback"
                 android:padding="20dp"
                 android:textSize="35sp"
@@ -50,7 +50,7 @@
                 android:background="@drawable/common_box">
 
                 <Spinner
-                    android:id="@+id/spinner_module"
+                    android:id="@+id/spn_feedback_type"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent"
@@ -75,6 +75,7 @@
             android:text="Feedback Title:"/>
 
         <EditText
+            android:id="@+id/feedback_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="4dp"

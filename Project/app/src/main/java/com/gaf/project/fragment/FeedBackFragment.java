@@ -86,12 +86,12 @@ public class FeedBackFragment extends Fragment{
         feedBackAdapter = new FeedbackAdapter(new FeedbackAdapter.IClickItem() {
             @Override
             public void detail(Feedback item) {
-                clickDetail();
+                clickDetail(item);
             }
 
             @Override
             public void update(Feedback item) {
-                clickUpdate();
+                clickUpdate(item);
             }
 
             @Override
@@ -132,8 +132,9 @@ public class FeedBackFragment extends Fragment{
         navigation.navigate(R.id.action_nav_feedback_to_add_feedback_fragment, bundle);
     }
 
-    private void clickUpdate() {
+    private void clickUpdate(Feedback item) {
         bundle.putString("mission", SystemConstant.UPDATE);
+        bundle.putSerializable("item", item);
         navigation = Navigation.findNavController(view);
         navigation.navigate(R.id.action_nav_feedback_to_add_feedback_fragment, bundle);
     }
@@ -162,8 +163,9 @@ public class FeedBackFragment extends Fragment{
         dialog.show(fragmentTransaction, "dialog for feedback");
     }
 
-    private void clickDetail() {
+    private void clickDetail(Feedback item) {
         bundle.putString("mission", SystemConstant.DETAIL);
+        bundle.putSerializable("item", item);
         navigation = Navigation.findNavController(view);
         navigation.navigate(R.id.action_nav_feedback_to_review_feedback_fragment, bundle);
     }

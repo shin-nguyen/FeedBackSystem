@@ -1,29 +1,25 @@
 package com.gaf.feedbacksystem.service.impl;
 
-import java.util.List;
-
-import com.gaf.feedbacksystem.dto.AdminDto;
-import com.gaf.feedbacksystem.entity.Admin;
-import com.gaf.feedbacksystem.entity.Assignment;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.gaf.feedbacksystem.dto.ClassDto;
+import com.gaf.feedbacksystem.entity.Class;
 import com.gaf.feedbacksystem.repository.ClazzRepository;
 import com.gaf.feedbacksystem.service.IClassService;
 import com.gaf.feedbacksystem.utils.ObjectMapperUtils;
-import com.gaf.feedbacksystem.entity.Class;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
-public class ClassServiceImpl implements IClassService  {
+public class ClassServiceImpl implements IClassService {
 
     @Autowired
-    ClazzRepository classRepository;
+	ClazzRepository classRepository;
     
 	@Override
 	public List<ClassDto> findAll() {
 		 List<Class> clazz = classRepository.findAllByDeletedIsFalse();
-	     List<ClassDto> classDtos = ObjectMapperUtils.mapAll(clazz,ClassDto.class);		 
+	     List<ClassDto> classDtos = ObjectMapperUtils.mapAll(clazz,ClassDto.class);
 	     return classDtos;
 	}
 

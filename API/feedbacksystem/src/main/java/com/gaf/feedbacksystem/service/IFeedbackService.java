@@ -1,8 +1,8 @@
 package com.gaf.feedbacksystem.service;
 
-import java.util.List;
-
 import com.gaf.feedbacksystem.dto.FeedbackDto;
+
+import java.util.List;
 
 public interface IFeedbackService {
 	
@@ -16,10 +16,5 @@ public interface IFeedbackService {
 	
 	void deleteById(Integer id);
 
-//    List<ClassDto> findAllByTrainer(String userName);
-//    List<ClassDto> findAllByTrainee(String userName);
-//    ClassDto findById(Integer classId);
-//    ClassDto update(ClassDto classDto);
-//    ClassDto save(ClassDto classDto);
 
 }

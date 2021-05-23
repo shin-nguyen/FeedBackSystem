@@ -13,6 +13,7 @@ import java.util.Collection;
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "questionID", unique = true, nullable = false)
     private Integer questionID;
 
     @ManyToOne

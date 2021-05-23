@@ -67,7 +67,7 @@
                 android:orientation="horizontal">
 
                 <Spinner
-                    android:id="@+id/spinner_class"
+                    android:id="@+id/spinner_topic_name"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_centerVertical="true"

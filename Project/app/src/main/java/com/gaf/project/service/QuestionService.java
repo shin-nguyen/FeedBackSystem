@@ -20,6 +20,8 @@ public interface QuestionService {
     @GET("question/loadListQuestion")
     Call<QuestionResponse> loadListQuestion();
 
+    @GET("question/loadListQuestionByTopic/{topicId}")
+    Call<QuestionResponse> loadListQuestionByTopic(@Path("topicId") Integer id);
     @POST("question/")
     Call<Question> create(@Body Question question);
 

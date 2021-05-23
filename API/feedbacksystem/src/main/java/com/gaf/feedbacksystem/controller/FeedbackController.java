@@ -6,10 +6,14 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import com.gaf.feedbacksystem.dto.FeedbackDto;
+import com.gaf.feedbacksystem.service.IAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +26,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.gaf.feedbacksystem.MyResourceNotFoundException;
 import com.gaf.feedbacksystem.constant.SystemConstant;
-import com.gaf.feedbacksystem.dto.FeedbackDto;
 import com.gaf.feedbacksystem.service.IFeedbackService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,7 +37,9 @@ public class FeedbackController {
 	
 	@Autowired
 	private IFeedbackService feedbackService;
-	
+	@Autowired
+	private IAdminService adminService;
+
 	 @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
 	    @GetMapping("/feedbacks/{id}")
 	    public ResponseEntity<FeedbackDto> getFeedback(@PathVariable(value = "id") Integer feedbackID) {
@@ -71,6 +76,10 @@ public class FeedbackController {
 	    @PostMapping(value = "/")
 	    public FeedbackDto create(@Valid @RequestBody FeedbackDto feedbackDto){
 	        try{
+				UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+						.getPrincipal();
+
+	        	feedbackDto.setAdmin(adminService.findByUserName(userDetails.getUsername()));
 	            return  feedbackService.save(feedbackDto);
 	        }
 	        catch (MyResourceNotFoundException exc) {

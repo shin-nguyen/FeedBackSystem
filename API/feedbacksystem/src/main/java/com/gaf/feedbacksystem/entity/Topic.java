@@ -15,6 +15,7 @@ import javax.persistence.*;
 public class Topic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "topicID", unique = true, nullable = false)
     private Integer topicID;
 
     @Column(length = 255)

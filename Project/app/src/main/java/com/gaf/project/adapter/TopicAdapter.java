@@ -1,10 +1,10 @@
 package com.gaf.project.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,15 +13,29 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.gaf.project.R;
 import com.gaf.project.model.Question;
 import com.gaf.project.model.Topic;
+import com.gaf.project.response.QuestionResponse;
+import com.gaf.project.service.QuestionService;
+import com.gaf.project.utils.ApiUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHolder>{
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
+public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHolder>{
     private List<Topic> mListTopic;
     private View view;
+    private  List<Question> listQuestion;
+    private QuestionService questionService = ApiUtils.getQuestionService();
+    private List<Question> mListQuestion = new ArrayList<>();
 
+
+    public  List<Question> getmListQuestion() {
+        return mListQuestion;
+    }
     public void setData(List<Topic> list){
         this.mListTopic = list;
         notifyDataSetChanged();
@@ -44,29 +58,39 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHol
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
 
         holder.questionRecyclerView.setLayoutManager(layoutManager);
-        //holder.questionRecyclerView.setHasFixedSize(true);
         holder.topic.setText(topic.getTopicName());
 
-        ArrayList<Question> listQuestion = new ArrayList<>();
+        TopicQuestionAdapter topicQuestionAdapter = new TopicQuestionAdapter((item, b) -> {
+            checkItem(item,b);
+        });
 
-        if (mListTopic.get(position).getTopicName().equals("topic1")){
-            listQuestion.add(new Question(1, topic, "content ddddddddddddddddddddddddddddddddddd", false));
-            listQuestion.add(new Question(2, topic, "content2", false));
-        }
-
-        QuestionAdapter questionAdapter = new QuestionAdapter(new QuestionAdapter.IClickItem() {
+        Call<QuestionResponse> questionCall = questionService.loadListQuestionByTopic(topic.getTopicID());
+        questionCall.enqueue(new Callback<QuestionResponse>() {
             @Override
-            public void update(Question item) {
-
+            public void onResponse(Call<QuestionResponse> call, Response<QuestionResponse> response) {
+                if (response.isSuccessful() && response.body()!=null){
+                    listQuestion= response.body().getQuestions();
+                    topicQuestionAdapter.setData(listQuestion);
+                }
             }
 
             @Override
-            public void delete(Question item) {
-
+            public void onFailure(Call<QuestionResponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
             }
         });
+
+
         //questionAdapter.setData(listQuestion);
-        holder.questionRecyclerView.setAdapter(questionAdapter);
+        holder.questionRecyclerView.setAdapter(topicQuestionAdapter);
+    }
+
+    private void checkItem(Question item, Boolean b) {
+        if (b){
+            mListQuestion.add(item);
+        }else{
+            mListQuestion.remove(item);
+        }
     }
 
     @Override
