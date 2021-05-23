@@ -36,9 +36,32 @@ public class Module implements  Serializable{
     @SerializedName("feedbackStartTime")
     @JsonFormat(pattern="dd/MM/yyyy")
     private Date feedbackStartTime;
+
+    public Module(Admin admin, String moduleName, Date startTime, Date endTime, Date feedbackStartTime, Date feedbackEndTime, Feedback feedback) {
+        this.admin = admin;
+        this.moduleName = moduleName;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.feedbackStartTime = feedbackStartTime;
+        this.feedbackEndTime = feedbackEndTime;
+        this.feedback = feedback;
+    }
+
     @SerializedName("feedbackEndTime")
     @JsonFormat(pattern="dd/MM/yyyy")
     private Date feedbackEndTime;
+
+    public Module(Integer moduleID, Admin admin, String moduleName, Date startTime, Date endTime, Date feedbackStartTime, Date feedbackEndTime, Feedback feedback) {
+        this.moduleID = moduleID;
+        this.admin = admin;
+        this.moduleName = moduleName;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.feedbackStartTime = feedbackStartTime;
+        this.feedbackEndTime = feedbackEndTime;
+        this.feedback = feedback;
+    }
+
     @SerializedName("feedback")
     private Feedback feedback;
 

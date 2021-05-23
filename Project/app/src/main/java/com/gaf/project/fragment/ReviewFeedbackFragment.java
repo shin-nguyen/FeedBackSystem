@@ -62,6 +62,7 @@ public class ReviewFeedbackFragment extends Fragment {
         mission = getArguments().getString("mission");
         feedback = (Feedback) getArguments().getSerializable("feedback");
         feedbackTitle.setText(feedback.getTitle());
+
         String userName = SessionManager.getInstance().getUserName();
         adminId.setText(userName);
 

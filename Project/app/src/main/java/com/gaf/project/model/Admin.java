@@ -19,4 +19,8 @@ public class Admin implements Serializable {
     private String email;
     @SerializedName("password")
     private String password;
+    @Override
+    public String toString() {
+        return getUserName();
+    }
 }
