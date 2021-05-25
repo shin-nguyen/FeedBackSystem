@@ -32,9 +32,6 @@ public class PieChart1Fragment extends Fragment {
 
     private View view;
 
-    private String[] feedback = {"SD", "D", "N", "A", "SA"};
-    private int[] noOfFeedback ={6, 20, 6, 5, 0};
-
     public PieChart1Fragment() {
         // Required empty public constructor
     }
@@ -48,6 +45,7 @@ public class PieChart1Fragment extends Fragment {
         tvClassName = view.findViewById(R.id.tvClassName);
         pieChartView = view.findViewById(R.id.chart);
 
+        tvClassName.setText("Class 1");
         setupPieChart(view);
 
         return view;
@@ -57,13 +55,14 @@ public class PieChart1Fragment extends Fragment {
 
         List pieData = new ArrayList<>();
 
-        //Get list status by User
         List<String> fbA = new ArrayList<>();
         fbA.add("SD");
         fbA.add("D");
         fbA.add("N");
         fbA.add("A");
         fbA.add("SA");
+
+        int[] noOfFeedback ={6, 20, 6, 5, 0};
 
         int fbSum = noOfFeedback[0] + noOfFeedback[1] + noOfFeedback[2] + noOfFeedback[3] + noOfFeedback[4];
 
@@ -83,6 +82,7 @@ public class PieChart1Fragment extends Fragment {
 
         PieChartData pieChartData = new PieChartData(pieData);
         pieChartData.setHasLabels(true);
+        pieChartData.setValueLabelBackgroundEnabled(false);
         pieChartData.setValueLabelTextSize(10);
         pieChartView.setPieChartData(pieChartData);
 
