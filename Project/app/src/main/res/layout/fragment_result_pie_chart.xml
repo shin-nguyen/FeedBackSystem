@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.ResultPieChartFragment"
-    android:background="@color/purple_200">
+    android:orientation="vertical"
+    tools:context=".fragment.ResultPieChartFragment">
 
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vpPieChart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="InvalidId" />
 
-</FrameLayout>
+</LinearLayout>
