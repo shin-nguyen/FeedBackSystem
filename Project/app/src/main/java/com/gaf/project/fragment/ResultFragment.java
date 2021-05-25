@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anychart.AnyChart;
 import com.gaf.project.R;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Class;
@@ -40,13 +41,15 @@ import retrofit2.Response;
 public class ResultFragment extends Fragment {
 
     private Button btnShowOverview, btnViewComment, btnShowDetail;
-    private View view;
+
     private ModuleService moduleService;
     private ClassService classService;
     private List<Module> moduleList;
     private List<Class> classList;
     private ArrayAdapter<Module> adapterModule;
     private ArrayAdapter<Class> adapterClass;
+
+    private View view;
     private  String userRole;
 
     public ResultFragment() {
