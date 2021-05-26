@@ -2,8 +2,10 @@ package com.gaf.project.utils;
 
 import com.gaf.project.config.RetrofitConfig;
 import com.gaf.project.constant.SystemConstant;
+import com.gaf.project.model.Answer;
 import com.gaf.project.model.Question;
 import com.gaf.project.service.AdminService;
+import com.gaf.project.service.AnswerService;
 import com.gaf.project.service.AssignmentService;
 import com.gaf.project.service.AuthenticationService;
 import com.gaf.project.service.ClassService;
@@ -69,9 +71,16 @@ public class ApiUtils {
                 .builderRetrofitAuth()
                 .create(FeedbackService.class);
     }
+
     public static TypeFeedbackService getTypeFeedbackService() {
         return RetrofitConfig.getInstance()
                 .builderRetrofitAuth()
                 .create(TypeFeedbackService.class);
+    }
+
+    public static AnswerService getAnswerService() {
+        return RetrofitConfig.getInstance()
+                .builderRetrofitAuth()
+                .create(AnswerService.class);
     }
 }

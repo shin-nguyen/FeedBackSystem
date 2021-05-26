@@ -7,10 +7,16 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.gaf.project.fragment.PieChart1Fragment;
 import com.gaf.project.fragment.PieChart2Fragment;
+import com.gaf.project.model.Module;
 
 public class ViewPageAdapter extends FragmentStatePagerAdapter {
-    public ViewPageAdapter(@NonNull FragmentManager fm, int behavior) {
+
+    Fragment frag1, frag2;
+
+    public ViewPageAdapter(@NonNull FragmentManager fm, int behavior, Fragment frag1, Fragment frag2) {
         super(fm, behavior);
+        this.frag1 =frag1;
+        this.frag2 =frag2;
     }
 
     @NonNull
@@ -18,12 +24,12 @@ public class ViewPageAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                return new PieChart1Fragment();
+                return frag1;
             case 1:
-                return new PieChart2Fragment();
+                return frag2;
         }
 
-        return new PieChart1Fragment();
+        return frag1;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.gaf.project.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -181,24 +183,25 @@ public class ResultFragment extends Fragment {
 
         }
 
-        btnShowDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                btnViewComment.setVisibility(view.VISIBLE);
-                Fragment fragPercent = new ResultPercentFragment();
-                FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-                transaction.replace(R.id.statistics_fragment_container, fragPercent).commit();
-
-            }
-        });
-
         btnShowOverview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                Module module = (Module) spnModule.getSelectedItem();
+                Class mClass = (Class) spnClass.getSelectedItem();
+
+//                Module module = new Module(6, "module1");
+//                Class mClass = new Class(6, "class1");
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("class", mClass);
+                bundle.putSerializable("module", module);
+
                 btnViewComment.setVisibility(view.GONE);
                 Fragment fragPieChart = new ResultPieChartFragment();
+
+                fragPieChart.setArguments(bundle);
+
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                 transaction.replace(R.id.statistics_fragment_container, fragPieChart).commit();
 
@@ -213,6 +216,18 @@ public class ResultFragment extends Fragment {
                 Fragment fragViewCmt = new ViewCommentFragment();
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                 transaction.replace(R.id.statistics_fragment_container, fragViewCmt).commit();
+
+            }
+        });
+
+        btnShowDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                btnViewComment.setVisibility(view.VISIBLE);
+                Fragment fragPercent = new ResultPercentFragment();
+                FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+                transaction.replace(R.id.statistics_fragment_container, fragPercent).commit();
 
             }
         });

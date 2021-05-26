@@ -69,4 +69,9 @@ public class Module implements  Serializable{
     public String toString() {
         return getModuleName();
     }
+
+    public Module(Integer moduleID, String moduleName) {
+        this.moduleID = moduleID;
+        this.moduleName = moduleName;
+    }
 }
