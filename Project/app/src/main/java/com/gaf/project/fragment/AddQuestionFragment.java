@@ -88,6 +88,9 @@ public class AddQuestionFragment extends Fragment {
         btnBack = view.findViewById(R.id.btn_back);
         btnSave = view.findViewById(R.id.btn_save);
 
+        String qsContent = questionContent.getText().toString();
+        Topic topic = (Topic) sprTopic.getSelectedItem();
+
         if(mission.equals(SystemConstant.ADD)){
             title.setText("Add Question");
             topicName.setVisibility(View.GONE);
@@ -114,7 +117,7 @@ public class AddQuestionFragment extends Fragment {
             btnSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showSuccessDialog("Add Success!");
+
                 }
             });
         }
@@ -128,24 +131,25 @@ public class AddQuestionFragment extends Fragment {
             btnSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Question questionUpdated = new Question(1,topic,content,false);
-//                    Call<Question> call =  questionService.update( questionUpdated );
-//                    call.enqueue(new Callback<Question>() {
-//                        @Override
-//                        public void onResponse(Call<Question> call, Response<Question> response) {
-//                            if (response.isSuccessful()&&response.body()!=null) {
-//                                showSuccessDialog("Edit Success!");
-//                                Log.e("Success","Update Class success");
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<Question> call, Throwable t) {
-//                            Log.e("Error",t.getLocalizedMessage());
-//                            showFailDialog("Error");
-//                        }
-//                    });
-//                    Log.e("Success","Send Class success");
+                    question.setTopic(topic);
+                    question.setQuestionContent(qsContent);
+                    Call<Question> call =  questionService.update( question );
+                    call.enqueue(new Callback<Question>() {
+                        @Override
+                        public void onResponse(Call<Question> call, Response<Question> response) {
+                            if (response.isSuccessful()&&response.body()!=null) {
+                                showSuccessDialog("Edit Success!");
+                                Log.e("Success","Update Class success");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Question> call, Throwable t) {
+                            Log.e("Error",t.getLocalizedMessage());
+                            showFailDialog("Error");
+                        }
+                    });
+                    Log.e("Success","Send Class success");
                 }
             });
         }
