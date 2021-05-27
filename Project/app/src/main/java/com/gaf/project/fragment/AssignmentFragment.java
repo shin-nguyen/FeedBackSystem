@@ -149,6 +149,8 @@ public class AssignmentFragment extends Fragment{
                             Log.e("Error",t.getLocalizedMessage());
                         }
                     });
+
+                    reloadFragment();
                 },
                 "Do you want to delete this Assignment?");
 
@@ -177,5 +179,16 @@ public class AssignmentFragment extends Fragment{
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         FailDialog newFragment = new FailDialog(message);
         newFragment.show(ft, "dialog fail");
+    }
+
+    public void reloadFragment(){
+        if (getFragmentManager() != null) {
+            showToast("reload");
+            getFragmentManager()
+                    .beginTransaction()
+                    .detach(this)
+                    .attach(this)
+                    .commit();
+        }
     }
 }

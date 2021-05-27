@@ -37,7 +37,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddQuestionFragment extends Fragment {
+public class ActionQuestionFragment extends Fragment {
 
     private View view;
     private String mission;
@@ -52,7 +52,7 @@ public class AddQuestionFragment extends Fragment {
     private ArrayAdapter<Topic> topicArrayAdapter;
     private List<Topic> topicList;
 
-    public AddQuestionFragment() {
+    public ActionQuestionFragment() {
         // Required empty public constructor
     }
 
