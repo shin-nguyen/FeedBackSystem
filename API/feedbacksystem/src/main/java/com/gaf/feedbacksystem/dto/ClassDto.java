@@ -1,15 +1,15 @@
 package com.gaf.feedbacksystem.dto;
 
-import java.time.LocalDate;
-import java.util.Collection;
+
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonRootName;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Collection;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -20,9 +20,9 @@ public class ClassDto {
     private String className;
     private Integer capacity;
     @JsonFormat(pattern="dd/MM/yyyy")
-    private LocalDate startTime;
+    private Date startTime;
     @JsonFormat(pattern="dd/MM/yyyy")
-    private LocalDate endTime;
+    private Date endTime;
     private boolean isDeleted = false;
     private Collection<TraineeDto> trainees;
 }

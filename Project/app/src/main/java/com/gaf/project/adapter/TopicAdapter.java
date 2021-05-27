@@ -64,6 +64,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHol
             checkItem(item,b);
         });
 
+        //load list questions
         Call<QuestionResponse> questionCall = questionService.loadListQuestionByTopic(topic.getTopicID());
         questionCall.enqueue(new Callback<QuestionResponse>() {
             @Override

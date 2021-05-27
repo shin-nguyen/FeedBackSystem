@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gaf.project.R;
 import com.gaf.project.model.Class;
+import com.gaf.project.model.Enrollment;
 import com.gaf.project.model.Feedback;
 import com.gaf.project.model.Trainee;
 
@@ -18,22 +19,29 @@ import java.util.List;
 
 public class EnrollmentAdapter extends RecyclerView.Adapter<EnrollmentAdapter.EnrollmentViewHolder> {
 
-    private List<Class> mListClass;
-    private List<Trainee> mListTrainee;
+    private List<Enrollment> mListEnrollment;
 
-    public void setClassData(List<Class> list){
-        this.mListClass = list;
+    private EnrollmentAdapter.IClickItem iClickItem;
+
+    public interface IClickItem{
+        void detail(Enrollment item);
+        void update(Enrollment item);
+        void delete(Enrollment item);
+    }
+
+    public EnrollmentAdapter(EnrollmentAdapter.IClickItem iClickItem){
+        this.iClickItem = iClickItem;
+    }
+
+    public void setData(List<Enrollment> list){
+        this.mListEnrollment = list;
         notifyDataSetChanged();
     }
 
-    public void setTraineeData(List<Trainee> list){
-        this.mListTrainee = list;
-        notifyDataSetChanged();
-    }
     @NonNull
     @Override
     public EnrollmentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_feedback,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_enrollment,parent,false);
 
         return new EnrollmentViewHolder(view);
     }
@@ -41,22 +49,31 @@ public class EnrollmentAdapter extends RecyclerView.Adapter<EnrollmentAdapter.En
     @Override
     public void onBindViewHolder(@NonNull EnrollmentViewHolder holder, int position) {
 
-        Class clazz = mListClass.get(position);
-        Trainee trainee = mListTrainee.get(position);
+        Enrollment enrollment = mListEnrollment.get(position);
 
-        if (clazz == null || trainee == null)
+        if (enrollment == null)
             return;
 
-        holder.classId.setText(clazz.getClassID());
-        holder.className.setText(clazz.getClassName());
-        holder.traineeId.setText(trainee.getUserName());
-        holder.traineeName.setText(trainee.getName());
+        holder.classId.setText(enrollment.getMClass().getClassID().toString());
+        holder.className.setText(enrollment.getMClass().getClassName());
+        holder.traineeId.setText(enrollment.getTrainee().getUserName());
+        holder.traineeName.setText(enrollment.getTrainee().getName());
+
+        holder.detailButton.setOnClickListener(v -> {
+            iClickItem.detail(enrollment);
+        });
+        holder.editButton.setOnClickListener(v -> {
+            iClickItem.update(enrollment);
+        });
+        holder.deleteButton.setOnClickListener(v -> {
+            iClickItem.delete(enrollment);
+        });
     }
 
     @Override
     public int getItemCount() {
-        if (mListClass != null && mListTrainee != null)
-            return mListClass.size() * mListTrainee.size();
+        if (mListEnrollment != null)
+            return mListEnrollment.size();
         return 0;
     }
 

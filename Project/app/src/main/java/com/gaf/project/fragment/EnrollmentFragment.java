@@ -20,6 +20,7 @@ import com.gaf.project.model.Trainee;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class EnrollmentFragment extends Fragment {
@@ -27,11 +28,17 @@ public class EnrollmentFragment extends Fragment {
     private View view;
     private NavController navigation;
     private RecyclerView recyclerViewEnrollment;
-    private EnrollmentAdapter EnrollmentAdapter;
+    private EnrollmentAdapter enrollmentAdapter;
     private List<Class> listClass;
     private List<Trainee> listTrainee;
 
     public EnrollmentFragment() {
+    }
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -50,19 +57,7 @@ public class EnrollmentFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         recyclerViewEnrollment.setLayoutManager(linearLayoutManager);
 
-        listClass = new ArrayList<>();
-        listTrainee = new ArrayList<>();
 
-
-        //Class clazz = new Class("1", "class1", "50", LocalDate.now(), LocalDate.now(), false, new ArrayList<>());
-        Trainee trainee = new Trainee("hungdo", "hung", "hung@gmail.com", "123", "0123", "Dong Nai", true, 1, "123", "123");
-
-        listTrainee.add(trainee);
-        //listClass.add(clazz);
-
-        EnrollmentAdapter enrollmentAdapter = new EnrollmentAdapter();
-        enrollmentAdapter.setClassData(listClass);
-        enrollmentAdapter.setTraineeData(listTrainee);
 
         recyclerViewEnrollment.setAdapter(enrollmentAdapter);
     }

@@ -25,13 +25,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="450dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/review_content"
         android:orientation="vertical"
         android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:paddingTop="15dp"
         android:paddingBottom="15dp">
 
@@ -50,9 +51,11 @@
                 android:id="@+id/feedback_title"
                 style="@style/TextItemStyle"
                 android:layout_width="wrap_content"
+                android:textColor="@color/blue"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,36 +72,20 @@
             <TextView
                 android:id="@+id/txt_admin_id"
                 style="@style/TextItemStyle"
+                android:textColor="@color/blue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
 
-
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <TextView
-                style="@style/TextViewStyle"
+            <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Topic: " />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:text="- Question: " />
-
+                android:layout_height="match_parent"
+                android:id="@+id/rcv_topic_in_review_feedback"/>
         </LinearLayout>
 
     </LinearLayout>
