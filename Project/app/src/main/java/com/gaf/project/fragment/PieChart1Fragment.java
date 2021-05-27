@@ -50,7 +50,6 @@ public class PieChart1Fragment extends Fragment {
 
     private AnswerService answerService;
     private List<Answer> answerList;
-    private List<Answer> answerListByValue;
 
     private View view;
 
@@ -72,7 +71,15 @@ public class PieChart1Fragment extends Fragment {
         if(getArguments() != null) {
             Class mClass = (Class) getArguments().getSerializable("class");
             Module module = (Module) getArguments().getSerializable("module");
+
             test(view, mClass, module);
+
+            tvClassName = view.findViewById(R.id.tvClassName);
+            pieChartView = view.findViewById(R.id.chart);
+
+            tvClassName.setText(mClass.getClassName());
+
+            setupPieChart(view, mClass, module);
         }
 
         return view;
@@ -106,7 +113,14 @@ public class PieChart1Fragment extends Fragment {
         valueNames.add("Agree");
         valueNames.add("Strongly Agree");
 
-        int answerSum = answerList.size();
+        int answerSum;
+        try {
+            answerSum = answerList.size();
+        }
+        catch (Exception ex) {
+            answerSum = 0;
+            return;
+        }
 
         int[] valueSum = new int[5];
         for(int j=0; j<answerSum; j++){
@@ -145,18 +159,6 @@ public class PieChart1Fragment extends Fragment {
     BiFunction<String,String,String> getLabel = (String name, String value)->{
         return  name + ": " + value+"%";
     };
-
-//    @Override
-//    public void onItemSelected(Class c, Module m) {
-//        tvClassName = view.findViewById(R.id.tvClassName);
-//        pieChartView = view.findViewById(R.id.chart);
-//
-//        tvClassName.setText(c.getClassName());
-//
-//        //setupPieChart(view, c, m);
-//
-//        test(view, c, m);
-//    }
 
     private void test(View view, Class c, Module m) {
         tvTest = view.findViewById(R.id.tvTest);

@@ -75,6 +75,15 @@ public class PieChart2Fragment extends Fragment{
             Class mClass = (Class) getArguments().getSerializable("class");
             Module module = (Module) getArguments().getSerializable("module");
             test(view, mClass, module);
+
+            pieChartView1 = view.findViewById(R.id.chart1);
+            pieChartView2 = view.findViewById(R.id.chart2);
+            pieChartView3 = view.findViewById(R.id.chart3);
+            pieChartView4 = view.findViewById(R.id.chart4);
+
+            for(int i = 0; i<4; i++){
+                setupPieChart(view, mClass, module, i);
+            }
         }
 
         return view;
@@ -100,6 +109,14 @@ public class PieChart2Fragment extends Fragment{
                     showToast("Error");
                 }
             });}).run();
+
+        int questionSum = 0;
+        try {
+            questionSum = questionListByTopic.size();
+        }
+        catch (Exception ex) {
+            return;
+        }
 
         for(int i=0; i<questionListByTopic.size(); i++) {
 
@@ -127,7 +144,13 @@ public class PieChart2Fragment extends Fragment{
             }).run();
         }
 
-        int answerSum = answerList.size();
+        int answerSum = 0;
+        try {
+            answerSum = answerList.size();
+        }
+        catch (Exception ex) {
+            return;
+        }
 
         List<String> valueNames = new ArrayList<>();
         valueNames.add("Strongly Disagree");
@@ -184,19 +207,6 @@ public class PieChart2Fragment extends Fragment{
     BiFunction<String,String,String> getLabel = (String name, String value)->{
         return  name + ": " + value+"%";
     };
-
-//    @Override
-//    public void onItemSelected(Class c, Module m) {
-//        pieChartView1 = view.findViewById(R.id.chart1);
-//        pieChartView2 = view.findViewById(R.id.chart2);
-//        pieChartView3 = view.findViewById(R.id.chart3);
-//        pieChartView4 = view.findViewById(R.id.chart4);
-//
-//        for(int i = 0; i<4; i++){
-//            //setupPieChart(view, c, m, i);
-//            test(view, c, m, i);
-//        }
-//    }
 
     private void test(View view, Class c, Module m) {
         tvTest = view.findViewById(R.id.tvTest);

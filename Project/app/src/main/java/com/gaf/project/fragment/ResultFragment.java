@@ -187,19 +187,16 @@ public class ResultFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                btnViewComment.setVisibility(view.GONE);
+
                 Module module = (Module) spnModule.getSelectedItem();
                 Class mClass = (Class) spnClass.getSelectedItem();
-
-//                Module module = new Module(6, "module1");
-//                Class mClass = new Class(6, "class1");
 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("class", mClass);
                 bundle.putSerializable("module", module);
 
-                btnViewComment.setVisibility(view.GONE);
                 Fragment fragPieChart = new ResultPieChartFragment();
-
                 fragPieChart.setArguments(bundle);
 
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
@@ -213,7 +210,17 @@ public class ResultFragment extends Fragment {
             public void onClick(View v) {
 
                 btnViewComment.setVisibility(view.GONE);
+
+                Module module = (Module) spnModule.getSelectedItem();
+                Class mClass = (Class) spnClass.getSelectedItem();
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("class", mClass);
+                bundle.putSerializable("module", module);
+
                 Fragment fragViewCmt = new ViewCommentFragment();
+                fragViewCmt.setArguments(bundle);
+
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                 transaction.replace(R.id.statistics_fragment_container, fragViewCmt).commit();
 
@@ -225,7 +232,17 @@ public class ResultFragment extends Fragment {
             public void onClick(View v) {
 
                 btnViewComment.setVisibility(view.VISIBLE);
+
+                Module module = (Module) spnModule.getSelectedItem();
+                Class mClass = (Class) spnClass.getSelectedItem();
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("class", mClass);
+                bundle.putSerializable("module", module);
+
                 Fragment fragPercent = new ResultPercentFragment();
+                fragPercent.setArguments(bundle);
+
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                 transaction.replace(R.id.statistics_fragment_container, fragPercent).commit();
 
