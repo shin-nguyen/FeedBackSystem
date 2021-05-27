@@ -1,6 +1,10 @@
 package com.gaf.feedbacksystem.service.impl;
 
+import com.gaf.feedbacksystem.dto.AssignmentDto;
+import com.gaf.feedbacksystem.dto.ClassDto;
 import com.gaf.feedbacksystem.dto.QuestionDto;
+import com.gaf.feedbacksystem.entity.Assignment;
+import com.gaf.feedbacksystem.entity.Class;
 import com.gaf.feedbacksystem.entity.Question;
 import com.gaf.feedbacksystem.repository.QuestionRepository;
 import com.gaf.feedbacksystem.service.IQuestionService;
@@ -18,7 +22,7 @@ public class QuestionServiceImpl implements IQuestionService {
 
     @Override
     public List<QuestionDto> findAll() {
-        List<Question> questions = questionRepository.findAll();
+        List<Question> questions = questionRepository.findAllByDeletedFalse();
         List<QuestionDto> questionDtos = ObjectMapperUtils.mapAll(questions,QuestionDto.class);
         return questionDtos;
     }
@@ -32,21 +36,30 @@ public class QuestionServiceImpl implements IQuestionService {
 
     @Override
     public QuestionDto findById(Integer QuestionId) {
-        return null;
+        Question question = questionRepository.findByQuestionID(QuestionId);
+        QuestionDto questionDto = ObjectMapperUtils.map(question,QuestionDto.class);
+        return questionDto;
     }
 
     @Override
     public QuestionDto update(QuestionDto questionDto) {
-        return null;
+        Question question=  questionRepository.findByQuestionID(questionDto.getQuestionID());
+
+        question.setQuestionContent(questionDto.getQuestionContent());
+        question.setTopic(question.getTopic());
+
+        return ObjectMapperUtils.map(questionRepository.save(question), QuestionDto.class);
     }
 
     @Override
     public QuestionDto save(QuestionDto questionDto) {
-        return null;
+        Question  question = ObjectMapperUtils.map(questionDto,Question.class);
+
+        return ObjectMapperUtils.map(questionRepository.save(question),QuestionDto.class);
     }
 
     @Override
     public void deleteById(Integer id) {
-
+        questionRepository.deleteById(id);
     }
 }

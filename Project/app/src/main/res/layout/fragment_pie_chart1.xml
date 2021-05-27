@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".fragment.PieChart1Fragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:layout_margin="8dp"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Feedback Statistics of Class "
+            android:gravity="end"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/tvClassName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Class 1"
+            android:textSize="18sp"
+            android:textColor="@color/search_box_border"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvTest"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Test"
+        android:textSize="30sp"
+        android:textColor="@color/search_box_border"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:orientation="horizontal">
+
+        <lecho.lib.hellocharts.view.PieChartView
+            android:id="@+id/chart"
+            android:layout_width="260dp"
+            android:layout_height="260dp"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ivColor1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="136dp"
+                android:src="@drawable/ic_baseline_brightness_1_24"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="#FFA500"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="0dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="136dp"
+                android:text="Strongly Disagree"
+                app:layout_constraintLeft_toRightOf="@+id/ivColor1"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/ivColor2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_brightness_1_24"
+                app:tint="#FF8C00"
+                app:layout_constraintTop_toBottomOf="@+id/ivColor1"
+                tools:ignore="MissingConstraints"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Disagree"
+                app:layout_constraintTop_toBottomOf="@+id/ivColor1"
+                app:layout_constraintLeft_toRightOf="@+id/ivColor2"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/ivColor3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_brightness_1_24"
+                app:tint="#FF7F50"
+                app:layout_constraintTop_toBottomOf="@+id/ivColor2"
+                tools:ignore="MissingConstraints"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Neutral"
+                app:layout_constraintTop_toBottomOf="@+id/ivColor2"
+                app:layout_constraintLeft_toRightOf="@+id/ivColor3"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/ivColor4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_brightness_1_24"
+                app:tint="#FF6347"
+                app:layout_constraintTop_toBottomOf="@+id/ivColor3"
+                tools:ignore="MissingConstraints"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Agree"
+                app:layout_constraintTop_toBottomOf="@+id/ivColor3"
+                app:layout_constraintLeft_toRightOf="@+id/ivColor4"
+                tools:ignore="MissingConstraints" />
+
+            <ImageView
+                android:id="@+id/ivColor5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_brightness_1_24"
+                app:tint="#FF6347"
+                app:layout_constraintTop_toBottomOf="@+id/ivColor4"
+                tools:ignore="MissingConstraints"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Strongly Agree"
+                app:layout_constraintTop_toBottomOf="@+id/ivColor4"
+                app:layout_constraintLeft_toRightOf="@+id/ivColor5"
+                tools:ignore="MissingConstraints" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -38,4 +38,11 @@ public class Feedback implements Serializable {
     private TypeFeedback typeFeedback;
     @SerializedName("questions")
     private Collection<Question> questions;
+
+    @Override
+    public String toString() {
+        return getTitle();
+    }
+
+
 }
