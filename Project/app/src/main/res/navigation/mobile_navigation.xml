@@ -50,7 +50,11 @@
         android:id="@+id/nav_module"
         android:name="com.gaf.project.fragment.ModuleFragment"
         android:label="fragment_module"
-        tools:layout="@layout/fragment_module" />
+        tools:layout="@layout/fragment_module" >
+        <action
+            android:id="@+id/action_nav_module_to_addModuleFragment"
+            app:destination="@id/addModuleFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_contact"
@@ -157,5 +161,10 @@
         android:name="com.gaf.project.fragment.DetailClassFragment"
         android:label="fragment_detail_class"
         tools:layout="@layout/fragment_detail_class" />
+    <fragment
+        android:id="@+id/addModuleFragment"
+        android:name="com.gaf.project.fragment.AddModuleFragment"
+        android:label="fragment_add_module"
+        tools:layout="@layout/fragment_add_module" />
 
 </navigation>

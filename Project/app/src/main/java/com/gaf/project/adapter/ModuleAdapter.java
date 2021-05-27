@@ -10,8 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gaf.project.R;
-import com.gaf.project.model.Assignment;
+import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Module;
+import com.gaf.project.utils.SessionManager;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -20,7 +21,7 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ModuleView
 
 
     private ModuleAdapter.IClickItem iClickItem;
-    public interface IClickItem<Module>{
+    public interface IClickItem{
         void update(Module  item);
         void delete(Module item);
     }
@@ -54,14 +55,21 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ModuleView
         SimpleDateFormat timeFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
 
 
-        holder.moduleId.setText(String.valueOf(module.getModuleID()));
-        holder.moduleName.setText(module.getModuleName());
-        holder.moduleAdminId.setText(module.getAdmin().getName());
-        holder.moduleStartDate.setText(dateFormat.format(module.getStartTime()));
-        holder.moduleEndDate.setText(dateFormat.format(module.getEndTime()));
-        holder.moduleFeedbackTitle.setText(module.getFeedback().getTitle());
-        holder.moduldeFeedbackStartTime.setText(timeFormat.format(module.getFeedbackStartTime()));
-        holder.moduldeFeedbackEndTime.setText(timeFormat.format(module.getFeedbackEndTime()));
+        holder.id.setText(String.valueOf(module.getModuleID()));
+        holder.name.setText(module.getModuleName());
+        holder.adminId.setText(module.getAdmin().getName());
+        holder.startDate.setText(dateFormat.format(module.getStartTime()));
+        holder.endDate.setText(dateFormat.format(module.getEndTime()));
+        holder.feedbackTitle.setText(module.getFeedback().getTitle());
+        holder.feedbackStartTime.setText(timeFormat.format(module.getFeedbackStartTime()));
+        holder.feedbackEndTime.setText(timeFormat.format(module.getFeedbackEndTime()));
+
+        holder.btnEdit.setOnClickListener(v->{
+            iClickItem.update(module);
+        });
+        holder.btnDelete.setOnClickListener(v->{
+            iClickItem.delete(module);
+        });
     }
 
     @Override
@@ -74,21 +82,31 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ModuleView
 
     public class ModuleViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView moduleId, moduleName, moduleAdminId, moduleStartDate,moduleEndDate;
-        private TextView moduleFeedbackTitle,moduldeFeedbackStartTime, moduldeFeedbackEndTime;
-        private Button editButton, deleteButton;
+        private TextView id, name, adminId, startDate, endDate;
+        private TextView feedbackTitle, feedbackStartTime, feedbackEndTime;
+        private Button btnEdit, btnDelete;
 
         public ModuleViewHolder(@NonNull View view) {
             super(view);
 
-            moduleId = view.findViewById(R.id.module_id);
-            moduleName = view.findViewById(R.id.module_name);
-            moduleAdminId = view.findViewById(R.id.module_admin_id);
-            moduleStartDate = view.findViewById(R.id.module_start_date);
-            moduleEndDate = view.findViewById(R.id.module_end_date);
-            moduleFeedbackTitle = view.findViewById(R.id.module_feedback_title);
-            moduldeFeedbackStartTime = view.findViewById(R.id.module_feedback_start_time);
-            moduldeFeedbackEndTime = view.findViewById(R.id.module_feedback_end_time);
+            id = view.findViewById(R.id.module_id);
+            name = view.findViewById(R.id.module_name);
+            adminId = view.findViewById(R.id.module_admin_id);
+            startDate = view.findViewById(R.id.module_start_date);
+            endDate = view.findViewById(R.id.module_end_date);
+            feedbackTitle = view.findViewById(R.id.module_feedback_title);
+            feedbackStartTime = view.findViewById(R.id.module_feedback_start_time);
+            feedbackEndTime = view.findViewById(R.id.module_feedback_end_time);
+
+            btnEdit = view.findViewById(R.id.btn_edit_module);
+            btnDelete = view.findViewById(R.id.btn_delete_module);
+
+            String userRole = SessionManager.getInstance().getUserRole();
+            if(!userRole.equals(SystemConstant.ADMIN_ROLE)){
+                btnEdit.setVisibility(View.GONE);
+                btnDelete.setVisibility(View.GONE);
+            }
+
         }
     }
 }

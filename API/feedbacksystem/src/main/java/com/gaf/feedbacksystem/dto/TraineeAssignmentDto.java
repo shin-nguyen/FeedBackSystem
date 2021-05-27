@@ -1,8 +1,5 @@
 package com.gaf.feedbacksystem.dto;
 
-import com.gaf.feedbacksystem.entity.Assignment;
-import com.gaf.feedbacksystem.entity.Trainee;
-import com.gaf.feedbacksystem.entity.TraineeAssignmentID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

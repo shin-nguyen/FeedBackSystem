@@ -3,11 +3,9 @@ package com.gaf.feedbacksystem.controller;
 import com.gaf.feedbacksystem.MyResourceNotFoundException;
 import com.gaf.feedbacksystem.constant.SystemConstant;
 import com.gaf.feedbacksystem.dto.AdminDto;
-import com.gaf.feedbacksystem.entity.*;
-import com.gaf.feedbacksystem.entity.Class;
+import com.gaf.feedbacksystem.dto.ClassDto;
 import com.gaf.feedbacksystem.service.IAdminService;
 
-import com.gaf.feedbacksystem.service.impl.AdminServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -27,7 +25,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -59,6 +59,22 @@ public class AdminController {
         return  ResponseEntity.ok().body(adminDto);
     }
 
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    @GetMapping(value = "/loadListAdmin", produces = "application/json")
+    public ResponseEntity<Map<String, List<?>>> loadListAdmin(){
+        try{
+            List<AdminDto> adminList = adminService.findAll();
+            if ( adminList.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            Map result = new HashMap();
+            result.put("admins", adminList);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Admin Not Found", exc);
+        }
+    }
 
     @PutMapping(value = "/")
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")

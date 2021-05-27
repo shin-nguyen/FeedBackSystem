@@ -64,4 +64,9 @@ public class Class implements Serializable {
     public String toString() {
         return getClassName();
     }
+
+    public Class(Integer classID, String className) {
+        this.classID = classID;
+        this.className = className;
+    }
 }

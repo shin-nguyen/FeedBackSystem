@@ -3,6 +3,7 @@ package com.gaf.project.service;
 import com.gaf.project.model.Assignment;
 import com.gaf.project.model.Class;
 import com.gaf.project.model.Question;
+import com.gaf.project.response.AnswerResponse;
 import com.gaf.project.response.AssignmentResponse;
 import com.gaf.project.response.ClassResponse;
 import com.gaf.project.response.DeleteResponse;
@@ -19,6 +20,9 @@ import retrofit2.http.Path;
 public interface QuestionService {
     @GET("question/loadListQuestion")
     Call<QuestionResponse> loadListQuestion();
+
+    @GET("question/loadListQuestionByTopic/{topicId}")
+    Call<QuestionResponse> loadListQuestionByTopic(@Path("topicId") Integer id);
 
     @POST("question/")
     Call<Question> create(@Body Question question);

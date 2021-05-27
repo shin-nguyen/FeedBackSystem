@@ -28,6 +28,13 @@ public class QuestionServiceImpl implements IQuestionService {
     }
 
     @Override
+    public List<QuestionDto> findAllByTopicId(Integer id) {
+        List<Question> questions = questionRepository.findAllByTopic_TopicID(id);
+        List<QuestionDto> questionDtos = ObjectMapperUtils.mapAll(questions,QuestionDto.class);
+        return questionDtos;
+    }
+
+    @Override
     public QuestionDto findById(Integer QuestionId) {
         Question question = questionRepository.findByQuestionID(QuestionId);
         QuestionDto questionDto = ObjectMapperUtils.map(question,QuestionDto.class);

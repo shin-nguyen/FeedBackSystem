@@ -19,6 +19,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Module {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "moduleID", unique = true, nullable = false)
     private Integer moduleID;
 
     @ManyToOne

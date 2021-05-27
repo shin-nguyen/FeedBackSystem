@@ -2,9 +2,8 @@ package com.gaf.feedbacksystem.controller;
 
 import com.gaf.feedbacksystem.MyResourceNotFoundException;
 import com.gaf.feedbacksystem.constant.SystemConstant;
-import com.gaf.feedbacksystem.dto.*;
-import com.gaf.feedbacksystem.entity.Admin;
-import com.gaf.feedbacksystem.entity.Trainer;
+import com.gaf.feedbacksystem.dto.AssignmentDto;
+import com.gaf.feedbacksystem.dto.TrainerDto;
 import com.gaf.feedbacksystem.service.IAssignmentService;
 import com.gaf.feedbacksystem.service.ITrainerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,14 +12,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -62,6 +59,7 @@ public class AssignmentController {
             } else{
                 assignmentList = assignmentService.findAll();
             }
+
             if ( assignmentList.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }

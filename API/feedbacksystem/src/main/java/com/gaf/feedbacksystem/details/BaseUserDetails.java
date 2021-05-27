@@ -1,11 +1,9 @@
 package com.gaf.feedbacksystem.details;
 
 import com.gaf.feedbacksystem.constant.SystemConstant;
-import com.gaf.feedbacksystem.entity.Admin;
 import com.gaf.feedbacksystem.user.BaseUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 

@@ -75,63 +75,66 @@ public class AddAssignmentFragment extends Fragment {
 
         final Spinner spnModule = (Spinner) view.findViewById(R.id.spinner_module_name);
         Call<ModuleResponse> callModule =  moduleService.loadModuleAdmin();
+        new Thread(()-> {
         callModule.enqueue(new Callback<ModuleResponse>() {
             @Override
             public void onResponse(Call<ModuleResponse> call, Response<ModuleResponse> response) {
-                new Thread(()-> {
+
                     if (response.isSuccessful()&& response.body()!=null){
                     moduleList = response.body().getModules();
                     adapterModule =
                             new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, moduleList);
                     spnModule.setAdapter(adapterModule);
-                }}).run();
+                }
             }
             @Override
             public void onFailure(Call<ModuleResponse> call, Throwable t) {
                 Log.e("Error",t.getLocalizedMessage());
                 showToast("Error");
             }
-        });
+        });}).run();
 
         final Spinner spnClass = (Spinner) view.findViewById(R.id.spinner_class_name);
         Call<ClassResponse> callClass =  classService.loadListClass();
+        new Thread(()-> {
         callClass.enqueue(new Callback<ClassResponse>() {
             @Override
             public void onResponse(Call<ClassResponse> call, Response<ClassResponse> response) {
-                new Thread(()-> {
+
                 if (response.isSuccessful()&& response.body()!=null){
                     classList = response.body().getClasss();
                      adapterClass =
                             new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, classList);
                     spnClass.setAdapter(adapterClass);
-                }}).run();
+                }
             }
             @Override
             public void onFailure(Call<ClassResponse> call, Throwable t) {
                 Log.e("Error",t.getLocalizedMessage());
                 showToast("Error");
             }
-        });
+        });}).run();
 
         final Spinner spnTrainer = (Spinner) view.findViewById(R.id.spinner_trainer_id);
         Call<TrainerReponse> callTrainer =  trainerService.loadListTrainer();
+        new Thread(()-> {
         callTrainer.enqueue(new Callback<TrainerReponse>() {
             @Override
             public void onResponse(Call<TrainerReponse> call, Response<TrainerReponse> response) {
-                new Thread(()-> {
+
                 if (response.isSuccessful()&& response.body()!=null){
                     trainerList = response.body().getTrainers();
                     adapterTrainer =
                             new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, trainerList);
                     spnTrainer.setAdapter(adapterTrainer);
-                }}).run();
+                }
             }
             @Override
             public void onFailure(Call<TrainerReponse> call, Throwable t) {
                 Log.e("Error",t.getLocalizedMessage());
                 showToast("Error");
             }
-        });
+        });}).run();
 
         btnSave = view.findViewById(R.id.btn_save);
         btnSave.setOnClickListener(v->{

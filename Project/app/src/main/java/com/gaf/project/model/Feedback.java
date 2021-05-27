@@ -2,7 +2,9 @@ package com.gaf.project.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,11 +16,20 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Feedback{
+public class Feedback implements Serializable {
     @SerializedName("feedbackID")
     private Integer feedbackID;
     @SerializedName("title")
     private  String title;
+
+
+    public Feedback(String title, TypeFeedback typeFeedback, List<Question> questions) {
+        this.title = title;
+        this.typeFeedback = typeFeedback;
+        this.questions = questions;
+    }
+
+
     @SerializedName("admin")
     private Admin admin;
     @SerializedName("deleted")
@@ -27,4 +38,11 @@ public class Feedback{
     private TypeFeedback typeFeedback;
     @SerializedName("questions")
     private Collection<Question> questions;
+
+    @Override
+    public String toString() {
+        return getTitle();
+    }
+
+
 }

@@ -47,32 +47,33 @@
                 android:text="Feedback Title: " />
 
             <TextView
-                android:id="@+id/assignment_no"
+                android:id="@+id/feedback_title"
                 style="@style/TextItemStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
-
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="30dp"
+            >
 
             <TextView
+                android:textSize="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Course Name: "
-                android:layout_marginBottom="20dp"
-                android:textSize="20sp"/>
+                android:text="Admin ID: " />
 
             <TextView
-                android:id="@+id/assignment_course_name"
+                android:id="@+id/txt_admin_id"
                 style="@style/TextItemStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="wrap_content"

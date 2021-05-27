@@ -1,12 +1,8 @@
 package com.gaf.feedbacksystem.dto;
 
 
-import com.gaf.feedbacksystem.entity.BaseUserEntity;
-import com.gaf.feedbacksystem.entity.Class;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import java.util.Collection;
 
 @Data

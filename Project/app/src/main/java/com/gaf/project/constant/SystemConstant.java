@@ -1,5 +1,7 @@
 package com.gaf.project.constant;
 
+import android.graphics.Color;
+
 import com.gaf.project.authentication.AuthenticationResponse;
 
 import java.util.Optional;
@@ -15,5 +17,15 @@ public class SystemConstant {
     public static final String DETAIL = "DETAIL";
 
     public static AuthenticationResponse authenticationResponse = new AuthenticationResponse();
+
+    public static final int []color ={
+            Color.parseColor("#FF4500"),
+            Color.parseColor("#FF6347"),
+            Color.parseColor("#FF7F50"),
+            Color.parseColor("#FF8C00"),
+            Color.parseColor("#FFA500")
+    };
+
+    public static final int lengthColor = color.length;
 }
 

@@ -1,11 +1,8 @@
 package com.gaf.feedbacksystem.dto;
 
-import com.gaf.feedbacksystem.entity.Admin;
-import com.gaf.feedbacksystem.entity.Question;
-import com.gaf.feedbacksystem.entity.TypeFeedback;
+
 import lombok.*;
 
-import javax.persistence.*;
 import java.util.Collection;
 
 @Data
@@ -15,8 +12,8 @@ import java.util.Collection;
 public class FeedbackDto {
     private Integer feedbackID;
     private  String title;
-    private Admin admin;
+    private AdminDto admin;
     private boolean isDeleted;
-    private TypeFeedback typeFeedback;
+    private TypeFeedbackDto typeFeedback;
     private Collection<QuestionDto> questions;
 }
