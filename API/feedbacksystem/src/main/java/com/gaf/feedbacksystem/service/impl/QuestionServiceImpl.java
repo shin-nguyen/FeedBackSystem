@@ -22,7 +22,7 @@ public class QuestionServiceImpl implements IQuestionService {
 
     @Override
     public List<QuestionDto> findAll() {
-        List<Question> questions = questionRepository.findAll();
+        List<Question> questions = questionRepository.findAllByDeletedFalse();
         List<QuestionDto> questionDtos = ObjectMapperUtils.mapAll(questions,QuestionDto.class);
         return questionDtos;
     }

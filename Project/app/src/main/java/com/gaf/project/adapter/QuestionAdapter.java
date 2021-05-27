@@ -52,10 +52,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
             return;
         }
 
+        String paddingContent = convertToWhitespace("Question Content: ");
         holder.topicId.setText(String.valueOf(question.getTopic().getTopicID()));
         holder.topicName.setText(String.valueOf(question.getTopic().getTopicName()));
         holder.questionId.setText(String.valueOf(question.getQuestionID()));
-        holder.questionContent.setText(String.valueOf(question.getQuestionContent()));
+        holder.questionContent.setText(paddingContent+String.valueOf(question.getQuestionContent()));
 
         holder.btnEdit.setOnClickListener(v->{
             iClickItem.update(question);
@@ -90,5 +91,14 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
             btnDelete=itemView.findViewById(R.id.btn_delete_question);
 
         }
+    }
+
+    public String convertToWhitespace (String string){
+        int error = 14;
+        String result="";
+        for(int i=0;i<=string.length()+error;i++){
+            result+=" ";
+        }
+        return result;
     }
 }

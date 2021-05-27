@@ -24,4 +24,9 @@ public class Question implements Serializable {
     private  String questionContent;
     @SerializedName("deleted")
     private  boolean isDeleted;
+
+    public Question(Topic topic, String questionContent) {
+        this.topic = topic;
+        this.questionContent = questionContent;
+    }
 }
