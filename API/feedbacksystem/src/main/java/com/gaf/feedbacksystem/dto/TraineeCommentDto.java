@@ -37,8 +37,6 @@ public class TraineeCommentDto {
         getPrimaryKey().setTrainee(trainee);
     }
 
-
-
     private String comment;
     public String getComment() {
         return comment;
