@@ -3,6 +3,7 @@ package com.gaf.feedbacksystem.entity;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -32,11 +33,11 @@ public class Class {
 
     @JsonFormat(pattern="dd/MM/yyyy")
     @Column(name = "startTime",columnDefinition = "DATE")
-    private LocalDate  startTime;
+    private Date  startTime;
     
     @JsonFormat(pattern="dd/MM/yyyy")
     @Column(name ="endTime",columnDefinition = "DATE")
-    private LocalDate  endTime;
+    private Date endTime;
 
     private boolean isDeleted = false;
 

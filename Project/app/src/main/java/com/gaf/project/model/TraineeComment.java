@@ -1,6 +1,8 @@
 package com.gaf.project.model;
 
 import com.gaf.project.model.Trainee;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import kotlin.jvm.Transient;
 import lombok.AllArgsConstructor;
@@ -8,51 +10,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class TraineeComment{
-
-   TraineeCommentId primaryKey = new TraineeCommentId();
-
-    TraineeCommentId getPrimaryKey(){
-        return primaryKey;
-    }
-
-    public Class getmClass() {
-        return getPrimaryKey().getMClass();
-    }
-    public void setmClass(Class mClass) {
-        getPrimaryKey().setMClass(mClass);
-    }
-
-
-    public Module getModule() {
-        return getPrimaryKey().getModule();
-    }
-    public void setModule(Module module) {
-        getPrimaryKey().setModule(module);
-    }
-
-
-    public Trainee getTraine() {
-        return getPrimaryKey().getTrainee();
-    }
-    public void setTrainee(Trainee trainee) {
-        getPrimaryKey().setTrainee(trainee);
-    }
-
-
+    @SerializedName("mClass")
+    @Expose
+    private Class mClass;
+    @SerializedName("module")
+    @Expose
+    private Module module;
+    @SerializedName("trainee")
+    @Expose
+    private Trainee trainee;
+    @SerializedName("comment")
+    @Expose
     private String comment;
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
 }
 
