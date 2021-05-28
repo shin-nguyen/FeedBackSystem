@@ -88,95 +88,91 @@ public class ActionQuestionFragment extends Fragment {
         btnBack = view.findViewById(R.id.btn_back);
         btnSave = view.findViewById(R.id.btn_save);
 
-        if(mission.equals(SystemConstant.ADD)){
+        if(mission.equals(SystemConstant.ADD)) {
             title.setText("Add Question");
             topicName.setVisibility(View.GONE);
-
-            Call<TopicResponse> callTopic = topicService.loadListTopic();
-            callTopic.enqueue(new Callback<TopicResponse>() {
-                @Override
-                public void onResponse(Call<TopicResponse> call, Response<TopicResponse> response) {
-                    new Thread(()-> {
-                        if (response.isSuccessful()&& response.body()!=null){
-                            topicList= response.body().getTopic();
-                            topicArrayAdapter =
-                                    new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, topicList);
-                            sprTopic.setAdapter(topicArrayAdapter);
-                        }}).run();
-                }
-                @Override
-                public void onFailure(Call<TopicResponse> call, Throwable t) {
-                    Log.e("Error",t.getLocalizedMessage());
-                    showToast("Error");
-                }
-            });
-
-
-            btnSave.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showToast("add");
-
-                    Topic topic = (Topic) sprTopic.getSelectedItem();
-                    String qsContent = String.valueOf(questionContent.getText());
-
-                    Question newQuestion= new Question(topic,qsContent);
-
-                    Call<Question> call =  questionService.create( newQuestion );
-                    call.enqueue(new Callback<Question>() {
-                        @Override
-                        public void onResponse(Call<Question> call, Response<Question> response) {
-                            if (response.isSuccessful()&&response.body()!=null) {
-                                showSuccessDialog("Add Success!");
-                                Log.e("Success","Update Question success");
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Question> call, Throwable t) {
-                            Log.e("Error",t.getLocalizedMessage());
-                            showFailDialog("Error");
-                        }
-                    });
-                    Log.e("Success","Add Question success");
-                }
-            });
         }
 
-        if(mission.equals(SystemConstant.UPDATE)){
+        if(mission.equals(SystemConstant.UPDATE)) {
 
             title.setText("Edit Question");
             topicLayoutBox.setVisibility(View.GONE);
             topicName.setText(String.valueOf(question.getTopic().getTopicID()));
             questionContent.setText(question.getQuestionContent());
+        }
 
-            btnSave.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        Call<TopicResponse> callTopic = topicService.loadListTopic();
+        callTopic.enqueue(new Callback<TopicResponse>() {
+            @Override
+            public void onResponse(Call<TopicResponse> call, Response<TopicResponse> response) {
+                new Thread(()-> {
+                    if (response.isSuccessful()&& response.body()!=null){
+                        topicList= response.body().getTopic();
+                        topicArrayAdapter =
+                                new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, topicList);
+                        sprTopic.setAdapter(topicArrayAdapter);
+                    }}).run();
+            }
+            @Override
+            public void onFailure(Call<TopicResponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showToast("Error");
+            }
+        });
 
-                    String qsContent = String.valueOf(questionContent.getText());
-                    question.setQuestionContent(qsContent);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                    Call<Question> call =  questionService.update( question );
+                Topic topic = (Topic) sprTopic.getSelectedItem();
+                String qsContent = String.valueOf(questionContent.getText());
+
+                if (mission.equals(SystemConstant.ADD)) {
+                    Question newQuestion = new Question(topic, qsContent);
+
+                    Call<Question> call = questionService.create(newQuestion);
                     call.enqueue(new Callback<Question>() {
                         @Override
                         public void onResponse(Call<Question> call, Response<Question> response) {
-                            if (response.isSuccessful()&&response.body()!=null) {
-                                showSuccessDialog("Edit Success!");
-                                Log.e("Success","Update Question success");
+                            if (response.isSuccessful() && response.body() != null) {
+                                showSuccessDialog("Add Success!");
+                                Log.e("Success", "Update Question success");
                             }
                         }
 
                         @Override
                         public void onFailure(Call<Question> call, Throwable t) {
-                            Log.e("Error",t.getLocalizedMessage());
+                            Log.e("Error", t.getLocalizedMessage());
                             showFailDialog("Error");
                         }
                     });
-                    Log.e("Success","Update Question success");
+                    Log.e("Success", "Add Question success");
                 }
-            });
-        }
+
+                if (mission.equals(SystemConstant.UPDATE)) {
+
+                    question.setQuestionContent(qsContent);
+
+                    Call<Question> callUpdate = questionService.update(question);
+                    callUpdate.enqueue(new Callback<Question>() {
+                        @Override
+                        public void onResponse(Call<Question> call, Response<Question> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                showSuccessDialog("Edit Success!");
+                                Log.e("Success", "Update Question success");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Question> call, Throwable t) {
+                            Log.e("Error", t.getLocalizedMessage());
+                            showFailDialog("Error");
+                        }
+                    });
+                    Log.e("Success", "Update Question success");
+                }
+            }
+        });
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
