@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.gaf.project.R;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Answer;
+import com.gaf.project.model.Answer1;
 import com.gaf.project.model.Class;
 import com.gaf.project.model.Module;
 import com.gaf.project.model.Question;
@@ -47,8 +48,8 @@ public class PieChart2Fragment extends Fragment{
 
     private AnswerService answerService;
     private QuestionService questionService;
-    private List<Answer> answerList;
-    private List<Answer> answerListByQuestion;
+    private List<Answer1> answerList;
+    private List<Answer1> answerListByQuestion;
     private List<Question> questionListByTopic;
 
     private TextView tvTest;

@@ -9,6 +9,7 @@ import com.gaf.project.service.AnswerService;
 import com.gaf.project.service.AssignmentService;
 import com.gaf.project.service.AuthenticationService;
 import com.gaf.project.service.ClassService;
+import com.gaf.project.service.CommentService;
 import com.gaf.project.service.FeedbackService;
 import com.gaf.project.service.ModuleService;
 import com.gaf.project.service.QuestionService;
@@ -82,5 +83,11 @@ public class ApiUtils {
         return RetrofitConfig.getInstance()
                 .builderRetrofitAuth()
                 .create(AnswerService.class);
+    }
+
+    public static CommentService getCommentService() {
+        return RetrofitConfig.getInstance()
+                .builderRetrofitAuth()
+                .create(CommentService.class);
     }
 }
