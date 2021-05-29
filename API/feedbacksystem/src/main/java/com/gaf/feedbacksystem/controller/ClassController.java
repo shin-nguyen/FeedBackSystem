@@ -128,6 +128,36 @@ public class ClassController {
         }
     }
 
+    @PutMapping(value = "/{idOld}/{idNew}")
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    public ResponseEntity<ClassDto> updateByTrainee(@PathVariable(value = "idOld") Integer oldIdTrainee,
+                                                    @PathVariable(value = "idNew") Integer newIdTrainee,
+                                                    @Valid  @RequestBody ClassDto classDto){
+        try {
+            final ClassDto updatedEmployee = classService.updateTrainee(classDto,oldIdTrainee,newIdTrainee);
+
+            return ResponseEntity.ok(updatedEmployee);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+        }
+    }
+
+    @PutMapping(value = "/{id}")
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    public  ResponseEntity<ClassDto> deleteTrainee(@PathVariable (name = "id") String id,
+                                                @Valid  @RequestBody ClassDto classDto){
+
+        try {
+            final ClassDto updatedEmployee = classService.deleteTrainee(id,classDto);
+
+            return ResponseEntity.ok(updatedEmployee);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+        }
+    }
+
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
     public Map<String, Boolean> delete(@PathVariable (name = "id") Integer id){

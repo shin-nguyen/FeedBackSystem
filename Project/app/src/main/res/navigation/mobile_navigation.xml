@@ -66,7 +66,11 @@
         android:id="@+id/nav_enrollment"
         android:name="com.gaf.project.fragment.EnrollmentFragment"
         android:label="fragment_enrollment"
-        tools:layout="@layout/fragment_enrollment" />
+        tools:layout="@layout/fragment_enrollment" >
+        <action
+            android:id="@+id/action_nav_enrollment_to_editEnrollmentFragment"
+            app:destination="@id/editEnrollmentFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_feedback"
@@ -166,5 +170,10 @@
         android:name="com.gaf.project.fragment.AddModuleFragment"
         android:label="fragment_add_module"
         tools:layout="@layout/fragment_add_module" />
+    <fragment
+        android:id="@+id/editEnrollmentFragment"
+        android:name="com.gaf.project.fragment.EditEnrollmentFragment"
+        android:label="fragment_edit_enrollment"
+        tools:layout="@layout/fragment_edit_enrollment" />
 
 </navigation>

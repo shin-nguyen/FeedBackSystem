@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -58,7 +59,7 @@ public class Class implements Serializable {
 
     @SerializedName("trainees")
     @Expose
-    private Collection<Trainee> trainees = null;
+    private Set<Trainee> trainees = null;
 
     @Override
     public String toString() {
