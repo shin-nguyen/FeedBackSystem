@@ -65,7 +65,7 @@
             android:paddingLeft="10dp"
             android:enabled="false"
             android:textStyle="bold"
-            android:id="@id/txt_trainer_name"/>
+            android:id="@+id/txt_trainee_name"/>
 
     </LinearLayout>
 
