@@ -18,7 +18,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Trainee  implements Serializable {
-    @SerializedName("username")
+    @SerializedName("userName")
     private String userName;
 
     @SerializedName("name")

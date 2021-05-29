@@ -27,7 +27,7 @@ public class TraineeAssignmentDto {
     }
 
     @Transient
-    public TraineeDto getTraine() {
+    public TraineeDto getTrainee() {
         return getPrimaryKey().getTrainee();
     }
     public void setTrainee(TraineeDto trainee) {

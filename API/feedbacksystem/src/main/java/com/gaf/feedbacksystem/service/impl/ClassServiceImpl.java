@@ -64,25 +64,22 @@ public class ClassServiceImpl implements IClassService {
 	}
 	@Override
 	@Transactional
-	public ClassDto updateTrainee(Integer oldIdClass, Integer newIdClass, TraineeDto traineeDto) {
-		Class oldClass=  classRepository.findByClassID(oldIdClass);
+	public ClassDto updateTrainee(Integer oldIdClass, Integer newIdClass, String  idTrainee) {
 		Class newClass =  classRepository.findByClassID(newIdClass);
-		Trainee trainee = traineeRepository.findByUserName(traineeDto.getUserName());
+		Trainee trainee = traineeRepository.findByUserName(idTrainee);
 
-		ClassDto oldClassDto=deleteTrainee(traineeDto.getUserName(),
-				ObjectMapperUtils.map(oldClass, ClassDto.class));
-
+		deleteTrainee(idTrainee, oldIdClass);
 		newClass.addTrainee(trainee);
-
 
 		return ObjectMapperUtils.map(classRepository.save(newClass), ClassDto.class);
 	}
 
 	@Override
-	public ClassDto deleteTrainee(String id,ClassDto classDto) {
-		Class oldClass=  classRepository.findByClassID(classDto.getClassID());
+	@Transactional
+	public ClassDto deleteTrainee(String idTrainee,Integer idClass) {
+		Class oldClass=  classRepository.findByClassID(idClass);
 
-		Trainee trainee = 	traineeRepository.findByUserName(id);
+		Trainee trainee = 	traineeRepository.findByUserName(idTrainee);
 		oldClass.removeTrainee(trainee);
 
 		return ObjectMapperUtils.map(classRepository.save(oldClass), ClassDto.class);

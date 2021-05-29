@@ -22,7 +22,6 @@ public interface ClazzRepository extends JpaRepository<Class, Integer> {
     @Query("select c from Class c join fetch c.trainees enrollment   where enrollment.userName = :userName")
     List<Class> findAllByTrainee(@Param("userName") String userName);
 
-    Class save(Class aClazz);
     Class findByClassID(Integer classID);
     @Transactional
     @Modifying

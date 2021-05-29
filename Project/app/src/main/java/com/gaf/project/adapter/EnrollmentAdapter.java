@@ -84,10 +84,16 @@ public class EnrollmentAdapter extends RecyclerView.Adapter<EnrollmentAdapter.En
         public EnrollmentViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            traineeId = itemView.findViewById(R.id.trainee_id);
-            traineeName = itemView.findViewById(R.id.trainee_name);
-            classId = itemView.findViewById(R.id.class_id);
-            className = itemView.findViewById(R.id.class_name);
+            traineeId = itemView.findViewById(R.id.txt_trainee_id);
+            traineeName = itemView.findViewById(R.id.txt_trainee_name);
+            classId = itemView.findViewById(R.id.txt_class_id);
+            className = itemView.findViewById(R.id.txt_class_name);
+
+            detailButton = itemView.findViewById(R.id.btn_detail_enrollment);
+            editButton = itemView.findViewById(R.id.btn_edit_enrollment);
+            deleteButton = itemView.findViewById(R.id.btn_delete_enrollment);
+
+
         }
     }
 
