@@ -88,11 +88,11 @@
             app:destination="@id/review_feedback_fragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/nav_join"
-        android:name="com.gaf.project.fragment.JoinFragment"
-        android:label="fragment_join"
-        tools:layout="@layout/fragment_join" />
+<!--    <fragment-->
+<!--        android:id="@+id/nav_join"-->
+<!--        android:name="com.gaf.project.fragment.JoinFragment"-->
+<!--        android:label="fragment_join"-->
+<!--        tools:layout="@layout/fragment_join" />-->
 
     <fragment
         android:id="@+id/nav_log_out"
