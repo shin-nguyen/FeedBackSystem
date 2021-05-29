@@ -84,7 +84,7 @@
             android:layout_marginRight="30dp"
             android:text="Back"
             android:id="@+id/btn_back"
-            android:background="@drawable/search_button_format"
+            android:background="@drawable/background_search_button"
             />
     </RelativeLayout>
 

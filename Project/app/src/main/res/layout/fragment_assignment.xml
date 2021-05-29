@@ -56,7 +56,7 @@
                 android:layout_marginLeft="30dp"
                 android:ems="10"
                 android:layout_weight="1"
-                android:background="@drawable/search_box_format"
+                android:background="@drawable/background_search_box"
                 android:layout_marginRight="20dp"
                 android:paddingLeft="20dp"
                 android:paddingTop="8dp"

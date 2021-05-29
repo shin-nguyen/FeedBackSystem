@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:src="@drawable/r2s_logo"
+        android:src="@drawable/img_r2s_logo"
         android:padding="10dp" />
 
     <TextView
@@ -129,7 +129,7 @@
         android:textSize="20dp"
         android:textColor="@color/main_color"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:background="@drawable/item_format"
+        android:background="@drawable/background_item"
         android:text="@string/login_button" />
 
     <LinearLayout
