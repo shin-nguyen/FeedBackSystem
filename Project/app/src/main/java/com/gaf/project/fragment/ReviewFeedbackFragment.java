@@ -2,6 +2,9 @@ package com.gaf.project.fragment;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -15,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -52,17 +56,13 @@ public class ReviewFeedbackFragment extends Fragment {
     Button saveOrEditButton;
     private Feedback feedback;
     private FeedbackService feedbackService;
-    private List<Topic> listTopic;
-    private TopicService topicService;
-    private TopicReviewFeedbackAdapter topicReviewFeedbackAdapterAdapter;
-    private RecyclerView recyclerTopicReviewFeedback;
-    private List<Question> questionList;
+    private Set<Topic> topicSet;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         feedbackService = ApiUtils.getFeedbackService();
-        topicService = ApiUtils.getTopicService();
     }
 
     @Nullable
@@ -78,7 +78,7 @@ public class ReviewFeedbackFragment extends Fragment {
         TextView title = view.findViewById(R.id.feedback_review_title);
         TextView feedbackTitle = view.findViewById(R.id.feedback_title);
         TextView adminId = view.findViewById(R.id.txt_admin_id);
-        //TextView item = view.findViewById(R.id.item);
+        TextView item = view.findViewById(R.id.txt_topic_question);
 
 
         mission = getArguments().getString("mission");
@@ -88,40 +88,41 @@ public class ReviewFeedbackFragment extends Fragment {
         String userName = SessionManager.getInstance().getUserName();
         adminId.setText(userName);
 
-        listTopic = new ArrayList<>();
-        questionList = new ArrayList<>();
+        topicSet = new HashSet<>();
+        for (Question question:feedback.getQuestions()) {
+            topicSet.add(question.getTopic());
+        }
 
-        //String questionTmp = "";
-        //load list topic
-        Call<TopicResponse> topicCall = topicService.loadListTopic();
-        topicCall.enqueue(new Callback<TopicResponse>() {
-            @Override
-            public void onResponse(Call<TopicResponse> call, Response<TopicResponse> response) {
-                if (response.isSuccessful()&&response.body()!=null){
-                    listTopic = response.body().getTopic();
-                    topicReviewFeedbackAdapterAdapter.setData(listTopic);
-                    for (Topic topic: listTopic
-                         ) {
-                        for (Question question: feedback.getQuestions()
-                             ) {
-                            if (question.getTopic().getTopicID() == topic.getTopicID()){
-                                questionList.add(question);
-                            }
-                        }
-                    }
+        SpannableStringBuilder sb = new SpannableStringBuilder("");
+
+        Integer len = 0;
+//        topicReviewFeedbackAdapterAdapter.setData(listTopic);
+        for (Topic topic: topicSet) {
+            String topicName = topic.getTopicName()+"\n";
+            sb.append(topicName);
+            sb.setSpan(Typeface.BOLD,len,len+topicName.length(),Spannable.SPAN_PRIORITY);
+            len+=topicName.length();
+
+            String questionName = "";
+            for (Question question: feedback.getQuestions()) {
+                if (question.getTopic().getTopicID() == topic.getTopicID()){
+                    questionName= questionName + question.getQuestionContent() + "\n";
                 }
             }
+            questionName= questionName + "\n";
 
-            @Override
-            public void onFailure(Call<TopicResponse> call, Throwable t) {
-                Log.e("Can not get list topic",t.getLocalizedMessage());
-            }
-        });
+            len+=questionName.length();
+            sb.append(questionName);
+        }
 
-            // Choose mission to set text view
+        item.setText(sb);
+
+
+        // Choose mission to set text view
         if (mission == SystemConstant.ADD){
             title.setText("Review New Feedback");
             message = "Add Success!";
+            //set event for saving or editting
             saveOrEditButton.setOnClickListener(v->{
                 Call<Feedback> feedbackCall = feedbackService.create(feedback);
                 feedbackCall.enqueue(new Callback<Feedback>() {
@@ -151,12 +152,12 @@ public class ReviewFeedbackFragment extends Fragment {
             saveOrEditButton.setText("Edit");
             saveOrEditButton.setOnClickListener(v -> editFeedBack());
         }
-        topicReviewFeedbackAdapterAdapter = new TopicReviewFeedbackAdapter(questionList);
+//        topicReviewFeedbackAdapterAdapter = new TopicReviewFeedbackAdapter(questionList);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
-        recyclerTopicReviewFeedback = view.findViewById(R.id.rcv_topic_in_review_feedback);
-        recyclerTopicReviewFeedback.setLayoutManager(linearLayoutManager);
-        recyclerTopicReviewFeedback.setAdapter(topicReviewFeedbackAdapterAdapter);
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
+//        recyclerTopicReviewFeedback = view.findViewById(R.id.rcv_topic_in_review_feedback);
+//        recyclerTopicReviewFeedback.setLayoutManager(linearLayoutManager);
+//        recyclerTopicReviewFeedback.setAdapter(topicReviewFeedbackAdapterAdapter);
 
         return view;
     }
@@ -179,4 +180,8 @@ public class ReviewFeedbackFragment extends Fragment {
         FailDialog newFragment = new FailDialog(message);
         newFragment.show(ft, "dialog fail");
     }
+    public void showToast(String string){
+        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
+    }
+
 }

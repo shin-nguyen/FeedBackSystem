@@ -138,7 +138,7 @@
         tools:layout="@layout/add_assignment"/>
     <fragment
         android:id="@+id/add_question_fragment"
-        android:name="com.gaf.project.fragment.AddQuestionFragment"
+        android:name="com.gaf.project.fragment.ActionQuestionFragment"
         android:label="AddQuestionFragment"
         tools:layout="@layout/add_question"/>
 

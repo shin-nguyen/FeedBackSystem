@@ -121,7 +121,6 @@ public class AddModuleFragment extends Fragment {
 
 
         Call<AdminResponse> callAdmin =  adminService.loadListAdmin();
-        new Thread(()-> {
             callAdmin.enqueue(new Callback<AdminResponse>() {
                 @Override
                 public void onResponse(Call<AdminResponse> call, Response<AdminResponse> response) {
@@ -138,10 +137,10 @@ public class AddModuleFragment extends Fragment {
                     Log.e("Error",t.getLocalizedMessage());
                     showToast("Error");
                 }
-            });}).run();
+            });
 
         Call<FeedbackResponse> callFeedback =  feedbackService.getListFeedback();
-        new Thread(()-> {
+
             callFeedback.enqueue(new Callback<FeedbackResponse>() {
                 @Override
                 public void onResponse(Call<FeedbackResponse> call, Response<FeedbackResponse> response) {
@@ -158,7 +157,7 @@ public class AddModuleFragment extends Fragment {
                     Log.e("Error",t.getLocalizedMessage());
                     showToast("Error");
                 }
-            });}).run();
+            });
 
 
         btnSave.setOnClickListener(v->{

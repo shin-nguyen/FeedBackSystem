@@ -36,7 +36,6 @@ public class AssignmentServiceImpl implements IAssignmentService {
         List<Assignment> assignments = assignmentRepository.findByTrainerUserName(username);
         List<AssignmentDto> assignmentDtos = ObjectMapperUtils.mapAll(assignments, AssignmentDto.class);
         return assignmentDtos;
-
     }
 
     @Override

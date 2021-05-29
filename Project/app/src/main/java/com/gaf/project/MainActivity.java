@@ -107,15 +107,9 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-//                if (item.getItemId() == R.id.nav_assignment){
-//
-//                    Toast.makeText(getApplicationContext(), "Assignment", Toast.LENGTH_SHORT).show();
-//                }
                 if (item.getItemId() == R.id.nav_join){
-                    //Toast.makeText(getApplicationContext(), "Join", Toast.LENGTH_SHORT).show();
-
-
                     DialogFragment dialogFragment = JoinFragment.newInstance();
+                    dialogFragment.setCancelable(false);
                     dialogFragment.show(getSupportFragmentManager(), "join");
                 }
                 NavigationUI.onNavDestinationSelected(item, navController);
