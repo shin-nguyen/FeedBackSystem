@@ -7,60 +7,68 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.gaf.project.R;
+import com.gaf.project.model.Class;
+import com.gaf.project.model.Enrollment;
+import com.gaf.project.model.Trainee;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DetailEnrollmentFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 public class DetailEnrollmentFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private TextView idTrainee,phone,traineeName,address,email;
+    private TextView idClass, startTime, endTime, capacity,className;
+    private Button  btnBack;
 
     public DetailEnrollmentFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DetailEnrollmentFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DetailEnrollmentFragment newInstance(String param1, String param2) {
-        DetailEnrollmentFragment fragment = new DetailEnrollmentFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detail_enrollment, container, false);
+        View view =  inflater.inflate(R.layout.fragment_detail_enrollment, container, false);
+        initComponents(view);
+
+        Enrollment enrollment = new Enrollment();
+        DateFormat dfs = new SimpleDateFormat("dd/MM/yyyy");
+        enrollment = (Enrollment) getArguments().getSerializable("item");
+
+        Trainee trainee = enrollment.getTrainee();
+        Class mClass = enrollment.getMClass();
+
+        idTrainee.setText(trainee.getUserName());
+        phone.setText(trainee.getPhone());
+        traineeName.setText(trainee.getName());
+        address.setText(trainee.getAddress());
+        email.setText(trainee.getEmail());
+
+        idClass.setText(mClass.getClassName());
+        startTime.setText(dfs.format(mClass.getStartTime()));
+        className.setText(mClass.getClassName());
+        endTime.setText(dfs.format(mClass.getEndTime()));
+        capacity.setText(mClass.getCapacity());
+
+        return  view;
+    }
+    private void initComponents(View view) {
+        idTrainee = (TextView)view.findViewById(R.id.txt_trainee_id);
+        phone = view.findViewById(R.id.txt_trainee_phone);
+        traineeName = view.findViewById(R.id.txt_trainee_name);
+        address = view.findViewById(R.id.txt_trainee_address);
+        email = view.findViewById(R.id.txt_trainee_email);
+
+        idClass = (TextView)view.findViewById(R.id.txt_class_id);
+
+        startTime = (TextView)view.findViewById(R.id.txt_class_start_time);
+        className = (TextView)view.findViewById(R.id.txt_class_name);
+        endTime = (TextView)view.findViewById(R.id.txt_class_end_time);
+        capacity = (TextView)view.findViewById(R.id.txt_class_capicity);
+
+        btnBack  = (Button)view.findViewById(R.id.btn_back);
     }
 }
