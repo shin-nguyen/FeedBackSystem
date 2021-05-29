@@ -33,7 +33,7 @@
             android:layout_height="45sp"
             android:ems="10"
             android:layout_weight="1"
-            android:background="@drawable/gray_common_box"
+            android:background="@drawable/background_gray_box"
             android:paddingLeft="10dp"
             android:enabled="false"
             android:textStyle="bold"
@@ -61,11 +61,11 @@
             android:layout_height="45sp"
             android:ems="10"
             android:layout_weight="1"
-            android:background="@drawable/gray_common_box"
+            android:background="@drawable/background_gray_box"
             android:paddingLeft="10dp"
             android:enabled="false"
             android:textStyle="bold"
-            android:id="@id/txt_trainer_name"/>
+            android:id="@id/txt_trainer_id"/>
 
     </LinearLayout>
 
@@ -89,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/common_box"
+            android:background="@drawable/background_common_box"
             android:orientation="horizontal">
 
             <Spinner

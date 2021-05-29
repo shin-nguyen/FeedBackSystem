@@ -3,6 +3,7 @@ package com.gaf.feedbacksystem.controller;
 import com.gaf.feedbacksystem.MyResourceNotFoundException;
 import com.gaf.feedbacksystem.constant.SystemConstant;
 import com.gaf.feedbacksystem.dto.AssignmentDto;
+import com.gaf.feedbacksystem.dto.ClassDto;
 import com.gaf.feedbacksystem.dto.TrainerDto;
 import com.gaf.feedbacksystem.service.IAssignmentService;
 import com.gaf.feedbacksystem.service.ITrainerService;
@@ -33,7 +34,7 @@ public class AssignmentController {
     @Autowired
     private  ITrainerService trainerService;
 
-    @Operation(description = "Thao tac Assignment", responses = {
+    @Operation(description = "Assignment", responses = {
             @ApiResponse(
                     content = @Content(
                             array = @ArraySchema(
@@ -70,6 +71,27 @@ public class AssignmentController {
         catch (MyResourceNotFoundException exc) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Assignment Not Found", exc);
         }	
+    }
+
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    @GetMapping(value = "/loadListAssignmentByTrainer", produces = "application/json")
+    public ResponseEntity<Map<String, List<?>>> loadListAssignmentByTrainer(){
+        try{
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                    .getPrincipal();
+            String userName = userDetails.getUsername();
+
+            List<AssignmentDto> assignmentDtoList = assignmentService.findByTrainerUserName(userName);
+            if ( assignmentDtoList.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            Map result = new HashMap();
+            result.put("assignments", assignmentDtoList);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Assignment Not Found", exc);
+        }
     }
 
 

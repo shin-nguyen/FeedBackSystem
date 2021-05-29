@@ -104,13 +104,12 @@ public class ActionQuestionFragment extends Fragment {
         callTopic.enqueue(new Callback<TopicResponse>() {
             @Override
             public void onResponse(Call<TopicResponse> call, Response<TopicResponse> response) {
-                new Thread(()-> {
-                    if (response.isSuccessful()&& response.body()!=null){
-                        topicList= response.body().getTopic();
-                        topicArrayAdapter =
-                                new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, topicList);
-                        sprTopic.setAdapter(topicArrayAdapter);
-                    }}).run();
+                if (response.isSuccessful()&& response.body()!=null) {
+                    topicList = response.body().getTopic();
+                    topicArrayAdapter =
+                            new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, topicList);
+                    sprTopic.setAdapter(topicArrayAdapter);
+                };
             }
             @Override
             public void onFailure(Call<TopicResponse> call, Throwable t) {
