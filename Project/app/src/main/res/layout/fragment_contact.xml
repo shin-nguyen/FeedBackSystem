@@ -132,19 +132,19 @@
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:src="@drawable/ins"/>
+            android:src="@drawable/img_ins"/>
 
         <ImageView
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:src="@drawable/twt"/>
+            android:src="@drawable/img_twt"/>
 
         <ImageView
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:src="@drawable/fb"/>
+            android:src="@drawable/img_fb"/>
 
         <ImageView
             android:layout_width="0dp"

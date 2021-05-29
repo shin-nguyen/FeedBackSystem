@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/common_box"
+            android:background="@drawable/background_common_box"
             android:orientation="horizontal">
 
             <Spinner
@@ -80,7 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/common_box"
+            android:background="@drawable/background_common_box"
             android:orientation="horizontal">
 
             <Spinner
@@ -127,7 +127,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/common_box"
+            android:background="@drawable/background_common_box"
             android:orientation="horizontal">
 
             <Spinner

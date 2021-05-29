@@ -14,11 +14,11 @@
         <item
             android:id="@+id/nav_homepage"
             android:title="HOME PAGE"
-            android:icon="@drawable/ic_baseline_group_24"/>
+            android:icon="@drawable/ic_home"/>
         <item
             android:id="@+id/nav_assignment"
             android:title="ASSIGNMENT"
-            android:icon="@drawable/ic_baseline_group_24"/>
+            android:icon="@drawable/ic_bag"/>
         <item
             android:id="@+id/nav_class"
             android:title="CLASS"
@@ -30,30 +30,30 @@
         <item
             android:id="@+id/nav_enrollment"
             android:title="ENROLLMENT"
-            android:icon="@drawable/ic_baseline_group_24"/>
+            android:icon="@drawable/ic_time_table"/>
         <item
             android:id="@+id/nav_feedback"
             android:title="FEEDBACK"
-            android:icon="@drawable/ic_baseline_group_24"/>
+            android:icon="@drawable/ic_loading"/>
         <item
             android:id="@+id/nav_result"
             android:title="RESULT"
-            android:icon="@drawable/ic_baseline_group_24"/>
+            android:icon="@drawable/ic_document"/>
         <item
             android:id="@+id/nav_question"
             android:title="QUESTION"
-            android:icon="@drawable/ic_baseline_group_24"/>
+            android:icon="@drawable/ic_warning"/>
         <item
             android:id="@+id/nav_contact"
             android:title="CONTACT"
-            android:icon="@drawable/ic_baseline_group_24"/>
+            android:icon="@drawable/ic_phone"/>
         <item
             android:id="@+id/nav_join"
             android:title="JOIN"
             android:icon="@drawable/ic_baseline_group_24"/>
         <item
             android:id="@+id/nav_log_out"
-            android:icon="@drawable/ic_baseline_group_24"
+            android:icon="@drawable/ic_exit"
             android:title="LOGOUT" />
 
     </group>
