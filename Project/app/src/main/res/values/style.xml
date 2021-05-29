@@ -37,4 +37,8 @@
     </style>
 
     <string name="login_button">LOGIN</string>
+
+    <style name="JoinDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>

@@ -1,15 +1,24 @@
 package com.gaf.project;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.gaf.project.constant.SystemConstant;
+import com.gaf.project.dialog.SuccessDialog;
+import com.gaf.project.fragment.JoinFragment;
 import com.gaf.project.utils.SessionManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -17,6 +26,8 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +44,9 @@ public class MainActivity extends AppCompatActivity {
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
         Menu menu = navigationView.getMenu();
+
 
         String userRole = SessionManager.getInstance().getUserRole();
 
@@ -90,6 +103,26 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+//                if (item.getItemId() == R.id.nav_assignment){
+//
+//                    Toast.makeText(getApplicationContext(), "Assignment", Toast.LENGTH_SHORT).show();
+//                }
+                if (item.getItemId() == R.id.nav_join){
+                    //Toast.makeText(getApplicationContext(), "Join", Toast.LENGTH_SHORT).show();
+
+
+                    DialogFragment dialogFragment = JoinFragment.newInstance();
+                    dialogFragment.show(getSupportFragmentManager(), "join");
+                }
+                NavigationUI.onNavDestinationSelected(item, navController);
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
     }
 
     @Override
