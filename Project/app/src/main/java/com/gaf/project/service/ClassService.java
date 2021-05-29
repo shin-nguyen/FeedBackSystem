@@ -30,4 +30,8 @@ public interface ClassService {
 
     @PUT("class/")
     Call<Class> update(@Body Class mClass);
+
+    @PUT("class/{id}")
+    Call<Class> deleteTrainee(@Path("id") String id,@Body Class mClass);
+
 }

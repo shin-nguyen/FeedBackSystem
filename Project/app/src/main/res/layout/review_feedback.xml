@@ -78,15 +78,17 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+       <TextView
+           android:id="@+id/txt_topic_question"
+           android:layout_width="match_parent"
+           android:textColor="@color/black"
+           style="@style/TextItemStyle"
+           android:text="Ec"
+           android:layout_height="wrap_content">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/rcv_topic_in_review_feedback"/>
-        </LinearLayout>
+       </TextView>
+
+
 
     </LinearLayout>
 

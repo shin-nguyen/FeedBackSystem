@@ -28,4 +28,5 @@ public interface ClazzRepository extends JpaRepository<Class, Integer> {
     @Modifying
     @Query("update Class set isDeleted =true where classID = :id ")
     void deleteByClassId(@Param("id") Integer id);
+
 }

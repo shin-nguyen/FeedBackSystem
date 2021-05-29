@@ -2,7 +2,9 @@ package com.gaf.feedbacksystem.service.impl;
 
 import com.gaf.feedbacksystem.dto.ClassDto;
 import com.gaf.feedbacksystem.entity.Class;
+import com.gaf.feedbacksystem.entity.Trainee;
 import com.gaf.feedbacksystem.repository.ClazzRepository;
+import com.gaf.feedbacksystem.repository.TraineeRepository;
 import com.gaf.feedbacksystem.service.IClassService;
 import com.gaf.feedbacksystem.utils.ObjectMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,9 @@ public class ClassServiceImpl implements IClassService {
 
     @Autowired
 	ClazzRepository classRepository;
-    
+
+    @Autowired
+	TraineeRepository traineeRepository;
 	@Override
 	public List<ClassDto> findAll() {
 		 List<Class> clazz = classRepository.findAllByDeletedIsFalse();
@@ -53,6 +57,23 @@ public class ClassServiceImpl implements IClassService {
 
 		oldClass.setClassName(classDto.getClassName());
 		oldClass.setCapacity(classDto.getCapacity());
+
+		return ObjectMapperUtils.map(classRepository.save(oldClass), ClassDto.class);
+	}
+	@Override
+	public ClassDto updateTrainee(ClassDto classDto, Integer oldIdTrainee, Integer newIdTrainee) {
+		Class oldClass=  classRepository.findByClassID(classDto.getClassID());
+
+
+		return ObjectMapperUtils.map(classRepository.save(oldClass), ClassDto.class);
+	}
+
+	@Override
+	public ClassDto deleteTrainee(String id,ClassDto classDto) {
+		Class oldClass=  classRepository.findByClassID(classDto.getClassID());
+
+		Trainee trainee = 	traineeRepository.findByUserName(id);
+		oldClass.removeTrainee(trainee);
 
 		return ObjectMapperUtils.map(classRepository.save(oldClass), ClassDto.class);
 	}

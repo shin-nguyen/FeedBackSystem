@@ -12,4 +12,8 @@ public interface IClassService {
 	ClassDto update(ClassDto classDto);
 	ClassDto save(ClassDto classDto);
 	void deleteById(Integer id);
+
+	ClassDto updateTrainee(ClassDto classDto,Integer oldIdTrainee, Integer newIdTrainee);
+
+	ClassDto deleteTrainee(String id,ClassDto classDto);
 }
