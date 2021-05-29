@@ -46,6 +46,7 @@ public class ClassFragment extends Fragment {
     private Button btnAddClass;
     private  String userRole;
     private  View view;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

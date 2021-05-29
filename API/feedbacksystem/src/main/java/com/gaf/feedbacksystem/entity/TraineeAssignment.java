@@ -21,6 +21,9 @@ import javax.persistence.*;
                 joinColumns = @JoinColumn(name = "registrationCode",referencedColumnName = "registrationCode")),
 })
 public class TraineeAssignment{
+
+    private static final long serialVersionUID = 1L;
+
     @EmbeddedId
     TraineeAssignmentID primaryKey = new TraineeAssignmentID();
 
@@ -37,13 +40,12 @@ public class TraineeAssignment{
     }
 
     @Transient
-    public Trainee getTraine() {
+    public Trainee getTrainee() {
         return getPrimaryKey().getTrainee();
     }
     public void setTrainee(Trainee trainee) {
         getPrimaryKey().setTrainee(trainee);
     }
-
 
 }
 

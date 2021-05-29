@@ -9,12 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +37,7 @@ public class QuestionController {
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
         catch (MyResourceNotFoundException exc) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Question Not Found", exc);
         }
     }
 
@@ -57,8 +54,50 @@ public class QuestionController {
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
         catch (MyResourceNotFoundException exc) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Question Not Found", exc);
         }
     }
 
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    @PostMapping(value = "/")
+    public QuestionDto create(@Valid @RequestBody QuestionDto questionDto){
+        try{
+            return  questionService.save(questionDto);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Question Not Found", exc);
+        }
+    }
+
+
+    @PutMapping(value = "/")
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    public ResponseEntity<QuestionDto> update(@Valid  @RequestBody QuestionDto questionDto){
+        try {
+            final QuestionDto updatedQuestion = questionService.update(questionDto);
+
+            return ResponseEntity.ok(updatedQuestion);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Question Not Found", exc);
+        }
+    }
+
+    @DeleteMapping(value = "/{id}")
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    public Map<String, Boolean> delete(@PathVariable (name = "id") Integer id) {
+        try {
+            Map<String, Boolean> response = new HashMap<>();
+            try {
+                questionService.deleteById(id);
+                response.put("deleted", Boolean.TRUE);
+
+            } catch (Exception exception) {
+                response.put("deleted", Boolean.FALSE);
+            }
+            return response;
+        } catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Question Not Found", exc);
+        }
+    }
 }

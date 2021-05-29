@@ -25,13 +25,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="450dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/review_content"
+        android:background="@drawable/background_review_content"
         android:orientation="vertical"
         android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:paddingTop="15dp"
         android:paddingBottom="15dp">
 
@@ -50,9 +51,11 @@
                 android:id="@+id/feedback_title"
                 style="@style/TextItemStyle"
                 android:layout_width="wrap_content"
+                android:textColor="@color/blue"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,37 +72,23 @@
             <TextView
                 android:id="@+id/txt_admin_id"
                 style="@style/TextItemStyle"
+                android:textColor="@color/blue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
 
+       <TextView
+           android:id="@+id/txt_topic_question"
+           android:layout_width="match_parent"
+           android:textColor="@color/black"
+           style="@style/TextItemStyle"
+           android:text="Ec"
+           android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+       </TextView>
 
-            <TextView
-                style="@style/TextViewStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Topic: " />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:text="- Question: " />
-
-        </LinearLayout>
 
     </LinearLayout>
 

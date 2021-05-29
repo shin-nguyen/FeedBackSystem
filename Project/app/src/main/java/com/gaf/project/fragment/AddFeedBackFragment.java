@@ -99,7 +99,6 @@ public class AddFeedBackFragment extends Fragment {
             try {
                 mFeedbackEdit = (Feedback) getArguments().getSerializable("item");
                 if (mFeedbackEdit != null) {
-
                     Log.e("Success","Get Class Success");
                 }
             }
@@ -108,6 +107,9 @@ public class AddFeedBackFragment extends Fragment {
             }
 
         }
+
+
+        //load type feedback
         Call<TypeFeedbackResponse> callTypeFeedback =  typeFeedbackService.loadListTypeFeedback();
             callTypeFeedback.enqueue(new Callback<TypeFeedbackResponse>() {
             @Override
@@ -122,17 +124,41 @@ public class AddFeedBackFragment extends Fragment {
             }
             @Override
             public void onFailure(Call<TypeFeedbackResponse> call, Throwable t) {
-                Log.e("Error",t.getLocalizedMessage());
-                showToast("Error");
+                Log.e("Can not get type of feedback",t.getLocalizedMessage());
+                showToast("Can not get type of feedback");
             }
         });
 
+            //
+        topicAdapter = new TopicAdapter();
+        listTopic = new ArrayList<>();
+
+        //load list topic
+        Call<TopicResponse> topicCall = topicService.loadListTopic();
+        topicCall.enqueue(new Callback<TopicResponse>() {
+            @Override
+            public void onResponse(Call<TopicResponse> call, Response<TopicResponse> response) {
+                if (response.isSuccessful()&&response.body()!=null){
+                    listTopic = response.body().getTopic();
+                    topicAdapter.setData(listTopic);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TopicResponse> call, Throwable t) {
+                Log.e("Can not get list topic",t.getLocalizedMessage());
+                showToast("Can not get list topic");
+            }
+        });
+
+
         btnBack.setOnClickListener(v -> getActivity().onBackPressed());
+
 
         btnReview.setOnClickListener(v -> {
             navigation = Navigation.findNavController(view);
             if (topicAdapter.getmListQuestion().isEmpty()){
-                showToast("Error");
+                showToast("Choose at least one question");
             }else {
                 if(mission.equals(SystemConstant.ADD)) {
                     TypeFeedback typeFeedback = (TypeFeedback) spnFeedbackType.getSelectedItem();
@@ -146,29 +172,9 @@ public class AddFeedBackFragment extends Fragment {
         });
 
         recyclerTopic = view.findViewById(R.id.rcv_topic_in_feedback);
+        recyclerTopic.setAdapter(topicAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         recyclerTopic.setLayoutManager(linearLayoutManager);
-
-
-        topicAdapter = new TopicAdapter();
-        listTopic = new ArrayList<>();
-        Call<TopicResponse> topicCall = topicService.loadListTopic();
-        topicCall.enqueue(new Callback<TopicResponse>() {
-            @Override
-            public void onResponse(Call<TopicResponse> call, Response<TopicResponse> response) {
-                if (response.isSuccessful()&&response.body()!=null){
-                    listTopic = response.body().getTopic();
-                    topicAdapter.setData(listTopic);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TopicResponse> call, Throwable t) {
-                Log.e("Error",t.getLocalizedMessage());
-                showToast("Error");
-            }
-        });
-        recyclerTopic.setAdapter(topicAdapter);
 
         return view;
     }
@@ -192,6 +198,7 @@ public class AddFeedBackFragment extends Fragment {
         FailDialog newFragment = new FailDialog(message);
         newFragment.show(ft, "dialog fail");
     }
+
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }

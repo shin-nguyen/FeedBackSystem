@@ -11,7 +11,7 @@
         android:layout_marginLeft="25dp"
         android:layout_marginRight="35dp"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/item_format"
+        android:background="@drawable/background_item"
         android:orientation="vertical"
         android:paddingLeft="20dp"
         android:paddingTop="15dp"
@@ -74,7 +74,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -91,7 +91,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
     </LinearLayout>
 
@@ -114,9 +114,9 @@
             android:insetTop="0dp"
             android:insetRight="0dp"
             android:insetBottom="0dp"
-            app:icon="@drawable/ic_menu_camera"
-            app:iconPadding="0dp"
-            app:iconSize="24dp"
+            app:icon="@drawable/ic_edit_icon"
+            app:iconSize="40dp"
+            android:paddingLeft="5dp"
             app:shapeAppearanceOverlay="@style/ButtonRounded" />
 
         <com.google.android.material.button.MaterialButton
@@ -124,9 +124,9 @@
             android:layout_height="48dp"
             android:id="@+id/btn_delete_question"
             style="@style/Widget.MaterialComponents.Button.Icon"
-            app:icon="@drawable/ic_menu_camera"
-            app:iconSize="24dp"
-            app:iconPadding="0dp"
+            app:icon="@drawable/ic_delete_icon"
+            app:iconSize="35dp"
+            android:paddingLeft="6.5dp"
             android:insetLeft="0dp"
             android:insetTop="0dp"
             android:insetRight="0dp"

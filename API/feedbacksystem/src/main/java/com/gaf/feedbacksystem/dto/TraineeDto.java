@@ -13,5 +13,4 @@ public class TraineeDto extends BaseUserDto {
     private Integer idSkill;
     private String activationCode;
     private String resetPasswordCode;
-    private Collection<Class> classes;
 }

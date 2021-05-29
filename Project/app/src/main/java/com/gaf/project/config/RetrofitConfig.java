@@ -31,7 +31,7 @@ public class RetrofitConfig {
                 .build();
     }
 
-    public Retrofit  builderRetrofitAuth(){
+    public static  Retrofit  builderRetrofitAuth(){
         GsonBuilder gsonBuilder = new GsonBuilder();
 
         Gson gson = gsonBuilder
