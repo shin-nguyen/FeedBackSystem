@@ -50,19 +50,18 @@
             android:paddingBottom="20dp"
             android:id="@+id/search_field">
 
-            <EditText
+            <SearchView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginLeft="30dp"
-                android:ems="10"
                 android:layout_weight="1"
                 android:background="@drawable/background_search_box"
-                android:layout_marginRight="20dp"
-                android:paddingLeft="20dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
+                android:layout_marginRight="10dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:hint="Search" />
+                android:searchHintIcon="@null"
+                android:queryHint="Search"
+                android:id="@+id/sv_assignment"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="wrap_content"
@@ -70,7 +69,8 @@
                 android:layout_marginRight="15dp"
                 android:hint="Search"
                 android:textColorHint="@color/white"
-                android:backgroundTint="@color/main_color"/>
+                android:backgroundTint="@color/main_color"
+                android:id="@+id/btn_search"/>
 
         </LinearLayout>
 

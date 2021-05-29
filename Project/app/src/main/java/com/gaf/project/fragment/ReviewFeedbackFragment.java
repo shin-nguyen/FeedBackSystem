@@ -100,7 +100,7 @@ public class ReviewFeedbackFragment extends Fragment {
         for (Topic topic: topicSet) {
             String topicName = topic.getTopicName()+"\n";
             sb.append(topicName);
-            sb.setSpan(Typeface.BOLD,len,len+topicName.length(),Spannable.SPAN_PRIORITY);
+            sb.setSpan(Typeface.BOLD,len,len+topicName.length(),Spannable.SPAN_COMPOSING);
             len+=topicName.length();
 
             String questionName = "";

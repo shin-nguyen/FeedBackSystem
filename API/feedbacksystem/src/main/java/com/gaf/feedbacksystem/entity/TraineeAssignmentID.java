@@ -21,5 +21,5 @@ public  class TraineeAssignmentID implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "traineeId",referencedColumnName = "username")
-    private  Trainee trainee;
+    private Trainee trainee;
 }

@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 
@@ -49,7 +51,8 @@ public class AssignmentFragment extends Fragment{
     private AssignmentAdapter assignmentAdapter;
     private List<Assignment> listAssignment;
     private LinearLayout searchFiled;
-    private Button btnAdd;
+    private SearchView searchAssignment;
+    private Button btnAdd, btnSearch;
     private Boolean homeRole;
 
     public AssignmentFragment(){
@@ -67,7 +70,9 @@ public class AssignmentFragment extends Fragment{
         view = inflater.inflate(R.layout.fragment_assignment, container, false);
 
         searchFiled = view.findViewById(R.id.search_field);
+        searchAssignment = view.findViewById(R.id.sv_assignment);
         btnAdd = view.findViewById(R.id.btn_add_assignment);
+        btnSearch = view.findViewById(R.id.btn_search);
 
         String userRole = SessionManager.getInstance().getUserRole();
         if(!userRole.equals(SystemConstant.ADMIN_ROLE)){
@@ -99,9 +104,43 @@ public class AssignmentFragment extends Fragment{
             }
         });
 
-        //Set value adapter for Adapter
         listAssignment = new ArrayList<>();
-        Call<AssignmentResponse> call =  assignmentService.loadListAssignment();
+
+        if(userRole.equals(SystemConstant.ADMIN_ROLE)){
+            Call<AssignmentResponse> call =  assignmentService.loadListAssignment();
+            setAssignmentAdapter(call);
+        }
+
+        if(userRole.equals(SystemConstant.TRAINER_ROLE)){
+            Call<AssignmentResponse> call =  assignmentService.loadListAssignmentByTrainer();
+            setAssignmentAdapter(call);
+        }
+
+        btnAdd.setOnClickListener(v->{
+            Navigation.findNavController(view).navigate(R.id.action_nav_assignment_to_add_assignment_fragment);
+        });
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                assignmentAdapter.getFilter().filter(searchAssignment.getQuery());
+            }
+        });
+
+        searchAssignment.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                reloadFragment();
+                return false;
+            }
+        });
+
+        recyclerViewAssignment.setAdapter(assignmentAdapter);
+
+        return view;
+    }
+
+    private void setAssignmentAdapter(Call<AssignmentResponse> call){
         call.enqueue(new Callback<AssignmentResponse>() {
             @Override
             public void onResponse(Call<AssignmentResponse> call, Response<AssignmentResponse> response) {
@@ -118,14 +157,6 @@ public class AssignmentFragment extends Fragment{
                 showToast("Call API fail!");
             }
         });
-
-        recyclerViewAssignment.setAdapter(assignmentAdapter);
-
-        btnAdd.setOnClickListener(v->{
-            Navigation.findNavController(view).navigate(R.id.action_nav_assignment_to_add_assignment_fragment);
-        });
-
-        return view;
     }
 
     private void clickDelete(Assignment item){
@@ -145,7 +176,7 @@ public class AssignmentFragment extends Fragment{
                         }
                         @Override
                         public void onFailure(Call<DeleteResponse> call, Throwable t) {
-                            showFailDialog("Delete success!");
+                            showFailDialog("Delete fail!");
                             Log.e("Error",t.getLocalizedMessage());
                         }
                     });
@@ -183,7 +214,6 @@ public class AssignmentFragment extends Fragment{
 
     public void reloadFragment(){
         if (getFragmentManager() != null) {
-            showToast("reload");
             getFragmentManager()
                     .beginTransaction()
                     .detach(this)

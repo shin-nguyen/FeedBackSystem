@@ -78,16 +78,15 @@ public class EditAssignmentFragment extends Fragment {
         callTrainer.enqueue(new Callback<TrainerReponse>() {
             @Override
             public void onResponse(Call<TrainerReponse> call, Response<TrainerReponse> response) {
-                new Thread(()-> {
-                    if (response.isSuccessful()&& response.body()!=null){
-                        trainerList = response.body().getTrainers();
-                        adapterTrainer =
-                                new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, trainerList);
-                        spnTrainer.setAdapter(adapterTrainer);
-                        int spnPosition = -1;
-                        spnPosition = adapterTrainer.getPosition(trainer);
-                        spnTrainer.setSelection(spnPosition);
-                    }}).run();
+                if (response.isSuccessful()&& response.body()!=null){
+                    trainerList = response.body().getTrainers();
+                    adapterTrainer =
+                            new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, trainerList);
+                    spnTrainer.setAdapter(adapterTrainer);
+                    int spnPosition = -1;
+                    spnPosition = adapterTrainer.getPosition(trainer);
+                    spnTrainer.setSelection(spnPosition);
+                };
             }
             @Override
             public void onFailure(Call<TrainerReponse> call, Throwable t) {

@@ -12,6 +12,9 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 public class TraineeAssignmentDto {
+
+
+
     TraineeAssignmentIdDto primaryKey = new TraineeAssignmentIdDto();
 
     private  TraineeAssignmentIdDto getPrimaryKey(){

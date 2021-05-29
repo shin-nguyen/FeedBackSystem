@@ -23,6 +23,9 @@ public interface AssignmentService {
     @GET("assignment/loadListAssignment")
     Call<AssignmentResponse> loadListAssignment();
 
+    @GET("assignment/loadListAssignmentByTrainer")
+    Call<AssignmentResponse> loadListAssignmentByTrainer();
+
     @POST("assignment/")
     Call<Assignment> create(@Body Assignment assignment);
 

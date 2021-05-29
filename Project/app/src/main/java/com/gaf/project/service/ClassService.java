@@ -39,5 +39,4 @@ public interface ClassService {
 
     @PUT("class/")
     Call<Class> update(@Body Class mClass);
-
 }
