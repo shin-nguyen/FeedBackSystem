@@ -25,4 +25,7 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Assignme
     void deleteByMClassAndModuleAndTrainer(@Param("idClass") Integer idClass,
                                            @Param("idModule") Integer idModule,
                                            @Param("userName") String userName);
+
+    @Query("SELECT a FROM Assignment a WHERE a.registrationCode = :code")
+    Assignment findByCode(@Param("code") String code);
 }

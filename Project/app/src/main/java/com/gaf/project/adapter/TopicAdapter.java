@@ -19,7 +19,9 @@ import com.gaf.project.utils.ApiUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,7 +33,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHol
     private  List<Question> listQuestion;
     private QuestionService questionService = ApiUtils.getQuestionService();
     private List<Question> mListQuestion = new ArrayList<>();
-
+    private Set<Topic> topics = new HashSet<>();
 
     public  List<Question> getmListQuestion() {
         return mListQuestion;
@@ -88,8 +90,10 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHol
 
     private void checkItem(Question item, Boolean b) {
         if (b){
+            topics.add(item.getTopic());
             mListQuestion.add(item);
         }else{
+            topics.remove(item.getTopic());
             mListQuestion.remove(item);
         }
     }

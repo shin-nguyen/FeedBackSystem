@@ -145,7 +145,7 @@ public class AssignmentFragment extends Fragment{
                         }
                         @Override
                         public void onFailure(Call<DeleteResponse> call, Throwable t) {
-                            showFailDialog("Delete success!");
+                            showFailDialog("Delete fail!");
                             Log.e("Error",t.getLocalizedMessage());
                         }
                     });

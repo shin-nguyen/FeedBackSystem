@@ -13,13 +13,15 @@ import com.gaf.project.service.FeedbackService;
 import com.gaf.project.service.ModuleService;
 import com.gaf.project.service.QuestionService;
 import com.gaf.project.service.TopicService;
+import com.gaf.project.service.TraineeAssignmentService;
+import com.gaf.project.service.TraineeService;
 import com.gaf.project.service.TrainerService;
 import com.gaf.project.service.TypeFeedbackService;
 
 public class ApiUtils {
 
     //Dia chi may host
-    public static final String BASE_URL = "http://192.168.1.13:8080/";
+    public static final String BASE_URL = "http://192.168.1.14:8080/";
 
     public static AuthenticationService getAuthenticationService() {
         return RetrofitConfig.getInstance().buildRetrofit().create(AuthenticationService.class);
@@ -82,5 +84,17 @@ public class ApiUtils {
         return RetrofitConfig.getInstance()
                 .builderRetrofitAuth()
                 .create(AnswerService.class);
+    }
+
+    public static TraineeService getTraineeService(){
+        return RetrofitConfig.getInstance()
+                .builderRetrofitAuth()
+                .create(TraineeService.class);
+    }
+
+    public static TraineeAssignmentService getTraineeAssignmentService(){
+        return RetrofitConfig.getInstance()
+                .builderRetrofitAuth()
+                .create(TraineeAssignmentService.class);
     }
 }

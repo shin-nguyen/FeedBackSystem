@@ -12,6 +12,9 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 public class TraineeAssignmentDto {
+
+
+
     TraineeAssignmentIdDto primaryKey = new TraineeAssignmentIdDto();
 
     private  TraineeAssignmentIdDto getPrimaryKey(){
@@ -27,7 +30,7 @@ public class TraineeAssignmentDto {
     }
 
     @Transient
-    public TraineeDto getTraine() {
+    public TraineeDto getTrainee() {
         return getPrimaryKey().getTrainee();
     }
     public void setTrainee(TraineeDto trainee) {

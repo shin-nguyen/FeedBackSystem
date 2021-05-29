@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ITraineeAssignmentService {
     TraineeAssignmentDto save(TraineeAssignmentDto traineeAssignmentDto);
+
+//    void checkCodeIsAvailable(String username, String code);
 }
