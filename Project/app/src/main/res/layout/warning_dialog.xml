@@ -7,12 +7,12 @@
     android:id="@+id/warning_dialog"
     android:padding="30dp"
     android:layout_margin="30dp"
-    android:background="@drawable/dialog_format">
+    android:background="@drawable/background_dialog">
 
     <ImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@drawable/warning_icon"
+        android:src="@drawable/img_warning_icon"
         android:paddingBottom="10dp"/>
 
     <TextView

@@ -18,12 +18,15 @@ public class Assignment implements Serializable{
     @SerializedName("registrationCode")
     @Expose
     private String registrationCode;
+
     @SerializedName("module")
     @Expose
     private Module module;
+
     @SerializedName("trainer")
     @Expose
     private Trainer trainer;
+
     @SerializedName("mClass")
     @Expose
     private Class mClass;

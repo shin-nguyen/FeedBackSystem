@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.gaf.feedbacksystem.MyResourceNotFoundException;
 import com.gaf.feedbacksystem.dto.ClassDto;
+import com.gaf.feedbacksystem.dto.TraineeDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -120,6 +121,36 @@ public class ClassController {
     public ResponseEntity<ClassDto> update(@Valid  @RequestBody ClassDto classDto){
         try {
             final ClassDto updatedEmployee = classService.update(classDto);
+
+            return ResponseEntity.ok(updatedEmployee);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+        }
+    }
+
+    @PutMapping(value = "/{idOld}/{idNew}")
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    public ResponseEntity<ClassDto> updateByTrainee(@PathVariable(value = "idOld") Integer oldId,
+                                                    @PathVariable(value = "idNew") Integer newId,
+                                                    @Valid  @RequestBody TraineeDto traineeDto){
+        try {
+            final ClassDto updatedEmployee = classService.updateTrainee(oldId,newId,traineeDto);
+
+            return ResponseEntity.ok(updatedEmployee);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+        }
+    }
+
+    @PutMapping(value = "/{id}")
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    public  ResponseEntity<ClassDto> deleteTrainee(@PathVariable (name = "id") String id,
+                                                @Valid  @RequestBody ClassDto classDto){
+
+        try {
+            final ClassDto updatedEmployee = classService.deleteTrainee(id,classDto);
 
             return ResponseEntity.ok(updatedEmployee);
         }

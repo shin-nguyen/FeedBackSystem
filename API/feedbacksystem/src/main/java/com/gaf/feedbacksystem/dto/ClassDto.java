@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -24,5 +26,5 @@ public class ClassDto {
     @JsonFormat(pattern="dd/MM/yyyy")
     private Date endTime;
     private boolean isDeleted = false;
-    private Collection<TraineeDto> trainees;
+    private Set<TraineeDto> trainees = new HashSet<>();
 }

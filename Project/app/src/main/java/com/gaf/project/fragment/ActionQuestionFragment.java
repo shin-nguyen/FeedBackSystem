@@ -22,11 +22,9 @@ import com.gaf.project.R;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
-import com.gaf.project.model.Class;
 import com.gaf.project.model.Question;
 import com.gaf.project.model.Topic;
 import com.gaf.project.response.TopicResponse;
-import com.gaf.project.response.TrainerReponse;
 import com.gaf.project.service.QuestionService;
 import com.gaf.project.service.TopicService;
 import com.gaf.project.utils.ApiUtils;
@@ -43,7 +41,7 @@ public class ActionQuestionFragment extends Fragment {
     private String mission;
     private QuestionService questionService;
     private TopicService topicService;
-    private TextView title, topicName;
+    private TextView title, topicName, warningQuestion;
     private EditText questionContent;
     private Spinner sprTopic;
     private RelativeLayout topicLayoutBox;
@@ -68,7 +66,7 @@ public class ActionQuestionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.add_question, container, false);
+        view = inflater.inflate(R.layout.action_question, container, false);
 
         Bundle bundle = new Bundle();
         mission = getArguments().getString("mission");
@@ -81,6 +79,7 @@ public class ActionQuestionFragment extends Fragment {
         }
 
         title = view.findViewById(R.id.txt_title);
+        warningQuestion = view.findViewById(R.id.warning_question_content);
         sprTopic = view.findViewById(R.id.spinner_topic_name);
         questionContent = (EditText) view.findViewById(R.id.edt_question_content);
         topicLayoutBox= view.findViewById(R.id.spinner_topic_box);
@@ -124,52 +123,59 @@ public class ActionQuestionFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                warningQuestion.setVisibility(View.GONE);
+
                 Topic topic = (Topic) sprTopic.getSelectedItem();
                 String qsContent = String.valueOf(questionContent.getText());
 
-                if (mission.equals(SystemConstant.ADD)) {
-                    Question newQuestion = new Question(topic, qsContent);
+                if (qsContent.isEmpty()) {
+                    warningQuestion.setVisibility(View.VISIBLE);
+                } else {
 
-                    Call<Question> call = questionService.create(newQuestion);
-                    call.enqueue(new Callback<Question>() {
-                        @Override
-                        public void onResponse(Call<Question> call, Response<Question> response) {
-                            if (response.isSuccessful() && response.body() != null) {
-                                showSuccessDialog("Add Success!");
-                                Log.e("Success", "Update Question success");
+                    if (mission.equals(SystemConstant.ADD)) {
+                        Question newQuestion = new Question(topic, qsContent);
+
+                        Call<Question> call = questionService.create(newQuestion);
+                        call.enqueue(new Callback<Question>() {
+                            @Override
+                            public void onResponse(Call<Question> call, Response<Question> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    showSuccessDialog("Add Success!");
+                                    Log.e("Success", "Update Question success");
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<Question> call, Throwable t) {
-                            Log.e("Error", t.getLocalizedMessage());
-                            showFailDialog("Error");
-                        }
-                    });
-                    Log.e("Success", "Add Question success");
-                }
-
-                if (mission.equals(SystemConstant.UPDATE)) {
-
-                    question.setQuestionContent(qsContent);
-
-                    Call<Question> callUpdate = questionService.update(question);
-                    callUpdate.enqueue(new Callback<Question>() {
-                        @Override
-                        public void onResponse(Call<Question> call, Response<Question> response) {
-                            if (response.isSuccessful() && response.body() != null) {
-                                showSuccessDialog("Edit Success!");
-                                Log.e("Success", "Update Question success");
+                            @Override
+                            public void onFailure(Call<Question> call, Throwable t) {
+                                Log.e("Error", t.getLocalizedMessage());
+                                showFailDialog("Error");
                             }
-                        }
+                        });
+                        Log.e("Success", "Add Question success");
+                    }
 
-                        @Override
-                        public void onFailure(Call<Question> call, Throwable t) {
-                            Log.e("Error", t.getLocalizedMessage());
-                            showFailDialog("Error");
-                        }
-                    });
-                    Log.e("Success", "Update Question success");
+                    if (mission.equals(SystemConstant.UPDATE)) {
+
+                        question.setQuestionContent(qsContent);
+
+                        Call<Question> callUpdate = questionService.update(question);
+                        callUpdate.enqueue(new Callback<Question>() {
+                            @Override
+                            public void onResponse(Call<Question> call, Response<Question> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    showSuccessDialog("Edit Success!");
+                                    Log.e("Success", "Update Question success");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Question> call, Throwable t) {
+                                Log.e("Error", t.getLocalizedMessage());
+                                showFailDialog("Error");
+                            }
+                        });
+                        Log.e("Success", "Update Question success");
+                    }
                 }
             }
         });

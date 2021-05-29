@@ -7,12 +7,11 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Question"
+        android:text="Edit Enrollment"
         android:padding="30dp"
         android:textSize="35sp"
         android:textStyle="bold"
-        android:textAlignment="center"
-        android:id="@+id/txt_title"/>
+        android:textAlignment="center"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,14 +19,70 @@
         android:orientation="vertical"
         android:paddingLeft="40dp"
         android:paddingRight="30dp"
-        android:paddingBottom="30dp">
+        android:paddingBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Topic Name:"
+            android:text="Trainer ID"
             android:textSize="17sp"
-            android:layout_marginBottom="5dp"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="45sp"
+            android:ems="10"
+            android:layout_weight="1"
+            android:background="@drawable/gray_common_box"
+            android:paddingLeft="10dp"
+            android:enabled="false"
+            android:textStyle="bold"
+            android:id="@+id/txt_trainer_id"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="40dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trainer Name"
+            android:textSize="17sp"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="45sp"
+            android:ems="10"
+            android:layout_weight="1"
+            android:background="@drawable/gray_common_box"
+            android:paddingLeft="10dp"
+            android:enabled="false"
+            android:textStyle="bold"
+            android:id="@+id/txt_trainee_name"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="40dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Class Name"
+            android:textSize="17sp"
             android:textStyle="bold"/>
 
         <RelativeLayout
@@ -35,11 +90,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/common_box"
-            android:orientation="horizontal"
-            android:id="@+id/spinner_topic_box">
+            android:orientation="horizontal">
 
             <Spinner
-                android:id="@+id/spinner_topic_name"
+                android:id="@+id/spinner_class_name"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_centerVertical="true"
@@ -73,54 +127,7 @@
 
         </RelativeLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/gray_common_box"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:gravity="left|center_vertical"
-            android:padding="10dp"
-            android:id="@+id/txt_topic_name"/>
-
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="317dp"
-        android:orientation="vertical"
-        android:paddingLeft="40dp"
-        android:paddingRight="30dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="Question Content:"
-            android:textSize="17sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/edt_question_content"
-            android:layout_width="match_parent"
-            android:layout_height="276dp"
-            android:background="@drawable/common_box"
-            android:ems="100"
-            android:gravity="start|top"
-            android:inputType="textMultiLine"
-            android:padding="10dp"/>
-
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Please enter the question"
-        android:paddingLeft="40dp"
-        android:textSize="16sp"
-        android:paddingBottom="10dp"
-        android:visibility="gone"
-        android:textColor="@color/delete_button_color"/>
 
     <LinearLayout
         android:layout_width="match_parent"
