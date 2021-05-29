@@ -60,7 +60,6 @@
             android:layout_width="match_parent"
             android:layout_height="45sp"
             android:ems="10"
-            android:layout_weight="1"
             android:background="@drawable/background_gray_box"
             android:paddingLeft="10dp"
             android:enabled="false"

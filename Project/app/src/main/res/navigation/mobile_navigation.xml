@@ -70,6 +70,9 @@
         <action
             android:id="@+id/action_nav_enrollment_to_editEnrollmentFragment"
             app:destination="@id/editEnrollmentFragment" />
+        <action
+            android:id="@+id/action_nav_enrollment_to_detailEnrollmentFragment"
+            app:destination="@id/detailEnrollmentFragment" />
     </fragment>
 
     <fragment
@@ -85,11 +88,11 @@
             app:destination="@id/review_feedback_fragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/nav_join"
-        android:name="com.gaf.project.fragment.JoinFragment"
-        android:label="fragment_join"
-        tools:layout="@layout/fragment_join" />
+<!--    <fragment-->
+<!--        android:id="@+id/nav_join"-->
+<!--        android:name="com.gaf.project.fragment.JoinFragment"-->
+<!--        android:label="fragment_join"-->
+<!--        tools:layout="@layout/fragment_join" />-->
 
     <fragment
         android:id="@+id/nav_log_out"
@@ -175,5 +178,10 @@
         android:name="com.gaf.project.fragment.EditEnrollmentFragment"
         android:label="fragment_edit_enrollment"
         tools:layout="@layout/fragment_edit_enrollment" />
+    <fragment
+        android:id="@+id/detailEnrollmentFragment"
+        android:name="com.gaf.project.fragment.DetailEnrollmentFragment"
+        android:label="fragment_detail_enrollment"
+        tools:layout="@layout/fragment_detail_enrollment" />
 
 </navigation>

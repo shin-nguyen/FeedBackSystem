@@ -165,7 +165,7 @@ public class FeedBackFragment extends Fragment{
 
     private void clickDetail(Feedback item) {
         bundle.putString("mission", SystemConstant.DETAIL);
-        bundle.putSerializable("item", item);
+        bundle.putSerializable("feedback", item);
         navigation = Navigation.findNavController(view);
         navigation.navigate(R.id.action_nav_feedback_to_review_feedback_fragment, bundle);
     }

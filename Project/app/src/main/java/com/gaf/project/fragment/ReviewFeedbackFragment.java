@@ -122,6 +122,7 @@ public class ReviewFeedbackFragment extends Fragment {
         if (mission == SystemConstant.ADD){
             title.setText("Review New Feedback");
             message = "Add Success!";
+            //set event for saving or editting
             saveOrEditButton.setOnClickListener(v->{
                 Call<Feedback> feedbackCall = feedbackService.create(feedback);
                 feedbackCall.enqueue(new Callback<Feedback>() {

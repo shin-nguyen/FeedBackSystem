@@ -1,6 +1,7 @@
 package com.gaf.project.service;
 
 import com.gaf.project.model.Class;
+import com.gaf.project.model.Trainee;
 import com.gaf.project.response.ClassResponse;
 import com.gaf.project.response.DeleteResponse;
 
@@ -28,10 +29,15 @@ public interface ClassService {
     @DELETE("class/{id}")
     Call<DeleteResponse> delete( @Path("id") Integer id);
 
-    @PUT("class/")
-    Call<Class> update(@Body Class mClass);
+    @PUT("class/{idOld}/{idNew}")
+    Call<Class> updateByTrainee(@Path(value = "idOld") Integer oldId,
+                                @Path(value = "idNew") Integer newId,
+                                @Body Trainee trainee);
 
     @PUT("class/{id}")
     Call<Class> deleteTrainee(@Path("id") String id,@Body Class mClass);
+
+    @PUT("class/")
+    Call<Class> update(@Body Class mClass);
 
 }

@@ -108,6 +108,7 @@ public class AddFeedBackFragment extends Fragment {
 
         }
 
+
         //load type feedback
         Call<TypeFeedbackResponse> callTypeFeedback =  typeFeedbackService.loadListTypeFeedback();
             callTypeFeedback.enqueue(new Callback<TypeFeedbackResponse>() {
