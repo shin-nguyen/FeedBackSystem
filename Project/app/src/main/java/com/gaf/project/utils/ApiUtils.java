@@ -1,14 +1,12 @@
 package com.gaf.project.utils;
 
 import com.gaf.project.config.RetrofitConfig;
-import com.gaf.project.constant.SystemConstant;
-import com.gaf.project.model.Answer;
-import com.gaf.project.model.Question;
 import com.gaf.project.service.AdminService;
 import com.gaf.project.service.AnswerService;
 import com.gaf.project.service.AssignmentService;
 import com.gaf.project.service.AuthenticationService;
 import com.gaf.project.service.ClassService;
+import com.gaf.project.service.CommentService;
 import com.gaf.project.service.FeedbackService;
 import com.gaf.project.service.ModuleService;
 import com.gaf.project.service.QuestionService;
@@ -92,9 +90,14 @@ public class ApiUtils {
                 .create(TraineeService.class);
     }
 
-    public static TraineeAssignmentService getTraineeAssignmentService(){
+    public static TraineeAssignmentService getTraineeAssignmentService() {
         return RetrofitConfig.getInstance()
                 .builderRetrofitAuth()
                 .create(TraineeAssignmentService.class);
+    }
+    public static CommentService getCommentService() {
+        return RetrofitConfig.getInstance()
+                .builderRetrofitAuth()
+                .create(CommentService.class);
     }
 }

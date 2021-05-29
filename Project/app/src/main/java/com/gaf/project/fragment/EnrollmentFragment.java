@@ -148,7 +148,7 @@ public class EnrollmentFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putSerializable("item", item);
 
-        Navigation.findNavController(view).navigate(R.id.action_nav_class_to_add_class_fragment, bundle);
+        Navigation.findNavController(view).navigate(R.id.action_nav_enrollment_to_detailEnrollmentFragment, bundle);
     }
 
     private void clickUpdate(Enrollment item) {

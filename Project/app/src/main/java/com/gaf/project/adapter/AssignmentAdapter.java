@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,11 +22,13 @@ import com.gaf.project.model.Assignment;
 import com.gaf.project.model.Class;
 import com.gaf.project.utils.SessionManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.AssignmentViewHolder> {
+public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.AssignmentViewHolder> implements Filterable {
 
     private List<Assignment> mListAssignment;
+    private List<Assignment> mListAssignmentOld;
 
     private AssignmentAdapter.IClickItem iClickItem;
 
@@ -38,6 +42,7 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
 
     public void setData(List<Assignment> list){
         this.mListAssignment = list;
+        this.mListAssignmentOld = list;
         notifyDataSetChanged();
     }
 
@@ -102,5 +107,42 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
                 btnEdit.setVisibility(View.GONE);
             }
         }
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String strSearch = constraint.toString();
+                if(strSearch.isEmpty()){
+                    mListAssignment=mListAssignmentOld;
+                }else {
+                    List<Assignment> assignmentList = new ArrayList<>();
+                    for(Assignment assignment : mListAssignmentOld){
+                        if(assignment.getMClass().getClassName().toLowerCase().contains(strSearch.toLowerCase())
+                            ||assignment.getModule().getModuleName().toLowerCase().contains(strSearch.toLowerCase())
+                            ||assignment.getTrainer().getName().toLowerCase().contains(strSearch.toLowerCase())
+                            ||assignment.getRegistrationCode().toLowerCase().contains(strSearch.toLowerCase())){
+
+                            assignmentList.add(assignment);
+
+                        }
+
+                        mListAssignment=assignmentList;
+                    }
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values=mListAssignment;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mListAssignment=(List<Assignment>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 }

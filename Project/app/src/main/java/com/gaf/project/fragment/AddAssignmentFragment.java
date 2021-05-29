@@ -75,7 +75,6 @@ public class AddAssignmentFragment extends Fragment {
 
         final Spinner spnModule = (Spinner) view.findViewById(R.id.spinner_module_name);
         Call<ModuleResponse> callModule =  moduleService.loadModuleAdmin();
-        new Thread(()-> {
         callModule.enqueue(new Callback<ModuleResponse>() {
             @Override
             public void onResponse(Call<ModuleResponse> call, Response<ModuleResponse> response) {
@@ -92,11 +91,10 @@ public class AddAssignmentFragment extends Fragment {
                 Log.e("Error",t.getLocalizedMessage());
                 showToast("Error");
             }
-        });}).run();
+        });
 
         final Spinner spnClass = (Spinner) view.findViewById(R.id.spinner_class_name);
         Call<ClassResponse> callClass =  classService.loadListClass();
-        new Thread(()-> {
         callClass.enqueue(new Callback<ClassResponse>() {
             @Override
             public void onResponse(Call<ClassResponse> call, Response<ClassResponse> response) {
@@ -113,11 +111,10 @@ public class AddAssignmentFragment extends Fragment {
                 Log.e("Error",t.getLocalizedMessage());
                 showToast("Error");
             }
-        });}).run();
+        });
 
         final Spinner spnTrainer = (Spinner) view.findViewById(R.id.spinner_trainer_id);
         Call<TrainerReponse> callTrainer =  trainerService.loadListTrainer();
-        new Thread(()-> {
         callTrainer.enqueue(new Callback<TrainerReponse>() {
             @Override
             public void onResponse(Call<TrainerReponse> call, Response<TrainerReponse> response) {
@@ -134,7 +131,7 @@ public class AddAssignmentFragment extends Fragment {
                 Log.e("Error",t.getLocalizedMessage());
                 showToast("Error");
             }
-        });}).run();
+        });
 
         btnSave = view.findViewById(R.id.btn_save);
         btnSave.setOnClickListener(v->{

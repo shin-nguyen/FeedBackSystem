@@ -22,7 +22,7 @@
         <item
             android:id="@+id/nav_class"
             android:title="CLASS"
-            android:icon="@drawable/ic_baseline_group_24"/>
+            android:icon="@drawable/ic_group"/>
         <item
             android:id="@+id/nav_module"
             android:title="MODULE"

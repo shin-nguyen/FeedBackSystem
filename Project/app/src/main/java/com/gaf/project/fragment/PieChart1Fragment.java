@@ -1,6 +1,5 @@
 package com.gaf.project.fragment;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -22,6 +21,7 @@ import com.anychart.charts.Pie;
 import com.gaf.project.R;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Answer;
+import com.gaf.project.model.Answer1;
 import com.gaf.project.model.Class;
 import com.gaf.project.model.Module;
 import com.gaf.project.response.AnswerResponse;
@@ -49,7 +49,7 @@ public class PieChart1Fragment extends Fragment {
     private PieChartView pieChartView;
 
     private AnswerService answerService;
-    private List<Answer> answerList;
+    private List<Answer1> answerList;
 
     private View view;
 
