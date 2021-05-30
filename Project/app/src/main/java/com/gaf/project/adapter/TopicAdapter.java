@@ -38,6 +38,11 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHol
     public  List<Question> getmListQuestion() {
         return mListQuestion;
     }
+
+    public Set<Topic> getmListTopic(){
+        return topics;
+    }
+
     public void setData(List<Topic> list){
         this.mListTopic = list;
         notifyDataSetChanged();

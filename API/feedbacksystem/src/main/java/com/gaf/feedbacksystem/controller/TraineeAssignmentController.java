@@ -65,10 +65,14 @@ public class TraineeAssignmentController {
                 AssignmentDto assignmentDto = assignmentService.findByCode(code);
                 TraineeDto traineeDto = traineeService.findByUserName(username);
 
-                if (assignmentDto == null || traineeDto == null){
+                if (traineeDto == null){
                     throw new MyResourceNotFoundException();
                 }
-                if (assignmentDto.getRegistrationCode().equals(code)){
+
+                if (assignmentDto == null){
+                    response.put("add", Boolean.FALSE);
+                }
+                else if (assignmentDto.getRegistrationCode().equals(code)){
                     TraineeAssignmentDto traineeAssignmentDto = new TraineeAssignmentDto();
                     traineeAssignmentDto.setAssignment(assignmentDto);
                     traineeAssignmentDto.setTrainee(traineeDto);
@@ -77,7 +81,9 @@ public class TraineeAssignmentController {
 
                     response.put("add", Boolean.TRUE);
                 }
-                response.put("add", Boolean.FALSE);
+//                else {
+//                    response.put("add", Boolean.FALSE);
+//                }
 
             return response;
         } catch (MyResourceNotFoundException exc) {

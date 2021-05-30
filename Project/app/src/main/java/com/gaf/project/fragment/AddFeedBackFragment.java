@@ -68,7 +68,9 @@ public class AddFeedBackFragment extends Fragment {
     private Spinner spnFeedbackType;
     private EditText feedbackTitle;
     private ArrayAdapter<TypeFeedback> typeFeedbackAdapter;
-    private  Button  btnBack,btnReview;
+    private Button  btnBack,btnReview;
+    private Integer idFb;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +101,7 @@ public class AddFeedBackFragment extends Fragment {
             try {
                 mFeedbackEdit = (Feedback) getArguments().getSerializable("item");
                 if (mFeedbackEdit != null) {
+                    idFb = mFeedbackEdit.getFeedbackID();
                     Log.e("Success","Get Class Success");
                 }
             }
@@ -107,7 +110,6 @@ public class AddFeedBackFragment extends Fragment {
             }
 
         }
-
 
         //load type feedback
         Call<TypeFeedbackResponse> callTypeFeedback =  typeFeedbackService.loadListTypeFeedback();
@@ -128,8 +130,7 @@ public class AddFeedBackFragment extends Fragment {
                 showToast("Can not get type of feedback");
             }
         });
-
-            //
+        //
         topicAdapter = new TopicAdapter();
         listTopic = new ArrayList<>();
 
@@ -141,6 +142,7 @@ public class AddFeedBackFragment extends Fragment {
                 if (response.isSuccessful()&&response.body()!=null){
                     listTopic = response.body().getTopic();
                     topicAdapter.setData(listTopic);
+                    getTopics(listTopic);
                 }
             }
 
@@ -157,17 +159,25 @@ public class AddFeedBackFragment extends Fragment {
 
         btnReview.setOnClickListener(v -> {
             navigation = Navigation.findNavController(view);
-            if (topicAdapter.getmListQuestion().isEmpty()){
-                showToast("Choose at least one question");
-            }else {
-                if(mission.equals(SystemConstant.ADD)) {
-                    TypeFeedback typeFeedback = (TypeFeedback) spnFeedbackType.getSelectedItem();
-                    List<Question> questionList = topicAdapter.getmListQuestion();
+            if (feedbackTitle.getText().toString().isEmpty()){
+                showToast("Please enter feedback title");
+                return;
+            }
 
+            if (listTopic.size() == topicAdapter.getmListTopic().size()){
+                TypeFeedback typeFeedback = (TypeFeedback) spnFeedbackType.getSelectedItem();
+                List<Question> questionList = topicAdapter.getmListQuestion();
+                if(mission.equals(SystemConstant.ADD)) {
                     Feedback feedback = new Feedback( feedbackTitle.getText().toString(),typeFeedback,questionList);
                     bundle.putSerializable("feedback", feedback);
                 }
+                else if (mission.equals(SystemConstant.UPDATE)){
+                    Feedback feedback = new Feedback(idFb, feedbackTitle.getText().toString(),typeFeedback,questionList);
+                    bundle.putSerializable("feedback", feedback);
+                }
                 navigation.navigate(R.id.action_add_feedback_fragment_to_review_feedback_fragment, bundle);
+            }else {
+                showToast("Choose at least one question per topic");
             }
         });
 
@@ -179,6 +189,10 @@ public class AddFeedBackFragment extends Fragment {
         return view;
     }
 
+    private void getTopics(List<Topic> listTopic) {
+        this.listTopic = listTopic;
+    }
+
     private void initComponents(View view) {
         title = view.findViewById(R.id.txt_title);
         spnFeedbackType = view.findViewById(R.id.spn_feedback_type);
@@ -187,20 +201,8 @@ public class AddFeedBackFragment extends Fragment {
         btnReview = view.findViewById(R.id.btn_review_feeback);
     }
 
-    public void showSuccessDialog(String message){
-        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        SuccessDialog newFragment = new SuccessDialog(message);
-        newFragment.show(ft, "dialog success");
-    }
-
-    public void showFailDialog(String message){
-        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        FailDialog newFragment = new FailDialog(message);
-        newFragment.show(ft, "dialog fail");
-    }
-
     public void showToast(String string){
-        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(),string,Toast.LENGTH_SHORT   ).show();
     }
 
 }

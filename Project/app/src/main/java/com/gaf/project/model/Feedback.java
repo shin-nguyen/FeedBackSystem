@@ -39,6 +39,13 @@ public class Feedback implements Serializable {
     @SerializedName("questions")
     private Collection<Question> questions;
 
+    public Feedback(Integer idFb, String title, TypeFeedback typeFeedback, List<Question> questionList) {
+        this.feedbackID = idFb;
+        this.title = title;
+        this.typeFeedback = typeFeedback;
+        this.questions = questionList;
+    }
+
     @Override
     public String toString() {
         return getTitle();

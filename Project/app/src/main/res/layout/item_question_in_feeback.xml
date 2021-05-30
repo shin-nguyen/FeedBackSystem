@@ -21,12 +21,14 @@
         android:layout_centerInParent="true"
         android:layout_marginLeft="50dp"
         android:layout_alignParentLeft="true">
+
         <TextView
             android:id="@+id/txt_question_in_feeback"
             style="@style/TextItemStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Question"/>
+            android:text="Question"
+            android:textColor="@color/black"/>
     </LinearLayout>
 
 </RelativeLayout>

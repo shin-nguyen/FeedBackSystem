@@ -1,6 +1,5 @@
 package com.gaf.project.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -8,8 +7,6 @@ import lombok.*;
 
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 

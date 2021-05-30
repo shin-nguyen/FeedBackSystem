@@ -92,7 +92,6 @@ public class FeedbackController {
 	    public ResponseEntity<FeedbackDto> update(@Valid  @RequestBody FeedbackDto feedbackDto){
 	        try {
 	            final FeedbackDto updatedFeedback = feedbackService.update(feedbackDto);
-
 	            return ResponseEntity.ok(updatedFeedback);
 	        }
 	        catch (MyResourceNotFoundException exc) {
