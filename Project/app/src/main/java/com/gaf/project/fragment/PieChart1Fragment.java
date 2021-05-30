@@ -9,25 +9,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.anychart.AnyChart;
-import com.anychart.AnyChartView;
-import com.anychart.chart.common.dataentry.DataEntry;
-import com.anychart.chart.common.dataentry.ValueDataEntry;
-import com.anychart.charts.Pie;
 import com.gaf.project.R;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Answer;
-import com.gaf.project.model.Answer1;
 import com.gaf.project.model.Class;
 import com.gaf.project.model.Module;
 import com.gaf.project.response.AnswerResponse;
-import com.gaf.project.response.ClassResponse;
 import com.gaf.project.service.AnswerService;
-import com.gaf.project.service.ClassService;
 import com.gaf.project.utils.ApiUtils;
 
 import java.util.ArrayList;
@@ -41,15 +32,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.content.Context.MODE_PRIVATE;
-
 public class PieChart1Fragment extends Fragment {
 
     private TextView tvClassName, tvTest;
     private PieChartView pieChartView;
 
     private AnswerService answerService;
-    private List<Answer1> answerList;
+    private List<Answer> answerList;
 
     private View view;
 
