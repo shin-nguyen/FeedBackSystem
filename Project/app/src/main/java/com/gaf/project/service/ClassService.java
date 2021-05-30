@@ -29,13 +29,13 @@ public interface ClassService {
     @DELETE("class/{id}")
     Call<DeleteResponse> delete( @Path("id") Integer id);
 
-    @PUT("class/{idOld}/{idNew}")
-    Call<Class> updateByTrainee(@Path(value = "idOld") Integer oldId,
-                                @Path(value = "idNew") Integer newId,
-                                @Body Trainee trainee);
+    @PUT("class/updateTrainee/{idOld}/{idNew}/{idTrainee}")
+    Call<Class> updateTrainee(@Path(value = "idOld") Integer idOld,
+                                @Path(value = "idNew") Integer idNew,
+                              @Path(value = "idTrainee") String idTrainee);
 
-    @PUT("class/{id}")
-    Call<Class> deleteTrainee(@Path("id") String id,@Body Class mClass);
+    @PUT("class/deleteTrainee/{idTrainee}/{idClass}")
+    Call<Class> deleteTrainee(@Path("idTrainee") String idTrainee,@Path("idClass") Integer idClass);
 
     @PUT("class/")
     Call<Class> update(@Body Class mClass);

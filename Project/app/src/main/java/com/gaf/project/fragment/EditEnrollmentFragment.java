@@ -88,14 +88,10 @@ public class EditEnrollmentFragment extends Fragment {
         });
 
         btnSave.setOnClickListener(v->{
-
-            Class selectedClass = (Class) spnClass.getSelectedItem();
-            enrollment.setMClass(selectedClass);
-
             Integer oldClass = enrollment.getMClass().getClassID();
             Integer newClass = ((Class) spnClass.getSelectedItem()).getClassID();
 
-            Call<Class> enrollmentCall =  classService.updateByTrainee(oldClass,newClass,enrollment.getTrainee());
+            Call<Class> enrollmentCall =  classService.updateTrainee(oldClass,newClass,enrollment.getTrainee().getUserName());
             enrollmentCall.enqueue(new Callback<Class>() {
                 @Override
                 public void onResponse(Call<Class> call, Response<Class> response) {

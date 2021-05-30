@@ -23,11 +23,13 @@ import com.gaf.project.model.Assignment;
 import com.gaf.project.model.Class;
 import com.gaf.project.model.Module;
 import com.gaf.project.model.Trainer;
+import com.gaf.project.response.AssignmentResponse;
 import com.gaf.project.response.TrainerReponse;
 import com.gaf.project.service.AssignmentService;
 import com.gaf.project.service.TrainerService;
 import com.gaf.project.utils.ApiUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -41,9 +43,11 @@ public class EditAssignmentFragment extends Fragment {
     private AssignmentService assignmentService;
     private TrainerService trainerService;
     private List<Trainer> trainerList;
+    private List<Assignment> assignmentList;
     private ArrayAdapter<Trainer> adapterTrainer;
     private Spinner spnTrainer;
     private Assignment assignment;
+    private Boolean flag = true;
 
     public EditAssignmentFragment() {
         // Required empty public constructor
@@ -96,33 +100,71 @@ public class EditAssignmentFragment extends Fragment {
         });
 
         btnSave.setOnClickListener(v->{
-            String oldTrainer = assignment.getTrainer().getUserName();
+            String trainerName = assignment.getTrainer().getUserName();
 
             Trainer selectedTrainer = (Trainer) spnTrainer.getSelectedItem();
             assignment.setTrainer(selectedTrainer);
 
-            Call<Assignment> call =  assignmentService.update(oldTrainer,assignment);
-                    call.enqueue(new Callback<Assignment>() {
-                        @Override
-                        public void onResponse(Call<Assignment> call, Response<Assignment> response) {
-                            if (response.isSuccessful()&&response.body()!=null) {
-                                showSuccessDialog("Edit Success!");
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Assignment> call, Throwable t) {
-                            Log.e("Error",t.getLocalizedMessage());
+            assignmentList = new ArrayList<>();
+            Call<AssignmentResponse> callListAssignment =  assignmentService.loadListAssignment();
+            callListAssignment.enqueue(new Callback<AssignmentResponse>() {
+                @Override
+                public void onResponse(Call<AssignmentResponse> call, Response<AssignmentResponse> response) {
+                    if (response.isSuccessful()&&response.body()!=null){
+                        assignmentList = response.body().getAssignments();
+                        flag = checkExistAssignment(assignmentList,assignment);
+                        if(flag){
+                            Call<Assignment> callAddAssignment = assignmentService.create(assignment);
+                            callUpdateAssignment(trainerName);
+                        }else {
                             showFailDialog("Assignment already exist!");
                         }
-                    });
-                });
+                        Log.e("Success","Assignment get success");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<AssignmentResponse> call, Throwable t) {
+                    Log.e("Error",t.getLocalizedMessage());
+                    showToast("Call API fail!");
+                }
+            });
+        });
 
         btnBack.setOnClickListener(view1 -> {
             getActivity().onBackPressed();
         });
 
         return view;
+    }
+
+    public Boolean checkExistAssignment(List<Assignment> list, Assignment assignment){
+        for(Assignment ass : list){
+            if(ass.getTrainer().equals(assignment.getTrainer())
+                    && ass.getModule().equals(assignment.getModule())
+                    && ass.getMClass().equals(assignment.getMClass())){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void callUpdateAssignment(String trainerName){
+        Call<Assignment> call =  assignmentService.update(trainerName,assignment);
+        call.enqueue(new Callback<Assignment>() {
+            @Override
+            public void onResponse(Call<Assignment> call, Response<Assignment> response) {
+                if (response.isSuccessful()&&response.body()!=null) {
+                    showSuccessDialog("Edit Success!");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Assignment> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showFailDialog("Assignment already exist!");
+            }
+        });
     }
 
     private void initView(View view) {

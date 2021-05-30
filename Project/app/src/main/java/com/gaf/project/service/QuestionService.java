@@ -21,6 +21,9 @@ public interface QuestionService {
     @GET("question/loadListQuestion")
     Call<QuestionResponse> loadListQuestion();
 
+    @GET("question/loadListActiveQuestion")
+    Call<QuestionResponse> loadListActiveQuestion();
+
     @GET("question/loadListQuestionByTopic/{topicId}")
     Call<QuestionResponse> loadListQuestionByTopic(@Path("topicId") Integer id);
 

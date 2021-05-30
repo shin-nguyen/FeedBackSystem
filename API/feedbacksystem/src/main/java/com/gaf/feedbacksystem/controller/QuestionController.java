@@ -25,6 +25,23 @@ public class QuestionController {
     private IQuestionService questionService;
 
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    @GetMapping(value = "/loadListActiveQuestion", produces = "application/json")
+    public ResponseEntity<Map<String, List<?>>> getListActiveQuestion(){
+        try{
+            List<QuestionDto> questionList = questionService.findByDeleteFalse();
+            if ( questionList.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            Map result = new HashMap();
+            result.put("questions", questionList);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Question Not Found", exc);
+        }
+    }
+
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
     @GetMapping(value = "/loadListQuestion", produces = "application/json")
     public ResponseEntity<Map<String, List<?>>> getListQuestion(){
         try{

@@ -87,8 +87,7 @@ public class QuestionFragment extends Fragment {
         recyclerViewQuestion.setLayoutManager(linearLayoutManager);
 
         listQuestion = new ArrayList<>();
-        Call<QuestionResponse> call =  questionService.loadListQuestion();
-
+        Call<QuestionResponse> call =  questionService.loadListActiveQuestion();
         call.enqueue(new Callback<QuestionResponse>() {
             @Override
             public void onResponse(Call<QuestionResponse> call, Response<QuestionResponse> response) {
@@ -139,8 +138,6 @@ public class QuestionFragment extends Fragment {
 
         recyclerViewQuestion.setAdapter(questionAdapter);
 
-        navigation = Navigation.findNavController(view);
-
         btnAdd = view.findViewById(R.id.btn_add_question);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,7 +145,7 @@ public class QuestionFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("mission", SystemConstant.ADD);
 
-                navigation.navigate(R.id.action_nav_question_to_add_question_fragment,bundle);
+                Navigation.findNavController(view).navigate(R.id.action_nav_question_to_add_question_fragment,bundle);
             }
         });
     }
@@ -158,7 +155,7 @@ public class QuestionFragment extends Fragment {
         bundle.putString("mission", SystemConstant.UPDATE);
         bundle.putSerializable("item", item);
 
-        navigation.navigate(R.id.action_nav_question_to_add_question_fragment,bundle);
+        Navigation.findNavController(view).navigate(R.id.action_nav_question_to_add_question_fragment,bundle);
     }
 
     private void clickDelete(Question item){
@@ -167,29 +164,30 @@ public class QuestionFragment extends Fragment {
 
         final WarningDialog dialog = new WarningDialog(
                 () -> {
-                    Call<DeleteResponse> call =  questionService.delete(item.getQuestionID());
-
-                    call.enqueue(new Callback<DeleteResponse>() {
-                        @Override
-                        public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
-                            if (response.isSuccessful()&&response.body().getDeleted()){
-                                showSuccessDialog("Delete success!");
-                            }
-                        }
-                        @Override
-                        public void onFailure(Call<DeleteResponse> call, Throwable t) {
-                            showFailDialog("Delete success!");
-                            Log.e("Error",t.getLocalizedMessage());
-                        }
-                    });
-
-                    reloadFragment();
+                    callDeleteQuestion(item);
                 },
                 "Do you want to delete this Question?");
 
-
         dialog.show(ft, "dialog success");
+    }
 
+    public void callDeleteQuestion(Question question){
+        Call<DeleteResponse> call =  questionService.delete(question.getQuestionID());
+        call.enqueue(new Callback<DeleteResponse>() {
+            @Override
+            public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
+                if (response.isSuccessful()&&response.body().getDeleted()){
+                    showSuccessDialog("Delete success!");
+                }
+            }
+            @Override
+            public void onFailure(Call<DeleteResponse> call, Throwable t) {
+                showFailDialog("Delete success!");
+                Log.e("Error",t.getLocalizedMessage());
+            }
+        });
+
+        reloadFragment();
     }
 
     public void showToast(String string){
@@ -215,7 +213,6 @@ public class QuestionFragment extends Fragment {
 
     public void reloadFragment(){
         if (getFragmentManager() != null) {
-            showToast("reload");
             getFragmentManager()
                     .beginTransaction()
                     .detach(this)
