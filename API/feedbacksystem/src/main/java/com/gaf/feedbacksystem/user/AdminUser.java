@@ -3,8 +3,6 @@ package com.gaf.feedbacksystem.user;
 import com.gaf.feedbacksystem.entity.Admin;
 
 public class AdminUser implements BaseUser<Admin> {
-
-
     Admin admin = new Admin();
 
     @Override
