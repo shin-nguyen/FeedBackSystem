@@ -94,11 +94,20 @@ public class EnrollmentFragment extends Fragment {
         recyclerViewEnrollment.setLayoutManager(linearLayoutManager);
 
         listClass = new ArrayList<>();
+        enrollmentList = new ArrayList<>();
         Call<ClassResponse> call =  classService.loadListClass();
         call.enqueue(new Callback<ClassResponse>() {
             @Override
             public void onResponse(Call<ClassResponse> call, Response<ClassResponse> response) {
                 listClass = response.body().getClasss();
+                if (listClass!=null) {
+                    for (Class mClass:listClass) {
+                        for (Trainee trainee : mClass.getTrainees())
+                            enrollmentList.add(new Enrollment(mClass,trainee));
+                    }
+                }
+
+                enrollmentAdapter.setData(enrollmentList);
             }
 
             @Override
@@ -108,14 +117,7 @@ public class EnrollmentFragment extends Fragment {
             }
         });
 
-        if (listClass!=null) {
-            for (Class mClass:listClass) {
-                for (Trainee trainee : mClass.getTrainees())
-                enrollmentList.add(new Enrollment(mClass,trainee));
-            }
-        }
-
-        enrollmentAdapter.setData(enrollmentList);
+        recyclerViewEnrollment.setAdapter(enrollmentAdapter);
 
         return view;
     }
@@ -124,7 +126,7 @@ public class EnrollmentFragment extends Fragment {
 
         final WarningDialog dialog = new WarningDialog(
                 () -> {
-                    Call<Class> call =  classService.deleteTrainee(item.getTrainee().getUserName(),item.getMClass());
+                    Call<Class> call =  classService.deleteTrainee(item.getTrainee().getUserName(),item.getMClass().getClassID());
 
                     call.enqueue(new Callback<Class>() {
                         @Override
@@ -152,6 +154,10 @@ public class EnrollmentFragment extends Fragment {
     }
 
     private void clickUpdate(Enrollment item) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("item", item);
+
+        Navigation.findNavController(view).navigate(R.id.action_nav_enrollment_to_editEnrollmentFragment, bundle);
     }
 
     public void showToast(String string){

@@ -96,7 +96,9 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_contact,R.id.nav_join,R.id.nav_log_out,
                 R.id.add_feedback_fragment, R.id.add_assignment_fragment, R.id.add_question_fragment,
                 R.id.edit_assignment_fragment,R.id.add_class_fragment,R.id.nav_trainee_home_fragment,R.id.detailClassFragment,
-                R.id.addModuleFragment)
+                R.id.addModuleFragment,
+                R.id.detailEnrollmentFragment,
+                R.id.editEnrollmentFragment)
                 .setDrawerLayout(drawer)
                 .build();
 

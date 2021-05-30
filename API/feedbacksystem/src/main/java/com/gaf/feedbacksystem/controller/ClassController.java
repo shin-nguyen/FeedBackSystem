@@ -129,13 +129,13 @@ public class ClassController {
         }
     }
 
-    @PutMapping(value = "/{idOld}/{idNew}")
+    @PutMapping(value = "/updateTrainee/{idOld}/{idNew}/{idTrainee}")
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
-    public ResponseEntity<ClassDto> updateByTrainee(@PathVariable(value = "idOld") Integer oldId,
+    public ResponseEntity<ClassDto> updateTrainee(@PathVariable(value = "idOld") Integer oldId,
                                                     @PathVariable(value = "idNew") Integer newId,
-                                                    @Valid  @RequestBody TraineeDto traineeDto){
+                                                    @PathVariable(value = "idTrainee") String idTrainee){
         try {
-            final ClassDto updatedEmployee = classService.updateTrainee(oldId,newId,traineeDto);
+            final ClassDto updatedEmployee = classService.updateTrainee(oldId,newId,idTrainee);
 
             return ResponseEntity.ok(updatedEmployee);
         }
@@ -144,13 +144,13 @@ public class ClassController {
         }
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/deleteTrainee/{idTrainee}/{idClass}")
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
-    public  ResponseEntity<ClassDto> deleteTrainee(@PathVariable (name = "id") String id,
-                                                @Valid  @RequestBody ClassDto classDto){
+    public  ResponseEntity<ClassDto> deleteTrainee(@PathVariable (name = "idTrainee") String idTrainee,
+                                                @PathVariable (name = "idClass") Integer idClass){
 
         try {
-            final ClassDto updatedEmployee = classService.deleteTrainee(id,classDto);
+            final ClassDto updatedEmployee = classService.deleteTrainee(idTrainee,idClass);
 
             return ResponseEntity.ok(updatedEmployee);
         }

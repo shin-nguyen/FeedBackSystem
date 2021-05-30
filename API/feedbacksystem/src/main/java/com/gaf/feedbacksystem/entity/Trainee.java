@@ -28,7 +28,6 @@ public class Trainee  extends BaseUserEntity{
     @ManyToMany(mappedBy = "trainees")
     // LAZY để tránh việc truy xuất dữ liệu không cần thiết. Lúc nào cần thì mới query
     @EqualsAndHashCode.Exclude
-    @JsonIgnore
     private Collection<Class> classes;
 
 }

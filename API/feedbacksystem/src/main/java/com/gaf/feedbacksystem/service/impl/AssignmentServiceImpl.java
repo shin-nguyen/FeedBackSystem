@@ -47,6 +47,13 @@ public class AssignmentServiceImpl implements IAssignmentService {
     }
 
     @Override
+    public AssignmentDto findByCode(String code) {
+        Assignment assignments = assignmentRepository.findByCode(code);
+        AssignmentDto assignmentDtos = ObjectMapperUtils.map(assignments, AssignmentDto.class);
+        return assignmentDtos;
+    }
+
+    @Override
     public void deleteById(Integer idClass, Integer idModule, String userName) {
         assignmentRepository.deleteByMClassAndModuleAndTrainer(idClass,idModule,userName);
     }

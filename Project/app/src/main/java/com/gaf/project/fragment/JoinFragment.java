@@ -18,9 +18,15 @@ import com.gaf.project.R;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
 import com.gaf.project.model.Assignment;
+import com.gaf.project.model.Trainee;
+import com.gaf.project.model.TraineeAssignment;
+import com.gaf.project.response.AddTraineeAssignment;
 import com.gaf.project.response.AssignmentResponse;
 import com.gaf.project.service.AssignmentService;
+import com.gaf.project.service.TraineeAssignmentService;
+import com.gaf.project.service.TraineeService;
 import com.gaf.project.utils.ApiUtils;
+import com.gaf.project.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,16 +43,14 @@ public class JoinFragment extends DialogFragment {
 
     private View view;
     private String registrationCode;
-    private List<Assignment> listAssignment;
-    private AssignmentService assignmentService;
-    private String message;
+    private TraineeAssignmentService traineeAssignmentService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setStyle(DialogFragment.STYLE_NORMAL, R.style.JoinDialog);
-        assignmentService = ApiUtils.getAssignmentService();
+        traineeAssignmentService = ApiUtils.getTraineeAssignmentService();
     }
 
     @Override
@@ -76,33 +80,23 @@ public class JoinFragment extends DialogFragment {
 
     private void joinInClass(String code) {
 //        Toast.makeText(getContext(), code, Toast.LENGTH_LONG).show();
-        //load list assignment
-        listAssignment = new ArrayList<>();
-        Call<AssignmentResponse> call =  assignmentService.loadListAssignment();
-        call.enqueue(new Callback<AssignmentResponse>() {
+        //
+        String userName = SessionManager.getInstance().getUserName();
+        Call<AddTraineeAssignment> addTraineeAssignmentCall = traineeAssignmentService.create(userName, code);
+        addTraineeAssignmentCall.enqueue(new Callback<AddTraineeAssignment>() {
             @Override
-            public void onResponse(Call<AssignmentResponse> call, Response<AssignmentResponse> response) {
-                if (response.isSuccessful()&&response.body()!=null){
-                    listAssignment = response.body().getAssignments();
-                    Log.e("Success","Assigment get success");
-
-                    for (Assignment item: listAssignment
-                    ) {
-                        if (registrationCode.equals(item.getRegistrationCode())){
-                            message = "Join Success!";
-                            showSuccessDialog(message);
-                        }else if (registrationCode != item.getRegistrationCode()){
-                            message = "Invalid Registration Code!!!";
-                            showFailDialog(message);
-                        }
-                    }
+            public void onResponse(Call<AddTraineeAssignment> call, Response<AddTraineeAssignment> response) {
+                if (response.isSuccessful()&&response.body().getAdded()){
+                    showSuccessDialog("Join success!");
+                }
+                if (response.isSuccessful()&&response.body().getAdded()==false){
+                    showSuccessDialog("Invalid Registration Code!!!");
                 }
             }
 
             @Override
-            public void onFailure(Call<AssignmentResponse> call, Throwable t) {
+            public void onFailure(Call<AddTraineeAssignment> call, Throwable t) {
                 Log.e("Error",t.getLocalizedMessage());
-                showToast("Call API fail!");
             }
         });
     }

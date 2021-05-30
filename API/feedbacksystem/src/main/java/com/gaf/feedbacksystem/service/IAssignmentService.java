@@ -9,5 +9,6 @@ public interface IAssignmentService {
     AssignmentDto save(AssignmentDto assignment);
     List<AssignmentDto> findByTrainerUserName(String username);
     AssignmentDto update(String userName,AssignmentDto newAssignment);
+    AssignmentDto findByCode(String code);
     void deleteById(Integer idClass,Integer idModule,String userName);
 }

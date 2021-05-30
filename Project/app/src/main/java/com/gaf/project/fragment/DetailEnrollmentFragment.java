@@ -51,8 +51,8 @@ public class DetailEnrollmentFragment extends Fragment {
         startTime.setText(dfs.format(mClass.getStartTime()));
         className.setText(mClass.getClassName());
         endTime.setText(dfs.format(mClass.getEndTime()));
-        capacity.setText(mClass.getCapacity());
-
+        capacity.setText(mClass.getCapacity().toString());
+        btnBack.setOnClickListener(v -> getActivity().onBackPressed());
         return  view;
     }
     private void initComponents(View view) {

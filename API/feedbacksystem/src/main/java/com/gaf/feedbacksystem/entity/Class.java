@@ -43,7 +43,7 @@ public class Class {
 
     private boolean isDeleted = false;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     // Quan hệ n-n với đối tượng ở dưới (Person) (1 địa điểm có nhiều người ở)
     @EqualsAndHashCode.Exclude // không sử dụng trường này trong equals và hashcode
     @ToString.Exclude // Khoonhg sử dụng trong toString()
@@ -55,12 +55,12 @@ public class Class {
     private Set<Trainee> trainees;
 
     public void addTrainee(Trainee trainee) {
-        this.getTrainees().add(trainee);
+        this.trainees.add(trainee);
         trainee.getClasses().add(this);
     }
 
     public void removeTrainee(Trainee trainee) {
-        this.getTrainees().remove(trainee);
+        this.trainees.remove(trainee);
         trainee.getClasses().remove(this);
     }
 

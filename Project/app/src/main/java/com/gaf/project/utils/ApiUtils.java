@@ -1,9 +1,6 @@
 package com.gaf.project.utils;
 
 import com.gaf.project.config.RetrofitConfig;
-import com.gaf.project.constant.SystemConstant;
-import com.gaf.project.model.Answer;
-import com.gaf.project.model.Question;
 import com.gaf.project.service.AdminService;
 import com.gaf.project.service.AnswerService;
 import com.gaf.project.service.AssignmentService;
@@ -14,12 +11,15 @@ import com.gaf.project.service.FeedbackService;
 import com.gaf.project.service.ModuleService;
 import com.gaf.project.service.QuestionService;
 import com.gaf.project.service.TopicService;
+import com.gaf.project.service.TraineeAssignmentService;
+import com.gaf.project.service.TraineeService;
 import com.gaf.project.service.TrainerService;
 import com.gaf.project.service.TypeFeedbackService;
 
 public class ApiUtils {
 
     //Dia chi may host
+
     public static final String BASE_URL = "http://192.168.1.198:8080/";
 
     public static AuthenticationService getAuthenticationService() {
@@ -85,6 +85,17 @@ public class ApiUtils {
                 .create(AnswerService.class);
     }
 
+    public static TraineeService getTraineeService(){
+        return RetrofitConfig.getInstance()
+                .builderRetrofitAuth()
+                .create(TraineeService.class);
+    }
+
+    public static TraineeAssignmentService getTraineeAssignmentService() {
+        return RetrofitConfig.getInstance()
+                .builderRetrofitAuth()
+                .create(TraineeAssignmentService.class);
+    }
     public static CommentService getCommentService() {
         return RetrofitConfig.getInstance()
                 .builderRetrofitAuth()
