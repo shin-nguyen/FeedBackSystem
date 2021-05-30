@@ -6,6 +6,8 @@ import com.gaf.feedbacksystem.repository.TopicRepository;
 import com.gaf.feedbacksystem.service.ITopicService;
 import com.gaf.feedbacksystem.utils.ObjectMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +23,15 @@ public class TopicServiceImpl implements ITopicService {
         List<Topic> topic = topicRepository.findAll();
         List<TopicDto> topicDto = ObjectMapperUtils.mapAll(topic,TopicDto.class);
         return topicDto;
+    }
+
+    @Override
+    public List<TopicDto> findAllByTopicName() {
+        List<Topic> topics = topicRepository.findAllByOrderByTopicNameAsc();
+        List<TopicDto> topicDto = ObjectMapperUtils.mapAll(topics,TopicDto.class);
+        return topicDto;
+        //var sort = new Sort(Sort.Direction.ASC, "topicName");
+        //return topicRepository.findAllOrderByTopicName(sort);
     }
 
     @Override

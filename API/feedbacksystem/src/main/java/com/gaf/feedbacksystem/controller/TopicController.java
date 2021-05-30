@@ -6,6 +6,7 @@ import com.gaf.feedbacksystem.dto.TopicDto;
 import com.gaf.feedbacksystem.service.impl.TopicServiceImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,7 +32,7 @@ public class TopicController {
     @GetMapping(value = "/loadListTopic", produces = "application/json")
     public ResponseEntity<Map<String, List<?>>> getListTopic(){
         try{
-            List<TopicDto> topicList = topicService.findAll();
+            List<TopicDto> topicList = topicService.findAllByTopicName();
             if ( topicList.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }

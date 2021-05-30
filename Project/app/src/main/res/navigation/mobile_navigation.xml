@@ -135,6 +135,9 @@
         <action
             android:id="@+id/action_review_feedback_fragment_to_add_feedback_fragment"
             app:destination="@id/add_feedback_fragment" />
+        <action
+            android:id="@+id/action_review_feedback_fragment_to_nav_feedback"
+            app:destination="@id/nav_feedback" />
     </fragment>
 
 

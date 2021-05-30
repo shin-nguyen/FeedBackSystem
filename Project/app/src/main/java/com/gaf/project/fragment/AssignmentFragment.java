@@ -85,7 +85,7 @@ public class AssignmentFragment extends Fragment{
                 searchFiled.setVisibility(View.GONE);
             }
         }catch (Exception exception){
-
+            
         }
 
         recyclerViewAssignment = view.findViewById(R.id.rcv_assignment);
@@ -116,6 +116,8 @@ public class AssignmentFragment extends Fragment{
             setAssignmentAdapter(call);
         }
 
+        recyclerViewAssignment.setAdapter(assignmentAdapter);
+
         btnAdd.setOnClickListener(v->{
             Navigation.findNavController(view).navigate(R.id.action_nav_assignment_to_add_assignment_fragment);
         });
@@ -135,57 +137,16 @@ public class AssignmentFragment extends Fragment{
             }
         });
 
-        recyclerViewAssignment.setAdapter(assignmentAdapter);
-
         return view;
-    }
-
-    private void setAssignmentAdapter(Call<AssignmentResponse> call){
-        call.enqueue(new Callback<AssignmentResponse>() {
-            @Override
-            public void onResponse(Call<AssignmentResponse> call, Response<AssignmentResponse> response) {
-                if (response.isSuccessful()&&response.body()!=null){
-                    listAssignment = response.body().getAssignments();
-                    assignmentAdapter.setData(listAssignment);
-                    Log.e("Success","Assigment get success");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AssignmentResponse> call, Throwable t) {
-                Log.e("Error",t.getLocalizedMessage());
-                showToast("Call API fail!");
-            }
-        });
     }
 
     private void clickDelete(Assignment item){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         final WarningDialog dialog = new WarningDialog(
                 () -> {
-                    Call<DeleteResponse> call =  assignmentService.delete(item.getMClass().getClassID(),
-                                                                            item.getModule().getModuleID(),
-                                                                            item.getTrainer().getUserName());
-
-                    call.enqueue(new Callback<DeleteResponse>() {
-                        @Override
-                        public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
-                            if (response.isSuccessful()&&response.body().getDeleted()){
-                                showSuccessDialog("Delete success!");
-                            }
-                        }
-                        @Override
-                        public void onFailure(Call<DeleteResponse> call, Throwable t) {
-                            showFailDialog("Delete fail!");
-                            Log.e("Error",t.getLocalizedMessage());
-                        }
-                    });
-
-                    reloadFragment();
+                    callDeleteAssignment(item);
                 },
                 "Do you want to delete this Assignment?");
-
-
         dialog.show(ft, "dialog success");
     }
 
@@ -202,7 +163,12 @@ public class AssignmentFragment extends Fragment{
 
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        SuccessDialog newFragment = new SuccessDialog(message);
+        SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
+            @Override
+            public void changeFragment() {
+
+            }
+        });
         newFragment.show(ft, "dialog success");
     }
 
@@ -220,5 +186,45 @@ public class AssignmentFragment extends Fragment{
                     .attach(this)
                     .commit();
         }
+    }
+
+    private void setAssignmentAdapter(Call<AssignmentResponse> call){
+        call.enqueue(new Callback<AssignmentResponse>() {
+            @Override
+            public void onResponse(Call<AssignmentResponse> call, Response<AssignmentResponse> response) {
+                if (response.isSuccessful()&&response.body()!=null){
+                    listAssignment = response.body().getAssignments();
+                    assignmentAdapter.setData(listAssignment);
+                    Log.e("Success","Assignment get success");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AssignmentResponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showToast("Call API fail!");
+            }
+        });
+    }
+
+    private void  callDeleteAssignment(Assignment assignment){
+        Call<DeleteResponse> call =  assignmentService.delete(assignment.getMClass().getClassID(),
+                assignment.getModule().getModuleID(),
+                assignment.getTrainer().getUserName());
+        call.enqueue(new Callback<DeleteResponse>() {
+            @Override
+            public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
+                if (response.isSuccessful()&&response.body().getDeleted()){
+                    showSuccessDialog("Delete success!");
+                }
+            }
+            @Override
+            public void onFailure(Call<DeleteResponse> call, Throwable t) {
+                showFailDialog("Delete success!");
+                Log.e("Error",t.getLocalizedMessage());
+            }
+        });
+
+        reloadFragment();
     }
 }

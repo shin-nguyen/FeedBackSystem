@@ -134,23 +134,10 @@ public class ActionQuestionFragment extends Fragment {
                     if (mission.equals(SystemConstant.ADD)) {
                         Question newQuestion = new Question(topic, qsContent);
 
-                        Call<Question> call = questionService.create(newQuestion);
-                        call.enqueue(new Callback<Question>() {
-                            @Override
-                            public void onResponse(Call<Question> call, Response<Question> response) {
-                                if (response.isSuccessful() && response.body() != null) {
-                                    showSuccessDialog("Add Success!");
-                                    Log.e("Success", "Update Question success");
-                                }
-                            }
+                        Call<Question> callAdd = questionService.create(newQuestion);
+                        callQuestion(callAdd,"Add Success!!");
 
-                            @Override
-                            public void onFailure(Call<Question> call, Throwable t) {
-                                Log.e("Error", t.getLocalizedMessage());
-                                showFailDialog("Error");
-                            }
-                        });
-                        Log.e("Success", "Add Question success");
+                        reloadFragment();
                     }
 
                     if (mission.equals(SystemConstant.UPDATE)) {
@@ -158,22 +145,9 @@ public class ActionQuestionFragment extends Fragment {
                         question.setQuestionContent(qsContent);
 
                         Call<Question> callUpdate = questionService.update(question);
-                        callUpdate.enqueue(new Callback<Question>() {
-                            @Override
-                            public void onResponse(Call<Question> call, Response<Question> response) {
-                                if (response.isSuccessful() && response.body() != null) {
-                                    showSuccessDialog("Edit Success!");
-                                    Log.e("Success", "Update Question success");
-                                }
-                            }
+                        callQuestion(callUpdate,"Edit Success!!");
 
-                            @Override
-                            public void onFailure(Call<Question> call, Throwable t) {
-                                Log.e("Error", t.getLocalizedMessage());
-                                showFailDialog("Error");
-                            }
-                        });
-                        Log.e("Success", "Update Question success");
+                        reloadFragment();
                     }
                 }
             }
@@ -189,9 +163,33 @@ public class ActionQuestionFragment extends Fragment {
         return view;
     }
 
+    public void callQuestion(Call<Question> call, String notification){
+        call.enqueue(new Callback<Question>() {
+            @Override
+            public void onResponse(Call<Question> call, Response<Question> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    showSuccessDialog(notification);
+                    Log.e("Success", "Success");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Question> call, Throwable t) {
+                Log.e("Error", t.getLocalizedMessage());
+                showFailDialog("Error");
+            }
+        });
+        Log.e("Success", "Success");
+    }
+
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        SuccessDialog newFragment = new SuccessDialog(message);
+        SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
+            @Override
+            public void changeFragment() {
+
+            }
+        });
         newFragment.show(ft, "dialog success");
     }
 
@@ -203,5 +201,15 @@ public class ActionQuestionFragment extends Fragment {
 
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
+    }
+
+    public void reloadFragment(){
+        if (getFragmentManager() != null) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .detach(this)
+                    .attach(this)
+                    .commit();
+        }
     }
 }

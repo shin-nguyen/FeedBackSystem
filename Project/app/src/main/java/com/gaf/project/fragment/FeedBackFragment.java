@@ -159,6 +159,7 @@ public class FeedBackFragment extends Fragment{
                             Log.e("Fail to delete this feedback", t.getLocalizedMessage());
                         }
                     });
+                    reloadFragment();
                 }, "Do you want to delete this feedback?");
         dialog.show(fragmentTransaction, "dialog for feedback");
     }
@@ -182,7 +183,22 @@ public class FeedBackFragment extends Fragment{
 
     private void showSuccessDialog(String message) {
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        SuccessDialog newFragment = new SuccessDialog(message);
+        SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
+            @Override
+            public void changeFragment() {
+
+            }
+        });
         newFragment.show(ft, "dialog success");
+    }
+
+    private void reloadFragment(){
+        if (getFragmentManager() != null) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .detach(this)
+                    .attach(this)
+                    .commit();
+        }
     }
 }
