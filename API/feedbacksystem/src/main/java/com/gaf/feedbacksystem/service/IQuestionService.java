@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface IQuestionService {
     List<QuestionDto> findAll();
+    List<QuestionDto> findByDeleteFalse();
     List<QuestionDto> findAllByTopicId(Integer id);
     QuestionDto findById(Integer QuestionId);
     QuestionDto update(QuestionDto questionDto);

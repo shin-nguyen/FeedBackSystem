@@ -22,6 +22,13 @@ public class QuestionServiceImpl implements IQuestionService {
 
     @Override
     public List<QuestionDto> findAll() {
+        List<Question> questions = questionRepository.findAll();
+        List<QuestionDto> questionDtos = ObjectMapperUtils.mapAll(questions,QuestionDto.class);
+        return questionDtos;
+    }
+
+    @Override
+    public List<QuestionDto> findByDeleteFalse() {
         List<Question> questions = questionRepository.findAllByDeletedFalse();
         List<QuestionDto> questionDtos = ObjectMapperUtils.mapAll(questions,QuestionDto.class);
         return questionDtos;
@@ -60,6 +67,6 @@ public class QuestionServiceImpl implements IQuestionService {
 
     @Override
     public void deleteById(Integer id) {
-        questionRepository.deleteById(id);
+        questionRepository.deleteByQuestionId(id);
     }
 }
