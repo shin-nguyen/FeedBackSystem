@@ -12,4 +12,7 @@ public interface AnswerService {
 
     @GET("answer/loadListAnswerByQuestion/{idClass}/{idModule}/{idQuestion}")
     Call<AnswerResponse> loadListAnswerByQuestion(@Path("idClass") Integer idClass, @Path("idModule") Integer idModule, @Path("idQuestion") Integer idQuestion);
+
+    @GET("class/{topicID}")
+    Call<AnswerResponse> loadListAnswerByTopic(@Path("topicID") Integer topicID);
 }
