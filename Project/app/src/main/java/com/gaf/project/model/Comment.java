@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Comment implements Serializable {
-
     @SerializedName("module")
     @Expose
     private Module module;

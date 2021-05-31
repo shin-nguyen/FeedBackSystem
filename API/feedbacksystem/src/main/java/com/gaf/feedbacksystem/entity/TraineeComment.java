@@ -46,7 +46,7 @@ public class TraineeComment{
     }
 
     @Transient
-    public Trainee getTraine() {
+    public Trainee getTrainee() {
         return getPrimaryKey().getTrainee();
     }
     public void setTrainee(Trainee trainee) {
