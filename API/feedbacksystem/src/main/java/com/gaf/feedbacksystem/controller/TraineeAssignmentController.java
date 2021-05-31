@@ -48,12 +48,12 @@ public class TraineeAssignmentController {
                 throw new MyResourceNotFoundException();
             }
 
-            TraineeAssignmentDto traineeAssignmentDto = traineeAssignmentService.checkIsAvailable(username, code);
+            //TraineeAssignmentDto traineeAssignmentDto = traineeAssignmentService.checkIsAvailable(username, code);
                 try {
                     //check have trainee joined class
-                    if (traineeAssignmentDto != null){
-                        response.put("added", 0);
-                    }else
+//                    if (traineeAssignmentDto != null){
+//                        response.put("added", 0);
+//                    }else
                     // assignment is null, it's mean invalid code
                     if (assignmentDto == null){
                         response.put("added", 1);

@@ -79,14 +79,14 @@ public class JoinFragment extends DialogFragment {
                 if (response.isSuccessful()&&response.body().getAdded() == null){
                     showFailDialog("some thing went wrong");
                 }
-                else if (response.isSuccessful()&&response.body().getAdded()){
+                else if (response.isSuccessful()&&response.body().getAdded() == 2){
                     showSuccessDialog("Join success!");
                 }
-                else if (response.isSuccessful()&&response.body().getAdded() == false){
+                else if (response.isSuccessful()&&response.body().getAdded() == 1){
                     showFailDialog("Invalid Registration Code!!!");
                 }
                 else if (response.body() != null){
-                    showFailDialog("eeeeeerror");
+                    showFailDialog("Error");
                 }
             }
 
