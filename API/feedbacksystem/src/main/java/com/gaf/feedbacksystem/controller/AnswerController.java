@@ -60,4 +60,21 @@ public class AnswerController {
     }
 
 
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    @PostMapping(value = "", produces = "application/json")
+    public ResponseEntity<Map<String, List<?>>> addAll(@RequestBody List<AnswerDto> answerDtos ){
+        try{
+            List<AnswerDto> answerDtoList = iAnswerService.addAll(answerDtos);
+            if ( answerDtoList.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            Map result = new HashMap();
+            result.put("answers", answerDtoList);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Answer Not Found", exc);
+        }
+    }
+
 }

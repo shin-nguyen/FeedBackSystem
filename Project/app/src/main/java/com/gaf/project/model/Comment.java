@@ -19,7 +19,7 @@ public class Comment implements Serializable {
     private Module module;
     @SerializedName("trainee")
     @Expose
-    private Trainer trainee;
+    private Trainee trainee;
     @SerializedName("mClass")
     @Expose
     private Class mClass;

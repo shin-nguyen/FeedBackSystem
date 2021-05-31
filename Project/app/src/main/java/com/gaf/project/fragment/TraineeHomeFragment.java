@@ -86,7 +86,6 @@ public class TraineeHomeFragment extends Fragment {
             @Override
             public void onFailure(Call<AssignmentResponse> call, Throwable t) {
                 Log.e("Error",t.getLocalizedMessage());
-                showToast("Call API fail!");
             }
         });
     }
@@ -97,8 +96,6 @@ public class TraineeHomeFragment extends Fragment {
 
         Navigation.findNavController(view).navigate(R.id.action_nav_trainee_home_fragment_to_doFeedbackFragment,bundle);
     }
-    public void showToast(String string){
-        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
-    }
+
 
 }
