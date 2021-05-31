@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -115,7 +116,7 @@ public class ActionQuestionFragment extends Fragment {
                         Question newQuestion = new Question(topic, qsContent);
                         questionViewModel.addQuestion(newQuestion);
 
-                        reloadFragment();
+                        showDialog("Add");
                     }
 
                     if (mission.equals(SystemConstant.UPDATE)) {
@@ -123,7 +124,7 @@ public class ActionQuestionFragment extends Fragment {
                         question.setQuestionContent(qsContent);
                         questionViewModel.updateQuestion(question);
 
-                        reloadFragment();
+                        showDialog("Edit");
                     }
                 }
             }
@@ -150,12 +151,21 @@ public class ActionQuestionFragment extends Fragment {
         btnSave = view.findViewById(R.id.btn_save);
     }
 
+    public void showDialog(String action){
+        Boolean actionStatus = questionViewModel.getActionStatus().booleanValue();
+        if(actionStatus){
+            showSuccessDialog(action+" Success!!");
+        }else {
+            showFailDialog(action+" Fail!!");
+        }
+    }
+
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
             @Override
             public void changeFragment() {
-
+                Navigation.findNavController(view).navigate(R.id.action_add_question_fragment_to_nav_question);
             }
         });
         newFragment.show(ft, "dialog success");

@@ -113,7 +113,7 @@
         tools:layout="@layout/fragment_question" >
         <action
             android:id="@+id/action_nav_question_to_add_question_fragment"
-            app:destination="@id/add_question_fragment" />
+            app:destination="@id/action_question_fragment" />
     </fragment>
 <!--    </fragment>-->
 
@@ -147,7 +147,7 @@
         android:label="AddAssignmentFragment"
         tools:layout="@layout/add_assignment"/>
     <fragment
-        android:id="@+id/add_question_fragment"
+        android:id="@+id/action_question_fragment"
         android:name="com.gaf.project.fragment.ActionQuestionFragment"
         android:label="AddQuestionFragment"
         tools:layout="@layout/action_question">

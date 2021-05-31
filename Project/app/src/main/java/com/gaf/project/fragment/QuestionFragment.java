@@ -197,8 +197,8 @@ public class QuestionFragment extends Fragment {
     }
 
     public void showDialog(String action){
-        Boolean actionStatus = questionViewModel.getActionStatus();
-        if(actionStatus == true){
+        Boolean actionStatus = questionViewModel.getActionStatus().booleanValue();
+        if(actionStatus){
             showSuccessDialog(action+" Success!!");
         }else {
             showFailDialog(action+" Fail!!");
