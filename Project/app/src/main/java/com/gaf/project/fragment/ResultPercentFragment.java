@@ -7,34 +7,24 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gaf.project.R;
-import com.gaf.project.adapter.AssignmentAdapter;
 import com.gaf.project.adapter.ResultPercentAdapter;
 import com.gaf.project.model.Answer;
-import com.gaf.project.model.Assignment;
 import com.gaf.project.model.Class;
 import com.gaf.project.model.Module;
 import com.gaf.project.model.PercentValue;
 import com.gaf.project.model.Question;
-import com.gaf.project.response.AnswerResponse;
-import com.gaf.project.response.QuestionResponse;
 import com.gaf.project.service.AnswerService;
 import com.gaf.project.service.QuestionService;
 import com.gaf.project.utils.ApiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ResultPercentFragment extends Fragment {
 

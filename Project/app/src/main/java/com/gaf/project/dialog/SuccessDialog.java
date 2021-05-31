@@ -18,9 +18,15 @@ import com.gaf.project.constant.SystemConstant;
 public class SuccessDialog extends DialogFragment {
 
     private String message;
+    private IClick iClick;
 
-    public SuccessDialog(String message) {
+    public SuccessDialog(String message, IClick iClick) {
         this.message = message;
+        this.iClick = iClick;
+    }
+
+    public interface IClick{
+        void changeFragment();
     }
 
     @NonNull
@@ -35,7 +41,10 @@ public class SuccessDialog extends DialogFragment {
         dialogMessage.setText(message);
 
         Button confirmBtn = view.findViewById(R.id.btn_success_confirm);
-        confirmBtn.setOnClickListener(v -> dismiss());
+        confirmBtn.setOnClickListener(v -> {
+            iClick.changeFragment();
+            dismiss();
+        });
 
         builder.setView(view);
         return builder.create();

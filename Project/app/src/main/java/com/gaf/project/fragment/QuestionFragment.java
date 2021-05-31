@@ -240,7 +240,12 @@ public class QuestionFragment extends Fragment {
 
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        SuccessDialog newFragment = new SuccessDialog(message);
+        SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
+            @Override
+            public void changeFragment() {
+
+            }
+        });
         newFragment.show(ft, "dialog success");
     }
 

@@ -135,6 +135,9 @@
         <action
             android:id="@+id/action_review_feedback_fragment_to_add_feedback_fragment"
             app:destination="@id/add_feedback_fragment" />
+        <action
+            android:id="@+id/action_review_feedback_fragment_to_nav_feedback"
+            app:destination="@id/nav_feedback" />
     </fragment>
 
 
@@ -162,7 +165,11 @@
         android:id="@+id/nav_trainee_home_fragment"
         android:name="com.gaf.project.fragment.TraineeHomeFragment"
         android:label="fragment_trainee_home"
-        tools:layout="@layout/fragment_trainee_home" />
+        tools:layout="@layout/fragment_trainee_home" >
+        <action
+            android:id="@+id/action_nav_trainee_home_fragment_to_doFeedbackFragment"
+            app:destination="@id/doFeedbackFragment" />
+    </fragment>
     <fragment
         android:id="@+id/detailClassFragment"
         android:name="com.gaf.project.fragment.DetailClassFragment"
@@ -183,5 +190,10 @@
         android:name="com.gaf.project.fragment.DetailEnrollmentFragment"
         android:label="fragment_detail_enrollment"
         tools:layout="@layout/fragment_detail_enrollment" />
+    <fragment
+        android:id="@+id/doFeedbackFragment"
+        android:name="com.gaf.project.fragment.DoFeedbackFragment"
+        android:label="fragment_do_feedback"
+        tools:layout="@layout/fragment_do_feedback" />
 
 </navigation>

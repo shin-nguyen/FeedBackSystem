@@ -19,13 +19,14 @@
             android:text="Review New Feedback"
             android:padding="10dp"
             android:textSize="36sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="450dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
@@ -45,13 +46,14 @@
                 android:textSize="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Feedback Title: " />
+                android:text="Feedback Title: "
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/feedback_title"
                 style="@style/TextItemStyle"
                 android:layout_width="wrap_content"
-                android:textColor="@color/blue"
+                android:textColor="@color/red"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
@@ -67,12 +69,13 @@
                 android:textSize="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Admin ID: " />
+                android:text="Admin ID: "
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/txt_admin_id"
                 style="@style/TextItemStyle"
-                android:textColor="@color/blue"
+                android:textColor="@color/red"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -83,8 +86,9 @@
            android:layout_width="match_parent"
            android:textColor="@color/black"
            style="@style/TextItemStyle"
-           android:text="Ec"
-           android:layout_height="wrap_content">
+           android:text="Content"
+           android:layout_height="wrap_content"
+           android:scrollbars="vertical">
 
        </TextView>
 

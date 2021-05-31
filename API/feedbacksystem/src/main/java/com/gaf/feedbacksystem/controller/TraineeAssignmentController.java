@@ -5,9 +5,11 @@ import com.gaf.feedbacksystem.constant.SystemConstant;
 import com.gaf.feedbacksystem.dto.AssignmentDto;
 import com.gaf.feedbacksystem.dto.TraineeAssignmentDto;
 import com.gaf.feedbacksystem.dto.TraineeDto;
+import com.gaf.feedbacksystem.entity.TraineeAssignment;
 import com.gaf.feedbacksystem.service.IAssignmentService;
 import com.gaf.feedbacksystem.service.ITraineeAssignmentService;
 import com.gaf.feedbacksystem.service.ITraineeService;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.BasicPermission;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,52 +36,42 @@ public class TraineeAssignmentController {
     @Autowired
     private IAssignmentService assignmentService;
 
-//    @PreAuthorize("hasRole(\"" + SystemConstant.TRAINEE_ROLE + "\")")
-//    @PostMapping(value = "/{userid}/{code}")
-//    public TraineeAssignmentDto create(@PathVariable (name = "userid") String userid,
-//                                       @PathVariable (name = "code") String code){
-//        try{
-//            AssignmentDto assignmentDto = assignmentService.findByCode(code);
-//            TraineeDto traineeDto = traineeService.findByUserName(userid);
-//
-//            if (assignmentDto == null || traineeDto == null){
-//                throw new MyResourceNotFoundException();
-//            }
-//
-//            TraineeAssignmentDto traineeAssignmentDto = new TraineeAssignmentDto();
-//            traineeAssignmentDto.setAssignment(assignmentDto);
-//            traineeAssignmentDto.setTrainee(traineeDto);
-//
-//            return  traineeAssignmentService.save(traineeAssignmentDto);
-//        }
-//        catch (MyResourceNotFoundException exc) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Trainee_Assignment Not Found", exc);
-//        }
-//    }
-
     @PostMapping(value = "/{username}/{code}")
     @PreAuthorize("hasRole(\"" + SystemConstant.TRAINEE_ROLE + "\")")
-    public Map<String, Boolean> create(@PathVariable (name = "username") String username,
+    public Map<String, Integer> create(@PathVariable (name = "username") String username,
                                         @PathVariable (name = "code") String code) {
         try {
-            Map<String, Boolean> response = new HashMap<>();
+            Map<String, Integer> response = new HashMap<>();
                 AssignmentDto assignmentDto = assignmentService.findByCode(code);
                 TraineeDto traineeDto = traineeService.findByUserName(username);
+            if (traineeDto == null){
+                throw new MyResourceNotFoundException();
+            }
 
-                if (assignmentDto == null || traineeDto == null){
-                    throw new MyResourceNotFoundException();
+            TraineeAssignmentDto traineeAssignmentDto = traineeAssignmentService.checkIsAvailable(username, code);
+                try {
+                    //check have trainee joined class
+                    if (traineeAssignmentDto != null){
+                        response.put("added", 0);
+                    }else
+                    // assignment is null, it's mean invalid code
+                    if (assignmentDto == null){
+                        response.put("added", 1);
+                    }
+                    //code is available in assignment, so add to trainee_assignment
+                    else if (assignmentDto.getRegistrationCode().equals(code)){
+                        TraineeAssignmentDto traineeAssignmentDto1 = new TraineeAssignmentDto();
+                        traineeAssignmentDto1.setAssignment(assignmentDto);
+                        traineeAssignmentDto1.setTrainee(traineeDto);
+
+                        traineeAssignmentService.save(traineeAssignmentDto1);
+
+                        response.put("added", 2);
+                    }
+                }catch (MyResourceNotFoundException exc){
+                    response.put("added", 3);
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "error", exc);
                 }
-                if (assignmentDto.getRegistrationCode().equals(code)){
-                    TraineeAssignmentDto traineeAssignmentDto = new TraineeAssignmentDto();
-                    traineeAssignmentDto.setAssignment(assignmentDto);
-                    traineeAssignmentDto.setTrainee(traineeDto);
-
-                    traineeAssignmentService.save(traineeAssignmentDto);
-
-                    response.put("add", Boolean.TRUE);
-                }
-                response.put("add", Boolean.FALSE);
-
             return response;
         } catch (MyResourceNotFoundException exc) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);

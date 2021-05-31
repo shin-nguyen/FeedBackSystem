@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddTraineeAssignment {
+public class AddTraineeAssignmentResponse {
     private Boolean added;
 }

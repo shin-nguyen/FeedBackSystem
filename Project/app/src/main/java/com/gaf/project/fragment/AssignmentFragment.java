@@ -145,6 +145,21 @@ public class AssignmentFragment extends Fragment{
         return view;
     }
 
+    public void showToast(String string){
+        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
+    }
+
+    public void showSuccessDialog(String message){
+        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+        SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
+            @Override
+            public void changeFragment() {
+
+            }
+        });
+        newFragment.show(ft, "dialog success");
+    }
+
     private void setAssignmentAdapter(Call<AssignmentResponse> call){
         call.enqueue(new Callback<AssignmentResponse>() {
             @Override
@@ -212,15 +227,6 @@ public class AssignmentFragment extends Fragment{
         reloadFragment();
     }
 
-    public void showToast(String string){
-        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
-    }
-
-    public void showSuccessDialog(String message){
-        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        SuccessDialog newFragment = new SuccessDialog(message);
-        newFragment.show(ft, "dialog success");
-    }
 
     public void showFailDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();

@@ -3,7 +3,6 @@ package com.gaf.project.fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
@@ -17,19 +16,10 @@ import android.widget.Toast;
 import com.gaf.project.R;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
-import com.gaf.project.model.Assignment;
-import com.gaf.project.model.Trainee;
-import com.gaf.project.model.TraineeAssignment;
-import com.gaf.project.response.AddTraineeAssignment;
-import com.gaf.project.response.AssignmentResponse;
-import com.gaf.project.service.AssignmentService;
+import com.gaf.project.response.AddTraineeAssignmentResponse;
 import com.gaf.project.service.TraineeAssignmentService;
-import com.gaf.project.service.TraineeService;
 import com.gaf.project.utils.ApiUtils;
 import com.gaf.project.utils.SessionManager;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -82,20 +72,26 @@ public class JoinFragment extends DialogFragment {
 //        Toast.makeText(getContext(), code, Toast.LENGTH_LONG).show();
         //
         String userName = SessionManager.getInstance().getUserName();
-        Call<AddTraineeAssignment> addTraineeAssignmentCall = traineeAssignmentService.create(userName, code);
-        addTraineeAssignmentCall.enqueue(new Callback<AddTraineeAssignment>() {
+        Call<AddTraineeAssignmentResponse> addTraineeAssignmentCall = traineeAssignmentService.create(userName, code);
+        addTraineeAssignmentCall.enqueue(new Callback<AddTraineeAssignmentResponse>() {
             @Override
-            public void onResponse(Call<AddTraineeAssignment> call, Response<AddTraineeAssignment> response) {
-                if (response.isSuccessful()&&response.body().getAdded()){
+            public void onResponse(Call<AddTraineeAssignmentResponse> call, Response<AddTraineeAssignmentResponse> response) {
+                if (response.isSuccessful()&&response.body().getAdded() == null){
+                    showFailDialog("some thing went wrong");
+                }
+                else if (response.isSuccessful()&&response.body().getAdded()){
                     showSuccessDialog("Join success!");
                 }
-                if (response.isSuccessful()&&response.body().getAdded()==false){
-                    showSuccessDialog("Invalid Registration Code!!!");
+                else if (response.isSuccessful()&&response.body().getAdded() == false){
+                    showFailDialog("Invalid Registration Code!!!");
+                }
+                else if (response.body() != null){
+                    showFailDialog("eeeeeerror");
                 }
             }
 
             @Override
-            public void onFailure(Call<AddTraineeAssignment> call, Throwable t) {
+            public void onFailure(Call<AddTraineeAssignmentResponse> call, Throwable t) {
                 Log.e("Error",t.getLocalizedMessage());
             }
         });
@@ -103,7 +99,12 @@ public class JoinFragment extends DialogFragment {
 
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        SuccessDialog newFragment = new SuccessDialog(message);
+        SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
+            @Override
+            public void changeFragment() {
+
+            }
+        });
         newFragment.show(ft, "dialog success");
     }
 
