@@ -86,6 +86,15 @@ public class ClassServiceImpl implements IClassService {
 	}
 
 	@Override
+	public ClassDto addEnrollment(String idTrainee,Integer idClass) {
+		Class clazz =  classRepository.findByClassID(idClass);
+		Trainee trainee = traineeRepository.findByUserName(idTrainee);
+
+		clazz.addTrainee(trainee);
+		return null;
+	}
+
+	@Override
 	public ClassDto save(ClassDto classDto) {
 		Class  mClass = ObjectMapperUtils.map(classDto,Class.class);
 

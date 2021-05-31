@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -51,7 +52,8 @@ public class EnrollmentFragment extends Fragment {
     private List<Class> listClass;
     private ClassService classService;
     private List<Enrollment> enrollmentList;
-    private  Spinner spnClass  ;
+    private Spinner spnClass  ;
+    private ArrayAdapter<Class> enrollmentArrayAdapter;
     private Button btnAddEnrollment;
     private TextView title;
     
@@ -71,6 +73,7 @@ public class EnrollmentFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_enrollment, container, false);
         btnAddEnrollment = view.findViewById(R.id.btn_add_enrollment);
         title = view.findViewById(R.id.txt_title);
+        spnClass = view.findViewById(R.id.spinner_class);
 
         enrollmentAdapter =  new EnrollmentAdapter(new EnrollmentAdapter.IClickItem() {
             @Override
@@ -95,6 +98,7 @@ public class EnrollmentFragment extends Fragment {
 
         listClass = new ArrayList<>();
         enrollmentList = new ArrayList<>();
+        //
         Call<ClassResponse> call =  classService.loadListClass();
         call.enqueue(new Callback<ClassResponse>() {
             @Override
@@ -105,9 +109,11 @@ public class EnrollmentFragment extends Fragment {
                         for (Trainee trainee : mClass.getTrainees())
                             enrollmentList.add(new Enrollment(mClass,trainee));
                     }
+                    enrollmentArrayAdapter =
+                            new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, listClass);
+                    spnClass.setAdapter(enrollmentArrayAdapter);
+                    enrollmentAdapter.setData(enrollmentList);
                 }
-
-                enrollmentAdapter.setData(enrollmentList);
             }
 
             @Override
