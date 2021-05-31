@@ -3,8 +3,10 @@ package com.gaf.project.fragment;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,10 +36,9 @@ import retrofit2.Response;
 
 public class PieChart1Fragment extends Fragment {
 
-    private TextView tvClassName, tvTest;
+    private TextView tvClassName;
     private PieChartView pieChartView;
-
-    private AnswerService answerService;
+    private View layNote;
     private List<Answer> answerList;
 
     private View view;
@@ -49,7 +50,6 @@ public class PieChart1Fragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        answerService = ApiUtils.getAnswerService();
     }
 
     @Override
@@ -58,43 +58,25 @@ public class PieChart1Fragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_pie_chart1, container, false);
         if(getArguments() != null) {
-            Class mClass = (Class) getArguments().getSerializable("class");
-            Module module = (Module) getArguments().getSerializable("module");
 
-            test(view, mClass, module);
+            answerList = (List<Answer>) getArguments().getSerializable("listAnswer");
+            String className = getArguments().getString("className");
 
             tvClassName = view.findViewById(R.id.tvClassName);
             pieChartView = view.findViewById(R.id.chart);
+            layNote = view.findViewById(R.id.layNote);
 
-            tvClassName.setText(mClass.getClassName());
+            tvClassName.setText(className);
 
-            setupPieChart(view, mClass, module);
+            setupPieChart(view, answerList);
         }
 
         return view;
     }
 
-    private void setupPieChart(View view, Class c, Module m) {
+    private void setupPieChart(View view, List<Answer> answerList) {
 
         List pieData = new ArrayList<>();
-
-        Call<AnswerResponse> callAnswer =  answerService.loadListAnswer(c.getClassID(), m.getModuleID());
-        new Thread(()-> {
-            callAnswer.enqueue(new Callback<AnswerResponse>() {
-                @Override
-                public void onResponse(Call<AnswerResponse> call, Response<AnswerResponse> response) {
-
-                    if (response.isSuccessful()&& response.body()!=null){
-                        answerList = response.body().getAnswers();
-                        showToast("Success");
-                    }
-                }
-                @Override
-                public void onFailure(Call<AnswerResponse> call, Throwable t) {
-                    Log.e("Error",t.getLocalizedMessage());
-                    showToast("Error");
-                }
-            });}).run();
 
         List<String> valueNames = new ArrayList<>();
         valueNames.add("Strongly Disagree");
@@ -103,35 +85,23 @@ public class PieChart1Fragment extends Fragment {
         valueNames.add("Agree");
         valueNames.add("Strongly Agree");
 
-        int answerSum;
-        try {
-            answerSum = answerList.size();
-        }
-        catch (Exception ex) {
-            answerSum = 0;
-            return;
-        }
+        int answerSum = answerList.size();
 
-        int[] valueSum = new int[5];
-        for(int j=0; j<answerSum; j++){
+        for (int i=0; i<5; i++){
+
             int count = 0;
-            for(int k=0; k<answerList.size(); k++){
-                if(answerList.get(k).getValue() == j){
+            for(int j=0; j<answerSum; j++){
+                if(answerList.get(j).getValue() == i){
                     count++;
                 }
             }
-            valueSum[j] = count;
-        }
 
-        for (int i=0; i<valueNames.size(); i++){
-
-            Integer value = valueSum[i];
-
+            int value = count;
             if (value==0){
                 continue;
             }
 
-            String name  =  valueNames.get(i).toString();
+            String name  =  valueNames.get(i);
             Integer color = SystemConstant.color[(4-i) % SystemConstant.lengthColor];
             Double percent = (double)value/(double)answerSum*100;
 
@@ -143,17 +113,11 @@ public class PieChart1Fragment extends Fragment {
         pieChartData.setValueLabelBackgroundEnabled(false);
         pieChartData.setValueLabelTextSize(10);
         pieChartView.setPieChartData(pieChartData);
-
     }
 
     BiFunction<String,String,String> getLabel = (String name, String value)->{
-        return  name + ": " + value+"%";
+        return value+"%";
     };
-
-    private void test(View view, Class c, Module m) {
-        tvTest = view.findViewById(R.id.tvTest);
-        tvTest.setText(c.getClassID()+"\n"+m.getModuleID());
-    }
 
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +19,13 @@ import com.gaf.project.model.Answer;
 import com.gaf.project.model.Class;
 import com.gaf.project.model.Module;
 import com.gaf.project.model.Question;
+import com.gaf.project.model.Topic;
 import com.gaf.project.response.AnswerResponse;
 import com.gaf.project.response.QuestionResponse;
+import com.gaf.project.response.TopicResponse;
 import com.gaf.project.service.AnswerService;
 import com.gaf.project.service.QuestionService;
+import com.gaf.project.service.TopicService;
 import com.gaf.project.utils.ApiUtils;
 
 import java.util.ArrayList;
@@ -37,15 +41,17 @@ import retrofit2.Response;
 
 public class PieChart2Fragment extends Fragment{
 
+    private TextView tvTopicName1, tvTopicName2, tvTopicName3;
     private PieChartView pieChartView1, pieChartView2, pieChartView3, pieChartView4;
 
     private AnswerService answerService;
     private QuestionService questionService;
-    private List<Answer> answerList;
-    private List<Answer> answerListByQuestion;
-    private List<Question> questionListByTopic;
+    private TopicService topicService;
 
-    private TextView tvTest;
+    private List<Answer> answerList;
+    private List<Answer> answerListByTopic;
+    private List<Question> questionListByTopic;
+    private List<Topic> topicList;
 
     private View view;
 
@@ -58,6 +64,7 @@ public class PieChart2Fragment extends Fragment{
         super.onCreate(savedInstanceState);
         answerService = ApiUtils.getAnswerService();
         questionService = ApiUtils.getQuestionService();
+        topicService = ApiUtils.getTopicService();
     }
 
     @Override
@@ -65,84 +72,104 @@ public class PieChart2Fragment extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_pie_chart2, container, false);
+
+        tvTopicName1 = view.findViewById(R.id.tvTopicName);
+        tvTopicName2 = view.findViewById(R.id.tvTopicName1);
+        tvTopicName3 = view.findViewById(R.id.tvTopicName2);
+
+        pieChartView1 = view.findViewById(R.id.chart1);
+        pieChartView2 = view.findViewById(R.id.chart2);
+        pieChartView3 = view.findViewById(R.id.chart3);
+        pieChartView4 = view.findViewById(R.id.chart4);
+
         if(getArguments() != null) {
-            Class mClass = (Class) getArguments().getSerializable("class");
-            Module module = (Module) getArguments().getSerializable("module");
-            test(view, mClass, module);
+            answerList = (List<Answer>) getArguments().getSerializable("listAnswer");
 
-            pieChartView1 = view.findViewById(R.id.chart1);
-            pieChartView2 = view.findViewById(R.id.chart2);
-            pieChartView3 = view.findViewById(R.id.chart3);
-            pieChartView4 = view.findViewById(R.id.chart4);
+            topicList = new ArrayList<>();
+            Call<TopicResponse> callTopic =  topicService.loadListTopic();
+            callTopic.enqueue(new Callback<TopicResponse>() {
+                @Override
+                public void onResponse(Call<TopicResponse> call, Response<TopicResponse> response) {
 
-            for(int i = 0; i<4; i++){
-                setupPieChart(view, mClass, module, i);
-            }
+                    if (response.isSuccessful()&& response.body()!=null){
+                        topicList = response.body().getTopic();
+                        tvTopicName1.setText(topicList.get(0).getTopicName());
+                        tvTopicName2.setText(topicList.get(1).getTopicName());
+                        tvTopicName3.setText(topicList.get(2).getTopicName());
+
+                        for(int i=0; i<topicList.size(); i++){
+                            setupPieChartTopic(view, answerList, i+1);
+                        }
+
+                        //setupPieChart(view, mClass, module, 0);
+                    }
+                }
+                @Override
+                public void onFailure(Call<TopicResponse> call, Throwable t) {
+                    Log.e("Error",t.getLocalizedMessage());
+                    showToast("Error0");
+                }
+            });
         }
 
         return view;
     }
 
-    private void setupPieChart(View view, Class c, Module m, int topicId) {
+    private void setupPieChartTopic(View view, List<Answer> answerList, int topicId) {
 
-        List pieData = new ArrayList<>();
+        questionListByTopic = new ArrayList<>();
+        Call<QuestionResponse> callQuestion = questionService.loadListQuestionByTopic(topicId);
+        callQuestion.enqueue(new Callback<QuestionResponse>() {
+            @Override
+            public void onResponse(Call<QuestionResponse> call, Response<QuestionResponse> response) {
 
-        Call<QuestionResponse> callQuestion =  questionService.loadListQuestionByTopic(topicId);
-        new Thread(()-> {
-            callQuestion.enqueue(new Callback<QuestionResponse>() {
-                @Override
-                public void onResponse(Call<QuestionResponse> call, Response<QuestionResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    questionListByTopic = response.body().getQuestions();
 
-                    if (response.isSuccessful()&& response.body()!=null){
-                        questionListByTopic = response.body().getQuestions();
-                    }
-                }
-                @Override
-                public void onFailure(Call<QuestionResponse> call, Throwable t) {
-                    Log.e("Error",t.getLocalizedMessage());
-                    showToast("Error");
-                }
-            });}).run();
+                    answerListByTopic = new ArrayList<>();
+                    for(int i = 0; i<answerList.size(); i++){
+                        int j = 0;
+                        while (j<questionListByTopic.size()){
+                            if(answerList.get(i).getQuestion().getQuestionID() == questionListByTopic.get(j).getQuestionID()){
 
-        int questionSum = 0;
-        try {
-            questionSum = questionListByTopic.size();
-        }
-        catch (Exception ex) {
-            return;
-        }
+                                answerListByTopic.add(answerList.get(i));
 
-        for(int i=0; i<questionListByTopic.size(); i++) {
-
-            Call<AnswerResponse> callAnswer = answerService.loadListAnswerByQuestion(c.getClassID(), m.getModuleID(), questionListByTopic.get(i).getQuestionID());
-            new Thread(() -> {
-                callAnswer.enqueue(new Callback<AnswerResponse>() {
-                    @Override
-                    public void onResponse(Call<AnswerResponse> call, Response<AnswerResponse> response) {
-
-                        if (response.isSuccessful() && response.body() != null) {
-                            answerListByQuestion = response.body().getAnswers();
-
-                            for(int j=0; j<answerListByQuestion.size(); j++) {
-                                answerList.add(answerListByQuestion.get(j));
+                                j = questionListByTopic.size();
+                            }
+                            else {
+                                j++;
                             }
                         }
                     }
 
-                    @Override
-                    public void onFailure(Call<AnswerResponse> call, Throwable t) {
-                        Log.e("Error", t.getLocalizedMessage());
-                        showToast("Error");
-                    }
-                });
-            }).run();
-        }
+                    doPieChart(view, answerListByTopic, topicId);
+                }
+            }
 
-        int answerSum = 0;
-        try {
-            answerSum = answerList.size();
-        }
-        catch (Exception ex) {
+            @Override
+            public void onFailure(Call<QuestionResponse> call, Throwable t) {
+                Log.e("Error", t.getLocalizedMessage());
+                showToast("Error2" + topicId);
+            }
+        });
+    }
+
+    private void doPieChart(View view, List<Answer> li, int topicId) {
+        List pieData = new ArrayList<>();
+
+        int answerSum = li.size();
+
+        if(answerSum == 0){
+            switch (topicId){
+                case 1:
+                    pieChartView1.setVisibility(view.INVISIBLE);
+                case 2:
+                    pieChartView2.setVisibility(view.INVISIBLE);
+                case 3:
+                    pieChartView3.setVisibility(view.INVISIBLE);
+                case 4:
+                    pieChartView4.setVisibility(View.INVISIBLE);
+            }
             return;
         }
 
@@ -153,26 +180,20 @@ public class PieChart2Fragment extends Fragment{
         valueNames.add("Agree");
         valueNames.add("Strongly Agree");
 
-        int[] valueSum = new int[5];
-        for(int j=0; j<answerSum; j++){
+        for (int i=0; i<5; i++){
             int count = 0;
-            for(int k=0; k<answerList.size(); k++){
-                if(answerList.get(k).getValue() == j){
+            for(int k=0; k<li.size(); k++){
+                if(li.get(k).getValue() == i){
                     count++;
                 }
             }
-            valueSum[j] = count;
-        }
 
-        for (int i=0; i<valueNames.size(); i++){
-
-            Integer value = valueSum[i];
-
+            Integer value = count;
             if (value==0){
                 continue;
             }
 
-            String name  =  valueNames.get(i).toString();
+            String name  =  valueNames.get(i);
             Integer color = SystemConstant.color[(4-i) % SystemConstant.lengthColor];
             Double percent = (double)value/(double)answerSum*100;
 
@@ -185,27 +206,21 @@ public class PieChart2Fragment extends Fragment{
         pieChartData.setValueLabelTextSize(6);
 
         switch (topicId){
-            case 0:
-                pieChartView1.setPieChartData(pieChartData);
             case 1:
-                pieChartView2.setPieChartData(pieChartData);
+                pieChartView1.setPieChartData(pieChartData);
             case 2:
+                pieChartView2.setPieChartData(pieChartData);
+            case 3:
                 pieChartView3.setPieChartData(pieChartData);
             case 4:
                 pieChartView4.setPieChartData(pieChartData);
 
         }
-
     }
 
     BiFunction<String,String,String> getLabel = (String name, String value)->{
-        return  name + ": " + value+"%";
+        return value+"%";
     };
-
-    private void test(View view, Class c, Module m) {
-        tvTest = view.findViewById(R.id.tvTest);
-        tvTest.setText(c.getClassName()+"\n"+m.getModuleName());
-    }
 
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
