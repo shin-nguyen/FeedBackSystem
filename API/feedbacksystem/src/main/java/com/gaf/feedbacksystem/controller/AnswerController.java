@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +63,7 @@ public class AnswerController {
 
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
     @PostMapping(value = "", produces = "application/json")
-    public ResponseEntity<Map<String, List<?>>> addAll(@RequestBody List<AnswerDto> answerDtos ){
+    public ResponseEntity<Map<String, List<?>>> addAll(@RequestBody ArrayList<AnswerDto> answerDtos ){
         try{
             List<AnswerDto> answerDtoList = iAnswerService.addAll(answerDtos);
             if ( answerDtoList.isEmpty()) {

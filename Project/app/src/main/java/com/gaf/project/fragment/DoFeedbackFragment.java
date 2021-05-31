@@ -24,6 +24,7 @@ import com.gaf.project.model.Assignment;
 import com.gaf.project.model.Comment;
 import com.gaf.project.model.Topic;
 import com.gaf.project.model.Trainee;
+import com.gaf.project.response.AnswerResponse;
 import com.gaf.project.response.TopicResponse;
 import com.gaf.project.service.AnswerService;
 import com.gaf.project.service.CommentService;
@@ -121,11 +122,19 @@ public class DoFeedbackFragment extends Fragment {
             });
 
             List<Answer> mList = topicTrainningAdapter.getmListAnswer();
-//            answerService.saveAll(mList);
 
-            for (Answer a:mList){
-                Log.e("Succees","ec");
-            }
+            Call<AnswerResponse> answerResponseCall = answerService.addAll(mList);
+            answerResponseCall.enqueue(new Callback<AnswerResponse>() {
+                @Override
+                public void onResponse(Call<AnswerResponse> call, Response<AnswerResponse> response) {
+                    Log.e("Success","Add Answer");
+                }
+
+                @Override
+                public void onFailure(Call<AnswerResponse> call, Throwable t) {
+
+                }
+            });
         });
         rcvAnswerInFeedbackTrainee.setAdapter(topicTrainningAdapter);
         return view;
