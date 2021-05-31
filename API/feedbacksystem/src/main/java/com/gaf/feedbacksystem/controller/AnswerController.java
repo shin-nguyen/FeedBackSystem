@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,5 +60,22 @@ public class AnswerController {
         }
     }
 
+
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    @PostMapping(value = "", produces = "application/json")
+    public ResponseEntity<Map<String, List<?>>> addAll(@RequestBody ArrayList<AnswerDto> answerDtos ){
+        try{
+            List<AnswerDto> answerDtoList = iAnswerService.addAll(answerDtos);
+            if ( answerDtoList.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            Map result = new HashMap();
+            result.put("answers", answerDtoList);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Answer Not Found", exc);
+        }
+    }
 
 }
