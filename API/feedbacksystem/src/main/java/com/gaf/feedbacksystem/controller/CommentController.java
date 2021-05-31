@@ -19,7 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/class")
+@RequestMapping(value = "/comment")
 @Tag(name = "comment")
 public class CommentController {
     @Autowired
