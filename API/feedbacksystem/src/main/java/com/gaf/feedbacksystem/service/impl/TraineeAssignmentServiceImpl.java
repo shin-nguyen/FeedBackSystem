@@ -22,6 +22,11 @@ public class TraineeAssignmentServiceImpl implements ITraineeAssignmentService {
         return ObjectMapperUtils.map(traineeAssignmentRepository.save(traineeAssignment), TraineeAssignmentDto.class);
     }
 
+    @Override
+    public TraineeAssignmentDto checkIsAvailable(String username, String code) {
+        return ObjectMapperUtils.map(traineeAssignmentRepository.compare(username, code), TraineeAssignmentDto.class);
+    }
+
 //    @Override
 //    public void checkCodeIsAvailable(String username, String code) {
 //        traineeAssignmentRepository.compare(username, code);
