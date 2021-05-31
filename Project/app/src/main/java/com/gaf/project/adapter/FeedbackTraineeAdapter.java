@@ -9,27 +9,30 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gaf.project.R;
+import com.gaf.project.model.Assignment;
 import com.gaf.project.model.Feedback;
 import com.gaf.project.model.Module;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class FeedbackTraineeAdapter extends RecyclerView.Adapter<FeedbackTraineeAdapter.FeedbackTraineeViewHolder>{
 
     private IClickItem iClickItem;
-    private List<Module> mListModule;
+    private List<Assignment> mListAssignment;
 
     public FeedbackTraineeAdapter(IClickItem iClickItem) {
         this.iClickItem = iClickItem;
     }
 
     public interface IClickItem{
-        void detail(Feedback item);
+        void detail(Assignment item);
     }
 
-    public void setData(List<Module> list){
-        this.mListModule = list;
+    public void setData(List<Assignment> list){
+        this.mListAssignment = list;
         notifyDataSetChanged();
     }
 
@@ -43,22 +46,33 @@ public class FeedbackTraineeAdapter extends RecyclerView.Adapter<FeedbackTrainee
 
     @Override
     public void onBindViewHolder(@NonNull FeedbackTraineeViewHolder holder, int position) {
-        Module module = mListModule.get(position);
+        Assignment assignment = mListAssignment.get(position);
 
-        if(module==null){
+        if(assignment==null){
             return;
         }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-        holder.feedbackTitle.setText(String.valueOf(module.getFeedback().getFeedbackID()));
+        holder.feedbackTitle.setText(String.valueOf(assignment.getModule().getFeedback().getFeedbackID()));
+        holder.classId.setText(String.valueOf(assignment.getMClass().getClassID()));
+        holder.className.setText(assignment.getMClass().getClassName());
+        holder.moduleId.setText(assignment.getModule().getModuleID().toString());
+        holder.endTime.setText(dateFormat.format(assignment.getModule().getFeedbackEndTime()));
+        holder.moduleName.setText(assignment.getModule().getModuleName());
 
+        holder.status.setText("InComplete");
+
+        holder.btnFeedback.setOnClickListener(v->{
+            iClickItem.detail(assignment);
+        });
 
 
     }
 
     @Override
     public int getItemCount() {
-        if (mListModule != null){
-            return mListModule.size();
+        if (mListAssignment != null){
+            return mListAssignment.size();
         }
         return 0;
     }
