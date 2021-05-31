@@ -3,8 +3,10 @@ package com.gaf.project.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+
 import com.gaf.project.model.Trainee;
 import com.google.gson.Gson;
+
 
 public class MySharedPreferences {
     private  static final String MY_SHARED_FREFERENCES = "MY_SHARED_FREFERENCES";

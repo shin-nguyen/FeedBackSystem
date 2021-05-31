@@ -22,6 +22,7 @@ public class ApiUtils {
 
     public static final String BASE_URL = "http://192.168.1.3:8080/";
 
+
     public static AuthenticationService getAuthenticationService() {
         return RetrofitConfig.getInstance().buildRetrofit().create(AuthenticationService.class);
     }
