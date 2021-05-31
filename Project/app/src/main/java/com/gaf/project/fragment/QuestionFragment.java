@@ -29,17 +29,21 @@ import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
 import com.gaf.project.dialog.WarningDialog;
 import com.gaf.project.model.Assignment;
+import com.gaf.project.model.Feedback;
 import com.gaf.project.model.Question;
 import com.gaf.project.model.Topic;
 import com.gaf.project.response.ClassResponse;
 import com.gaf.project.response.DeleteResponse;
+import com.gaf.project.response.FeedbackResponse;
 import com.gaf.project.response.QuestionResponse;
 import com.gaf.project.response.TopicResponse;
+import com.gaf.project.service.FeedbackService;
 import com.gaf.project.service.QuestionService;
 import com.gaf.project.service.TopicService;
 import com.gaf.project.utils.ApiUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import retrofit2.Call;
@@ -49,16 +53,19 @@ import retrofit2.Response;
 public class QuestionFragment extends Fragment {
 
     private View view;
-    private NavController navigation;
     private QuestionService questionService;
+    private FeedbackService feedbackService;
     private TopicService topicService;
     private RecyclerView recyclerViewQuestion;
     private QuestionAdapter questionAdapter;
     private List<Question> listQuestion;
+    private List<Feedback> feedbackList;
     private Button btnAdd;
     private ArrayAdapter<Topic> topicArrayAdapter;
     private List<Topic> topicList;
     private Spinner sprTopic;
+    private Boolean checkDeleteFlag = false;
+    private Integer countUse = 0;
 
     public QuestionFragment() {
         // Required empty public constructor
@@ -69,6 +76,7 @@ public class QuestionFragment extends Fragment {
         super.onCreate(savedInstanceState);
         questionService = ApiUtils.getQuestionService();
         topicService = ApiUtils.getTopicService();
+        feedbackService = ApiUtils.getFeedbackService();
     }
 
     @Override
@@ -160,15 +168,51 @@ public class QuestionFragment extends Fragment {
 
     private void clickDelete(Question item){
 
-        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+        countUse = 0;
+        checkDeleteFlag = false;
 
-        final WarningDialog dialog = new WarningDialog(
-                () -> {
-                    callDeleteQuestion(item);
-                },
-                "Do you want to delete this Question?");
+        feedbackList = new ArrayList<>();
+        Call<FeedbackResponse> call = feedbackService.getListFeedback();
+        call.enqueue(new Callback<FeedbackResponse>() {
+            @Override
+            public void onResponse(Call<FeedbackResponse> call, Response<FeedbackResponse> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    feedbackList = response.body().getFeedbacks();
+                    for(Feedback feedback: feedbackList){
+                        Collection<Question> questions = feedback.getQuestions();
+                        for(Question question: questions){
+                            if(question.equals(item)){
+                                checkDeleteFlag=true;
+                                countUse++;
+                            }
 
-        dialog.show(ft, "dialog success");
+                            FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+                            final WarningDialog dialog;
+                            if(checkDeleteFlag){
+                                dialog = new WarningDialog(
+                                        () -> {
+                                            callDeleteQuestion(item);
+                                        },
+                                        "This Question is in use with " + countUse + " Feedback.You really want to delete this Question?");
+                            }else {
+                                dialog = new WarningDialog(
+                                        () -> {
+                                            callDeleteQuestion(item);
+                                        },
+                                        "Do you want to delete this Question?");
+                            }
+                            dialog.show(ft, "dialog success");
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FeedbackResponse> call, Throwable t) {
+                Log.e("Fail to call api for feedback", t.getLocalizedMessage());
+                showToast("Fail to call api for feedback");
+            }
+        });
     }
 
     public void callDeleteQuestion(Question question){
