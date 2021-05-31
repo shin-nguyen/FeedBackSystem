@@ -3,6 +3,8 @@ package com.gaf.project.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.gaf.project.model.Assignment;
+
 public class MySharedPreferences {
     private  static final String MY_SHARED_FREFERENCES = "MY_SHARED_FREFERENCES";
     private Context mContext;
