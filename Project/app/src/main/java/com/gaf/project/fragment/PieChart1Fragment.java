@@ -86,6 +86,7 @@ public class PieChart1Fragment extends Fragment {
 
                     if (response.isSuccessful()&& response.body()!=null){
                         answerList = response.body().getAnswers();
+                        showToast("Success");
                     }
                 }
                 @Override
@@ -151,7 +152,7 @@ public class PieChart1Fragment extends Fragment {
 
     private void test(View view, Class c, Module m) {
         tvTest = view.findViewById(R.id.tvTest);
-        tvTest.setText(c.getClassName()+"\n"+m.getModuleName());
+        tvTest.setText(c.getClassID()+"\n"+m.getModuleID());
     }
 
     public void showToast(String string){
