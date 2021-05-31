@@ -169,6 +169,8 @@ public class AddAssignmentFragment extends Fragment {
                     showToast("Call API fail!");
                 }
             });
+
+            reloadFragment();
         });
 
         btnBack= view.findViewById(R.id.btn_back);
@@ -231,4 +233,13 @@ public class AddAssignmentFragment extends Fragment {
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }
 
+    public void reloadFragment(){
+        if (getFragmentManager() != null) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .detach(this)
+                    .attach(this)
+                    .commit();
+        }
+    }
 }

@@ -93,7 +93,7 @@ public class FeedbackTraineeAdapter extends RecyclerView.Adapter<FeedbackTrainee
             endTime =itemView.findViewById(R.id.module_feedback_end_time);
             status =itemView.findViewById(R.id.status);
 
-            btnFeedback = itemView.findViewById(R.id.btn_feedback_detail);
+            btnFeedback = itemView.findViewById(R.id.btn_do_feedback);
 
         }
     }
