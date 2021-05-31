@@ -83,7 +83,7 @@ public class JoinFragment extends DialogFragment {
                     showSuccessDialog("Join success!");
                 }
                 else if (response.isSuccessful()&&response.body().getAdded() == false){
-                    showSuccessDialog("Invalid Registration Code!!!");
+                    showFailDialog("Invalid Registration Code!!!");
                 }
                 else if (response.body() != null){
                     showFailDialog("eeeeeerror");
