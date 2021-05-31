@@ -3,64 +3,102 @@ package com.gaf.project.fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.gaf.project.R;
+import com.gaf.project.adapter.AssignmentAdapter;
+import com.gaf.project.adapter.FeedbackAdapter;
+import com.gaf.project.adapter.FeedbackTraineeAdapter;
+import com.gaf.project.model.Assignment;
+import com.gaf.project.model.Feedback;
+import com.gaf.project.response.AssignmentResponse;
+import com.gaf.project.service.AssignmentService;
+import com.gaf.project.service.FeedbackService;
+import com.gaf.project.utils.ApiUtils;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TraineeHomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class TraineeHomeFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public TraineeHomeFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TraineeHomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static TraineeHomeFragment newInstance(String param1, String param2) {
-        TraineeHomeFragment fragment = new TraineeHomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private View view;
+    private AssignmentService assignmentService;
+    private RecyclerView recyclerViewAssignment;
+    private FeedbackTraineeAdapter feedbackTraineeAdapter;
+    private List<Assignment> listAssignment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        assignmentService = ApiUtils.getAssignmentService();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trainee_home, container, false);
+        view =  inflater.inflate(R.layout.fragment_trainee_home, container, false);
+
+
+        recyclerViewAssignment = view.findViewById(R.id.rcv_feedback_for_trainee);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
+        recyclerViewAssignment.setLayoutManager(linearLayoutManager);
+
+        feedbackTraineeAdapter = new FeedbackTraineeAdapter(item -> {
+            doFeedback(item);
+        });
+        listAssignment = new ArrayList<>();
+        Call<AssignmentResponse> call =  assignmentService.loadListAssignment();
+        setAssignmentAdapter(call);
+
+        recyclerViewAssignment.setAdapter(feedbackTraineeAdapter);
+
+        return view;
     }
+
+    private void setAssignmentAdapter(Call<AssignmentResponse> call){
+        call.enqueue(new Callback<AssignmentResponse>() {
+            @Override
+            public void onResponse(Call<AssignmentResponse> call, Response<AssignmentResponse> response) {
+                if (response.isSuccessful()&&response.body()!=null){
+                    listAssignment = response.body().getAssignments();
+                    feedbackTraineeAdapter.setData(listAssignment);
+                    Log.e("Success","Assignment get success");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AssignmentResponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showToast("Call API fail!");
+            }
+        });
+    }
+
+    private void doFeedback(Assignment item) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("item", item);
+
+        Navigation.findNavController(view).navigate(R.id.action_nav_trainee_home_fragment_to_doFeedbackFragment,bundle);
+    }
+    public void showToast(String string){
+        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
+    }
+
 }

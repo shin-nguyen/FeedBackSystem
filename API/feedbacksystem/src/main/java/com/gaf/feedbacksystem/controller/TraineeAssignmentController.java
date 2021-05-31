@@ -36,29 +36,6 @@ public class TraineeAssignmentController {
     @Autowired
     private IAssignmentService assignmentService;
 
-//    @PreAuthorize("hasRole(\"" + SystemConstant.TRAINEE_ROLE + "\")")
-//    @PostMapping(value = "/{userid}/{code}")
-//    public TraineeAssignmentDto create(@PathVariable (name = "userid") String userid,
-//                                       @PathVariable (name = "code") String code){
-//        try{
-//            AssignmentDto assignmentDto = assignmentService.findByCode(code);
-//            TraineeDto traineeDto = traineeService.findByUserName(userid);
-//
-//            if (assignmentDto == null || traineeDto == null){
-//                throw new MyResourceNotFoundException();
-//            }
-//
-//            TraineeAssignmentDto traineeAssignmentDto = new TraineeAssignmentDto();
-//            traineeAssignmentDto.setAssignment(assignmentDto);
-//            traineeAssignmentDto.setTrainee(traineeDto);
-//
-//            return  traineeAssignmentService.save(traineeAssignmentDto);
-//        }
-//        catch (MyResourceNotFoundException exc) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Trainee_Assignment Not Found", exc);
-//        }
-//    }
-
     @PostMapping(value = "/{username}/{code}")
     @PreAuthorize("hasRole(\"" + SystemConstant.TRAINEE_ROLE + "\")")
     public Map<String, Integer> create(@PathVariable (name = "username") String username,
@@ -95,7 +72,6 @@ public class TraineeAssignmentController {
                     response.put("added", 3);
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "error", exc);
                 }
-
             return response;
         } catch (MyResourceNotFoundException exc) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);

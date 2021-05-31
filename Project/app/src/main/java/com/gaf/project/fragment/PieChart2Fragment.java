@@ -1,6 +1,5 @@
 package com.gaf.project.fragment;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -16,18 +15,14 @@ import android.widget.Toast;
 import com.gaf.project.R;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Answer;
-import com.gaf.project.model.Answer1;
 import com.gaf.project.model.Class;
 import com.gaf.project.model.Module;
 import com.gaf.project.model.Question;
-import com.gaf.project.model.Topic;
 import com.gaf.project.response.AnswerResponse;
 import com.gaf.project.response.QuestionResponse;
 import com.gaf.project.service.AnswerService;
 import com.gaf.project.service.QuestionService;
 import com.gaf.project.utils.ApiUtils;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,16 +35,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.content.Context.MODE_PRIVATE;
-
 public class PieChart2Fragment extends Fragment{
 
     private PieChartView pieChartView1, pieChartView2, pieChartView3, pieChartView4;
 
     private AnswerService answerService;
     private QuestionService questionService;
-    private List<Answer1> answerList;
-    private List<Answer1> answerListByQuestion;
+    private List<Answer> answerList;
+    private List<Answer> answerListByQuestion;
     private List<Question> questionListByTopic;
 
     private TextView tvTest;
