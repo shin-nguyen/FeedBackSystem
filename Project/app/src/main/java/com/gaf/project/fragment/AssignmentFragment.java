@@ -29,14 +29,19 @@ import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
 import com.gaf.project.dialog.WarningDialog;
 import com.gaf.project.model.Assignment;
+import com.gaf.project.model.Feedback;
 import com.gaf.project.response.AssignmentResponse;
 import com.gaf.project.response.DeleteResponse;
+import com.gaf.project.response.FeedbackResponse;
 import com.gaf.project.service.AssignmentService;
+import com.gaf.project.service.FeedbackService;
 import com.gaf.project.utils.ApiUtils;
 import com.gaf.project.utils.SessionManager;
 
 
 import java.util.ArrayList;
+import java.util.Currency;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -140,23 +145,6 @@ public class AssignmentFragment extends Fragment{
         return view;
     }
 
-    private void clickDelete(Assignment item){
-        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        final WarningDialog dialog = new WarningDialog(
-                () -> {
-                    callDeleteAssignment(item);
-                },
-                "Do you want to delete this Assignment?");
-        dialog.show(ft, "dialog success");
-    }
-
-    private void clickUpdate(Assignment item) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("item", item);
-
-        Navigation.findNavController(view).navigate(R.id.action_nav_assignment_to_edit_assignment_fragment,bundle);
-    }
-
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }
@@ -170,22 +158,6 @@ public class AssignmentFragment extends Fragment{
             }
         });
         newFragment.show(ft, "dialog success");
-    }
-
-    public void showFailDialog(String message){
-        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        FailDialog newFragment = new FailDialog(message);
-        newFragment.show(ft, "dialog fail");
-    }
-
-    public void reloadFragment(){
-        if (getFragmentManager() != null) {
-            getFragmentManager()
-                    .beginTransaction()
-                    .detach(this)
-                    .attach(this)
-                    .commit();
-        }
     }
 
     private void setAssignmentAdapter(Call<AssignmentResponse> call){
@@ -207,6 +179,33 @@ public class AssignmentFragment extends Fragment{
         });
     }
 
+    private void clickDelete(Assignment item){
+        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+        if(checkToDelete(item)){
+            final WarningDialog dialog = new WarningDialog(
+                    () -> {
+                        callDeleteAssignment(item);
+                    },
+                    "An active Module and Class has been assigned to this assignment. Do you really want to delete this?");
+            dialog.show(ft, "dialog success");
+        }else {
+            final WarningDialog dialog = new WarningDialog(
+                    () -> {
+                        callDeleteAssignment(item);
+                    },
+                    "Do you want to delete this Assignment?");
+            dialog.show(ft, "dialog success");
+        }
+
+    }
+
+    private void clickUpdate(Assignment item) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("item", item);
+
+        Navigation.findNavController(view).navigate(R.id.action_nav_assignment_to_edit_assignment_fragment,bundle);
+    }
+
     private void  callDeleteAssignment(Assignment assignment){
         Call<DeleteResponse> call =  assignmentService.delete(assignment.getMClass().getClassID(),
                 assignment.getModule().getModuleID(),
@@ -226,5 +225,30 @@ public class AssignmentFragment extends Fragment{
         });
 
         reloadFragment();
+    }
+
+
+    public void showFailDialog(String message){
+        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+        FailDialog newFragment = new FailDialog(message);
+        newFragment.show(ft, "dialog fail");
+    }
+
+    public void reloadFragment(){
+        if (getFragmentManager() != null) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .detach(this)
+                    .attach(this)
+                    .commit();
+        }
+    }
+
+    public Boolean checkToDelete(Assignment assignment){
+        if((assignment.getMClass().isDeleted()==false && assignment.getMClass().getEndTime().compareTo(new Date())>0)
+            || (assignment.getModule().isDeleted()==false && assignment.getModule().getEndTime().compareTo(new Date())>0)){
+            return true;
+        }
+        return false;
     }
 }
