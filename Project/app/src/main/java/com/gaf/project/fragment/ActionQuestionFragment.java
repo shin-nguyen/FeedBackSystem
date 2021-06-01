@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +30,8 @@ import com.gaf.project.response.TopicResponse;
 import com.gaf.project.service.QuestionService;
 import com.gaf.project.service.TopicService;
 import com.gaf.project.utils.ApiUtils;
+import com.gaf.project.viewmodel.QuestionViewModel;
+import com.gaf.project.viewmodel.TopicViewModel;
 
 import java.util.List;
 
@@ -38,17 +42,16 @@ import retrofit2.Response;
 public class ActionQuestionFragment extends Fragment {
 
     private View view;
-    private String mission;
-    private QuestionService questionService;
-    private TopicService topicService;
+    private QuestionViewModel questionViewModel;
+    private TopicViewModel topicViewModel;
+    private Question question;
+    private ArrayAdapter<Topic> topicArrayAdapter;
     private TextView title, topicName, warningQuestion;
     private EditText questionContent;
     private Spinner sprTopic;
-    private RelativeLayout topicLayoutBox;
     private Button btnSave, btnBack;
-    private Question question;
-    private ArrayAdapter<Topic> topicArrayAdapter;
-    private List<Topic> topicList;
+    private RelativeLayout topicLayoutBox;
+    private String mission;
 
     public ActionQuestionFragment() {
         // Required empty public constructor
@@ -57,10 +60,10 @@ public class ActionQuestionFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        questionService = ApiUtils.getQuestionService();
-        topicService = ApiUtils.getTopicService();
-
+        topicViewModel = new ViewModelProvider(this).get(TopicViewModel.class);
+        questionViewModel = new ViewModelProvider(this).get(QuestionViewModel.class);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,24 +71,9 @@ public class ActionQuestionFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.action_question, container, false);
 
-        Bundle bundle = new Bundle();
+        initView();
+
         mission = getArguments().getString("mission");
-
-        try {
-            question= (Question) getArguments().getSerializable("item");
-        }
-        catch (Exception ex){
-
-        }
-
-        title = view.findViewById(R.id.txt_title);
-        warningQuestion = view.findViewById(R.id.warning_question_content);
-        sprTopic = view.findViewById(R.id.spinner_topic_name);
-        questionContent = (EditText) view.findViewById(R.id.edt_question_content);
-        topicLayoutBox= view.findViewById(R.id.spinner_topic_box);
-        topicName= view.findViewById(R.id.txt_topic_name);
-        btnBack = view.findViewById(R.id.btn_back);
-        btnSave = view.findViewById(R.id.btn_save);
 
         if(mission.equals(SystemConstant.ADD)) {
             title.setText("Add Question");
@@ -94,27 +82,19 @@ public class ActionQuestionFragment extends Fragment {
 
         if(mission.equals(SystemConstant.UPDATE)) {
 
+            question= (Question) getArguments().getSerializable("item");
+
             title.setText("Edit Question");
             topicLayoutBox.setVisibility(View.GONE);
             topicName.setText(String.valueOf(question.getTopic().getTopicID()));
             questionContent.setText(question.getQuestionContent());
         }
 
-        Call<TopicResponse> callTopic = topicService.loadListTopic();
-        callTopic.enqueue(new Callback<TopicResponse>() {
+        topicViewModel.getListTopicLiveData().observe(getViewLifecycleOwner(), new Observer<List<Topic>>() {
             @Override
-            public void onResponse(Call<TopicResponse> call, Response<TopicResponse> response) {
-                if (response.isSuccessful()&& response.body()!=null) {
-                    topicList = response.body().getTopic();
-                    topicArrayAdapter =
-                            new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, topicList);
-                    sprTopic.setAdapter(topicArrayAdapter);
-                };
-            }
-            @Override
-            public void onFailure(Call<TopicResponse> call, Throwable t) {
-                Log.e("Error",t.getLocalizedMessage());
-                showToast("Error");
+            public void onChanged(List<Topic> topics) {
+                topicArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, topics);
+                sprTopic.setAdapter(topicArrayAdapter);
             }
         });
 
@@ -133,9 +113,7 @@ public class ActionQuestionFragment extends Fragment {
 
                     if (mission.equals(SystemConstant.ADD)) {
                         Question newQuestion = new Question(topic, qsContent);
-
-                        Call<Question> callAdd = questionService.create(newQuestion);
-                        callQuestion(callAdd,"Add Success!!");
+                        questionViewModel.addQuestion(newQuestion);
 
                         reloadFragment();
                     }
@@ -143,9 +121,7 @@ public class ActionQuestionFragment extends Fragment {
                     if (mission.equals(SystemConstant.UPDATE)) {
 
                         question.setQuestionContent(qsContent);
-
-                        Call<Question> callUpdate = questionService.update(question);
-                        callQuestion(callUpdate,"Edit Success!!");
+                        questionViewModel.updateQuestion(question);
 
                         reloadFragment();
                     }
@@ -163,23 +139,15 @@ public class ActionQuestionFragment extends Fragment {
         return view;
     }
 
-    public void callQuestion(Call<Question> call, String notification){
-        call.enqueue(new Callback<Question>() {
-            @Override
-            public void onResponse(Call<Question> call, Response<Question> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    showSuccessDialog(notification);
-                    Log.e("Success", "Success");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Question> call, Throwable t) {
-                Log.e("Error", t.getLocalizedMessage());
-                showFailDialog("Error");
-            }
-        });
-        Log.e("Success", "Success");
+    public void initView(){
+        title = view.findViewById(R.id.txt_title);
+        warningQuestion = view.findViewById(R.id.warning_question_content);
+        sprTopic = view.findViewById(R.id.spinner_topic_name);
+        questionContent = (EditText) view.findViewById(R.id.edt_question_content);
+        topicLayoutBox= view.findViewById(R.id.spinner_topic_box);
+        topicName= view.findViewById(R.id.txt_topic_name);
+        btnBack = view.findViewById(R.id.btn_back);
+        btnSave = view.findViewById(R.id.btn_save);
     }
 
     public void showSuccessDialog(String message){

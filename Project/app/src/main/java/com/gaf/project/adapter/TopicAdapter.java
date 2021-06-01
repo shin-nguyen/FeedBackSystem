@@ -1,5 +1,6 @@
 package com.gaf.project.adapter;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +22,7 @@ import com.gaf.project.model.Topic;
 import com.gaf.project.response.QuestionResponse;
 import com.gaf.project.service.QuestionService;
 import com.gaf.project.utils.ApiUtils;
+import com.gaf.project.viewmodel.QuestionViewModel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,7 +37,7 @@ import retrofit2.Response;
 public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHolder>{
     private List<Topic> mListTopic;
     private View view;
-    private  List<Question> listQuestion;
+    private List<Question> listQuestion;
     private QuestionService questionService = ApiUtils.getQuestionService();
     private List<Question> mListQuestion = new ArrayList<>();
     private Set<Topic> topics = new HashSet<>();
@@ -46,6 +53,10 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHol
     public void setData(List<Topic> list){
         this.mListTopic = list;
         notifyDataSetChanged();
+    }
+
+    public void setListQuestion(List<Question> question){
+        this.listQuestion = question;
     }
 
     @NonNull
@@ -88,8 +99,6 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHol
             }
         });
 
-
-        //questionAdapter.setData(listQuestion);
         holder.questionRecyclerView.setAdapter(topicQuestionAdapter);
     }
 

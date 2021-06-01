@@ -150,7 +150,11 @@
         android:id="@+id/add_question_fragment"
         android:name="com.gaf.project.fragment.ActionQuestionFragment"
         android:label="AddQuestionFragment"
-        tools:layout="@layout/action_question"/>
+        tools:layout="@layout/action_question">
+        <action
+            android:id="@+id/action_add_question_fragment_to_nav_question"
+            app:destination="@id/nav_question" />
+    </fragment>
 
     <fragment
         android:id="@+id/add_class_fragment"

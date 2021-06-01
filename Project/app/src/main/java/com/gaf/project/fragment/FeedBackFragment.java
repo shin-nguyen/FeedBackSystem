@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,6 +32,7 @@ import com.gaf.project.response.FeedbackResponse;
 import com.gaf.project.service.FeedbackService;
 import com.gaf.project.utils.ApiUtils;
 import com.gaf.project.utils.SessionManager;
+import com.gaf.project.viewmodel.FeedBackViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +46,8 @@ public class FeedBackFragment extends Fragment{
     private View view;
     private RecyclerView recyclerViewFeedback;
     private FeedbackAdapter feedBackAdapter;
-    private List<Feedback> feedbackList;
+    //private List<Feedback> feedbackList;
+    private FeedBackViewModel feedBackViewModel;
     private FeedbackService feedbackService;
     private NavController navigation;
 
@@ -53,6 +57,13 @@ public class FeedBackFragment extends Fragment{
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         feedbackService = ApiUtils.getFeedbackService();
+        feedBackViewModel = new ViewModelProvider(this).get(FeedBackViewModel.class);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        feedBackViewModel.initData();
     }
 
     @Override
@@ -64,23 +75,21 @@ public class FeedBackFragment extends Fragment{
         String userRole = SessionManager.getInstance().getUserRole();
 
         if(userRole.equals(SystemConstant.ADMIN_ROLE)){
-            feedbackList = new ArrayList<>();
-            Call<FeedbackResponse> call = feedbackService.getListFeedback();
-            setAdapter(call);
+//            feedbackList = new ArrayList<>();
+//            Call<FeedbackResponse> call = feedbackService.getListFeedback();
+//            setAdapter(call);
+            feedBackViewModel.getListFeedBackLiveData().observe(getViewLifecycleOwner(), new Observer<List<Feedback>>() {
+                @Override
+                public void onChanged(List<Feedback> feedbacks) {
+                    feedBackAdapter.setData(feedbacks);
+                }
+            });
 
             //open fragment create new feedback by button
             Button btnAddFeedBack = view.findViewById(R.id.btn_add_feedback);
             btnAddFeedBack.setOnClickListener(v -> {
                 clickAdd();
             });
-        }else if (userRole.equals(SystemConstant.TRAINER_ROLE)){
-
-            //do something with trainer
-
-        }else if (userRole.equals(SystemConstant.TRAINEE_ROLE)){
-
-            //do something with trainee
-
         }
 
         feedBackAdapter = new FeedbackAdapter(new FeedbackAdapter.IClickItem() {
@@ -100,6 +109,8 @@ public class FeedBackFragment extends Fragment{
             }
         });
 
+
+
         recyclerViewFeedback = view.findViewById(R.id.rcv_feedback);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         recyclerViewFeedback.setLayoutManager(linearLayoutManager);
@@ -108,23 +119,23 @@ public class FeedBackFragment extends Fragment{
         return view;
     }
 
-    private void setAdapter(Call<FeedbackResponse> call) {
-        call.enqueue(new Callback<FeedbackResponse>() {
-            @Override
-            public void onResponse(Call<FeedbackResponse> call, Response<FeedbackResponse> response) {
-                if (response.isSuccessful() && response.body() != null){
-                    feedbackList = response.body().getFeedbacks();
-                    feedBackAdapter.setData(feedbackList);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<FeedbackResponse> call, Throwable t) {
-                Log.e("Fail to call api for feedback", t.getLocalizedMessage());
-                showToast("Fail to call api for feedback");
-            }
-        });
-    }
+//    private void setAdapter(Call<FeedbackResponse> call) {
+//        call.enqueue(new Callback<FeedbackResponse>() {
+//            @Override
+//            public void onResponse(Call<FeedbackResponse> call, Response<FeedbackResponse> response) {
+//                if (response.isSuccessful() && response.body() != null){
+//                    feedbackList = response.body().getFeedbacks();
+//                    feedBackAdapter.setData(feedbackList);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<FeedbackResponse> call, Throwable t) {
+//                Log.e("Fail to call api for feedback", t.getLocalizedMessage());
+//                showToast("Fail to call api for feedback");
+//            }
+//        });
+//    }
 
     private void clickAdd() {
         bundle.putString("mission", SystemConstant.ADD);
@@ -144,12 +155,15 @@ public class FeedBackFragment extends Fragment{
 
         final WarningDialog dialog = new WarningDialog(
                 () -> {
+                    //feedBackViewModel.deleteFeedback(item);
+
                     Call<DeleteResponse> call = feedbackService.delete(item.getFeedbackID());
                     call.enqueue(new Callback<DeleteResponse>() {
                         @Override
                         public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
                             if (response.isSuccessful() && response.body().getDeleted()){
                                 showSuccessDialog("Delete success!");
+                                reloadFragment();
                             }
                         }
 

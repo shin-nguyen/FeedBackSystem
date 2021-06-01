@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -42,6 +44,9 @@ import com.gaf.project.service.FeedbackService;
 import com.gaf.project.service.TopicService;
 import com.gaf.project.service.TypeFeedbackService;
 import com.gaf.project.utils.ApiUtils;
+import com.gaf.project.viewmodel.QuestionViewModel;
+import com.gaf.project.viewmodel.TopicViewModel;
+import com.gaf.project.viewmodel.TypeFeedbackViewModel;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -59,25 +64,22 @@ public class AddFeedBackFragment extends Fragment {
     private RecyclerView recyclerTopic;
     private TopicAdapter topicAdapter;
     private List<Topic> listTopic;
-    private List<TypeFeedback> typeFeedbacks ;
     private String mission;
-    private FeedbackService feedbackService;
-    private TopicService topicService;
-    private TypeFeedbackService typeFeedbackService;
     private TextView title;
     private Spinner spnFeedbackType;
     private EditText feedbackTitle;
-    private ArrayAdapter<TypeFeedback> typeFeedbackAdapter;
+    private ArrayAdapter<TypeFeedback> typeFeedbackArrayAdapter;
     private Button  btnBack,btnReview;
     private Integer idFb;
+    private TypeFeedbackViewModel typeFeedbackViewModel;
+    private TopicViewModel topicViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        feedbackService = ApiUtils.getFeedbackService();
-        typeFeedbackService = ApiUtils.getTypeFeedbackService();
 
-        topicService = ApiUtils.getTopicService();
+        typeFeedbackViewModel = new ViewModelProvider(this).get(TypeFeedbackViewModel.class);
+        topicViewModel = new ViewModelProvider(this).get(TopicViewModel.class);
     }
 
     @Nullable
@@ -111,48 +113,26 @@ public class AddFeedBackFragment extends Fragment {
 
         }
 
-        //load type feedback
-        Call<TypeFeedbackResponse> callTypeFeedback =  typeFeedbackService.loadListTypeFeedback();
-            callTypeFeedback.enqueue(new Callback<TypeFeedbackResponse>() {
+        //load type feedback using ViewModel
+        typeFeedbackViewModel.getListTypeFeedbackLiveData().observe(getViewLifecycleOwner(), new Observer<List<TypeFeedback>>() {
             @Override
-            public void onResponse(Call<TypeFeedbackResponse> call, Response<TypeFeedbackResponse> response) {
-
-                    if (response.isSuccessful()&& response.body()!=null){
-                        typeFeedbacks = response.body().getTypeFeedbacks();
-                        typeFeedbackAdapter =
-                                new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, typeFeedbacks);
-                        spnFeedbackType.setAdapter(typeFeedbackAdapter);
-                    }
-            }
-            @Override
-            public void onFailure(Call<TypeFeedbackResponse> call, Throwable t) {
-                Log.e("Can not get type of feedback",t.getLocalizedMessage());
-                showToast("Can not get type of feedback");
+            public void onChanged(List<TypeFeedback> typeFeedbacks) {
+                typeFeedbackArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, typeFeedbacks);
+                spnFeedbackType.setAdapter(typeFeedbackArrayAdapter);
             }
         });
-        //
+
         topicAdapter = new TopicAdapter();
         listTopic = new ArrayList<>();
 
         //load list topic
-        Call<TopicResponse> topicCall = topicService.loadListTopic();
-        topicCall.enqueue(new Callback<TopicResponse>() {
+        topicViewModel.getListTopicLiveData().observe(getViewLifecycleOwner(), new Observer<List<Topic>>() {
             @Override
-            public void onResponse(Call<TopicResponse> call, Response<TopicResponse> response) {
-                if (response.isSuccessful()&&response.body()!=null){
-                    listTopic = response.body().getTopic();
-                    topicAdapter.setData(listTopic);
-                    getTopics(listTopic);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TopicResponse> call, Throwable t) {
-                Log.e("Can not get list topic",t.getLocalizedMessage());
-                showToast("Can not get list topic");
+            public void onChanged(List<Topic> topics) {
+                topicAdapter.setData(topics);
+                getTopics(topics);
             }
         });
-
 
         btnBack.setOnClickListener(v -> getActivity().onBackPressed());
 

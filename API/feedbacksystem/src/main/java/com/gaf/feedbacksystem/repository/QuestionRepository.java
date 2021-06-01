@@ -19,8 +19,8 @@ public interface QuestionRepository extends JpaRepository<Question,Integer> {
     List<Question> findAllByDeletedFalse();
 
     Question findByQuestionID(Integer questionID);
-
-    List<Question> findAllByTopic_TopicID(Integer id);
+    
+    List<Question> findAllByTopic_TopicID(@Param("id") Integer id);
 
     @Transactional
     @Modifying

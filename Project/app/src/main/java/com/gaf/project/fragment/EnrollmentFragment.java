@@ -5,6 +5,9 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -33,6 +37,7 @@ import com.gaf.project.response.ClassResponse;
 import com.gaf.project.response.DeleteResponse;
 import com.gaf.project.service.ClassService;
 import com.gaf.project.utils.ApiUtils;
+import com.gaf.project.viewmodel.EnrollmentViewModel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -49,21 +54,19 @@ public class EnrollmentFragment extends Fragment {
     private View view;
     private RecyclerView recyclerViewEnrollment;
     private EnrollmentAdapter enrollmentAdapter;
-    private List<Class> listClass;
     private ClassService classService;
-    private List<Enrollment> enrollmentList;
     private Spinner spnClass  ;
     private ArrayAdapter<Class> enrollmentArrayAdapter;
     private Button btnAddEnrollment;
     private TextView title;
-    
-    public EnrollmentFragment() {
-    }
+    private EnrollmentViewModel enrollmentViewModel;
+    private Class aClass;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         classService = ApiUtils.getClassService();
+        enrollmentViewModel = new ViewModelProvider(this).get(EnrollmentViewModel.class);
     }
 
     @Override
@@ -96,34 +99,38 @@ public class EnrollmentFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         recyclerViewEnrollment.setLayoutManager(linearLayoutManager);
 
-        listClass = new ArrayList<>();
-        enrollmentList = new ArrayList<>();
-        //
-        Call<ClassResponse> call =  classService.loadListClass();
-        call.enqueue(new Callback<ClassResponse>() {
+        //get list class from view model
+        enrollmentViewModel.getListClassLiveData().observe(getViewLifecycleOwner(), new Observer<List<Class>>() {
             @Override
-            public void onResponse(Call<ClassResponse> call, Response<ClassResponse> response) {
-                listClass = response.body().getClasss();
-                if (listClass!=null) {
-                    for (Class mClass:listClass) {
-                        for (Trainee trainee : mClass.getTrainees())
-                            enrollmentList.add(new Enrollment(mClass,trainee));
-                    }
-                    enrollmentArrayAdapter =
-                            new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, listClass);
-                    spnClass.setAdapter(enrollmentArrayAdapter);
-                    enrollmentAdapter.setData(enrollmentList);
-                }
+            public void onChanged(List<Class> classes) {
+                enrollmentArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, classes);
+                spnClass.setAdapter(enrollmentArrayAdapter);
             }
+        });
 
+        //get list enrollment from view model
+        enrollmentViewModel.getListEnrollmentLiveData().observe(getViewLifecycleOwner(), new Observer<List<Enrollment>>() {
             @Override
-            public void onFailure(Call<ClassResponse> call, Throwable t) {
-                Log.e("Error",t.getLocalizedMessage());
-                showToast("Error");
+            public void onChanged(List<Enrollment> enrollments) {
+                enrollmentAdapter.setData(enrollments);
             }
         });
 
         recyclerViewEnrollment.setAdapter(enrollmentAdapter);
+
+        spnClass.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                aClass = (Class) parent.getItemAtPosition(position);
+                showToast(aClass.getClassID().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         return view;
     }

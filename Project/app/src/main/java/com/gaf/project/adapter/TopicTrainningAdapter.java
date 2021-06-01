@@ -37,7 +37,7 @@ public class TopicTrainningAdapter extends RecyclerView.Adapter<TopicTrainningAd
     private AnswerService answerService = ApiUtils.getAnswerService();
     private List<Answer> mListAnswer = new ArrayList<>();
 
-    public  List<Answer> getmListQuestion() {
+    public  List<Answer> getmListAnswer() {
         return mListAnswer;
     }
 
