@@ -17,7 +17,10 @@ import com.gaf.project.authentication.AuthenticationRequest;
 import com.gaf.project.authentication.AuthenticationResponse;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.fragment.ModuleFragment;
+import com.gaf.project.model.Trainee;
 import com.gaf.project.service.AuthenticationService;
+import com.gaf.project.service.TraineeService;
+import com.gaf.project.service.TrainerService;
 import com.gaf.project.utils.ApiUtils;
 import com.gaf.project.utils.SessionManager;
 
@@ -34,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private CheckBox cbRememberMe;
     private Spinner pnRole;
     private AuthenticationService authenticationService;
+    private TraineeService traineeService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //get all view in activity
     public void addControls(){
+        traineeService = ApiUtils.getTraineeService();
         getSupportActionBar().hide();
         edtEmail = findViewById(R.id.edt_email);
         edtPassword = findViewById(R.id.edt_password);
@@ -124,6 +129,22 @@ public class LoginActivity extends AppCompatActivity {
         SessionManager.getInstance().setIsLogin(true);
         SessionManager.getInstance().setUserName(username);
         SessionManager.getInstance().setUserRole(role);
+
+        if (role.equals(SystemConstant.TRAINEE_ROLE)){
+        Call<Trainee> call = traineeService.loadProfile();
+        call.enqueue(new Callback<Trainee>() {
+            @Override
+            public void onResponse(Call<Trainee> call, Response<Trainee> response) {
+                if (response.body()!=null && response.isSuccessful()){
+                    SessionManager.getInstance().setTrainee(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Trainee> call, Throwable t) {
+
+            }
+        });}
 
 //        edtPassword.setText("");
 //        edtEmail.setText("");
