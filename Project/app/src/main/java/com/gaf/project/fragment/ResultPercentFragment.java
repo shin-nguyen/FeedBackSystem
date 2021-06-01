@@ -38,6 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+//fragment to show statistics by percent for admin, trainer for nav_result
 public class ResultPercentFragment extends Fragment {
 
     TextView tvTopicName, tvTopicName1, tvTopicName2, tvTopicName3;
@@ -87,9 +88,11 @@ public class ResultPercentFragment extends Fragment {
         rcvStatisticsTopic3 = view.findViewById(R.id.rcvStatisticsTopic3);
 
         if(getArguments() != null) {
+            //receive data
             Class mClass = (Class) getArguments().getSerializable("class");
             Module module = (Module) getArguments().getSerializable("module");
 
+            //load list topic
             topicList = new ArrayList<>();
             Call<TopicResponse> callTopic =  topicService.loadListTopic();
             callTopic.enqueue(new Callback<TopicResponse>() {
@@ -103,6 +106,7 @@ public class ResultPercentFragment extends Fragment {
                         tvTopicName2.setText("III. " +topicList.get(2).getTopicName());
                         tvTopicName3.setText("IV. " +topicList.get(3).getTopicName());
 
+                        //do step 1 for set up percent statistic
                         doStep1(view, mClass, module);
                     }
                 }
@@ -117,6 +121,7 @@ public class ResultPercentFragment extends Fragment {
         return view;
     }
 
+    //step 1 for set up percent statistic: load list answer and do step 2
     private void doStep1(View view, Class mClass, Module module) {
 
         answerList = new ArrayList<>();
@@ -128,6 +133,7 @@ public class ResultPercentFragment extends Fragment {
                 if (response.isSuccessful()&& response.body()!=null){
                     answerList = response.body().getAnswers();
 
+                    //step 2
                     doStep2(view, answerList);
                 }
             }
@@ -140,6 +146,7 @@ public class ResultPercentFragment extends Fragment {
 
     }
 
+    //step 2 for set up percent statistic: load list active questions and do final step
     private void doStep2(View view, List<Answer> answerList) {
 
         questionList = new ArrayList<>();
@@ -151,6 +158,7 @@ public class ResultPercentFragment extends Fragment {
                 if (response.isSuccessful()&& response.body()!=null){
                     questionList = response.body().getQuestions();
 
+                    //do final step: set up percent statistics for topic
                     for(int i=1; i<=4; i++){
                         setupRecyclerView(view, i, answerList, questionList);
                     }
@@ -165,8 +173,10 @@ public class ResultPercentFragment extends Fragment {
 
     }
 
+    //set up percent statistic with 2 list answers and list active question
     private void setupRecyclerView(View view, int topicId, List<Answer> answerList, List<Question> questionList) {
 
+        //select list question by topic
         questionListByTopic = new ArrayList<>();
         for(int i=0; i<questionList.size(); i++){
             if(questionList.get(i).getTopic().getTopicID() == topicId){
@@ -174,9 +184,12 @@ public class ResultPercentFragment extends Fragment {
             }
         }
 
+        //create list percent value for adapter
         percentValueList = new ArrayList<>();
+        //a question in a topic (topicId)
         for(int i=0; i<questionListByTopic.size(); i++){
 
+            //select all answer of this question
             answerListByQuestion = new ArrayList<>();
             for(int j=0; j<answerList.size(); j++){
                 if(answerList.get(j).getQuestion().getQuestionID() == questionListByTopic.get(i).getQuestionID()){
@@ -184,13 +197,19 @@ public class ResultPercentFragment extends Fragment {
                 }
             }
 
+            //have list answers by question, calculate value
             int valueSum = answerListByQuestion.size();
+            //if valueSum = 0
             if(valueSum == 0){
                 percentValueList.add(new PercentValue("- " + questionListByTopic.get(i).getQuestionContent(),
                         "0.00%", "0.00%","0.00%","0.00%", "0.00%"));
             }
+            //if valueSum != 0
             else {
                 List<String> percentValue = new ArrayList<>();
+
+                //percent chart have 5 values: 0,1,2,3,4
+                //count by value, calculate the percent
                 for (int k = 0; k < 5; k++) {
 
                     int count = 0;
@@ -206,15 +225,19 @@ public class ResultPercentFragment extends Fragment {
                     percentValue.add(k, f.format(percent)+"%");
                 }
 
+                //add list value percent, this list for adapter set data
+                //PercentValue is format variable be created for list value percent
                 percentValueList.add(new PercentValue("- " + questionListByTopic.get(i).getQuestionContent(),
                         percentValue.get(0), percentValue.get(1), percentValue.get(2), percentValue.get(3), percentValue.get(4)));
             }
         }
 
+        //set up adapter
         linearLayoutManager = new LinearLayoutManager(view.getContext());
         resultPercentAdapter = new ResultPercentAdapter();
         resultPercentAdapter.setData(percentValueList);
 
+        //set up recycler view by topics
         switch (topicId){
             case 1:
                 rcvStatisticsTopic.setLayoutManager(linearLayoutManager);

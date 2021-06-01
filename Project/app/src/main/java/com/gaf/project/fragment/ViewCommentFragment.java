@@ -14,15 +14,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.gaf.project.R;
-import com.gaf.project.adapter.AssignmentAdapter;
 import com.gaf.project.adapter.CommentAdapter;
-import com.gaf.project.model.Assignment;
 import com.gaf.project.model.Class;
 import com.gaf.project.model.Comment;
 import com.gaf.project.model.Module;
-import com.gaf.project.response.AssignmentResponse;
 import com.gaf.project.response.CommentResponse;
-import com.gaf.project.service.AssignmentService;
 import com.gaf.project.service.CommentService;
 import com.gaf.project.utils.ApiUtils;
 
@@ -33,6 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+//fragment for admin, trainer view comment in nav_result
 public class ViewCommentFragment extends Fragment {
 
     private CommentService commentService;
@@ -61,6 +58,7 @@ public class ViewCommentFragment extends Fragment {
         recyclerViewComment = view.findViewById(R.id.rcvComment);
 
         if(getArguments() != null) {
+            //receive data
             Class mClass = (Class) getArguments().getSerializable("class");
             Module module = (Module) getArguments().getSerializable("module");
 
@@ -69,6 +67,7 @@ public class ViewCommentFragment extends Fragment {
 
             commentAdapter = new CommentAdapter();
 
+            //load list comment, set data for adapter and set adapter for recycler view
             listComment = new ArrayList<>();
             Call<CommentResponse> call =  commentService.loadListComment(mClass.getClassID(), module.getModuleID());
             call.enqueue(new Callback<CommentResponse>() {

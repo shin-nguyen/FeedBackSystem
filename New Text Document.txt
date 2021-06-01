@@ -33,6 +33,13 @@ insert question value (4,false,"Noi Dung Danh Gia GV ",2);
 insert question value (5,false,"Noi Dung Danh Gia SV Hoc  ",2);
 insert question value (6,false,"Danh Gia Ec ",2);
 
+insert question value (7,false,"Noi Dung Danh Gia GV ",3);
+insert question value (8,false,"Noi Dung Danh Gia SV Hoc  ",3);
+insert question value (9,false,"Danh Gia Ec ",3);
+insert question value (10,false,"Noi Dung Danh Gia GV ",4);
+insert question value (11,false,"Noi Dung Danh Gia SV Hoc  ",4);
+insert question value (12,false,"Danh Gia Ec ",4);
+
 insert trainee value('thao','thaole301000@gmail.com','thao','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
 '1234','TanThanh',1,true,'0918948074','1234');
 insert trainee value('hung','hung@gmail.com','hung','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
