@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Fail"
-        android:textColor="@color/black"
+        android:textStyle="bold"
         android:textSize="25sp"
         />
 

@@ -145,7 +145,11 @@
         android:id="@+id/add_assignment_fragment"
         android:name="com.gaf.project.fragment.AddAssignmentFragment"
         android:label="AddAssignmentFragment"
-        tools:layout="@layout/add_assignment"/>
+        tools:layout="@layout/add_assignment">
+        <action
+            android:id="@+id/action_add_assignment_fragment_to_nav_assignment"
+            app:destination="@id/nav_assignment" />
+    </fragment>
     <fragment
         android:id="@+id/action_question_fragment"
         android:name="com.gaf.project.fragment.ActionQuestionFragment"
@@ -164,7 +168,12 @@
     <fragment
         android:id="@+id/edit_assignment_fragment"
         android:name="com.gaf.project.fragment.EditAssignmentFragment"
-        android:label="EditAssignmentFragment" />
+        android:label="EditAssignmentFragment"
+        tools:layout="@layout/edit_assignment" >
+        <action
+            android:id="@+id/action_edit_assignment_fragment_to_nav_assignment"
+            app:destination="@id/nav_assignment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_trainee_home_fragment"
         android:name="com.gaf.project.fragment.TraineeHomeFragment"
