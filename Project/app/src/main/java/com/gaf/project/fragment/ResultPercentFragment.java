@@ -7,9 +7,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gaf.project.R;
@@ -19,25 +21,40 @@ import com.gaf.project.model.Class;
 import com.gaf.project.model.Module;
 import com.gaf.project.model.PercentValue;
 import com.gaf.project.model.Question;
+import com.gaf.project.model.Topic;
+import com.gaf.project.response.AnswerResponse;
+import com.gaf.project.response.QuestionResponse;
+import com.gaf.project.response.TopicResponse;
 import com.gaf.project.service.AnswerService;
 import com.gaf.project.service.QuestionService;
+import com.gaf.project.service.TopicService;
 import com.gaf.project.utils.ApiUtils;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ResultPercentFragment extends Fragment {
 
+    TextView tvTopicName, tvTopicName1, tvTopicName2, tvTopicName3;
     RecyclerView rcvStatisticsTopic, rcvStatisticsTopic1, rcvStatisticsTopic2, rcvStatisticsTopic3;
     private ResultPercentAdapter resultPercentAdapter;
     private List<PercentValue> percentValueList;
-    LinearLayoutManager linearLayoutManager;
+    private LinearLayoutManager linearLayoutManager;
 
     private AnswerService answerService;
     private QuestionService questionService;
+    private TopicService topicService;
+
     private List<Answer> answerList;
     private List<Answer> answerListByQuestion;
+    private List<Question> questionList;
     private List<Question> questionListByTopic;
+    private List<Topic> topicList;
 
     private View view;
 
@@ -50,6 +67,7 @@ public class ResultPercentFragment extends Fragment {
         super.onCreate(savedInstanceState);
         answerService = ApiUtils.getAnswerService();
         questionService = ApiUtils.getQuestionService();
+        topicService = ApiUtils.getTopicService();
     }
 
     @Override
@@ -58,142 +76,162 @@ public class ResultPercentFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_result_percent, container, false);
 
+        tvTopicName = view.findViewById(R.id.tvTopicName);
+        tvTopicName1 = view.findViewById(R.id.tvTopicName1);
+        tvTopicName2 = view.findViewById(R.id.tvTopicName2);
+        tvTopicName3 = view.findViewById(R.id.tvTopicName3);
+
+        rcvStatisticsTopic = view.findViewById(R.id.rcvStatisticsTopic);
+        rcvStatisticsTopic1 = view.findViewById(R.id.rcvStatisticsTopic1);
+        rcvStatisticsTopic2 = view.findViewById(R.id.rcvStatisticsTopic2);
+        rcvStatisticsTopic3 = view.findViewById(R.id.rcvStatisticsTopic3);
+
         if(getArguments() != null) {
             Class mClass = (Class) getArguments().getSerializable("class");
             Module module = (Module) getArguments().getSerializable("module");
 
-            rcvStatisticsTopic = view.findViewById(R.id.rcvStatisticsTopic);
-            rcvStatisticsTopic1 = view.findViewById(R.id.rcvStatisticsTopic1);
-            rcvStatisticsTopic2 = view.findViewById(R.id.rcvStatisticsTopic2);
-            rcvStatisticsTopic3 = view.findViewById(R.id.rcvStatisticsTopic3);
-//            rcvStatisticsTopic21 = view.findViewById(R.id.rcvStatisticsTopic21);
+            topicList = new ArrayList<>();
+            Call<TopicResponse> callTopic =  topicService.loadListTopic();
+            callTopic.enqueue(new Callback<TopicResponse>() {
+                @Override
+                public void onResponse(Call<TopicResponse> call, Response<TopicResponse> response) {
 
-            for(int i=0; i<4; i++){
-                setupRecyclerView(view, mClass, module, i);
-            }
+                    if (response.isSuccessful()&& response.body()!=null){
+                        topicList = response.body().getTopic();
+                        tvTopicName.setText("I. " + topicList.get(0).getTopicName());
+                        tvTopicName1.setText("II. " +topicList.get(1).getTopicName());
+                        tvTopicName2.setText("III. " +topicList.get(2).getTopicName());
+                        tvTopicName3.setText("IV. " +topicList.get(3).getTopicName());
+
+                        doStep1(view, mClass, module);
+                    }
+                }
+                @Override
+                public void onFailure(Call<TopicResponse> call, Throwable t) {
+                    Log.e("Error",t.getLocalizedMessage());
+                    showToast("Error0");
+                }
+            });
         }
 
         return view;
     }
 
-    private void setupRecyclerView(View view,Class c, Module m, int topicId) {
+    private void doStep1(View view, Class mClass, Module module) {
+
+        answerList = new ArrayList<>();
+        Call<AnswerResponse> callAnswer =  answerService.loadListAnswer(mClass.getClassID(), module.getModuleID());
+        callAnswer.enqueue(new Callback<AnswerResponse>() {
+            @Override
+            public void onResponse(Call<AnswerResponse> call, Response<AnswerResponse> response) {
+
+                if (response.isSuccessful()&& response.body()!=null){
+                    answerList = response.body().getAnswers();
+
+                    doStep2(view, answerList);
+                }
+            }
+            @Override
+            public void onFailure(Call<AnswerResponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showToast("Error");
+            }
+        });
+
+    }
+
+    private void doStep2(View view, List<Answer> answerList) {
+
+        questionList = new ArrayList<>();
+        Call<QuestionResponse> callAnswer =  questionService.loadListActiveQuestion();
+        callAnswer.enqueue(new Callback<QuestionResponse>() {
+            @Override
+            public void onResponse(Call<QuestionResponse> call, Response<QuestionResponse> response) {
+
+                if (response.isSuccessful()&& response.body()!=null){
+                    questionList = response.body().getQuestions();
+
+                    for(int i=1; i<=4; i++){
+                        setupRecyclerView(view, i, answerList, questionList);
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<QuestionResponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showToast("Error");
+            }
+        });
+
+    }
+
+    private void setupRecyclerView(View view, int topicId, List<Answer> answerList, List<Question> questionList) {
+
+        questionListByTopic = new ArrayList<>();
+        for(int i=0; i<questionList.size(); i++){
+            if(questionList.get(i).getTopic().getTopicID() == topicId){
+                questionListByTopic.add(questionList.get(i));
+            }
+        }
 
         percentValueList = new ArrayList<>();
+        for(int i=0; i<questionListByTopic.size(); i++){
 
-//        Call<QuestionResponse> callQuestion =  questionService.loadListQuestionByTopic(topicId);
-//        new Thread(()-> {
-//            callQuestion.enqueue(new Callback<QuestionResponse>() {
-//                @Override
-//                public void onResponse(Call<QuestionResponse> call, Response<QuestionResponse> response) {
-//
-//                    if (response.isSuccessful()&& response.body()!=null){
-//                        questionListByTopic = response.body().getQuestions();
-//                    }
-//                }
-//                @Override
-//                public void onFailure(Call<QuestionResponse> call, Throwable t) {
-//                    Log.e("Error",t.getLocalizedMessage());
-//                    showToast("Error");
-//                }
-//            });}).run();
-//
-//        int questionSum = 0;
-//        try {
-//            questionSum = questionListByTopic.size();
-//        }
-//        catch (Exception ex) {
-//            return;
-//        }
-//
-//        for(int i=0; i<questionListByTopic.size(); i++) {
-//
-//            Call<AnswerResponse> callAnswer = answerService.loadListAnswerByQuestion(c.getClassID(), m.getModuleID(), questionListByTopic.get(i).getQuestionID());
-//            int finalI = i;
-//            new Thread(() -> {
-//                callAnswer.enqueue(new Callback<AnswerResponse>() {
-//                    @Override
-//                    public void onResponse(Call<AnswerResponse> call, Response<AnswerResponse> response) {
-//
-//                        if (response.isSuccessful() && response.body() != null) {
-//                            answerListByQuestion = response.body().getAnswers();
-//
-//                            int[] valueSum = new int[5];
-//                            for(int j=0; j<answerListByQuestion.size(); j++){
-//                                int count = 0;
-//                                for(int k=0; k<answerList.size(); k++){
-//                                    if(answerList.get(k).getValue() == j){
-//                                        count++;
-//                                    }
-//                                }
-//                                valueSum[j] = count;
-//                            }
-//
-//                            PercentValue percentValue = new PercentValue("- " + questionListByTopic.get(finalI).getQuestionContent(),
-//                                    valueSum[0] + "%", valueSum[1] + "%", valueSum[2] + "%", valueSum[3] + "%", valueSum[4] + "%");
-//
-//                            percentValueList.add(percentValue);
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<AnswerResponse> call, Throwable t) {
-//                        Log.e("Error", t.getLocalizedMessage());
-//                        showToast("Error");
-//                    }
-//                });
-//            }).run();
-//        }
+            answerListByQuestion = new ArrayList<>();
+            for(int j=0; j<answerList.size(); j++){
+                if(answerList.get(j).getQuestion().getQuestionID() == questionListByTopic.get(i).getQuestionID()){
+                    answerListByQuestion.add(answerList.get(j));
+                }
+            }
 
-        //int valueSum = percentValueList.size();
+            int valueSum = answerListByQuestion.size();
+            if(valueSum == 0){
+                percentValueList.add(new PercentValue("- " + questionListByTopic.get(i).getQuestionContent(),
+                        "0.00%", "0.00%","0.00%","0.00%", "0.00%"));
+            }
+            else {
+                List<String> percentValue = new ArrayList<>();
+                for (int k = 0; k < 5; k++) {
 
-        PercentValue percentValue = new PercentValue("- Question content 1...", "6.1%", "20%", "5%", "7%", "0%");
-        PercentValue percentValue1 = new PercentValue("- Question content 2...", "6%", "20%", "5%", "7%", "0%");
-        PercentValue percentValue2 = new PercentValue("- Question content 3...", "6%", "20%", "5%", "7%", "0%");
-        PercentValue percentValue3 = new PercentValue("- Question content 4...", "6%", "20%", "5%", "7%", "0%");
-        PercentValue percentValue4 = new PercentValue("- Question content 5...", "6.1%", "20%", "5%", "7%", "0%");
-        PercentValue percentValue5 = new PercentValue("- Question content 6...", "6%", "20%", "5%", "7%", "0%");
-        PercentValue percentValue6 = new PercentValue("- Question content 7...", "6%", "20%", "5%", "7%", "0%");
-        PercentValue percentValue7 = new PercentValue("- Question content 8...", "6%", "20%", "5%", "7%", "0%");
+                    int count = 0;
+                    for(int j=0; j<valueSum; j++){
+                        if(answerListByQuestion.get(j).getValue() == k){
+                            count++;
+                        }
+                    }
+
+                    int value = count;
+                    Double percent = (double)value/(double)valueSum*100;
+                    DecimalFormat f = new DecimalFormat("#0.00");
+                    percentValue.add(k, f.format(percent)+"%");
+                }
+
+                percentValueList.add(new PercentValue("- " + questionListByTopic.get(i).getQuestionContent(),
+                        percentValue.get(0), percentValue.get(1), percentValue.get(2), percentValue.get(3), percentValue.get(4)));
+            }
+        }
+
+        linearLayoutManager = new LinearLayoutManager(view.getContext());
+        resultPercentAdapter = new ResultPercentAdapter();
+        resultPercentAdapter.setData(percentValueList);
 
         switch (topicId){
-            case 0:
-                percentValueList = new ArrayList<>();
-                percentValueList.add(percentValue);
-                percentValueList.add(percentValue1);
-                resultPercentAdapter = new ResultPercentAdapter();
-                linearLayoutManager = new LinearLayoutManager(view.getContext());
-                rcvStatisticsTopic.setLayoutManager(linearLayoutManager);
-                resultPercentAdapter.setData(percentValueList);
-                rcvStatisticsTopic.setAdapter(resultPercentAdapter);
             case 1:
-                percentValueList = new ArrayList<>();
-                percentValueList.add(percentValue2);
-                percentValueList.add(percentValue3);
-                percentValueList.add(percentValue2);
-                percentValueList.add(percentValue3);
-                resultPercentAdapter = new ResultPercentAdapter();
-                linearLayoutManager = new LinearLayoutManager(view.getContext());
-                rcvStatisticsTopic1.setLayoutManager(linearLayoutManager);
-                resultPercentAdapter.setData(percentValueList);
-                rcvStatisticsTopic1.setAdapter(resultPercentAdapter);
+                rcvStatisticsTopic.setLayoutManager(linearLayoutManager);
+                rcvStatisticsTopic.setAdapter(resultPercentAdapter);
+                break;
             case 2:
-                percentValueList = new ArrayList<>();
-                percentValueList.add(percentValue4);
-                percentValueList.add(percentValue5);
-                resultPercentAdapter = new ResultPercentAdapter();
-                linearLayoutManager = new LinearLayoutManager(view.getContext());
-                rcvStatisticsTopic2.setLayoutManager(linearLayoutManager);
-                resultPercentAdapter.setData(percentValueList);
-                rcvStatisticsTopic2.setAdapter(resultPercentAdapter);
+                rcvStatisticsTopic1.setLayoutManager(linearLayoutManager);
+                rcvStatisticsTopic1.setAdapter(resultPercentAdapter);
+                break;
             case 3:
-                percentValueList = new ArrayList<>();
-                percentValueList.add(percentValue6);
-                percentValueList.add(percentValue7);
-                resultPercentAdapter = new ResultPercentAdapter();
-                linearLayoutManager = new LinearLayoutManager(view.getContext());
+                rcvStatisticsTopic2.setLayoutManager(linearLayoutManager);
+                rcvStatisticsTopic2.setAdapter(resultPercentAdapter);
+                break;
+            case 4:
                 rcvStatisticsTopic3.setLayoutManager(linearLayoutManager);
-                resultPercentAdapter.setData(percentValueList);
                 rcvStatisticsTopic3.setAdapter(resultPercentAdapter);
+                break;
         }
 
     }
