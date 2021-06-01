@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,6 +81,7 @@ public class AddClassFragment extends Fragment {
         if(mission.equals(SystemConstant.ADD)){
             mTitle.setText("Add Class");
         }
+        else
         if(mission.equals(SystemConstant.UPDATE)){
             mTitle.setText("Edit Class");
             try {
@@ -88,11 +90,12 @@ public class AddClassFragment extends Fragment {
                     SimpleDateFormat myFra = new SimpleDateFormat("MM/dd/yyyy");
                     idClass = mClassEdit.getClassID();
                     mName.setText(mClassEdit.getClassName());
-                    mCapacity.setText(mClassEdit.getCapacity());
+                    mCapacity.setText(mClassEdit.getCapacity().toString());
                     mStartDate.setText(myFra.format(mClassEdit.getStartTime()));
                     mEndDate.setText(myFra.format(mClassEdit.getEndTime()));
 
                     mStartDate.setEnabled(false);
+                    btnStartDate.setEnabled(false);
                 }
             }
             catch (Exception ex){
@@ -111,13 +114,11 @@ public class AddClassFragment extends Fragment {
 
                 if(mission.equals(SystemConstant.UPDATE)){
                     Class mClass = new Class(idClass,name,capacity,startDate,endDate)   ;
-                    classViewModel.update(mClass);
-
-                    showDialog("Edit");
+                    showDialog(classViewModel.update(mClass),"Edit");
                 }
                 else if(mission.equals(SystemConstant.ADD)){
                     Class mClass = new Class(name,capacity,startDate,endDate);
-                    classViewModel.add(mClass);
+                    showDialog(classViewModel.add(mClass),"Add");
                 }
             }
         });
@@ -163,7 +164,7 @@ public class AddClassFragment extends Fragment {
             return !flag;
         }
 
-        if(mCapacity.getText().toString().isEmpty()||Integer.valueOf(mCapacity.getText().toString())>0){
+        if(mCapacity.getText().toString().isEmpty()||Integer.valueOf(mCapacity.getText().toString())<0){
             mCapacityWarning.setVisibility(View.VISIBLE);
             return !flag;
         }
@@ -177,7 +178,7 @@ public class AddClassFragment extends Fragment {
         Date startDate = new Date();
         try {
             startDate= dfs.parse(mStartDate.getText().toString());
-            if (startDate.compareTo(new Date())<0){
+            if (startDate.compareTo(new Date())<0&&!mission.equals(SystemConstant.UPDATE)){
                 mStartDateWaring.setVisibility(View.VISIBLE);
                 return !flag;
             }
@@ -241,8 +242,7 @@ public class AddClassFragment extends Fragment {
         btnStartDate =(ImageButton) view.findViewById(R.id.btn_add_start_date);
         btnEndDate =(ImageButton) view.findViewById(R.id.btn_add_end_date);
     }
-    public void showDialog(String action){
-        Boolean actionStatus = classViewModel.getActionStatus().booleanValue();
+    public void showDialog( Boolean actionStatus,String action){
         if(actionStatus){
             showSuccessDialog(action+" Success!!");
         }else {

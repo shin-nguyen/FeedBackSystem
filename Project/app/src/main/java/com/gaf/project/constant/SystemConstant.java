@@ -16,6 +16,10 @@ public class SystemConstant {
     public static final String DELETE = "DELETE";
     public static final String DETAIL = "DETAIL";
 
+
+    public static final String SUCCESS = "SUCCESS";
+    public static final String FAIL = "FAIL";
+
     public static AuthenticationResponse authenticationResponse = new AuthenticationResponse();
 
     public static final int []color ={

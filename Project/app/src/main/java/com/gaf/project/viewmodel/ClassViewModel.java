@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.navigation.Navigation;
@@ -72,46 +73,48 @@ public class ClassViewModel extends ViewModel {
         });
     }
 
-    public void deleted(Class mClass){
-        setActionStatus(false);
+    public MutableLiveData<String> deleted(Class mClass){
+        MutableLiveData<String> integerMutableLiveData = new MutableLiveData<>();
 
         Call<DeleteResponse> call =  classService.delete(mClass.getClassID());
         call.enqueue(new Callback<DeleteResponse>() {
             @Override
             public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
                 if (response.isSuccessful()&&response.body().getDeleted()){
+                    integerMutableLiveData.setValue(SystemConstant.SUCCESS);
                     initData();
-                    setActionStatus(true);
                 }
             }
             @Override
             public void onFailure(Call<DeleteResponse> call, Throwable t) {
-                setActionStatus(false);
+                integerMutableLiveData.setValue(SystemConstant.FAIL);
                 Log.e("Error",t.getLocalizedMessage());
             }
         });
+
+        return integerMutableLiveData;
     }
 
     public MutableLiveData<List<Class>> getListClassLiveData() {
         return mListClassLiveData;
     }
 
-    public Boolean getActionStatus() {
+    private Boolean getActionStatus() {
         return actionStatus;
     }
-    public void setActionStatus(Boolean actionStatus) {
+    private void setActionStatus(Boolean actionStatus) {
         this.actionStatus = actionStatus;
     }
 
-    public void update(Class mClass) {
+    public boolean update(Class mClass) {
         setActionStatus(false);
         Call<Class> call = classService.create(mClass);
         call.enqueue(new Callback<Class>() {
             @Override
             public void onResponse(Call<Class> call, Response<Class> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    initData();
                     setActionStatus(true);
+                    initData();
                 }
             }
 
@@ -120,17 +123,18 @@ public class ClassViewModel extends ViewModel {
                 Log.e("Error", t.getLocalizedMessage());
             }
         });
+        return getActionStatus();
     }
 
-    public void add(Class mClass) {
-        setActionStatus(true);
+    public boolean add(Class mClass) {
+        setActionStatus(false);
         Call<Class> call = classService.create(mClass);
         call.enqueue(new Callback<Class>() {
             @Override
             public void onResponse(Call<Class> call, Response<Class> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    setActionStatus(true);
                     initData();
-                    setActionStatus(false);
                 }
             }
 
@@ -139,5 +143,6 @@ public class ClassViewModel extends ViewModel {
                 Log.e("Error", t.getLocalizedMessage());
             }
         });
+        return getActionStatus();
     }
 }
