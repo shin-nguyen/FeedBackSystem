@@ -120,4 +120,8 @@ public class QuestionViewModel extends ViewModel {
     public void setActionStatus(Boolean actionStatus) {
         this.actionStatus = actionStatus;
     }
+
+    public List<Question> getListQuestion() {
+        return mListQuestion;
+    }
 }

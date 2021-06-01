@@ -25,6 +25,7 @@ import com.gaf.project.R;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
+import com.gaf.project.model.Assignment;
 import com.gaf.project.model.Question;
 import com.gaf.project.model.Topic;
 import com.gaf.project.response.TopicResponse;
@@ -111,20 +112,26 @@ public class ActionQuestionFragment extends Fragment {
                 if (qsContent.isEmpty()) {
                     warningQuestion.setVisibility(View.VISIBLE);
                 } else {
-
                     if (mission.equals(SystemConstant.ADD)) {
                         Question newQuestion = new Question(topic, qsContent);
-                        questionViewModel.addQuestion(newQuestion);
 
-                        showDialog("Add");
+                        if(checkQuestion(newQuestion,questionViewModel.getListQuestion())){
+                            questionViewModel.addQuestion(newQuestion);
+                            showDialog("Add");
+                        }else {
+                            showFailDialog("Question already exist!!");
+                        }
                     }
 
                     if (mission.equals(SystemConstant.UPDATE)) {
-
                         question.setQuestionContent(qsContent);
-                        questionViewModel.updateQuestion(question);
 
-                        showDialog("Edit");
+                        if(checkQuestion(question,questionViewModel.getListQuestion())){
+                            questionViewModel.updateQuestion(question);
+                            showDialog("Edit");
+                        }else {
+                            showFailDialog("Question already exist!!");
+                        }
                     }
                 }
             }
@@ -149,6 +156,15 @@ public class ActionQuestionFragment extends Fragment {
         topicName= view.findViewById(R.id.txt_topic_name);
         btnBack = view.findViewById(R.id.btn_back);
         btnSave = view.findViewById(R.id.btn_save);
+    }
+
+    public Boolean checkQuestion(Question question, List<Question> questionList){
+        for(Question qs : questionList){
+            if(qs.getTopic().equals(question.getTopic()) && qs.getQuestionContent().equals(question.getQuestionContent())){
+                return false;
+            }
+        }
+        return true;
     }
 
     public void showDialog(String action){
