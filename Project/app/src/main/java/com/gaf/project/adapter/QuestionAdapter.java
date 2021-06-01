@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,13 +17,16 @@ import com.gaf.project.R;
 import com.gaf.project.model.Assignment;
 import com.gaf.project.model.Question;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.QuestionViewHolder> {
+public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.QuestionViewHolder> implements Filterable {
 
     private List<Question> mListQuestion;
+    private List<Question> mListQuestionOld;
 
     private QuestionAdapter.IClickItem iClickItem;
+
     public interface IClickItem{
         void update(Question item);
         void delete(Question item);
@@ -32,6 +37,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
 
     public void setData(List<Question> list){
         this.mListQuestion = list;
+        this.mListQuestionOld = list;
         notifyDataSetChanged();
     }
 
@@ -100,5 +106,39 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
             result+=" ";
         }
         return result;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String strSearch = constraint.toString();
+                if(strSearch.equals("Show All")){
+                    mListQuestion = mListQuestionOld;
+                }else {
+                    List<Question> questionList = new ArrayList<>();
+                    for(Question question : mListQuestionOld){
+                        if(question.getTopic().getTopicName().toLowerCase().contains(strSearch.toLowerCase())){
+
+                            questionList.add(question);
+
+                        }
+
+                        mListQuestion=questionList;
+                    }
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values=mListQuestion;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mListQuestion=(List<Question>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 }

@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,13 +23,18 @@ import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
 import com.gaf.project.dialog.WarningDialog;
+import com.gaf.project.model.Class;
 import com.gaf.project.model.Module;
 import com.gaf.project.response.DeleteResponse;
 import com.gaf.project.response.ModuleResponse;
 import com.gaf.project.service.ModuleService;
 import com.gaf.project.utils.ApiUtils;
 import com.gaf.project.utils.SessionManager;
+import com.gaf.project.viewmodel.AdminViewModel;
+import com.gaf.project.viewmodel.ModuleViewModel;
+import com.gaf.project.viewmodel.QuestionViewModel;
 
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -41,7 +47,7 @@ public class ModuleFragment extends Fragment {
     private RecyclerView rcvModule;
     private ModuleAdapter adapter;
     private List<Module> moduleList;
-    private ModuleService moduleService;
+    private ModuleViewModel moduleViewModel;
     private  String userRole;
     private Button btnAddModule;
     public ModuleFragment() {
@@ -51,20 +57,20 @@ public class ModuleFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        moduleService = ApiUtils.getModuleService();
+        moduleViewModel = new ViewModelProvider(this).get(ModuleViewModel.class);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        moduleViewModel.initData();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        userRole = SessionManager.getInstance().getUserRole();
-
         view = inflater.inflate(R.layout.fragment_module, container, false);
-        btnAddModule = view.findViewById(R.id.btn_add_module);
-        rcvModule = view.findViewById(R.id.rcv_module);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
-        rcvModule.setLayoutManager(linearLayoutManager);
+        initComponents(view);
 
         adapter = new ModuleAdapter(new ModuleAdapter.IClickItem() {
             @Override
@@ -78,11 +84,8 @@ public class ModuleFragment extends Fragment {
             }
         });
 
-
+        userRole = SessionManager.getInstance().getUserRole();
         if(userRole.equals(SystemConstant.ADMIN_ROLE)){
-            Call<ModuleResponse> call =  moduleService.loadModuleAdmin();
-            setAdapter(call);
-
             btnAddModule.setOnClickListener(v ->{
                 Bundle bundle = new Bundle();
                 bundle.putString("mission", SystemConstant.ADD);
@@ -90,36 +93,23 @@ public class ModuleFragment extends Fragment {
             });
         }else if(userRole.equals(SystemConstant.TRAINER_ROLE)){
             btnAddModule.setVisibility(View.GONE);
-
-            Call<ModuleResponse> call =  moduleService.loadModuleTrainer();
-            setAdapter(call);
         }else if(userRole.equals(SystemConstant.TRAINEE_ROLE)){
             btnAddModule.setVisibility(View.GONE);
-
-            Call<ModuleResponse> call =  moduleService.loadModuleTrainee();
-            setAdapter(call);
         }
+
+        moduleViewModel.getmListModuleLiveData().observe(getViewLifecycleOwner(),modules -> {
+            adapter.setData(modules);
+        });
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
+        rcvModule.setLayoutManager(linearLayoutManager);
         rcvModule.setAdapter(adapter);
-        return  view;
+        return view;
     }
 
-    private void setAdapter(Call<ModuleResponse> call){
-
-        call.enqueue(new Callback<ModuleResponse>() {
-            @Override
-            public void onResponse(Call<ModuleResponse> call, Response<ModuleResponse> response) {
-                if (response.isSuccessful()&&response.body()!=null){
-                    moduleList = response.body().getModules();
-                    adapter.setData(moduleList);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ModuleResponse> call, Throwable t) {
-                Log.e("Error",t.getLocalizedMessage());
-                showToast("Error");
-            }
-        });
+    private void initComponents(View view) {
+        btnAddModule = view.findViewById(R.id.btn_add_module);
+        rcvModule = view.findViewById(R.id.rcv_module);
     }
 
     private void clickUpdate(Module item) {
@@ -131,28 +121,43 @@ public class ModuleFragment extends Fragment {
     }
 
     private void clickDelete(Module item){
+
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-
-        final WarningDialog dialog = new WarningDialog(
-                () -> {
-                    Call<DeleteResponse> call =  moduleService.delete(item.getModuleID());
-
-                    call.enqueue(new Callback<DeleteResponse>() {
-                        @Override
-                        public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
-                            if (response.isSuccessful()&&response.body().getDeleted()){
-                                showSuccessDialog("Delete success!");
-                            }
-                        }
-                        @Override
-                        public void onFailure(Call<DeleteResponse> call, Throwable t) {
-                            showFailDialog("Delete success!");
-                            Log.e("Error",t.getLocalizedMessage());
-                        }
-                    });
-                },
-                "Do you want to delete this Class?");
+        final WarningDialog dialog;
+        Boolean checkDeleteFlag = check(item.getStartTime());
+        if (checkDeleteFlag) {
+            dialog = new WarningDialog(
+                    () -> {
+                        moduleViewModel.delete(item);
+                        showDialog("Delete");
+                    },
+                    "This Module has been started. You readly want to delete this Module?");
+        } else {
+            dialog = new WarningDialog(
+                    () -> {
+                        moduleViewModel.delete(item);
+                        showDialog("Delete");
+                    },
+                    "Do you want to delete this Module?");
+        }
         dialog.show(ft, "dialog success");
+    }
+
+    private Boolean check(Date startTime) {
+        Date date = new Date();
+        if (date.compareTo(startTime)<0){
+            return false;
+        }
+        return  true;
+    }
+
+    public void showDialog(String action){
+        Boolean actionStatus = moduleViewModel.getActionStatus().booleanValue();
+        if(actionStatus){
+            showSuccessDialog(action+" Success!!");
+        }else {
+            showFailDialog(action+" Fail!!");
+        }
     }
 
     public void showToast(String string){

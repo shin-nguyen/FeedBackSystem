@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +14,6 @@ import android.widget.Toast;
 import com.gaf.project.R;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Answer;
-import com.gaf.project.model.Class;
-import com.gaf.project.model.Module;
-import com.gaf.project.response.AnswerResponse;
-import com.gaf.project.service.AnswerService;
-import com.gaf.project.utils.ApiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,16 +22,12 @@ import java.util.function.BiFunction;
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.view.PieChartView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
+//fragment to show a total pie chart for all feedback, it's in ResultPieChart
 public class PieChart1Fragment extends Fragment {
 
-    private TextView tvClassName, tvTest;
+    private TextView tvClassName;
     private PieChartView pieChartView;
-
-    private AnswerService answerService;
     private List<Answer> answerList;
 
     private View view;
@@ -49,7 +39,6 @@ public class PieChart1Fragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        answerService = ApiUtils.getAnswerService();
     }
 
     @Override
@@ -57,45 +46,32 @@ public class PieChart1Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_pie_chart1, container, false);
+
         if(getArguments() != null) {
-            Class mClass = (Class) getArguments().getSerializable("class");
-            Module module = (Module) getArguments().getSerializable("module");
 
-            test(view, mClass, module);
+            //receive data: list answers
+            answerList = (List<Answer>) getArguments().getSerializable("listAnswer");
+            String className = getArguments().getString("className");
 
+            //set tittle for Class name
             tvClassName = view.findViewById(R.id.tvClassName);
+            tvClassName.setText(className);
+
             pieChartView = view.findViewById(R.id.chart);
 
-            tvClassName.setText(mClass.getClassName());
-
-            setupPieChart(view, mClass, module);
+            //set up pie chart with list answers
+            setupPieChart(view, answerList);
         }
 
         return view;
     }
 
-    private void setupPieChart(View view, Class c, Module m) {
+    //set up pie chart
+    private void setupPieChart(View view, List<Answer> answerList) {
 
         List pieData = new ArrayList<>();
 
-        Call<AnswerResponse> callAnswer =  answerService.loadListAnswer(c.getClassID(), m.getModuleID());
-        new Thread(()-> {
-            callAnswer.enqueue(new Callback<AnswerResponse>() {
-                @Override
-                public void onResponse(Call<AnswerResponse> call, Response<AnswerResponse> response) {
-
-                    if (response.isSuccessful()&& response.body()!=null){
-                        answerList = response.body().getAnswers();
-                        showToast("Success");
-                    }
-                }
-                @Override
-                public void onFailure(Call<AnswerResponse> call, Throwable t) {
-                    Log.e("Error",t.getLocalizedMessage());
-                    showToast("Error");
-                }
-            });}).run();
-
+        //pie chart have 5 values: 0,1,2,3,4 and there are their labels
         List<String> valueNames = new ArrayList<>();
         valueNames.add("Strongly Disagree");
         valueNames.add("Disagree");
@@ -103,57 +79,42 @@ public class PieChart1Fragment extends Fragment {
         valueNames.add("Agree");
         valueNames.add("Strongly Agree");
 
-        int answerSum;
-        try {
-            answerSum = answerList.size();
-        }
-        catch (Exception ex) {
-            answerSum = 0;
-            return;
-        }
+        int answerSum = answerList.size();
 
-        int[] valueSum = new int[5];
-        for(int j=0; j<answerSum; j++){
+        //calculate percent
+        for (int i=0; i<5; i++){
+
             int count = 0;
-            for(int k=0; k<answerList.size(); k++){
-                if(answerList.get(k).getValue() == j){
+            for(int j=0; j<answerSum; j++){
+                if(answerList.get(j).getValue() == i){
                     count++;
                 }
             }
-            valueSum[j] = count;
-        }
 
-        for (int i=0; i<valueNames.size(); i++){
-
-            Integer value = valueSum[i];
-
+            int value = count;
             if (value==0){
                 continue;
             }
 
-            String name  =  valueNames.get(i).toString();
+            String name  =  valueNames.get(i);
             Integer color = SystemConstant.color[(4-i) % SystemConstant.lengthColor];
             Double percent = (double)value/(double)answerSum*100;
 
             pieData.add(new SliceValue(value, color).setLabel(getLabel.apply(name,String.format("%.1f",percent))));
         }
 
+        //set up pie chart
         PieChartData pieChartData = new PieChartData(pieData);
         pieChartData.setHasLabels(true);
         pieChartData.setValueLabelBackgroundEnabled(false);
         pieChartData.setValueLabelTextSize(10);
         pieChartView.setPieChartData(pieChartData);
-
     }
 
+    //format the label on chart
     BiFunction<String,String,String> getLabel = (String name, String value)->{
-        return  name + ": " + value+"%";
+        return value+"%";
     };
-
-    private void test(View view, Class c, Module m) {
-        tvTest = view.findViewById(R.id.tvTest);
-        tvTest.setText(c.getClassID()+"\n"+m.getModuleID());
-    }
 
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();

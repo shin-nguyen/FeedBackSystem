@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import com.gaf.project.R;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
+import com.gaf.project.model.Assignment;
 import com.gaf.project.model.Question;
 import com.gaf.project.model.Topic;
 import com.gaf.project.response.TopicResponse;
@@ -110,20 +112,26 @@ public class ActionQuestionFragment extends Fragment {
                 if (qsContent.isEmpty()) {
                     warningQuestion.setVisibility(View.VISIBLE);
                 } else {
-
                     if (mission.equals(SystemConstant.ADD)) {
                         Question newQuestion = new Question(topic, qsContent);
-                        questionViewModel.addQuestion(newQuestion);
 
-                        reloadFragment();
+                        if(checkQuestion(newQuestion,questionViewModel.getListQuestion())){
+                            questionViewModel.addQuestion(newQuestion);
+                            showDialog("Add");
+                        }else {
+                            showFailDialog("Question already exist!!");
+                        }
                     }
 
                     if (mission.equals(SystemConstant.UPDATE)) {
-
                         question.setQuestionContent(qsContent);
-                        questionViewModel.updateQuestion(question);
 
-                        reloadFragment();
+                        if(checkQuestion(question,questionViewModel.getListQuestion())){
+                            questionViewModel.updateQuestion(question);
+                            showDialog("Edit");
+                        }else {
+                            showFailDialog("Question already exist!!");
+                        }
                     }
                 }
             }
@@ -150,12 +158,30 @@ public class ActionQuestionFragment extends Fragment {
         btnSave = view.findViewById(R.id.btn_save);
     }
 
+    public Boolean checkQuestion(Question question, List<Question> questionList){
+        for(Question qs : questionList){
+            if(qs.getTopic().equals(question.getTopic()) && qs.getQuestionContent().equals(question.getQuestionContent())){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void showDialog(String action){
+        Boolean actionStatus = questionViewModel.getActionStatus().booleanValue();
+        if(actionStatus){
+            showSuccessDialog(action+" Success!!");
+        }else {
+            showFailDialog(action+" Fail!!");
+        }
+    }
+
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
             @Override
             public void changeFragment() {
-
+                Navigation.findNavController(view).navigate(R.id.action_add_question_fragment_to_nav_question);
             }
         });
         newFragment.show(ft, "dialog success");

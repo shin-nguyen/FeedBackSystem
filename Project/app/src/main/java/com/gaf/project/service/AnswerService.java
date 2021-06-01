@@ -1,9 +1,14 @@
 package com.gaf.project.service;
 
+import com.gaf.project.model.Answer;
 import com.gaf.project.response.AnswerResponse;
 
+import java.util.List;
+
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface AnswerService {
@@ -13,6 +18,6 @@ public interface AnswerService {
     @GET("answer/loadListAnswerByQuestion/{idClass}/{idModule}/{idQuestion}")
     Call<AnswerResponse> loadListAnswerByQuestion(@Path("idClass") Integer idClass, @Path("idModule") Integer idModule, @Path("idQuestion") Integer idQuestion);
 
-    @GET("class/{topicID}")
-    Call<AnswerResponse> loadListAnswerByTopic(@Path("topicID") Integer topicID);
+    @POST("answer")
+    Call<AnswerResponse> addAll(@Body List<Answer> answers);
 }

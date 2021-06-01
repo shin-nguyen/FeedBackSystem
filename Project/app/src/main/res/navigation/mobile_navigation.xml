@@ -113,7 +113,7 @@
         tools:layout="@layout/fragment_question" >
         <action
             android:id="@+id/action_nav_question_to_add_question_fragment"
-            app:destination="@id/add_question_fragment" />
+            app:destination="@id/action_question_fragment" />
     </fragment>
 <!--    </fragment>-->
 
@@ -145,9 +145,13 @@
         android:id="@+id/add_assignment_fragment"
         android:name="com.gaf.project.fragment.AddAssignmentFragment"
         android:label="AddAssignmentFragment"
-        tools:layout="@layout/add_assignment"/>
+        tools:layout="@layout/add_assignment">
+        <action
+            android:id="@+id/action_add_assignment_fragment_to_nav_assignment"
+            app:destination="@id/nav_assignment" />
+    </fragment>
     <fragment
-        android:id="@+id/add_question_fragment"
+        android:id="@+id/action_question_fragment"
         android:name="com.gaf.project.fragment.ActionQuestionFragment"
         android:label="AddQuestionFragment"
         tools:layout="@layout/action_question">
@@ -160,11 +164,20 @@
         android:id="@+id/add_class_fragment"
         android:name="com.gaf.project.fragment.AddClassFragment"
         android:label="fragment_add_class"
-        tools:layout="@layout/fragment_add_class" />
+        tools:layout="@layout/fragment_add_class" >
+        <action
+            android:id="@+id/action_add_class_fragment_to_nav_class"
+            app:destination="@id/nav_class" />
+    </fragment>
     <fragment
         android:id="@+id/edit_assignment_fragment"
         android:name="com.gaf.project.fragment.EditAssignmentFragment"
-        android:label="EditAssignmentFragment" />
+        android:label="EditAssignmentFragment"
+        tools:layout="@layout/edit_assignment" >
+        <action
+            android:id="@+id/action_edit_assignment_fragment_to_nav_assignment"
+            app:destination="@id/nav_assignment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_trainee_home_fragment"
         android:name="com.gaf.project.fragment.TraineeHomeFragment"
@@ -183,7 +196,11 @@
         android:id="@+id/addModuleFragment"
         android:name="com.gaf.project.fragment.AddModuleFragment"
         android:label="fragment_add_module"
-        tools:layout="@layout/fragment_add_module" />
+        tools:layout="@layout/fragment_add_module" >
+        <action
+            android:id="@+id/action_addModuleFragment_to_nav_module"
+            app:destination="@id/nav_module" />
+    </fragment>
     <fragment
         android:id="@+id/editEnrollmentFragment"
         android:name="com.gaf.project.fragment.EditEnrollmentFragment"

@@ -32,3 +32,50 @@ insert question value (3,false,"Danh Gia Ec ",1);
 insert question value (4,false,"Noi Dung Danh Gia GV ",2);
 insert question value (5,false,"Noi Dung Danh Gia SV Hoc  ",2);
 insert question value (6,false,"Danh Gia Ec ",2);
+
+insert question value (7,false,"Noi Dung Danh Gia GV ",3);
+insert question value (8,false,"Noi Dung Danh Gia SV Hoc  ",3);
+insert question value (9,false,"Danh Gia Ec ",3);
+insert question value (10,false,"Noi Dung Danh Gia GV ",4);
+insert question value (11,false,"Noi Dung Danh Gia SV Hoc  ",4);
+insert question value (12,false,"Danh Gia Ec ",4);
+
+insert trainee value('thao','thaole301000@gmail.com','thao','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
+'1234','TanThanh',1,true,'0918948074','1234');
+insert trainee value('hung','hung@gmail.com','hung','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
+'1234','NT',1,true,'0918948074','1234');
+insert trainee value('thong','thong@gmail.com','thong','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
+'1234','NT',1,true,'0918948074','1234');
+insert trainee value('kai','kai@gmail.com','kai','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
+'1234','NT',1,true,'0918948074','1234');
+insert trainee value('nghia','nghia@gmail.com','nghia','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
+'1234','NT',1,true,'0918948074','1234');
+insert trainee value('langde','nghia@gmail.com','langde','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
+'1234','NT',1,true,'0918948074','1234');
+
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (0, 1, 'thao', 1, 1);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (1, 1, 'hung', 1, 1);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (2, 1, 'nghia', 1, 1);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (2, 1, 'langde', 1, 1);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (3, 1, 'thong', 1, 1);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (4, 1, 'kai', 1, 4);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (0, 1, 'thao', 1, 4);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (1, 1, 'hung', 1, 4);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (2, 1, 'nghia', 1, 4);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (3, 1, 'thong', 1, 4);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (4, 1, 'langde', 1, 4);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (0, 1, 'thao', 1, 12);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (0, 1, 'hung', 1, 12);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (2, 1, 'nghia', 1, 12);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (4, 1, 'thong', 1, 12);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (4, 1, 'langde', 1, 11);
+
+INSERT INTO `coursedb`.`topic` (`topicid`, `topic_name`) VALUES (3, 'GiangVien');
+INSERT INTO `coursedb`.`topic` (`topicid`, `topic_name`) VALUES (4, 'Other');
+
+INSERT INTO `coursedb`.`trainee_comment` (`comment`, `classid`, `trainee_id`, `moduleid`) VALUES ('hay qua!', 1, 'thao', 1);
+INSERT INTO `coursedb`.`trainee_comment` (`comment`, `classid`, `trainee_id`, `moduleid`) VALUES ('qua tuyet voi!', 1, 'thong', 1);
+INSERT INTO `coursedb`.`trainee_comment` (`comment`, `classid`, `trainee_id`, `moduleid`) VALUES ('on ap', 1, 'kai', 1);
+INSERT INTO `coursedb`.`trainee_comment` (`comment`, `classid`, `trainee_id`, `moduleid`) VALUES ('cung duoc', 1, 'hung', 1);
+INSERT INTO `coursedb`.`trainee_comment` (`comment`, `classid`, `trainee_id`, `moduleid`) VALUES ('ok!', 1, 'nghia', 1);
+INSERT INTO `coursedb`.`trainee_comment` (`comment`, `classid`, `trainee_id`, `moduleid`) VALUES ('cung binh thuong...', 1, 'langde', 1);
