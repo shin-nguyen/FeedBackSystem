@@ -32,13 +32,10 @@ public class ClassViewModel extends ViewModel {
     private ClassService classService;
     private MutableLiveData<List<Class>> mListClassLiveData;
     private List<Class> mListClass;
-    private Boolean actionStatus;
-
 
     public ClassViewModel() {
         classService = ApiUtils.getClassService();
         mListClassLiveData = new MutableLiveData<>();
-
         initData();
     }
 
@@ -74,75 +71,74 @@ public class ClassViewModel extends ViewModel {
     }
 
     public MutableLiveData<String> deleted(Class mClass){
-        MutableLiveData<String> integerMutableLiveData = new MutableLiveData<>();
+        MutableLiveData<String> actionStatus = new MutableLiveData<>();
 
         Call<DeleteResponse> call =  classService.delete(mClass.getClassID());
         call.enqueue(new Callback<DeleteResponse>() {
             @Override
             public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
                 if (response.isSuccessful()&&response.body().getDeleted()){
-                    integerMutableLiveData.setValue(SystemConstant.SUCCESS);
+                    actionStatus.setValue(SystemConstant.SUCCESS);
                     initData();
                 }
             }
             @Override
             public void onFailure(Call<DeleteResponse> call, Throwable t) {
-                integerMutableLiveData.setValue(SystemConstant.FAIL);
+                actionStatus.setValue(SystemConstant.FAIL);
                 Log.e("Error",t.getLocalizedMessage());
             }
         });
 
-        return integerMutableLiveData;
+        return actionStatus;
     }
 
     public MutableLiveData<List<Class>> getListClassLiveData() {
         return mListClassLiveData;
     }
 
-    private Boolean getActionStatus() {
+    public MutableLiveData<String> update(Class mClass) {
+        MutableLiveData<String> actionStatus = new MutableLiveData<>();
+
+        Call<Class> call = classService.create(mClass);
+        call.enqueue(new Callback<Class>() {
+            @Override
+            public void onResponse(Call<Class> call, Response<Class> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    actionStatus.setValue(SystemConstant.SUCCESS);
+                    initData();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Class> call, Throwable t) {
+                actionStatus.setValue(SystemConstant.FAIL);
+                Log.e("Error", t.getLocalizedMessage());
+            }
+        });
         return actionStatus;
-    }
-    private void setActionStatus(Boolean actionStatus) {
-        this.actionStatus = actionStatus;
+
     }
 
-    public boolean update(Class mClass) {
-        setActionStatus(false);
+    public MutableLiveData<String> add(Class mClass) {
+        MutableLiveData<String> actionStatus = new MutableLiveData<>();
+
         Call<Class> call = classService.create(mClass);
         call.enqueue(new Callback<Class>() {
             @Override
             public void onResponse(Call<Class> call, Response<Class> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    setActionStatus(true);
+                    actionStatus.setValue(SystemConstant.SUCCESS);
                     initData();
                 }
             }
 
             @Override
             public void onFailure(Call<Class> call, Throwable t) {
+                actionStatus.setValue(SystemConstant.FAIL);
                 Log.e("Error", t.getLocalizedMessage());
             }
         });
-        return getActionStatus();
-    }
+        return actionStatus;
 
-    public boolean add(Class mClass) {
-        setActionStatus(false);
-        Call<Class> call = classService.create(mClass);
-        call.enqueue(new Callback<Class>() {
-            @Override
-            public void onResponse(Call<Class> call, Response<Class> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    setActionStatus(true);
-                    initData();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Class> call, Throwable t) {
-                Log.e("Error", t.getLocalizedMessage());
-            }
-        });
-        return getActionStatus();
     }
 }

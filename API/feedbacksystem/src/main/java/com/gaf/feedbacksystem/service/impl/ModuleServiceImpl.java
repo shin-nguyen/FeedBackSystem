@@ -1,6 +1,10 @@
 package com.gaf.feedbacksystem.service.impl;
 
+import com.gaf.feedbacksystem.dto.ClassDto;
 import com.gaf.feedbacksystem.dto.ModuleDto;
+import com.gaf.feedbacksystem.entity.Admin;
+import com.gaf.feedbacksystem.entity.Class;
+import com.gaf.feedbacksystem.entity.Feedback;
 import com.gaf.feedbacksystem.entity.Module;
 import com.gaf.feedbacksystem.repository.ModuleRepository;
 import com.gaf.feedbacksystem.service.IModuleService;
@@ -24,10 +28,17 @@ public class ModuleServiceImpl implements IModuleService {
 
     @Override
     public ModuleDto update(ModuleDto moduleDTO) {
-//        Module oldModule=  moduleRepository.findModuleByModuleID(moduleDTO.getModuleID());
-//        oldModule.setModuleName(moduleDTO.getModuleName());
-//        return  moduleRepository.save(oldModule);
-        return  null;
+        Module oldModule=  moduleRepository.findByModuleID(moduleDTO.getModuleID());
+
+        oldModule.setModuleName(moduleDTO.getModuleName());
+        oldModule.setAdmin(ObjectMapperUtils.map(moduleDTO.getAdmin(), Admin.class));
+        oldModule.setFeedback(ObjectMapperUtils.map(moduleDTO.getFeedback(), Feedback.class));
+        oldModule.setStartTime(moduleDTO.getStartTime());
+        oldModule.setEndTime(moduleDTO.getEndTime());
+        oldModule.setFeedbackStartTime(moduleDTO.getFeedbackStartTime());
+        oldModule.setFeedbackEndTime(moduleDTO.getFeedbackEndTime());
+
+        return ObjectMapperUtils.map(moduleRepository.save(oldModule), ModuleDto.class);
     }
 
     @Override
@@ -35,13 +46,9 @@ public class ModuleServiceImpl implements IModuleService {
         moduleRepository.deleteByModuleId(id);
     }
 
-
-    /*
-    Loi tut ***
-     */
     @Override
     public List<ModuleDto> findAllByTrainee(String userName) {
-        List<Module> modules = moduleRepository.findAllByTrainer(userName);
+        List<Module> modules = moduleRepository.findAllByTrainee(userName);
         List<ModuleDto> moduleDtos = ObjectMapperUtils.mapAll(modules,ModuleDto.class);
         return moduleDtos;
     }

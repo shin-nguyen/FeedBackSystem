@@ -19,6 +19,7 @@ import com.gaf.project.service.ModuleService;
 import com.gaf.project.utils.ApiUtils;
 import com.gaf.project.utils.SessionManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -28,13 +29,11 @@ import retrofit2.Response;
 public class ModuleViewModel extends ViewModel {
     private ModuleService moduleService;
     private MutableLiveData<List<Module>> mListModuleLiveData;
-    private List<Module> mListModule;
-    private Boolean actionStatus;
+    private List<Module> mListModule = new ArrayList<>();
 
     public ModuleViewModel() {
         moduleService = ApiUtils.getModuleService();
         mListModuleLiveData = new MutableLiveData<>();
-
         initData();
     }
 
@@ -52,60 +51,65 @@ public class ModuleViewModel extends ViewModel {
 
     }
 
-    public void add(Module module){
-        setActionStatus(false);
+    public MutableLiveData<String> add(Module module){
+        MutableLiveData<String> actionStatus = new MutableLiveData<>();
         Call<Module> call = moduleService.create(module);
         call.enqueue(new Callback<Module>() {
             @Override
             public void onResponse(Call<Module> call, Response<Module> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    actionStatus.setValue(SystemConstant.SUCCESS);
                     initData();
-                    setActionStatus(true);
                 }
             }
             @Override
             public void onFailure(Call<Module> call, Throwable t) {
+                actionStatus.setValue(SystemConstant.FAIL);
                 Log.e("Error", t.getLocalizedMessage());
             }
         });
+        return actionStatus;
     }
 
-    public void update(Module module){
-        setActionStatus(false);
+    public MutableLiveData<String> update(Module module){
+        MutableLiveData<String> actionStatus = new MutableLiveData<>();
         Call<Module> call = moduleService.update(module);
         call.enqueue(new Callback<Module>() {
             @Override
             public void onResponse(Call<Module> call, Response<Module> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    actionStatus.setValue(SystemConstant.SUCCESS);
                     initData();
-                    setActionStatus(true);
                 }
             }
 
             @Override
             public void onFailure(Call<Module> call, Throwable t) {
+                actionStatus.setValue(SystemConstant.FAIL);
                 Log.e("Error", t.getLocalizedMessage());
             }
         });
+        return actionStatus;
     }
 
-    public void delete(Module module){
-        setActionStatus(true);
+    public MutableLiveData<String> delete(Module module){
+        MutableLiveData<String> actionStatus = new MutableLiveData<>();
         Call<DeleteResponse> call =  moduleService.delete(module.getModuleID());
         call.enqueue(new Callback<DeleteResponse>() {
             @Override
             public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
                 if (response.isSuccessful()&&response.body().getDeleted()){
+                    actionStatus.setValue(SystemConstant.SUCCESS);
                     initData();
-                    setActionStatus(true);
                 }
             }
             @Override
             public void onFailure(Call<DeleteResponse> call, Throwable t) {
+                actionStatus.setValue(SystemConstant.FAIL);
                 Log.e("Error",t.getLocalizedMessage());
-                setActionStatus(false);
             }
         });
+        return actionStatus;
     }
 
     private void setAdapter(Call<ModuleResponse> call){
@@ -129,13 +133,4 @@ public class ModuleViewModel extends ViewModel {
     public MutableLiveData<List<Module>> getmListModuleLiveData() {
         return mListModuleLiveData;
     }
-
-    public Boolean getActionStatus() {
-        return actionStatus;
-    }
-
-    public void setActionStatus(Boolean actionStatus) {
-        this.actionStatus = actionStatus;
-    }
-
 }

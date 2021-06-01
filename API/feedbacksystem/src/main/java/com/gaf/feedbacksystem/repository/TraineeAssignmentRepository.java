@@ -12,8 +12,6 @@ import java.util.List;
 @Repository
 public interface TraineeAssignmentRepository extends JpaRepository<TraineeAssignment, TraineeAssignmentID> {
 
-//    @Query("")
-//    TraineeAssignment compare(@Param("username")String username, @Param("code") String code);
     @Query("from TraineeAssignment  t where  t.primaryKey.assignment.registrationCode =:code and t.primaryKey.trainee.userName =:username")
     TraineeAssignment compare(@Param("username")String username, @Param("code") String code);
 }

@@ -3,6 +3,7 @@ package com.gaf.feedbacksystem.controller;
 
 import com.gaf.feedbacksystem.MyResourceNotFoundException;
 import com.gaf.feedbacksystem.constant.SystemConstant;
+import com.gaf.feedbacksystem.dto.ClassDto;
 import com.gaf.feedbacksystem.dto.ModuleDto;
 import com.gaf.feedbacksystem.service.IModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class ModuleController {
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
         catch (MyResourceNotFoundException exc) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Module Not Found", exc);
         }
     }
 
@@ -81,7 +82,7 @@ public class ModuleController {
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
         catch (MyResourceNotFoundException exc) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Module Not Found", exc);
         }
     }
 
@@ -93,7 +94,19 @@ public class ModuleController {
             return  moduleService.save(moduleteDto);
         }
         catch (MyResourceNotFoundException exc) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Module Not Found", exc);
+        }
+    }
+    @PutMapping(value = "/")
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    public ResponseEntity<ModuleDto> update(@Valid  @RequestBody ModuleDto moduleDto){
+        try {
+            final ModuleDto updateModule = moduleService.update(moduleDto);
+
+            return ResponseEntity.ok(updateModule);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Module Not Found", exc);
         }
     }
     @DeleteMapping(value = "/{id}")
@@ -110,7 +123,7 @@ public class ModuleController {
             }
             return response;
         }  catch (MyResourceNotFoundException exc) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Module Not Found", exc);
         }
 
     }
