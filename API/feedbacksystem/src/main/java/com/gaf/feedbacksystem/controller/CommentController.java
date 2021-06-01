@@ -2,6 +2,7 @@ package com.gaf.feedbacksystem.controller;
 
 import com.gaf.feedbacksystem.MyResourceNotFoundException;
 import com.gaf.feedbacksystem.constant.SystemConstant;
+import com.gaf.feedbacksystem.dto.AnswerDto;
 import com.gaf.feedbacksystem.dto.ClassDto;
 import com.gaf.feedbacksystem.dto.TraineeCommentDto;
 import com.gaf.feedbacksystem.service.IClassService;
@@ -9,14 +10,15 @@ import com.gaf.feedbacksystem.service.ICommentService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/comment")
@@ -33,6 +35,24 @@ public class CommentController {
         }
         catch (MyResourceNotFoundException exc) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+        }
+    }
+
+    @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
+    @GetMapping(value = "/loadListComment/{idClass}/{idModule}", produces = "application/json")
+    public ResponseEntity<Map<String, List<?>>> loadListComment(@PathVariable(value = "idClass") Integer classId,
+                                                               @PathVariable(value = "idModule") Integer moduleId){
+        try{
+            List<TraineeCommentDto> traineeCommentDtos = commentService.findByMClassAndModule(classId, moduleId);
+            if ( traineeCommentDtos.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            Map result = new HashMap();
+            result.put("comments", traineeCommentDtos);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comment Not Found", exc);
         }
     }
 }

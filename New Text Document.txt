@@ -65,3 +65,10 @@ INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `q
 
 INSERT INTO `coursedb`.`topic` (`topicid`, `topic_name`) VALUES (3, 'GiangVien');
 INSERT INTO `coursedb`.`topic` (`topicid`, `topic_name`) VALUES (4, 'Other');
+
+INSERT INTO `coursedb`.`trainee_comment` (`comment`, `classid`, `trainee_id`, `moduleid`) VALUES ('hay qua!', 1, 'thao', 1);
+INSERT INTO `coursedb`.`trainee_comment` (`comment`, `classid`, `trainee_id`, `moduleid`) VALUES ('qua tuyet voi!', 1, 'thong', 1);
+INSERT INTO `coursedb`.`trainee_comment` (`comment`, `classid`, `trainee_id`, `moduleid`) VALUES ('on ap', 1, 'kai', 1);
+INSERT INTO `coursedb`.`trainee_comment` (`comment`, `classid`, `trainee_id`, `moduleid`) VALUES ('cung duoc', 1, 'hung', 1);
+INSERT INTO `coursedb`.`trainee_comment` (`comment`, `classid`, `trainee_id`, `moduleid`) VALUES ('ok!', 1, 'nghia', 1);
+INSERT INTO `coursedb`.`trainee_comment` (`comment`, `classid`, `trainee_id`, `moduleid`) VALUES ('cung binh thuong...', 1, 'langde', 1);

@@ -75,7 +75,7 @@ public class ResultFragment extends Fragment {
         btnViewComment = view.findViewById(R.id.btnViewComment);
         btnShowDetail = view.findViewById(R.id.btnShowDetail);
 
-        btnViewComment.setVisibility(view.GONE);
+        btnViewComment.setVisibility(view.INVISIBLE);
         Fragment fragPieChart = new ResultPieChartFragment();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.statistics_fragment_container, fragPieChart).commit();
@@ -187,7 +187,7 @@ public class ResultFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                btnViewComment.setVisibility(view.GONE);
+                btnViewComment.setVisibility(view.INVISIBLE);
 
                 Module module = (Module) spnModule.getSelectedItem();
                 Class mClass = (Class) spnClass.getSelectedItem();
@@ -209,7 +209,7 @@ public class ResultFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                btnViewComment.setVisibility(view.GONE);
+                btnViewComment.setVisibility(view.INVISIBLE);
 
                 Module module = (Module) spnModule.getSelectedItem();
                 Class mClass = (Class) spnClass.getSelectedItem();

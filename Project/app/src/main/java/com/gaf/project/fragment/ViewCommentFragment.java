@@ -58,25 +58,28 @@ public class ViewCommentFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_view_comment, container, false);
 
+        recyclerViewComment = view.findViewById(R.id.rcvComment);
+
         if(getArguments() != null) {
             Class mClass = (Class) getArguments().getSerializable("class");
             Module module = (Module) getArguments().getSerializable("module");
 
-            recyclerViewComment = view.findViewById(R.id.rcvComment);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
             recyclerViewComment.setLayoutManager(linearLayoutManager);
 
             commentAdapter = new CommentAdapter();
 
             listComment = new ArrayList<>();
-
             Call<CommentResponse> call =  commentService.loadListComment(mClass.getClassID(), module.getModuleID());
             call.enqueue(new Callback<CommentResponse>() {
                 @Override
                 public void onResponse(Call<CommentResponse> call, Response<CommentResponse> response) {
                     if (response.isSuccessful()&&response.body()!=null){
                         listComment = response.body().getComments();
+
                         commentAdapter.setData(listComment);
+                        recyclerViewComment.setAdapter(commentAdapter);
+
                         Log.e("Success","Comment get success");
                     }
                 }
@@ -87,9 +90,6 @@ public class ViewCommentFragment extends Fragment {
                     showToast("Call API fail!");
                 }
             });
-
-            recyclerViewComment.setAdapter(commentAdapter);
-
         }
 
         return view;

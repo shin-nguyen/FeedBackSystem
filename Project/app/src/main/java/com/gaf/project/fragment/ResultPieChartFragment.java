@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +38,7 @@ public class ResultPieChartFragment extends Fragment {
 
     private AnswerService answerService;
     private List<Answer> answerList;
+    private List<Answer> answerListActive;
 
     public ResultPieChartFragment() {
         // Required empty public constructor
@@ -61,8 +61,8 @@ public class ResultPieChartFragment extends Fragment {
             Class mClass = (Class) getArguments().getSerializable("class");
             Module module = (Module) getArguments().getSerializable("module");
 
+            answerList = new ArrayList<>();
             Call<AnswerResponse> callAnswer =  answerService.loadListAnswer(mClass.getClassID(), module.getModuleID());
-
             callAnswer.enqueue(new Callback<AnswerResponse>() {
                 @Override
                 public void onResponse(Call<AnswerResponse> call, Response<AnswerResponse> response) {
@@ -70,8 +70,15 @@ public class ResultPieChartFragment extends Fragment {
                     if (response.isSuccessful()&& response.body()!=null){
                         answerList = response.body().getAnswers();
 
+                        answerListActive = new ArrayList<>();
+                        for(int i=0; i<answerList.size(); i++){
+                            if(answerList.get(i).getQuestion().isDeleted()==false){
+                                answerListActive.add(answerList.get(i));
+                            }
+                        }
+
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("listAnswer", (Serializable) answerList);
+                        bundle.putSerializable("listAnswer", (Serializable) answerListActive);
                         bundle.putString("className", mClass.getClassName());
 
 
@@ -82,9 +89,9 @@ public class ResultPieChartFragment extends Fragment {
                         frag2.setArguments(bundle);
 
                         vpPieChart = view.findViewById(R.id.vpPieChart);
-
                         vpAdapter = new ViewPageAdapter(getActivity().getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, frag1, frag2);
                         vpPieChart.setAdapter(vpAdapter);
+
                     }
                 }
                 @Override
@@ -93,10 +100,6 @@ public class ResultPieChartFragment extends Fragment {
                     showToast("Error");
                 }
             });
-
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable("class", mClass);
-//            bundle.putSerializable("module", module);
         }
 
         return view;

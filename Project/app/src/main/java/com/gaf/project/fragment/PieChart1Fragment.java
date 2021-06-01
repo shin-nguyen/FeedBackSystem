@@ -3,11 +3,8 @@ package com.gaf.project.fragment;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +14,6 @@ import android.widget.Toast;
 import com.gaf.project.R;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Answer;
-import com.gaf.project.model.Class;
-import com.gaf.project.model.Module;
-import com.gaf.project.response.AnswerResponse;
-import com.gaf.project.service.AnswerService;
-import com.gaf.project.utils.ApiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +22,6 @@ import java.util.function.BiFunction;
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.view.PieChartView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class PieChart1Fragment extends Fragment {
 

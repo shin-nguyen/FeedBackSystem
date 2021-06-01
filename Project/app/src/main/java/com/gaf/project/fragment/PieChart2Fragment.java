@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,15 +15,8 @@ import android.widget.Toast;
 import com.gaf.project.R;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Answer;
-import com.gaf.project.model.Class;
-import com.gaf.project.model.Module;
-import com.gaf.project.model.Question;
 import com.gaf.project.model.Topic;
-import com.gaf.project.response.AnswerResponse;
-import com.gaf.project.response.QuestionResponse;
 import com.gaf.project.response.TopicResponse;
-import com.gaf.project.service.AnswerService;
-import com.gaf.project.service.QuestionService;
 import com.gaf.project.service.TopicService;
 import com.gaf.project.utils.ApiUtils;
 
@@ -41,16 +33,12 @@ import retrofit2.Response;
 
 public class PieChart2Fragment extends Fragment{
 
-    private TextView tvTopicName1, tvTopicName2, tvTopicName3;
+    private TextView tvTopicName1, tvTopicName2, tvTopicName3, tvTopicName4;
     private PieChartView pieChartView1, pieChartView2, pieChartView3, pieChartView4;
-
-    private AnswerService answerService;
-    private QuestionService questionService;
     private TopicService topicService;
 
     private List<Answer> answerList;
     private List<Answer> answerListByTopic;
-    private List<Question> questionListByTopic;
     private List<Topic> topicList;
 
     private View view;
@@ -62,8 +50,6 @@ public class PieChart2Fragment extends Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        answerService = ApiUtils.getAnswerService();
-        questionService = ApiUtils.getQuestionService();
         topicService = ApiUtils.getTopicService();
     }
 
@@ -76,6 +62,7 @@ public class PieChart2Fragment extends Fragment{
         tvTopicName1 = view.findViewById(R.id.tvTopicName);
         tvTopicName2 = view.findViewById(R.id.tvTopicName1);
         tvTopicName3 = view.findViewById(R.id.tvTopicName2);
+        tvTopicName4 = view.findViewById(R.id.tvTopicName3);
 
         pieChartView1 = view.findViewById(R.id.chart1);
         pieChartView2 = view.findViewById(R.id.chart2);
@@ -83,6 +70,7 @@ public class PieChart2Fragment extends Fragment{
         pieChartView4 = view.findViewById(R.id.chart4);
 
         if(getArguments() != null) {
+            answerList = new ArrayList<>();
             answerList = (List<Answer>) getArguments().getSerializable("listAnswer");
 
             topicList = new ArrayList<>();
@@ -96,12 +84,11 @@ public class PieChart2Fragment extends Fragment{
                         tvTopicName1.setText(topicList.get(0).getTopicName());
                         tvTopicName2.setText(topicList.get(1).getTopicName());
                         tvTopicName3.setText(topicList.get(2).getTopicName());
+                        tvTopicName4.setText(topicList.get(3).getTopicName());
 
-                        for(int i=0; i<topicList.size(); i++){
-                            setupPieChartTopic(view, answerList, i+1);
+                        for(int i=1; i<=4; i++){
+                            setupPieChartTopic(view, answerList, i);
                         }
-
-                        //setupPieChart(view, mClass, module, 0);
                     }
                 }
                 @Override
@@ -117,58 +104,33 @@ public class PieChart2Fragment extends Fragment{
 
     private void setupPieChartTopic(View view, List<Answer> answerList, int topicId) {
 
-        questionListByTopic = new ArrayList<>();
-        Call<QuestionResponse> callQuestion = questionService.loadListQuestionByTopic(topicId);
-        callQuestion.enqueue(new Callback<QuestionResponse>() {
-            @Override
-            public void onResponse(Call<QuestionResponse> call, Response<QuestionResponse> response) {
-
-                if (response.isSuccessful() && response.body() != null) {
-                    questionListByTopic = response.body().getQuestions();
-
-                    answerListByTopic = new ArrayList<>();
-                    for(int i = 0; i<answerList.size(); i++){
-                        int j = 0;
-                        while (j<questionListByTopic.size()){
-                            if(answerList.get(i).getQuestion().getQuestionID() == questionListByTopic.get(j).getQuestionID()){
-
-                                answerListByTopic.add(answerList.get(i));
-
-                                j = questionListByTopic.size();
-                            }
-                            else {
-                                j++;
-                            }
-                        }
-                    }
-
-                    doPieChart(view, answerListByTopic, topicId);
-                }
+        answerListByTopic = new ArrayList<>();
+        for(int i=0; i<answerList.size(); i++){
+            if(answerList.get(i).getQuestion().getTopic().getTopicID() == topicId){
+                answerListByTopic.add(answerList.get(i));
             }
+        }
 
-            @Override
-            public void onFailure(Call<QuestionResponse> call, Throwable t) {
-                Log.e("Error", t.getLocalizedMessage());
-                showToast("Error2" + topicId);
-            }
-        });
+        doPieChart(view, answerListByTopic, topicId);
     }
 
     private void doPieChart(View view, List<Answer> li, int topicId) {
+
         List pieData = new ArrayList<>();
 
         int answerSum = li.size();
-
         if(answerSum == 0){
-            switch (topicId){
-                case 1:
-                    pieChartView1.setVisibility(view.INVISIBLE);
-                case 2:
-                    pieChartView2.setVisibility(view.INVISIBLE);
-                case 3:
-                    pieChartView3.setVisibility(view.INVISIBLE);
-                case 4:
-                    pieChartView4.setVisibility(View.INVISIBLE);
+            if(topicId == 1){
+                pieChartView1.setVisibility(view.INVISIBLE);
+            }
+            else if(topicId == 2){
+                pieChartView2.setVisibility(view.INVISIBLE);
+            }
+            else if(topicId == 3){
+                pieChartView3.setVisibility(view.INVISIBLE);
+            }
+            else {
+                pieChartView4.setVisibility(view.INVISIBLE);
             }
             return;
         }
@@ -205,16 +167,17 @@ public class PieChart2Fragment extends Fragment{
         pieChartData.setValueLabelBackgroundEnabled(false);
         pieChartData.setValueLabelTextSize(6);
 
-        switch (topicId){
-            case 1:
-                pieChartView1.setPieChartData(pieChartData);
-            case 2:
-                pieChartView2.setPieChartData(pieChartData);
-            case 3:
-                pieChartView3.setPieChartData(pieChartData);
-            case 4:
-                pieChartView4.setPieChartData(pieChartData);
-
+        if(topicId == 1){
+            pieChartView1.setPieChartData(pieChartData);
+        }
+        else if(topicId == 2){
+            pieChartView2.setPieChartData(pieChartData);
+        }
+        else if(topicId == 3){
+            pieChartView3.setPieChartData(pieChartData);
+        }
+        else {
+            pieChartView4.setPieChartData(pieChartData);
         }
     }
 
