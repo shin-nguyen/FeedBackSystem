@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     dialogFragment.setCancelable(false);
                     dialogFragment.show(getSupportFragmentManager(), "join");
                 }
+
                 NavigationUI.onNavDestinationSelected(item, navController);
                 drawer.closeDrawer(GravityCompat.START);
                 return true;

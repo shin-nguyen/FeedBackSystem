@@ -16,10 +16,10 @@ public interface ClazzRepository extends JpaRepository<Class, Integer> {
     @Query("from Class  where isDeleted=false")
     List<Class> findAllByDeletedIsFalse();
 
-    @Query("select c from Class c join Assignment a on c.classID = a.primaryKey.mClass.classID and a.primaryKey.trainer.userName = :userName")
+    @Query("select c from Class c join Assignment a on c.classID = a.primaryKey.mClass.classID and a.primaryKey.trainer.userName = :userName and c.isDeleted =false")
     List<Class> findAllByTrainer(@Param("userName") String userName);
 
-    @Query("select c from Class c join fetch c.trainees enrollment   where enrollment.userName = :userName")
+    @Query("select c from Class c join fetch c.trainees enrollment where enrollment.userName = :userName and c.isDeleted =false")
     List<Class> findAllByTrainee(@Param("userName") String userName);
 
     Class findByClassID(Integer classID);

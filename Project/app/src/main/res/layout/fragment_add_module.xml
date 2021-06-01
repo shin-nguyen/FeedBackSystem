@@ -370,7 +370,7 @@
             android:text="Please choose date or fill mm/dd/yyyy"
             android:textColor="@color/red"
             android:visibility="gone"
-            android:id="@+id/txt_feedbac_end_date_warning"/>
+            android:id="@+id/txt_feedback_end_date_warning"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

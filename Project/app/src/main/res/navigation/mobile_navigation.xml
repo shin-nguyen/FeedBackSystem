@@ -160,7 +160,11 @@
         android:id="@+id/add_class_fragment"
         android:name="com.gaf.project.fragment.AddClassFragment"
         android:label="fragment_add_class"
-        tools:layout="@layout/fragment_add_class" />
+        tools:layout="@layout/fragment_add_class" >
+        <action
+            android:id="@+id/action_add_class_fragment_to_nav_class"
+            app:destination="@id/nav_class" />
+    </fragment>
     <fragment
         android:id="@+id/edit_assignment_fragment"
         android:name="com.gaf.project.fragment.EditAssignmentFragment"
@@ -183,7 +187,11 @@
         android:id="@+id/addModuleFragment"
         android:name="com.gaf.project.fragment.AddModuleFragment"
         android:label="fragment_add_module"
-        tools:layout="@layout/fragment_add_module" />
+        tools:layout="@layout/fragment_add_module" >
+        <action
+            android:id="@+id/action_addModuleFragment_to_nav_module"
+            app:destination="@id/nav_module" />
+    </fragment>
     <fragment
         android:id="@+id/editEnrollmentFragment"
         android:name="com.gaf.project.fragment.EditEnrollmentFragment"

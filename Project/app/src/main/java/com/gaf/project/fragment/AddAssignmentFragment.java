@@ -80,7 +80,7 @@ public class AddAssignmentFragment extends Fragment {
         view = inflater.inflate(R.layout.add_assignment, container, false);
 
         final Spinner spnModule = (Spinner) view.findViewById(R.id.spinner_module_name);
-        moduleViewModel.getListModuleLiveData().observe(getViewLifecycleOwner(), new Observer<List<Module>>() {
+        moduleViewModel.getmListModuleLiveData().observe(getViewLifecycleOwner(), new Observer<List<Module>>() {
             @Override
             public void onChanged(List<Module> modules) {
                 adapterModule =
