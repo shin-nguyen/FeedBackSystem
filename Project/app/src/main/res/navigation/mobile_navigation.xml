@@ -185,7 +185,7 @@
         tools:layout="@layout/fragment_trainee_home" >
         <action
             android:id="@+id/action_nav_trainee_home_fragment_to_doFeedbackFragment"
-            app:destination="@id/doFeedbackFragment" />
+            app:destination="@id/do_feedback_fragment" />
     </fragment>
     <fragment
         android:id="@+id/detailClassFragment"
@@ -206,12 +206,18 @@
         android:id="@+id/editEnrollmentFragment"
         android:name="com.gaf.project.fragment.EditEnrollmentFragment"
         android:label="fragment_edit_enrollment"
-        tools:layout="@layout/fragment_edit_enrollment" />
+        tools:layout="@layout/fragment_edit_enrollment" >
+        <action
+            android:id="@+id/action_editEnrollmentFragment_to_nav_enrollment"
+            app:destination="@id/nav_enrollment" />
+    </fragment>
+
     <fragment
         android:id="@+id/detailEnrollmentFragment"
         android:name="com.gaf.project.fragment.DetailEnrollmentFragment"
         android:label="fragment_detail_enrollment"
         tools:layout="@layout/fragment_detail_enrollment" />
+
     <fragment
         android:id="@+id/do_feedback_fragment"
         android:name="com.gaf.project.fragment.DoFeedbackFragment"

@@ -19,8 +19,7 @@
             android:text="Review New Feedback"
             android:padding="10dp"
             android:textSize="36sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"/>
+            android:textStyle="bold"/>
 
     </LinearLayout>
 
@@ -46,8 +45,7 @@
                 android:textSize="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Feedback Title: "
-                android:textColor="@color/black"/>
+                android:text="Feedback Title: "/>
 
             <TextView
                 android:id="@+id/feedback_title"
@@ -69,8 +67,7 @@
                 android:textSize="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Admin ID: "
-                android:textColor="@color/black"/>
+                android:text="Admin ID: " />
 
             <TextView
                 android:id="@+id/txt_admin_id"
@@ -84,7 +81,6 @@
        <TextView
            android:id="@+id/txt_topic_question"
            android:layout_width="match_parent"
-           android:textColor="@color/black"
            style="@style/TextItemStyle"
            android:text="Content"
            android:layout_height="wrap_content"

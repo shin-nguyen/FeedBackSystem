@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="35dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
         android:padding="30dp"
         android:background="@drawable/background_item"
         android:orientation="vertical"
@@ -31,8 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Feedback ID: "
-                android:textSize="20sp"
-                android:textColor="@color/black"/>
+                android:textSize="20sp" />
 
         </LinearLayout>
 
@@ -47,8 +46,7 @@
                 style="@style/TextItemStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Title: "
-                android:textColor="@color/black" />
+                android:text="Title: " />
 
         </LinearLayout>
 
@@ -63,8 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginBottom="10dp"
                 android:layout_height="wrap_content"
-                android:text="Admin ID: "
-                android:textColor="@color/black"/>
+                android:text="Admin ID: " />
 
         </LinearLayout>
     </LinearLayout>

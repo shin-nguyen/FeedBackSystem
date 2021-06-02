@@ -23,8 +23,7 @@
                 android:text="Create New Feedback"
                 android:padding="20dp"
                 android:textSize="35sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -39,8 +38,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Feedback Type: "
-            android:textColor="@color/black"/>
+            android:text="Feedback Type: " />
 
         <LinearLayout
             android:layout_width="90dp"
@@ -74,8 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
-            android:text="Feedback Title:"
-            android:textColor="@color/black"/>
+            android:text="Feedback Title:" />
 
         <EditText
             android:id="@+id/feedback_title"

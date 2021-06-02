@@ -69,20 +69,17 @@ public class FeedBackFragment extends Fragment{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        // inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_feed_back, container, false);
 
+        //get and check User role
         String userRole = SessionManager.getInstance().getUserRole();
-
-        //check User role
         if(userRole.equals(SystemConstant.ADMIN_ROLE)){
 
-            feedBackViewModel.getListFeedBackLiveData().observe(getViewLifecycleOwner(), new Observer<List<Feedback>>() {
-                @Override
-                public void onChanged(List<Feedback> feedbacks) {
-                    feedBackAdapter.setData(feedbacks);
-                }
-            });
+            //get list feedback and set feedback adapter
+            feedBackViewModel.getListFeedBackLiveData().observe(getViewLifecycleOwner(),
+                    feedbacks -> feedBackAdapter.setData(feedbacks));
 
             //open fragment create new feedback by button
             Button btnAddFeedBack = view.findViewById(R.id.btn_add_feedback);
@@ -174,11 +171,7 @@ public class FeedBackFragment extends Fragment{
     //show success dialog
     private void showSuccessDialog(String message) {
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
-            @Override
-            public void changeFragment() {
-
-            }
+        SuccessDialog newFragment = new SuccessDialog(message, () -> {
         });
         newFragment.show(ft, "dialog success");
     }

@@ -103,14 +103,15 @@ public class AddFeedBackFragment extends Fragment {
         }
         else  if(mission.equals(SystemConstant.UPDATE)){
             title.setText("Edit New Feedback");
-
             bundle.putString("mission", SystemConstant.UPDATE);
 
+            //get feedback from previous fragment by bundle
             try {
                 mFeedbackEdit = (Feedback) getArguments().getSerializable("item");
                 if (mFeedbackEdit != null) {
                     idFb = mFeedbackEdit.getFeedbackID();
                     feedbackTitle.setText(mFeedbackEdit.getTitle());
+
                 }
             }
             catch (Exception ex){
@@ -120,15 +121,12 @@ public class AddFeedBackFragment extends Fragment {
         }
 
         //load type feedback using ViewModel
-        typeFeedbackViewModel.getListTypeFeedbackLiveData().observe(getViewLifecycleOwner(), new Observer<List<TypeFeedback>>() {
-            @Override
-            public void onChanged(List<TypeFeedback> typeFeedbacks) {
-                typeFeedbackArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, typeFeedbacks);
-                spnFeedbackType.setAdapter(typeFeedbackArrayAdapter);
+        typeFeedbackViewModel.getListTypeFeedbackLiveData().observe(getViewLifecycleOwner(), typeFeedbacks -> {
+            typeFeedbackArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, typeFeedbacks);
+            spnFeedbackType.setAdapter(typeFeedbackArrayAdapter);
 
-                if (mFeedbackEdit != null){
-                    spnFeedbackType.setSelection(typeFeedbackArrayAdapter.getPosition(mFeedbackEdit.getTypeFeedback()));
-                }
+            if (mFeedbackEdit != null){
+                spnFeedbackType.setSelection(typeFeedbackArrayAdapter.getPosition(mFeedbackEdit.getTypeFeedback()));
             }
         });
 
@@ -136,12 +134,9 @@ public class AddFeedBackFragment extends Fragment {
         listTopic = new ArrayList<>();
 
         //load list topic
-        topicViewModel.getListTopicLiveData().observe(getViewLifecycleOwner(), new Observer<List<Topic>>() {
-            @Override
-            public void onChanged(List<Topic> topics) {
-                topicAdapter.setData(topics);
-                getTopics(topics);
-            }
+        topicViewModel.getListTopicLiveData().observe(getViewLifecycleOwner(), topics -> {
+            topicAdapter.setData(topics);
+            getTopics(topics);
         });
 
         btnBack.setOnClickListener(v -> getActivity().onBackPressed());
@@ -173,6 +168,7 @@ public class AddFeedBackFragment extends Fragment {
             }
         });
 
+        //prepare for recycler view
         recyclerTopic = view.findViewById(R.id.rcv_topic_in_feedback);
         recyclerTopic.setAdapter(topicAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
