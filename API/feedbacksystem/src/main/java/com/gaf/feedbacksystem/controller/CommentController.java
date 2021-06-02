@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -38,6 +40,27 @@ public class CommentController {
         }
     }
 
+    @PreAuthorize("hasRole(\"" + SystemConstant.TRAINEE_ROLE + "\")")
+    @GetMapping(value = "/loadListCommentByTrainee/{idClass}/{idModule}", produces = "application/json")
+    public ResponseEntity<Map<String, List<?>>> loadListCommentByTrainee(@PathVariable(value = "idClass") Integer classId,
+                                                                @PathVariable(value = "idModule") Integer moduleId){
+        try{
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                    .getPrincipal();
+
+            Map result = new HashMap();
+            List<TraineeCommentDto> traineeCommentDtos = commentService.findByMClassAndModuleAndTrainee(classId, moduleId,userDetails.getUsername());
+            if ( traineeCommentDtos.isEmpty()) {
+                result.put("added", 0);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            result.put("added", 1);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comment Not Found", exc);
+        }
+    }
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
     @GetMapping(value = "/loadListComment/{idClass}/{idModule}", produces = "application/json")
     public ResponseEntity<Map<String, List<?>>> loadListComment(@PathVariable(value = "idClass") Integer classId,

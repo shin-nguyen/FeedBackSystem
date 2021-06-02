@@ -14,4 +14,9 @@ public interface CommentRepository extends JpaRepository<TraineeComment, Trainee
     @Query("SELECT a FROM TraineeComment a where a.primaryKey.mClass.classID = :idClass and a.primaryKey.module.moduleID = :idModule")
     List<TraineeComment> findByMClassAndModule(@Param("idClass") Integer idClass,
                                                   @Param("idModule") Integer idModule);
+
+    @Query("SELECT a FROM TraineeComment a where a.primaryKey.mClass.classID = :idClass and a.primaryKey.module.moduleID = :idModule and a.primaryKey.trainee.userName = :userName")
+    List<TraineeComment> findByMClassAndModuleAndTrainee(@Param("idClass") Integer idClass,
+                                               @Param("idModule") Integer idModule,
+                                                @Param("userName") String userName);
 }

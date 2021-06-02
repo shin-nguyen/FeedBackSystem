@@ -5,12 +5,12 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,54 +21,56 @@ import android.widget.Toast;
 
 import com.gaf.project.R;
 import com.gaf.project.adapter.TopicTrainningAdapter;
+import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
+import com.gaf.project.dialog.WarningDialog;
 import com.gaf.project.model.Answer;
 import com.gaf.project.model.Assignment;
+import com.gaf.project.model.Class;
 import com.gaf.project.model.Comment;
 import com.gaf.project.model.Topic;
 import com.gaf.project.model.Trainee;
-import com.gaf.project.response.AnswerResponse;
-import com.gaf.project.response.TopicResponse;
-import com.gaf.project.service.AnswerService;
-import com.gaf.project.service.CommentService;
-import com.gaf.project.service.TopicService;
-import com.gaf.project.service.TraineeService;
-import com.gaf.project.service.TrainerService;
-import com.gaf.project.utils.ApiUtils;
 import com.gaf.project.utils.SessionManager;
+import com.gaf.project.viewmodel.AnswerViewModel;
+import com.gaf.project.viewmodel.ClassViewModel;
+import com.gaf.project.viewmodel.CommentViewModel;
+import com.gaf.project.viewmodel.TopicViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class DoFeedbackFragment extends Fragment {
     private RecyclerView rcvAnswerInFeedbackTrainee;
     private TextView moduleName,comment, trainerName,className;
     private Button btnSubmit;
     private TopicTrainningAdapter topicTrainningAdapter;
-    private TopicService topicService;
-    private AnswerService answerService;
-    private CommentService commentService;
+    private TopicViewModel topicViewModel;
+    private AnswerViewModel answerViewModel;
+    private CommentViewModel commentViewModel;
     private List<Topic> topicList;
+    private  View view;
     Assignment assignment =new Assignment();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        answerService = ApiUtils.getAnswerService();
-        topicService = ApiUtils.getTopicService();
-        commentService = ApiUtils.getCommentService();
+        answerViewModel = new ViewModelProvider(this).get(AnswerViewModel.class);
+        topicViewModel = new ViewModelProvider(this).get(TopicViewModel.class);
+        commentViewModel = new ViewModelProvider(this).get(CommentViewModel.class);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        topicViewModel.initData();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_do_feedback, container, false);
+         view =  inflater.inflate(R.layout.fragment_do_feedback, container, false);
         initComponents(view);
 
         try {
@@ -88,74 +90,42 @@ public class DoFeedbackFragment extends Fragment {
         topicTrainningAdapter = new TopicTrainningAdapter(assignment.getModule(),assignment.getMClass());
         topicList = new ArrayList<>();
 
-        Call<TopicResponse> topicResponseCall = topicService.loadListTopic();
-        topicResponseCall.enqueue(new Callback<TopicResponse>() {
-            @Override
-            public void onResponse(Call<TopicResponse> call, Response<TopicResponse> response) {
-                if (response.isSuccessful()&& response.body()!=null){
-                    topicList = response.body().getTopic();
-                    topicTrainningAdapter.setData(topicList);
-                    setTopic(topicList);
-                }
-            }
 
-            @Override
-            public void onFailure(Call<TopicResponse> call, Throwable t) {
-                Log.e("Error",t.getLocalizedMessage());
-                showToast("Error");
-            }
+        topicViewModel.getListTopicLiveData().observe(getViewLifecycleOwner(),topics -> {
+                topicList = topics;
+                topicTrainningAdapter.setData(topicList);
         });
 
         btnSubmit.setOnClickListener(v->{
             String textComment = comment.getText().toString();
 
-            Trainee trainee = SessionManager.getInstance().getTrainee();
-            Comment comment = new Comment(assignment.getModule(),trainee,assignment.getMClass(),textComment);
-
             List<Answer> mListAnswer = topicTrainningAdapter.getmListAnswer();
-
             int numberQuestion = assignment.getModule().getFeedback().getQuestions().size() * topicList.size();
-
-            if (textComment.isEmpty() || mListAnswer.size() != numberQuestion){
+            if (textComment.isEmpty() ){
                 showFailDialog("Please complete your feedback!");
                 return;
             }
 
-            Call<Comment> commentCall = commentService.save(comment);
-            commentCall.enqueue(new Callback<Comment>() {
-                @Override
-                public void onResponse(Call<Comment> call, Response<Comment> response) {
-                    if (response.isSuccessful()&& response.body()!=null){
-                        showSuccessDialog("Submit Feedback Success");
-                    }
-                }
+            Trainee trainee = SessionManager.getInstance().getTrainee();
+            Comment comment = new Comment(assignment.getModule(),trainee,assignment.getMClass(),textComment);
 
-                @Override
-                public void onFailure(Call<Comment> call, Throwable t) {
+            commentViewModel.add(comment);
+            clickSave(mListAnswer);
 
-                }
-            });
-
-
-            Call<AnswerResponse> answerResponseCall = answerService.addAll(mListAnswer);
-            answerResponseCall.enqueue(new Callback<AnswerResponse>() {
-                @Override
-                public void onResponse(Call<AnswerResponse> call, Response<AnswerResponse> response) {
-                    Log.e("Success","Add Answer");
-                }
-
-                @Override
-                public void onFailure(Call<AnswerResponse> call, Throwable t) {
-
-                }
-            });
         });
         rcvAnswerInFeedbackTrainee.setAdapter(topicTrainningAdapter);
         return view;
     }
 
-    private void setTopic(List<Topic> topicList) {
-        this.topicList = topicList;
+    private void clickSave(List<Answer> answers){
+        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+        final WarningDialog dialog;
+        dialog = new WarningDialog(
+                () -> {
+                    showDialog( answerViewModel.addAll(answers),"Submit Feedback"); },
+                "Do you want to submit Feedback?");
+
+        dialog.show(ft, "dialog success");
     }
 
     private void initComponents(View view) {
@@ -174,13 +144,23 @@ public class DoFeedbackFragment extends Fragment {
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }
 
+    public void showDialog(MutableLiveData<String> actionStatus, String action){
+        actionStatus.observe(getViewLifecycleOwner(),s -> {
+            if(s.equals(SystemConstant.SUCCESS)){
+                showSuccessDialog(action+" Success!!");
+            }else {
+                showFailDialog(action+" Fail!!");
+            }
+        });
+
+    }
 
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
             @Override
             public void changeFragment() {
-
+                Navigation.findNavController(view).navigate(R.id.action_do_feedback_fragment_to_nav_trainee_home_fragment);
             }
         });
         newFragment.show(ft, "dialog success");

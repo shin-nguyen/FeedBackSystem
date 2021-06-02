@@ -94,6 +94,27 @@ public class AssignmentController {
         }
     }
 
+    @PreAuthorize("hasRole(\"" + SystemConstant.TRAINEE_ROLE + "\")")
+    @GetMapping(value = "/loadListAssignmentByTrainee", produces = "application/json")
+    public ResponseEntity<Map<String, List<?>>> loadListAssignmentByTrainee(){
+        try{
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                    .getPrincipal();
+            String userName = userDetails.getUsername();
+
+            List<AssignmentDto> assignmentDtoList = assignmentService.findByTraineeUserName(userName);
+            if ( assignmentDtoList.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            Map result = new HashMap();
+            result.put("assignments", assignmentDtoList);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        catch (MyResourceNotFoundException exc) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Assignment Not Found", exc);
+        }
+    }
+
 
     @PreAuthorize("hasRole(\"" + SystemConstant.ADMIN_ROLE + "\")")
     @PostMapping(value = "/")

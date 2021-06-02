@@ -36,14 +36,11 @@ public class TopicTrainningAdapter extends RecyclerView.Adapter<TopicTrainningAd
     private List<Question> mListQuestion;
     private Module module;
     private Class mClass;
-    private Set<Question> Questions = new HashSet<>();
 
     public TopicTrainningAdapter(Module module,Class mClass) {
         this.module = module;
         this.mClass = mClass;
     }
-
-    private Trainee trainee;
 
     private List<Answer> mListAnswer = new ArrayList<>();
 
@@ -79,6 +76,7 @@ public class TopicTrainningAdapter extends RecyclerView.Adapter<TopicTrainningAd
         QuestionTopicTrainingAdapter questionTopicTrainingAdapter =   new QuestionTopicTrainingAdapter(item -> {
             checkItem(item);
         },newPostion, module,mClass);
+
         mListQuestion = new ArrayList<>();
         //load list questions
         Call<QuestionResponse> questionCall = questionService.loadListQuestionByTopic(topic.getTopicID());
@@ -88,7 +86,6 @@ public class TopicTrainningAdapter extends RecyclerView.Adapter<TopicTrainningAd
                 if (response.isSuccessful() && response.body()!=null){
                     mListQuestion=  response.body().getQuestions();
                     questionTopicTrainingAdapter.setData( mListQuestion);
-                    getmListQuestion(mListQuestion);
                 }
             }
 
@@ -102,13 +99,6 @@ public class TopicTrainningAdapter extends RecyclerView.Adapter<TopicTrainningAd
         holder.answerRecyclerView.setAdapter(questionTopicTrainingAdapter);
     }
 
-    public void getmListQuestion(List<Question> mListQuestion) {
-        this.mListQuestion = mListQuestion;
-    }
-
-    public List<Question> questionList(){
-        return mListQuestion;
-    }
 
     private void checkItem(Answer item) {
 

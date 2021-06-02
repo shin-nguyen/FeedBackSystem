@@ -11,4 +11,6 @@ public interface IAssignmentService {
     AssignmentDto update(String userName,AssignmentDto newAssignment);
     AssignmentDto findByCode(String code);
     void deleteById(Integer idClass,Integer idModule,String userName);
+
+    List<AssignmentDto> findByTraineeUserName(String userName);
 }

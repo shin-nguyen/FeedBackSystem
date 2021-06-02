@@ -3,6 +3,7 @@ package com.gaf.project.fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,6 +28,9 @@ import com.gaf.project.response.AssignmentResponse;
 import com.gaf.project.service.AssignmentService;
 import com.gaf.project.service.FeedbackService;
 import com.gaf.project.utils.ApiUtils;
+import com.gaf.project.viewmodel.AssignmentViewModel;
+import com.gaf.project.viewmodel.ClassViewModel;
+import com.gaf.project.viewmodel.CommentViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,15 +42,20 @@ import retrofit2.Response;
 public class TraineeHomeFragment extends Fragment {
 
     private View view;
-    private AssignmentService assignmentService;
+    private AssignmentViewModel assignmentViewModel;
     private RecyclerView recyclerViewAssignment;
     private FeedbackTraineeAdapter feedbackTraineeAdapter;
-    private List<Assignment> listAssignment;
-
+    private CommentViewModel commentViewModel;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        assignmentService = ApiUtils.getAssignmentService();
+        assignmentViewModel = new ViewModelProvider(this).get(AssignmentViewModel.class);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        assignmentViewModel.initDataByTrainee();
     }
 
     @Override
@@ -60,34 +69,18 @@ public class TraineeHomeFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         recyclerViewAssignment.setLayoutManager(linearLayoutManager);
 
+
         feedbackTraineeAdapter = new FeedbackTraineeAdapter(item -> {
             doFeedback(item);
         });
-        listAssignment = new ArrayList<>();
-        Call<AssignmentResponse> call =  assignmentService.loadListAssignment();
-        setAssignmentAdapter(call);
+        assignmentViewModel.getListAssignmentOfTrainerLiveData().observe(getViewLifecycleOwner(),assignments -> {
+
+            feedbackTraineeAdapter.setData(assignments);
+        });
 
         recyclerViewAssignment.setAdapter(feedbackTraineeAdapter);
 
         return view;
-    }
-
-    private void setAssignmentAdapter(Call<AssignmentResponse> call){
-        call.enqueue(new Callback<AssignmentResponse>() {
-            @Override
-            public void onResponse(Call<AssignmentResponse> call, Response<AssignmentResponse> response) {
-                if (response.isSuccessful()&&response.body()!=null){
-                    listAssignment = response.body().getAssignments();
-                    feedbackTraineeAdapter.setData(listAssignment);
-                    Log.e("Success","Assignment get success");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AssignmentResponse> call, Throwable t) {
-                Log.e("Error",t.getLocalizedMessage());
-            }
-        });
     }
 
     private void doFeedback(Assignment item) {

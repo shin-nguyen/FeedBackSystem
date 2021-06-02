@@ -9,4 +9,6 @@ import java.util.List;
 public interface ICommentService {
     TraineeCommentDto save(TraineeCommentDto traineeCommentDto);
     List<TraineeCommentDto> findByMClassAndModule(Integer idClass, Integer idModule);
+
+    List<TraineeCommentDto> findByMClassAndModuleAndTrainee(Integer classId, Integer moduleId, String username);
 }

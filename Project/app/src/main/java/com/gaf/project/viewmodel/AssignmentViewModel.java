@@ -22,6 +22,7 @@ public class AssignmentViewModel extends ViewModel {
     private AssignmentService assignmentService;
     private MutableLiveData<List<Assignment>> mListAssignmentLiveData;
     private MutableLiveData<List<Assignment>> mListAssignmentOfTrainerLiveData;
+    private MutableLiveData<List<Assignment>> mListAssignmentOfTraineeLiveData;
     private List<Assignment> mListAssignment;
     private List<Assignment> mListAssignmentOfTrainer;
 
@@ -29,7 +30,7 @@ public class AssignmentViewModel extends ViewModel {
         assignmentService = ApiUtils.getAssignmentService();
         mListAssignmentLiveData = new MutableLiveData<>();
         mListAssignmentOfTrainerLiveData = new MutableLiveData<>();
-
+        mListAssignmentOfTraineeLiveData = new MutableLiveData<>();
         initData();
         initDataByTrainer();
     }
@@ -61,6 +62,24 @@ public class AssignmentViewModel extends ViewModel {
                 if (response.isSuccessful()&&response.body()!=null){
                     mListAssignmentOfTrainer = response.body().getAssignments();
                     mListAssignmentOfTrainerLiveData.setValue(mListAssignmentOfTrainer);
+                    Log.e("Success","Assignment get success");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AssignmentResponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+            }
+        });
+    }
+
+    public void initDataByTrainee(){
+        Call<AssignmentResponse> call =  assignmentService.loadListAssignmentByTrainee();
+        call.enqueue(new Callback<AssignmentResponse>() {
+            @Override
+            public void onResponse(Call<AssignmentResponse> call, Response<AssignmentResponse> response) {
+                if (response.isSuccessful()&&response.body()!=null){
+                    mListAssignmentOfTraineeLiveData.setValue(response.body().getAssignments());
                     Log.e("Success","Assignment get success");
                 }
             }
@@ -149,7 +168,9 @@ public class AssignmentViewModel extends ViewModel {
     public MutableLiveData<List<Assignment>> getListAssignmentOfTrainerLiveData() {
         return mListAssignmentOfTrainerLiveData;
     }
-
+    public MutableLiveData<List<Assignment>> getListAssignmentOfTraineeLiveData() {
+        return mListAssignmentOfTraineeLiveData;
+    }
     public List<Assignment> getListAssignment() {
         return mListAssignment;
     }

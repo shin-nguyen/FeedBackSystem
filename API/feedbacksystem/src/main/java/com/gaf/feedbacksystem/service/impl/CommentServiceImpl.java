@@ -33,4 +33,11 @@ public class CommentServiceImpl implements ICommentService {
         List<TraineeCommentDto> traineeCommentDtos = ObjectMapperUtils.mapAll(traineeComments, TraineeCommentDto.class);
         return traineeCommentDtos;
     }
+
+    @Override
+    public List<TraineeCommentDto> findByMClassAndModuleAndTrainee(Integer classId, Integer moduleId, String username) {
+        List<TraineeComment> traineeComments = commentRepository.findByMClassAndModuleAndTrainee(classId, moduleId,username);
+        List<TraineeCommentDto> traineeCommentDtos = ObjectMapperUtils.mapAll(traineeComments, TraineeCommentDto.class);
+        return traineeCommentDtos;
+    }
 }

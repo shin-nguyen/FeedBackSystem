@@ -61,4 +61,11 @@ public class AssignmentServiceImpl implements IAssignmentService {
         assignmentRepository.deleteByMClassAndModuleAndTrainer(idClass,idModule,userName);
     }
 
+    @Override
+    public List<AssignmentDto> findByTraineeUserName(String userName) {
+        List<Assignment> assignments = assignmentRepository.findByTraineeUserName(userName);
+        List<AssignmentDto> assignmentDtos = ObjectMapperUtils.mapAll(assignments, AssignmentDto.class);
+        return assignmentDtos;
+    }
+
 }

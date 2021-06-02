@@ -28,4 +28,7 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Assignme
 
     @Query("SELECT a FROM Assignment a WHERE a.registrationCode = :code")
     Assignment findByCode(@Param("code") String code);
+
+    @Query("select assignment from Assignment assignment join TraineeAssignment tA on assignment.registrationCode = tA.primaryKey.assignment.registrationCode where tA.primaryKey.trainee.userName = :userName")
+    List<Assignment> findByTraineeUserName(@Param("userName") String username);
 }
