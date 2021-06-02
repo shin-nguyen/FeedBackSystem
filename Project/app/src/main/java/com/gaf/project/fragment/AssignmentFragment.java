@@ -75,6 +75,8 @@ public class AssignmentFragment extends Fragment{
     @Override
     public void onStart(){
         super.onStart();
+
+        //Update data every time you enter Fragment
         assignmentViewModel.initData();
     }
 
@@ -83,14 +85,15 @@ public class AssignmentFragment extends Fragment{
                              ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_assignment, container, false);
 
+        //get role of current user from session manager
         userRole = SessionManager.getInstance().getUserRole();
 
         initView();
 
+        //declare recyclerview(view, adapter and set layout)
         recyclerViewAssignment = view.findViewById(R.id.rcv_assignment);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         recyclerViewAssignment.setLayoutManager(linearLayoutManager);
-
         assignmentAdapter = new AssignmentAdapter(new AssignmentAdapter.IClickItem() {
             @Override
             public void update(Assignment item) {
@@ -103,15 +106,20 @@ public class AssignmentFragment extends Fragment{
             }
         });
 
+        //if user is admin, get list all assignment, then put it in adapter
         if(userRole.equals(SystemConstant.ADMIN_ROLE)){
             assignmentViewModel.getListAssignmentLiveData().observe(getViewLifecycleOwner(), new Observer<List<Assignment>>() {
                 @Override
                 public void onChanged(List<Assignment> list) {
+                    if(list.isEmpty()){
+                        assignmentAdapter.setData(null);
+                    }
                     assignmentAdapter.setData(list);
                 }
             });
         }
 
+        //if user is trainer get list assignment of user, then put it in adapter
         if(userRole.equals(SystemConstant.TRAINER_ROLE)){
             assignmentViewModel.getListAssignmentOfTrainerLiveData().observe(getViewLifecycleOwner(), new Observer<List<Assignment>>() {
                 @Override
@@ -121,19 +129,27 @@ public class AssignmentFragment extends Fragment{
             });
         }
 
+        //put adapter to recyclerview
         recyclerViewAssignment.setAdapter(assignmentAdapter);
 
+        //set event for button add
         btnAdd.setOnClickListener(v->{
+
+            //go to add assignment page
             Navigation.findNavController(view).navigate(R.id.action_nav_assignment_to_add_assignment_fragment);
         });
 
+        //set event for button search
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //filter by content of search box
                 assignmentAdapter.getFilter().filter(searchAssignment.getQuery());
             }
         });
 
+        //reload the page at the end of the search action
         searchAssignment.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
@@ -145,6 +161,8 @@ public class AssignmentFragment extends Fragment{
         return view;
     }
 
+    /*set event to delete button
+    *delete assignment and show dialog*/
     private void clickDelete(Assignment item){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         if(checkToDelete(item)){
@@ -167,6 +185,8 @@ public class AssignmentFragment extends Fragment{
 
     }
 
+    /*set event for update button
+    *go to edit assignment page */
     private void clickUpdate(Assignment item) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("item", item);
@@ -174,6 +194,8 @@ public class AssignmentFragment extends Fragment{
         Navigation.findNavController(view).navigate(R.id.action_nav_assignment_to_edit_assignment_fragment,bundle);
     }
 
+  /*check to delete assignment
+    if assignment has a valid class or module and has not been deleted, it returns false and vice versa*/
     public Boolean checkToDelete(Assignment assignment){
         if((assignment.getMClass().isDeleted()==false && assignment.getMClass().getEndTime().compareTo(new Date())>0)
                 || (assignment.getModule().isDeleted()==false && assignment.getModule().getEndTime().compareTo(new Date())>0)){
@@ -182,10 +204,12 @@ public class AssignmentFragment extends Fragment{
         return false;
     }
 
+    //show toast
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }
 
+    //show dialog when the action is finished
     public void showDialog(String action){
         Boolean actionStatus = assignmentViewModel.getActionStatus().booleanValue();
         if(actionStatus){
@@ -195,12 +219,14 @@ public class AssignmentFragment extends Fragment{
         }
     }
 
+    //show fail dialog
     public void showFailDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         FailDialog newFragment = new FailDialog(message);
         newFragment.show(ft, "dialog fail");
     }
 
+    //show success dialog
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
@@ -212,6 +238,7 @@ public class AssignmentFragment extends Fragment{
         newFragment.show(ft, "dialog success");
     }
 
+    //reload page
     public void reloadFragment(){
         if (getFragmentManager() != null) {
             getFragmentManager()
@@ -222,6 +249,7 @@ public class AssignmentFragment extends Fragment{
         }
     }
 
+    //declare all view
     private void initView(){
         searchFiled = view.findViewById(R.id.search_field);
         searchAssignment = view.findViewById(R.id.sv_assignment);
