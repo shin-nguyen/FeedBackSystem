@@ -22,7 +22,8 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:text="TRAINING Module FEEDBACK"/>
+            android:text="TRAINING Module FEEDBACK"
+            android:textColor="@color/black"/>
     </LinearLayout>
 
     <RelativeLayout
@@ -38,7 +39,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginRight="20dp"
             android:layout_toStartOf="@+id/groupImage">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -49,34 +52,33 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Module: " />
+                    android:text="Module: "
+                    android:textColor="@color/black"/>
 
                 <TextView
                     android:id="@+id/txt_module_name"
                     style="@style/TextItemStyle"
                     android:layout_marginTop="10dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"/>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Class: " />
 
                 <TextView
                     android:id="@+id/txt_class_name"
                     style="@style/TextItemStyle"
                     android:layout_marginTop="10dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="Class"
+                    android:textColor="@color/black"/>
 
             </LinearLayout>
         </LinearLayout>
@@ -98,8 +100,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
-                    android:src="@drawable/ic_baseline_error_outline_24" />
+                    android:src="@drawable/ic_baseline_person_24" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -122,7 +123,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="TOPIC/LESSION EVALUATION"/>
+            android:text="TOPIC/LESSON EVALUATION"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 
@@ -135,7 +137,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:text="A. GENERAL COMMENT"/>
+            android:text="A. GENERAL COMMENT"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 
@@ -150,7 +153,7 @@
             android:id="@+id/txt_comment"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:hint="test" />
+            android:background="@drawable/background_common_box"/>
 
     </LinearLayout>
 
@@ -164,7 +167,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:text="B. DETAIL EVALUATION"/>
+            android:text="B. DETAIL EVALUATION"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 

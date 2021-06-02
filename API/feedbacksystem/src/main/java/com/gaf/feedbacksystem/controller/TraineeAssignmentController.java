@@ -40,6 +40,7 @@ public class TraineeAssignmentController {
     @Autowired
     private IClassService classService;
 
+    //save data to TraineeAssignment and return a integer
     @PostMapping(value = "/{username}/{code}")
     @PreAuthorize("hasRole(\"" + SystemConstant.TRAINEE_ROLE + "\")")
     public Map<String, Integer> create(@PathVariable (name = "username") String username,
@@ -51,13 +52,15 @@ public class TraineeAssignmentController {
             if (traineeDto == null){
                 throw new MyResourceNotFoundException();
             }
-
-//            TraineeAssignmentDto traineeAssignmentDto = traineeAssignmentService.checkIsAvailable(username, code);
+            TraineeAssignmentDto traineeAssignmentDto = new TraineeAssignmentDto();
+            boolean isCodeAvailable = traineeAssignmentService.checkCodeByTraineeId(username, code);
+            //traineeAssignmentDto = traineeAssignmentService.checkIsAvailable(username, code);
                 try {
                     //check have trainee joined class
 //                    if (traineeAssignmentDto != null){
-//                        response.put("added", 0);
-//                    }else
+                    if (isCodeAvailable == true){
+                        response.put("added", 0);
+                    }else
 
                     //if  is null, it's mean invalid code
                     if (assignmentDto == null){
@@ -67,7 +70,6 @@ public class TraineeAssignmentController {
                     else if (assignmentDto.getRegistrationCode().equals(code)){
                         ClassDto classDto = classService.findById(assignmentDto.getmClass().getClassID());
 
-                        TraineeAssignmentDto traineeAssignmentDto = new TraineeAssignmentDto();
                         traineeAssignmentDto.setAssignment(assignmentDto);
                         traineeAssignmentDto.setTrainee(traineeDto);
 

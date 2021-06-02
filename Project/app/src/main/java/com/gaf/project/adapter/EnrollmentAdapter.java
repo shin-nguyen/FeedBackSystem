@@ -4,6 +4,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,15 +15,49 @@ import com.gaf.project.R;
 import com.gaf.project.model.Class;
 import com.gaf.project.model.Enrollment;
 import com.gaf.project.model.Feedback;
+import com.gaf.project.model.Question;
 import com.gaf.project.model.Trainee;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class EnrollmentAdapter extends RecyclerView.Adapter<EnrollmentAdapter.EnrollmentViewHolder> {
+public class EnrollmentAdapter extends RecyclerView.Adapter<EnrollmentAdapter.EnrollmentViewHolder> implements Filterable {
 
     private List<Enrollment> mListEnrollment;
+    private List<Enrollment> mListEnrollmentOld;
 
     private EnrollmentAdapter.IClickItem iClickItem;
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String strSearch = constraint.toString();
+                if(strSearch.equals("All")){
+                    mListEnrollment = mListEnrollmentOld;
+                }else {
+                    List<Enrollment> enrollmentList = new ArrayList<>();
+                    for(Enrollment enrollment : mListEnrollmentOld){
+                        if(enrollment.getClassName().toLowerCase().contains(strSearch.toLowerCase())){
+                            enrollmentList.add(enrollment);
+                        }
+                        mListEnrollment = enrollmentList;
+                    }
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mListEnrollment;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mListEnrollment = (List<Enrollment>) results.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
 
     public interface IClickItem{
         void detail(Enrollment item);
@@ -35,6 +71,7 @@ public class EnrollmentAdapter extends RecyclerView.Adapter<EnrollmentAdapter.En
 
     public void setData(List<Enrollment> list){
         this.mListEnrollment = list;
+        this.mListEnrollmentOld = list;
         notifyDataSetChanged();
     }
 
@@ -96,5 +133,4 @@ public class EnrollmentAdapter extends RecyclerView.Adapter<EnrollmentAdapter.En
 
         }
     }
-
 }

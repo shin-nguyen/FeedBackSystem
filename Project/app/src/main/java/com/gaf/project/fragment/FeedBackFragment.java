@@ -46,7 +46,6 @@ public class FeedBackFragment extends Fragment{
     private View view;
     private RecyclerView recyclerViewFeedback;
     private FeedbackAdapter feedBackAdapter;
-    //private List<Feedback> feedbackList;
     private FeedBackViewModel feedBackViewModel;
     private FeedbackService feedbackService;
     private NavController navigation;
@@ -75,9 +74,7 @@ public class FeedBackFragment extends Fragment{
         String userRole = SessionManager.getInstance().getUserRole();
 
         if(userRole.equals(SystemConstant.ADMIN_ROLE)){
-//            feedbackList = new ArrayList<>();
-//            Call<FeedbackResponse> call = feedbackService.getListFeedback();
-//            setAdapter(call);
+
             feedBackViewModel.getListFeedBackLiveData().observe(getViewLifecycleOwner(), new Observer<List<Feedback>>() {
                 @Override
                 public void onChanged(List<Feedback> feedbacks) {
@@ -119,24 +116,6 @@ public class FeedBackFragment extends Fragment{
         return view;
     }
 
-//    private void setAdapter(Call<FeedbackResponse> call) {
-//        call.enqueue(new Callback<FeedbackResponse>() {
-//            @Override
-//            public void onResponse(Call<FeedbackResponse> call, Response<FeedbackResponse> response) {
-//                if (response.isSuccessful() && response.body() != null){
-//                    feedbackList = response.body().getFeedbacks();
-//                    feedBackAdapter.setData(feedbackList);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<FeedbackResponse> call, Throwable t) {
-//                Log.e("Fail to call api for feedback", t.getLocalizedMessage());
-//                showToast("Fail to call api for feedback");
-//            }
-//        });
-//    }
-
     private void clickAdd() {
         bundle.putString("mission", SystemConstant.ADD);
         navigation = Navigation.findNavController(view);
@@ -155,8 +134,6 @@ public class FeedBackFragment extends Fragment{
 
         final WarningDialog dialog = new WarningDialog(
                 () -> {
-                    //feedBackViewModel.deleteFeedback(item);
-
                     Call<DeleteResponse> call = feedbackService.delete(item.getFeedbackID());
                     call.enqueue(new Callback<DeleteResponse>() {
                         @Override

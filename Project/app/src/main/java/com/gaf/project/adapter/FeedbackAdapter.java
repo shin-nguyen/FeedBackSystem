@@ -1,6 +1,12 @@
 package com.gaf.project.adapter;
 
 
+import android.graphics.Typeface;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,9 +57,23 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.Feedba
             return;
         }
 
-        holder.feedbackId.setText(String.valueOf(feedback.getFeedbackID()));
-        holder.feedbackTitle.setText(feedback.getTitle());
-        holder.adminId.setText(feedback.getAdmin().getUserName());
+        String stringOfFbId = "Feedback ID: ";
+        SpannableStringBuilder feedbackId = new SpannableStringBuilder(stringOfFbId);
+        feedbackId.setSpan(new StyleSpan(Typeface.BOLD), 0, stringOfFbId.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        feedbackId.append(feedback.getFeedbackID().toString());
+        holder.feedbackId.setText(feedbackId);
+
+        String stringOfTitle = "Title: ";
+        SpannableStringBuilder title = new SpannableStringBuilder(stringOfTitle);
+        title.setSpan(new StyleSpan(Typeface.BOLD), 0, stringOfTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        title.append(feedback.getTitle());
+        holder.feedbackTitle.setText(title);
+
+        String stringOfAdId = "Admin ID: ";
+        SpannableStringBuilder adId = new SpannableStringBuilder(stringOfAdId);
+        adId.setSpan(new StyleSpan(Typeface.BOLD), 0, stringOfAdId.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        adId.append(feedback.getAdmin().getUserName());
+        holder.adminId.setText(adId);
 
         holder.detailButton.setOnClickListener(v -> {
             iClickItem.detail(feedback);

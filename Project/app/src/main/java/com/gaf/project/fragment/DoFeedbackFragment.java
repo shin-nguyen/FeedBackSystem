@@ -81,37 +81,45 @@ public class DoFeedbackFragment extends Fragment {
             showToast("Error");
         }
 
-                topicTrainningAdapter = new TopicTrainningAdapter(assignment.getModule(),assignment.getMClass());
-                topicList = new ArrayList<>();
+        topicTrainningAdapter = new TopicTrainningAdapter(assignment.getModule(),assignment.getMClass());
+        topicList = new ArrayList<>();
 
-                Call<TopicResponse> topicResponseCall = topicService.loadListTopic();
-                topicResponseCall.enqueue(new Callback<TopicResponse>() {
-                    @Override
-                    public void onResponse(Call<TopicResponse> call, Response<TopicResponse> response) {
-                        if (response.isSuccessful()&& response.body()!=null){
-                            topicList = response.body().getTopic();
-                            topicTrainningAdapter.setData(topicList);
-                        }
-                    }
+        Call<TopicResponse> topicResponseCall = topicService.loadListTopic();
+        topicResponseCall.enqueue(new Callback<TopicResponse>() {
+            @Override
+            public void onResponse(Call<TopicResponse> call, Response<TopicResponse> response) {
+                if (response.isSuccessful()&& response.body()!=null){
+                    topicList = response.body().getTopic();
+                    topicTrainningAdapter.setData(topicList);
+                }
+            }
 
-                    @Override
-                    public void onFailure(Call<TopicResponse> call, Throwable t) {
-                        Log.e("Error",t.getLocalizedMessage());
-                        showToast("Error");
-                    }
-                });
+            @Override
+            public void onFailure(Call<TopicResponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showToast("Error");
+            }
+        });
 
         btnSubmit.setOnClickListener(v->{
             String textComment = comment.getText().toString();
+
             Trainee trainee = SessionManager.getInstance().getTrainee();
             Comment comment = new Comment(assignment.getModule(),trainee,assignment.getMClass(),textComment);
+
+            List<Answer> mList = topicTrainningAdapter.getmListAnswer();
+
+            if (textComment.isEmpty() || mList.size() != assignment.getModule().getFeedback().getQuestions().size()){
+                showFailDialog("Please complete your feedback");
+                return;
+            }
 
             Call<Comment> commentCall = commentService.save(comment);
             commentCall.enqueue(new Callback<Comment>() {
                 @Override
                 public void onResponse(Call<Comment> call, Response<Comment> response) {
                     if (response.isSuccessful()&& response.body()!=null){
-                        showSuccessDialog("Sucess");
+                        showSuccessDialog("Success");
                     }
                 }
 
@@ -121,7 +129,6 @@ public class DoFeedbackFragment extends Fragment {
                 }
             });
 
-            List<Answer> mList = topicTrainningAdapter.getmListAnswer();
 
             Call<AnswerResponse> answerResponseCall = answerService.addAll(mList);
             answerResponseCall.enqueue(new Callback<AnswerResponse>() {

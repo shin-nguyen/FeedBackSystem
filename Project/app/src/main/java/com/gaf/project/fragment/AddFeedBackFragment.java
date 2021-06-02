@@ -136,9 +136,10 @@ public class AddFeedBackFragment extends Fragment {
 
         btnBack.setOnClickListener(v -> getActivity().onBackPressed());
 
-
+        //set event for review button
         btnReview.setOnClickListener(v -> {
             navigation = Navigation.findNavController(view);
+            //check feedback title
             if (feedbackTitle.getText().toString().isEmpty()){
                 showToast("Please enter feedback title");
                 return;

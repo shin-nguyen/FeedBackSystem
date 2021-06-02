@@ -77,13 +77,16 @@ public class JoinFragment extends DialogFragment {
             @Override
             public void onResponse(Call<AddTraineeAssignmentResponse> call, Response<AddTraineeAssignmentResponse> response) {
                 if (response.isSuccessful()&&response.body().getAdded() == null){
-                    showFailDialog("some thing went wrong");
+                    showFailDialog("Some thing went wrong");
                 }
                 else if (response.isSuccessful()&&response.body().getAdded() == 2){
                     showSuccessDialog("Join success!");
                 }
                 else if (response.isSuccessful()&&response.body().getAdded() == 1){
                     showFailDialog("Invalid Registration Code!!!");
+                }
+                else if (response.isSuccessful()&&response.body().getAdded() == 0){
+                    showFailDialog("You already join this module, please try another!!!");
                 }
                 else if (response.body() != null){
                     showFailDialog("Error");

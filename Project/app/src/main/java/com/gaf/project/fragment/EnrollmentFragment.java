@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Filter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -103,7 +104,10 @@ public class EnrollmentFragment extends Fragment {
         enrollmentViewModel.getListClassLiveData().observe(getViewLifecycleOwner(), new Observer<List<Class>>() {
             @Override
             public void onChanged(List<Class> classes) {
-                enrollmentArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, classes);
+                Class clazz = new Class("All", 0, new Date(), new Date());
+                List<Class> classList = classes;
+                classList.add(0, clazz);
+                enrollmentArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, classList);
                 spnClass.setAdapter(enrollmentArrayAdapter);
             }
         });
@@ -121,9 +125,13 @@ public class EnrollmentFragment extends Fragment {
         spnClass.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Class clazz = enrollmentArrayAdapter.getItem(position);
+                enrollmentAdapter.getFilter().filter(clazz.getClassName(), new Filter.FilterListener() {
+                    @Override
+                    public void onFilterComplete(int count) {
 
-                aClass = (Class) parent.getItemAtPosition(position);
-                showToast(aClass.getClassID().toString());
+                    }
+                });
             }
 
             @Override
