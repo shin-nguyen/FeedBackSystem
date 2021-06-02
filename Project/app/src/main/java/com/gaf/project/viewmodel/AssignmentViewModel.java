@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Assignment;
 import com.gaf.project.response.AssignmentResponse;
 import com.gaf.project.response.DeleteResponse;
@@ -23,7 +24,6 @@ public class AssignmentViewModel extends ViewModel {
     private MutableLiveData<List<Assignment>> mListAssignmentOfTrainerLiveData;
     private List<Assignment> mListAssignment;
     private List<Assignment> mListAssignmentOfTrainer;
-    private Boolean actionStatus;
 
     public AssignmentViewModel() {
         assignmentService = ApiUtils.getAssignmentService();
@@ -72,48 +72,55 @@ public class AssignmentViewModel extends ViewModel {
         });
     }
 
-    public void addAssignment(Assignment assignment){
-        setActionStatus(true);
+    public MutableLiveData<String> addAssignment(Assignment assignment){
+        MutableLiveData<String> actionStatus = new MutableLiveData<>();
+
         Call<Assignment> call = assignmentService.create(assignment);
         call.enqueue(new Callback<Assignment>() {
             @Override
             public void onResponse(Call<Assignment> call, Response<Assignment> response) {
                 if (response.isSuccessful()&&response.body()!=null) {
-                    setActionStatus(true);
                     initData();
+                    actionStatus.setValue(SystemConstant.SUCCESS);
                 }
             }
 
             @Override
             public void onFailure(Call<Assignment> call, Throwable t) {
                 Log.e("Error",t.getLocalizedMessage());
-                setActionStatus(false);
+                actionStatus.setValue(SystemConstant.FAIL);
             }
         });
+
+        return actionStatus;
     }
 
-    public void updateAssignment(String trainerName, Assignment assignment){
-        setActionStatus(true);
+    public MutableLiveData<String> updateAssignment(String trainerName, Assignment assignment){
+        MutableLiveData<String> actionStatus = new MutableLiveData<>();
+
         Call<Assignment> call =  assignmentService.update(trainerName,assignment);
         call.enqueue(new Callback<Assignment>() {
             @Override
             public void onResponse(Call<Assignment> call, Response<Assignment> response) {
                 if (response.isSuccessful()&&response.body()!=null) {
-                    setActionStatus(true);
                     initData();
+                    actionStatus.setValue(SystemConstant.SUCCESS);
                 }
             }
 
             @Override
             public void onFailure(Call<Assignment> call, Throwable t) {
                 Log.e("Error",t.getLocalizedMessage());
-                setActionStatus(false);
+                actionStatus.setValue(SystemConstant.FAIL);
             }
         });
+
+        return actionStatus;
     }
 
-    public void deleteAssignment(Assignment assignment){
-        setActionStatus(true);
+    public MutableLiveData deleteAssignment(Assignment assignment){
+        MutableLiveData<String> actionStatus = new MutableLiveData<>();
+
         Call<DeleteResponse> call =  assignmentService.delete(assignment.getMClass().getClassID(),
                 assignment.getModule().getModuleID(),
                 assignment.getTrainer().getUserName());
@@ -121,16 +128,18 @@ public class AssignmentViewModel extends ViewModel {
             @Override
             public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
                 if (response.isSuccessful()&&response.body().getDeleted()){
-                    setActionStatus(true);
                     initData();
+                    actionStatus.setValue(SystemConstant.SUCCESS);
                 }
             }
             @Override
             public void onFailure(Call<DeleteResponse> call, Throwable t) {
-                setActionStatus(false);
                 Log.e("Error",t.getLocalizedMessage());
+                actionStatus.setValue(SystemConstant.FAIL);
             }
         });
+
+        return actionStatus;
     }
 
     public MutableLiveData<List<Assignment>> getListAssignmentLiveData() {
@@ -139,14 +148,6 @@ public class AssignmentViewModel extends ViewModel {
 
     public MutableLiveData<List<Assignment>> getListAssignmentOfTrainerLiveData() {
         return mListAssignmentOfTrainerLiveData;
-    }
-
-    public Boolean getActionStatus() {
-        return actionStatus;
-    }
-
-    public void setActionStatus(Boolean actionStatus) {
-        this.actionStatus = actionStatus;
     }
 
     public List<Assignment> getListAssignment() {
