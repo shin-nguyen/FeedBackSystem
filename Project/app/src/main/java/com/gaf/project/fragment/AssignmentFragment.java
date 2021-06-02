@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -168,16 +169,14 @@ public class AssignmentFragment extends Fragment{
         if(checkToDelete(item)){
             final WarningDialog dialog = new WarningDialog(
                     () -> {
-                        assignmentViewModel.deleteAssignment(item);
-                        showDialog("Delete");
+                        showDialog(assignmentViewModel.deleteAssignment(item),"Delete");
                     },
                     "An active Module and Class has been assigned to this assignment. Do you really want to delete this?");
             dialog.show(ft, "dialog success");
         }else {
             final WarningDialog dialog = new WarningDialog(
                     () -> {
-                        assignmentViewModel.deleteAssignment(item);
-                        showDialog("Delete");
+                        showDialog(assignmentViewModel.deleteAssignment(item),"Delete");
                     },
                     "Do you want to delete this Assignment?");
             dialog.show(ft, "dialog success");
@@ -210,13 +209,14 @@ public class AssignmentFragment extends Fragment{
     }
 
     //show dialog when the action is finished
-    public void showDialog(String action){
-        Boolean actionStatus = assignmentViewModel.getActionStatus().booleanValue();
-        if(actionStatus){
-            showSuccessDialog(action+" Success!!");
-        }else {
-            showFailDialog(action+" Fail!!");
-        }
+    public void showDialog(MutableLiveData<String> actionStatus, String action){
+        actionStatus.observe(getViewLifecycleOwner(),s -> {
+            if(s.equals(SystemConstant.SUCCESS)){
+                showSuccessDialog(action+" Success!!");
+            }else {
+                showFailDialog(action+" Fail!!");
+            }
+        });
     }
 
     //show fail dialog

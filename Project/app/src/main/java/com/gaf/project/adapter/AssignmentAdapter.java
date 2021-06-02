@@ -36,6 +36,7 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
         void update(Assignment item);
         void delete(Assignment item);
     }
+
     public AssignmentAdapter(AssignmentAdapter.IClickItem iClickItem) {
         this.iClickItem = iClickItem;
     }
