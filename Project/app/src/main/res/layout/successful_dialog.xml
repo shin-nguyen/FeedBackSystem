@@ -18,9 +18,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txt_success_dialog_message"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_gravity="center"
-        android:textStyle="bold"
+        android:gravity="center"
         android:textSize="25sp"
+        android:textColor="@color/black"
         android:text="Success"/>
 
     <Button

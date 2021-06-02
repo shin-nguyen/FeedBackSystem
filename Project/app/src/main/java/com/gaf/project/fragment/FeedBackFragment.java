@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -46,7 +47,6 @@ public class FeedBackFragment extends Fragment{
     private View view;
     private RecyclerView recyclerViewFeedback;
     private FeedbackAdapter feedBackAdapter;
-    //private List<Feedback> feedbackList;
     private FeedBackViewModel feedBackViewModel;
     private FeedbackService feedbackService;
     private NavController navigation;
@@ -74,10 +74,9 @@ public class FeedBackFragment extends Fragment{
 
         String userRole = SessionManager.getInstance().getUserRole();
 
+        //check User role
         if(userRole.equals(SystemConstant.ADMIN_ROLE)){
-//            feedbackList = new ArrayList<>();
-//            Call<FeedbackResponse> call = feedbackService.getListFeedback();
-//            setAdapter(call);
+
             feedBackViewModel.getListFeedBackLiveData().observe(getViewLifecycleOwner(), new Observer<List<Feedback>>() {
                 @Override
                 public void onChanged(List<Feedback> feedbacks) {
@@ -92,6 +91,7 @@ public class FeedBackFragment extends Fragment{
             });
         }
 
+        //create feedback adapter for recycler view
         feedBackAdapter = new FeedbackAdapter(new FeedbackAdapter.IClickItem() {
             @Override
             public void detail(Feedback item) {
@@ -109,8 +109,7 @@ public class FeedBackFragment extends Fragment{
             }
         });
 
-
-
+        //prepare for recycler view
         recyclerViewFeedback = view.findViewById(R.id.rcv_feedback);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         recyclerViewFeedback.setLayoutManager(linearLayoutManager);
@@ -119,30 +118,14 @@ public class FeedBackFragment extends Fragment{
         return view;
     }
 
-//    private void setAdapter(Call<FeedbackResponse> call) {
-//        call.enqueue(new Callback<FeedbackResponse>() {
-//            @Override
-//            public void onResponse(Call<FeedbackResponse> call, Response<FeedbackResponse> response) {
-//                if (response.isSuccessful() && response.body() != null){
-//                    feedbackList = response.body().getFeedbacks();
-//                    feedBackAdapter.setData(feedbackList);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<FeedbackResponse> call, Throwable t) {
-//                Log.e("Fail to call api for feedback", t.getLocalizedMessage());
-//                showToast("Fail to call api for feedback");
-//            }
-//        });
-//    }
-
+    //change to add feedback fragment to add feedback
     private void clickAdd() {
         bundle.putString("mission", SystemConstant.ADD);
         navigation = Navigation.findNavController(view);
         navigation.navigate(R.id.action_nav_feedback_to_add_feedback_fragment, bundle);
     }
 
+    //change to add feedback fragment to update feedback
     private void clickUpdate(Feedback item) {
         bundle.putString("mission", SystemConstant.UPDATE);
         bundle.putSerializable("item", item);
@@ -150,34 +133,18 @@ public class FeedBackFragment extends Fragment{
         navigation.navigate(R.id.action_nav_feedback_to_add_feedback_fragment, bundle);
     }
 
+    //delete feedback item
     private void clickDelete(Feedback item) {
         FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
 
         final WarningDialog dialog = new WarningDialog(
                 () -> {
-                    //feedBackViewModel.deleteFeedback(item);
-
-                    Call<DeleteResponse> call = feedbackService.delete(item.getFeedbackID());
-                    call.enqueue(new Callback<DeleteResponse>() {
-                        @Override
-                        public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
-                            if (response.isSuccessful() && response.body().getDeleted()){
-                                showSuccessDialog("Delete success!");
-                                reloadFragment();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<DeleteResponse> call, Throwable t) {
-                            showFailDialog("Delete fail!");
-                            Log.e("Fail to delete this feedback", t.getLocalizedMessage());
-                        }
-                    });
-                    reloadFragment();
+                    showDialog(feedBackViewModel.delete(item), "Delete");
                 }, "Do you want to delete this feedback?");
         dialog.show(fragmentTransaction, "dialog for feedback");
     }
 
+    //change to review feedback to see detail
     private void clickDetail(Feedback item) {
         bundle.putString("mission", SystemConstant.DETAIL);
         bundle.putSerializable("feedback", item);
@@ -185,16 +152,26 @@ public class FeedBackFragment extends Fragment{
         navigation.navigate(R.id.action_nav_feedback_to_review_feedback_fragment, bundle);
     }
 
-    private void showToast(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+    //choose which dialog to show
+    public void showDialog(MutableLiveData<String> actionStatus, String action){
+        actionStatus.observe(getViewLifecycleOwner(),s -> {
+            if(s.equals(SystemConstant.SUCCESS)){
+                showSuccessDialog(action+" Success!!");
+            }else {
+                showFailDialog(action+" Fail!!");
+            }
+        });
+
     }
 
+    //show fail dialog
     private void showFailDialog(String message) {
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         FailDialog newFragment = new FailDialog(message);
         newFragment.show(ft, "dialog fail");
     }
 
+    //show success dialog
     private void showSuccessDialog(String message) {
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
@@ -204,15 +181,5 @@ public class FeedBackFragment extends Fragment{
             }
         });
         newFragment.show(ft, "dialog success");
-    }
-
-    private void reloadFragment(){
-        if (getFragmentManager() != null) {
-            getFragmentManager()
-                    .beginTransaction()
-                    .detach(this)
-                    .attach(this)
-                    .commit();
-        }
     }
 }

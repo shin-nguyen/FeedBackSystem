@@ -52,6 +52,7 @@ public class ClassViewModel extends ViewModel {
         }
         setAdapter(call);
     }
+
     private void setAdapter(Call<ClassResponse> call){
 
         call.enqueue(new Callback<ClassResponse>() {
@@ -99,7 +100,7 @@ public class ClassViewModel extends ViewModel {
     public MutableLiveData<String> update(Class mClass) {
         MutableLiveData<String> actionStatus = new MutableLiveData<>();
 
-        Call<Class> call = classService.create(mClass);
+        Call<Class> call = classService.update(mClass);
         call.enqueue(new Callback<Class>() {
             @Override
             public void onResponse(Call<Class> call, Response<Class> response) {

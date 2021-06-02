@@ -50,6 +50,7 @@ public class Module {
     private Date  feedbackEndTime;
 
     @ManyToOne
+    @JoinColumn(name = "feedbackId",referencedColumnName = "feedbackID")
     private Feedback feedback;
 
 }

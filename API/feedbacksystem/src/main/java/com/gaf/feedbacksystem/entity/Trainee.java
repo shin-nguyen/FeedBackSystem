@@ -7,15 +7,26 @@ import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Trainee  extends BaseUserEntity{
+public class Trainee{
+
+    @Id
+    @Column(name = "username",length = 50)
+    private  String userName;
+    @Column(name = "name",length = 50)
+    private String name;
+    @Column(name = "email",length = 50)
+    private  String email;
+    private String password;
 
     @Column(length = 50)
     private String phone;
@@ -31,6 +42,20 @@ public class Trainee  extends BaseUserEntity{
     @ManyToMany(mappedBy = "trainees")
     // LAZY để tránh việc truy xuất dữ liệu không cần thiết. Lúc nào cần thì mới query
     @EqualsAndHashCode.Exclude
-    private Collection<Class> classes;
+    private Set<Class> classes = new HashSet<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Trainee trainee = (Trainee) o;
+
+        return userName.equals(trainee.userName);
+    }
+
+    @Override
+    public int hashCode() {
+        return userName.hashCode();
+    }
 }

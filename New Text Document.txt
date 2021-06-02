@@ -3,43 +3,25 @@ use coursedb;
 
 select * from admin;
 insert admin value('thao','thaole301000@gmail.com','lethiphuongthao','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu');
+insert admin value('thanh','thongchuthanh@gmail.com','thongchuthanh','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu');
+insert admin value('sinh','quyetsinh@gmail.com','nguyenquetsinh','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu');
+insert admin value('hung','hungdo@gmail.com','doquanghung','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu');
+insert admin value('nghia','langde@gmail.com','dangvannghia','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu');
+
 
 select * from trainer;
-insert trainer value('thanh','ec@gmail.com','thanh','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
+insert trainer value('thao','thaole301000@gmail.com','lethiphuongthao','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
+'1234','CuChi',1,true,true,'0918948074','1234');
+insert trainer value('thanh','thongchuthanh@gmail.com','thongchuthanh','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
 '1234','TanThanh',1,true,true,'0918948074','1234');
+insert trainer value('sinh','quyetsinh@gmail.com','nguyenquetsinh','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
+'1234','BinhDinh',1,true,true,'0918948074','1234');
+insert trainer value('hung','hungdo@gmail.com','doquanghung','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
+'1234','DongNai',1,true,true,'0918948074','1234');
+insert trainer value('nghia','langde@gmail.com','dangvannghia','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
+'1234','NhaTrang',1,true,true,'0918948074','1234');
 
-insert Type_Feedback value(1,false,"TheLoaiA");
-select * from Type_Feedback;
-select * from feedback;
-insert feedback value(1,false,"Ec","thao",1);
-select * from module;
-select * from class;
-insert class value(1,2,"Ec",curdate(),false,curdate());
-insert class value(2,3,"Lop1A",curdate(),false,curdate());
-insert module value(1,curdate(),curdate(),curdate(),false,"HiHi",curdate(),"thao",1);
-select * from type_feedback;
-select * from assignment;
-insert assignment value ('1234',1,1,'thanh');
-insert trainer value('thao','thaole301000@gmail.com','thao','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
-'1234','TanThanh',1,true,true,'0918948074','1234');
-select * from topic;
-insert topic value(1,"DanhGia");
-insert topic value(2,"ChoDiem");
-select * from question; 
-insert question value (1,false,"Noi Dung Danh Gia GV ",1);
-insert question value (2,false,"Noi Dung Danh Gia SV Hoc  ",1);
-insert question value (3,false,"Danh Gia Ec ",1);
-insert question value (4,false,"Noi Dung Danh Gia GV ",2);
-insert question value (5,false,"Noi Dung Danh Gia SV Hoc  ",2);
-insert question value (6,false,"Danh Gia Ec ",2);
-
-insert question value (7,false,"Noi Dung Danh Gia GV ",3);
-insert question value (8,false,"Noi Dung Danh Gia SV Hoc  ",3);
-insert question value (9,false,"Danh Gia Ec ",3);
-insert question value (10,false,"Noi Dung Danh Gia GV ",4);
-insert question value (11,false,"Noi Dung Danh Gia SV Hoc  ",4);
-insert question value (12,false,"Danh Gia Ec ",4);
-
+select * from trainee;
 insert trainee value('thao','thaole301000@gmail.com','thao','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
 '1234','TanThanh',1,true,'0918948074','1234');
 insert trainee value('hung','hung@gmail.com','hung','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
@@ -53,26 +35,101 @@ insert trainee value('nghia','nghia@gmail.com','nghia','$2y$12$kxOPzw5uh02.8e1Xy
 insert trainee value('langde','nghia@gmail.com','langde','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
 '1234','NT',1,true,'0918948074','1234');
 
-INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (0, 1, 'thao', 1, 1);
+select * from Type_Feedback;
+insert Type_Feedback value(1,false,"TheLoaiA");
+insert Type_Feedback value(2,false,"TheLoaiB");
+insert Type_Feedback value(3,false,"TheLoaiC");
+insert Type_Feedback value(4,false,"TheLoaiD");
+insert Type_Feedback value(5,false,"TheLoaiE");
+
+select * from feedback;
+insert feedback value(1,false,"FeedbackCuaThao","thao",1);
+insert feedback value(2,false,"PhanHoi","thao",5);
+insert feedback value(3,false,"FeedbackCuaThanh","thanh",2);
+insert feedback value(4,false,"FeedbackLanSau","thao",2);
+insert feedback value(5,false,"FeedbackCuaNghia","nghia",3);
+insert feedback value(6,false,"FeedbackGiua","thao",3);
+insert feedback value(7,false,"FeedbackCuoi","thao",4);
+insert feedback value(8,false,"KoFeedback","thanh",4);
+insert feedback value(9,false,"FeedbackCuaHung","hung",3);
+insert feedback value(11,false,"FeedbackCuaSinh","sinh",3);
+
+select * from module;
+insert module value(1,curdate(),curdate(),curdate(),false,"TruyenThongVaMangMayTinh",curdate(),"thao",1);
+insert module value(2,curdate(),curdate(),curdate(),false,"HeThongMang",curdate(),"thanh",2);
+insert module value(3,curdate(),curdate(),curdate(),false,"CongNghePhanMen",curdate(),"thao",3);
+insert module value(4,curdate(),curdate(),curdate(),false,"KiThuatDuLieu",curdate(),"sinh",4);
+insert module value(5,curdate(),curdate(),curdate(),false,"CongNgheMay",curdate(),"hung",5);
+insert module value(6,curdate(),curdate(),curdate(),false,"CoKhi",curdate(),"nghia",3);
+insert module value(7,curdate(),curdate(),curdate(),false,"CNTTCLC",curdate(),"sinh",5);
+
+select * from class;
+insert class value(1,20,"A2-130",curdate(),false,curdate());
+insert class value(2,15,"A3-502",curdate(),false,curdate());
+insert class value(3,14,"A1-102",curdate(),false,curdate());
+insert class value(4,10,"B2-101",curdate(),false,curdate());
+insert class value(5,30,"C502",curdate(),false,curdate());
+insert class value(6,50,"A5-302",curdate(),false,curdate());
+
+select * from assignment;
+insert assignment value ('CL1M1T1622601142017',1,1,'hung');
+insert assignment value ('CL1M1T1622601593555',2,1,'thao');
+insert assignment value ('CL1M1T1622601681033',3,1,'sinh');
+insert assignment value ('CL1M2T1622601153776',1,2,'hung');
+insert assignment value ('CL1M2T1622601724040',2,1,'sinh');
+insert assignment value ('CL1M2T1622601828461',3,2,'nghia');
+insert assignment value ('CL1M4T1622601717759',1,4,'thao');
+insert assignment value ('CL1M5T1622601804729',2,5,'thanh');
+insert assignment value ('CL1M5T1622601816870',3,5,'hung');
+insert assignment value ('CL1M7T1622601809583',1,7,'hung');
+insert assignment value ('CL3M6T1622601709938',2,6,'thanh');
+insert assignment value ('CL5M2T1622601698236',3,2,'thanh');
+
+select * from topic;
+insert topic value(1,"Training program & content");
+insert topic value(2,"Trainer/Coach");
+insert topic value(3,"Course organization");
+insert topic value(4,"Orther");
+
+
+select * from question; 
+insert question value (1,false,"The training objective",1);
+insert question value (2,false,"The course is useful for my work  ",1);
+insert question value (3,false,"The material attributed were pertiment and helpful",1);
+insert question value (4,false,"The trainer is knowledgcable in the topic/course training subject area",2);
+insert question value (5,false,"The class Admin was supportive and helpful (providing accurate and timelu and professtional manners)",3);
+insert question value (6,false,"What did you like most about topic/Module?",4);
+
+
+select * from trainee_assignment;
+insert trainee_assignment value ('kai','CL1M1T1622601142017');
+insert trainee_assignment value ('thao','CL1M1T1622601142017');
+insert trainee_assignment value ('thong','CL1M1T1622601142017');
+
+
+select * from enrollment;
+insert enrollment value (1,'kai');
+insert enrollment value (1,'thao');
+insert enrollment value (1,'thong');
+
+select * from answer;
 INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (1, 1, 'hung', 1, 1);
 INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (2, 1, 'nghia', 1, 1);
 INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (2, 1, 'langde', 1, 1);
 INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (3, 1, 'thong', 1, 1);
 INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (4, 1, 'kai', 1, 4);
-INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (0, 1, 'thao', 1, 4);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (0, 1, 'thao', 1, 3);
 INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (1, 1, 'hung', 1, 4);
 INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (2, 1, 'nghia', 1, 4);
 INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (3, 1, 'thong', 1, 4);
 INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (4, 1, 'langde', 1, 4);
-INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (0, 1, 'thao', 1, 12);
-INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (0, 1, 'hung', 1, 12);
-INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (2, 1, 'nghia', 1, 12);
-INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (4, 1, 'thong', 1, 12);
-INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (4, 1, 'langde', 1, 11);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (0, 1, 'thao', 1, 2);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (0, 1, 'hung', 1, 3);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (2, 1, 'nghia', 1, 6);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (4, 1, 'thong', 1, 5);
+INSERT INTO `coursedb`.`answer` (`value`, `classid`, `traineeid`, `moduleid`, `questionid`) VALUES (4, 1, 'langde', 1, 2);
 
-INSERT INTO `coursedb`.`topic` (`topicid`, `topic_name`) VALUES (3, 'GiangVien');
-INSERT INTO `coursedb`.`topic` (`topicid`, `topic_name`) VALUES (4, 'Other');
-
+select * from trainee_comment;
 INSERT INTO `coursedb`.`trainee_comment` (`comment`, `classid`, `trainee_id`, `moduleid`) VALUES ('hay qua!', 1, 'thao', 1);
 INSERT INTO `coursedb`.`trainee_comment` (`comment`, `classid`, `trainee_id`, `moduleid`) VALUES ('qua tuyet voi!', 1, 'thong', 1);
 INSERT INTO `coursedb`.`trainee_comment` (`comment`, `classid`, `trainee_id`, `moduleid`) VALUES ('on ap', 1, 'kai', 1);

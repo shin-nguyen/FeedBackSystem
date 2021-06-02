@@ -144,7 +144,7 @@ public class ClassFragment extends Fragment {
                     () -> {
                         showDialog(classViewModel.deleted(item),"Delete");
                     },
-                    "Class is operating. Do you readly want to delete this class?");
+                    "Class is operating. Do you really want to delete this class?");
         } else {
             dialog = new WarningDialog(
                     () -> {
@@ -173,6 +173,7 @@ public class ClassFragment extends Fragment {
         });
 
     }
+
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }

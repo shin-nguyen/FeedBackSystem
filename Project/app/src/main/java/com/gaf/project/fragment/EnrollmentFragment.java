@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Filter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,18 +56,15 @@ public class EnrollmentFragment extends Fragment {
     private View view;
     private RecyclerView recyclerViewEnrollment;
     private EnrollmentAdapter enrollmentAdapter;
-    private ClassService classService;
     private Spinner spnClass  ;
     private ArrayAdapter<Class> enrollmentArrayAdapter;
     private Button btnAddEnrollment;
     private TextView title;
     private EnrollmentViewModel enrollmentViewModel;
-    private Class aClass;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        classService = ApiUtils.getClassService();
         enrollmentViewModel = new ViewModelProvider(this).get(EnrollmentViewModel.class);
     }
 
@@ -99,16 +98,19 @@ public class EnrollmentFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         recyclerViewEnrollment.setLayoutManager(linearLayoutManager);
 
-        //get list class from view model
+        //get list class from view model to set spinner
         enrollmentViewModel.getListClassLiveData().observe(getViewLifecycleOwner(), new Observer<List<Class>>() {
             @Override
             public void onChanged(List<Class> classes) {
-                enrollmentArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, classes);
+                Class clazz = new Class("All", 0, new Date(), new Date());
+                List<Class> classList = classes;
+                classList.add(0, clazz);
+                enrollmentArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, classList);
                 spnClass.setAdapter(enrollmentArrayAdapter);
             }
         });
 
-        //get list enrollment from view model
+        //get list enrollment from view model to show list
         enrollmentViewModel.getListEnrollmentLiveData().observe(getViewLifecycleOwner(), new Observer<List<Enrollment>>() {
             @Override
             public void onChanged(List<Enrollment> enrollments) {
@@ -121,9 +123,13 @@ public class EnrollmentFragment extends Fragment {
         spnClass.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Class clazz = enrollmentArrayAdapter.getItem(position);
+                enrollmentAdapter.getFilter().filter(clazz.getClassName(), new Filter.FilterListener() {
+                    @Override
+                    public void onFilterComplete(int count) {
 
-                aClass = (Class) parent.getItemAtPosition(position);
-                showToast(aClass.getClassID().toString());
+                    }
+                });
             }
 
             @Override
@@ -139,23 +145,9 @@ public class EnrollmentFragment extends Fragment {
 
         final WarningDialog dialog = new WarningDialog(
                 () -> {
-                    Call<Class> call =  classService.deleteTrainee(item.getTrainee().getUserName(),item.getMClass().getClassID());
-
-                    call.enqueue(new Callback<Class>() {
-                        @Override
-                        public void onResponse(Call<Class> call, Response<Class> response) {
-                            if (response.isSuccessful()&&response.body()!=null){
-                                showSuccessDialog("Delete success!");
-                            }
-                        }
-                        @Override
-                        public void onFailure(Call<Class> call, Throwable t) {
-                            showFailDialog("Delete success!");
-                            Log.e("Error",t.getLocalizedMessage());
-                        }
-                    });
+                    showDialog(enrollmentViewModel.delete(item.getTrainee().getUserName(), item.getMClass().getClassID()), "Delete Enrollment");
                 },
-                "Do you want to delete this Class?");
+                "Do you want to delete this item?");
         dialog.show(ft, "dialog success");
     }
 
@@ -176,6 +168,17 @@ public class EnrollmentFragment extends Fragment {
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }
+
+        public void showDialog(MutableLiveData<String> actionStatus, String action){
+            actionStatus.observe(getViewLifecycleOwner(),s -> {
+                if(s.equals(SystemConstant.SUCCESS)){
+                    showSuccessDialog(action+" Success!!");
+                }else {
+                    showFailDialog(action+" Fail!!");
+                }
+            });
+
+        }
 
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
