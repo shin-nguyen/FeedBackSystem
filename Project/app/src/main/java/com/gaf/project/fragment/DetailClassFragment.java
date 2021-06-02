@@ -74,7 +74,7 @@ public class DetailClassFragment extends Fragment {
         }
         catch (Exception ex){
             Log.e("Error",ex.getLocalizedMessage());
-            showToast("Error");
+//            showToast("Error");
         }
 
         btnBack.setOnClickListener(v->{

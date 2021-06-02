@@ -2,10 +2,7 @@
 package com.gaf.feedbacksystem.entity;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.*;
 
@@ -52,7 +49,7 @@ public class Class {
             joinColumns = @JoinColumn(name = "classID"),  // TRong đó, khóa ngoại chính là  trỏ tới class hiện tại ()
             inverseJoinColumns = @JoinColumn(name = "traineeID",referencedColumnName = "username") //Khóa ngoại thứ 2 trỏ tới thuộc tính ở dưới
     )
-    private Set<Trainee> trainees;
+    private Collection<Trainee> trainees;
 
     public void addTrainee(Trainee trainee) {
         this.trainees.add(trainee);

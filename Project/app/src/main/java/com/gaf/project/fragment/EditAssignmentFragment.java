@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -20,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.gaf.project.R;
+import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
 import com.gaf.project.model.Assignment;
@@ -68,47 +70,60 @@ public class EditAssignmentFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.edit_assignment, container, false);
 
+        //declare view
         initView(view);
 
+        //get assignment from bundle
         assignment = (Assignment) getArguments().getSerializable("item");
 
+        //get information from view
         Class mClass = assignment.getMClass();
         Module module = assignment.getModule();
         Trainer trainer = assignment.getTrainer();
 
+        //set information to view from database
         classId.setText(String.valueOf(mClass.getClassID()));
         className.setText(String.valueOf(mClass.getClassName()));
         moduleId.setText(String.valueOf(module.getModuleID()));
         moduleName.setText(String.valueOf(module.getModuleName()));
 
+        //set data for spinner trainer
         trainerViewModel.getListTrainerLiveData().observe(getViewLifecycleOwner(), new Observer<List<Trainer>>() {
             @Override
             public void onChanged(List<Trainer> trainers) {
                 adapterTrainer =
                         new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, trainers);
                 spnTrainer.setAdapter(adapterTrainer);
+
+                //set default value for spinner trainer
                 int spnPosition = -1;
                 spnPosition = adapterTrainer.getPosition(trainer);
                 spnTrainer.setSelection(spnPosition);
             }
         });
 
+        //set event to button save
         btnSave.setOnClickListener(v->{
+
+            //get trainer name from current assignment
             String trainerName = assignment.getTrainer().getUserName();
 
+            //get trainer from trainer spinner
             Trainer selectedTrainer = (Trainer) spnTrainer.getSelectedItem();
+
             if(selectedTrainer==null){
-                showFailDialog("Check your connection!!");
+                showFailDialog("Check your connection!!");//if trainer is null, show warning
             }else {
-                assignment.setTrainer(selectedTrainer);
+                assignment.setTrainer(selectedTrainer); //if trainer not null, set trainer to assignment
 
                 if(assignmentViewModel.getListAssignment()==null){
-                    showFailDialog("Check your connection!!");
+                    showFailDialog("Check your connection!!"); //check connection to api
                 }else{
+
+                    //if assignment already exist, show warning else update it
                     flag = checkExistAssignment(assignmentViewModel.getListAssignment(),assignment);
                     if(flag){
-                        assignmentViewModel.updateAssignment(trainerName,assignment);
-                        showDialog("Edit Assignment");
+                        showDialog(assignmentViewModel.updateAssignment(trainerName,assignment),"Edit Assignment");
                     }else {
                         showFailDialog("Assignment already exist!");
                     }
@@ -116,6 +131,7 @@ public class EditAssignmentFragment extends Fragment {
             }
         });
 
+        //back to previous page
         btnBack.setOnClickListener(view1 -> {
             getActivity().onBackPressed();
         });
@@ -136,20 +152,19 @@ public class EditAssignmentFragment extends Fragment {
     }
 
     //show dialog when the action is finished
-    public void showDialog(String action){
-        if(assignmentViewModel.getActionStatus()==null){
-            showFailDialog("Check your connection!!");
-        }else {
-            Boolean actionStatus = assignmentViewModel.getActionStatus().booleanValue();
-            if(actionStatus){
+    //show dialog when the action is finished
+    public void showDialog(MutableLiveData<String> actionStatus, String action){
+        actionStatus.observe(getViewLifecycleOwner(),s -> {
+            if(s.equals(SystemConstant.SUCCESS)){
                 showSuccessDialog(action+" Success!!");
             }else {
                 showFailDialog(action+" Fail!!");
             }
-        }
+        });
 
     }
 
+    //show success dialog
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
@@ -161,16 +176,19 @@ public class EditAssignmentFragment extends Fragment {
         newFragment.show(ft, "dialog success");
     }
 
+    //show fail dialog
     public void showFailDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         FailDialog newFragment = new FailDialog(message);
         newFragment.show(ft, "dialog fail");
     }
 
+    //show toast
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }
 
+    //declare all view
     private void initView(View view) {
         classId = view.findViewById(R.id.txt_class_id);
         className = view.findViewById(R.id.txt_class_name);

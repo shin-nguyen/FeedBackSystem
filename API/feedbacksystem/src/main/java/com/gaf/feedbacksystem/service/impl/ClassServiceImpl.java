@@ -59,7 +59,7 @@ public class ClassServiceImpl implements IClassService {
 
 		oldClass.setClassName(classDto.getClassName());
 		oldClass.setCapacity(classDto.getCapacity());
-
+		oldClass.setEndTime(classDto.getEndTime());
 		return ObjectMapperUtils.map(classRepository.save(oldClass), ClassDto.class);
 	}
 	@Override
@@ -86,12 +86,14 @@ public class ClassServiceImpl implements IClassService {
 	}
 
 	@Override
+	@Transactional
 	public ClassDto addEnrollment(String idTrainee,Integer idClass) {
-		Class clazz =  classRepository.findByClassID(idClass);
+		Class oldClass =  classRepository.findByClassID(idClass);
 		Trainee trainee = traineeRepository.findByUserName(idTrainee);
 
-		clazz.addTrainee(trainee);
-		return null;
+		oldClass.addTrainee(trainee);
+
+		return ObjectMapperUtils.map(classRepository.save(oldClass), ClassDto.class);
 	}
 
 	@Override

@@ -190,7 +190,7 @@ public class AddClassFragment extends Fragment {
         return  flag;
     }
 
-    private void setTextDate(TextView textView, View v){
+    private void setTextDate(EditText editText, View v){
         calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         int month = calendar.get(Calendar.MONTH);
@@ -200,8 +200,7 @@ public class AddClassFragment extends Fragment {
                 (datePicker, mYear, mMonth, mDayOfMonth) -> {
                     calendar.set(mYear, mMonth, mDayOfMonth);
                     planDate = calendar.getTime();
-
-                    textView.setText(new SimpleDateFormat("MM/dd/yyyy").format(planDate));
+                    editText.setText(new SimpleDateFormat("MM/dd/yyyy").format(planDate));
                 }
                 , year, month, day);
 

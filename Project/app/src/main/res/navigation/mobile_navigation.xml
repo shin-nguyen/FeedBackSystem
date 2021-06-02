@@ -186,6 +186,7 @@
         <action
             android:id="@+id/action_nav_trainee_home_fragment_to_doFeedbackFragment"
             app:destination="@id/do_feedback_fragment" />
+
     </fragment>
     <fragment
         android:id="@+id/detailClassFragment"

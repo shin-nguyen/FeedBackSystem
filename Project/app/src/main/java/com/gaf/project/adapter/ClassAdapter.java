@@ -60,6 +60,7 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
             holder.capacity.setText(mClass.getCapacity().toString());
+
             holder.startDate.setText(dateFormat.format(mClass.getStartTime()));
             holder.endDate.setText(dateFormat.format(mClass.getEndTime()));
 
