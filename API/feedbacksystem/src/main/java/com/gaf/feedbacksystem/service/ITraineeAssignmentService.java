@@ -9,6 +9,5 @@ import java.util.List;
 public interface ITraineeAssignmentService {
     TraineeAssignmentDto save(TraineeAssignmentDto traineeAssignmentDto);
 
-    TraineeAssignmentDto checkIsAvailable(String username, String code);
-//    void checkCodeIsAvailable(String username, String code);
+    boolean checkCodeByTraineeId (String username, String code);
 }

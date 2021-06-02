@@ -80,6 +80,7 @@ public class AddAssignmentFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.add_assignment, container, false);
 
+        //set data to spinner module
         final Spinner spnModule = (Spinner) view.findViewById(R.id.spinner_module_name);
         moduleViewModel.getmListModuleLiveData().observe(getViewLifecycleOwner(), new Observer<List<Module>>() {
             @Override
@@ -90,6 +91,7 @@ public class AddAssignmentFragment extends Fragment {
             }
         });
 
+        //set data to spinner class
         final Spinner spnClass = (Spinner) view.findViewById(R.id.spinner_class_name);
         classViewModel.getListClassLiveData().observe(getViewLifecycleOwner(), new Observer<List<Class>>() {
             @Override
@@ -100,6 +102,7 @@ public class AddAssignmentFragment extends Fragment {
             }
         });
 
+        //set data to spinner trainer
         final Spinner spnTrainer = (Spinner) view.findViewById(R.id.spinner_trainer_id);
         trainerViewModel.getListTrainerLiveData().observe(getViewLifecycleOwner(), new Observer<List<Trainer>>() {
             @Override
@@ -110,24 +113,41 @@ public class AddAssignmentFragment extends Fragment {
             }
         });
 
+        //set event for button save
         btnSave = view.findViewById(R.id.btn_save);
         btnSave.setOnClickListener(v->{
+
+            //get data from view
             Module module = (Module) spnModule.getSelectedItem();
             Class mClass = (Class) spnClass.getSelectedItem();
             Trainer trainer = (Trainer) spnTrainer.getSelectedItem();
-            String code = "CL" + mClass.getClassID() +"M" + module.getModuleID() + "T"+ System.currentTimeMillis();
 
-            Assignment newAssignment = new Assignment(code,module,trainer,mClass);
+            String code = "";
+            if(mClass!=null && module!=null && trainer!=null) {
+                code = "CL" + mClass.getClassID() + "M" + module.getModuleID() + "T" + System.currentTimeMillis();
 
-            flag = checkExistAssignment(assignmentViewModel.getListAssignment(),newAssignment);
-                    if(flag){
+                //create new assignment with data from view
+                Assignment newAssignment = new Assignment(code, module, trainer, mClass);
+
+                /*if assignment already exist, show fail dialog
+                 * else add assignment and show success dialog*/
+                if (assignmentViewModel.getListAssignment() == null) {
+                    showDialog("Check your connection!!");
+                } else {
+                    flag = checkExistAssignment(assignmentViewModel.getListAssignment(), newAssignment);
+                    if (flag) {
                         assignmentViewModel.addAssignment(newAssignment);
                         showDialog("Add Assignment");
-                    }else {
+                    } else {
                         showFailDialog("Assignment already exist!");
                     }
+                }
+            }else {
+                showFailDialog("Check your connection!!");
+            }
         });
 
+        //set event for button back - back to previous page
         btnBack= view.findViewById(R.id.btn_back);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,6 +159,7 @@ public class AddAssignmentFragment extends Fragment {
         return view;
     }
 
+    //check the existence of the assignment, return false if the assignment already exists and vice versa
     public Boolean checkExistAssignment(List<Assignment> list, Assignment assignment){
         for(Assignment ass : list){
             if(ass.getTrainer().equals(assignment.getTrainer())
@@ -150,15 +171,22 @@ public class AddAssignmentFragment extends Fragment {
         return true;
     }
 
+    //show dialog when the action is finished
     public void showDialog(String action){
-        Boolean actionStatus = assignmentViewModel.getActionStatus().booleanValue();
-        if(actionStatus){
-            showSuccessDialog(action+" Success!!");
+        if(assignmentViewModel.getActionStatus()==null){
+            showFailDialog("Check your connection!!");
         }else {
-            showFailDialog(action+" Fail!!");
+            Boolean actionStatus = assignmentViewModel.getActionStatus().booleanValue();
+            if(actionStatus){
+                showSuccessDialog(action+" Success!!");
+            }else {
+                showFailDialog(action+" Fail!!");
+            }
         }
+
     }
 
+    //show success dialog
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
@@ -170,16 +198,19 @@ public class AddAssignmentFragment extends Fragment {
         newFragment.show(ft, "dialog success");
     }
 
+    //show fail dialog
     public void showFailDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         FailDialog newFragment = new FailDialog(message);
         newFragment.show(ft, "dialog fail");
     }
 
+    //show toast
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }
 
+    //reload page
     public void reloadFragment(){
         if (getFragmentManager() != null) {
             getFragmentManager()

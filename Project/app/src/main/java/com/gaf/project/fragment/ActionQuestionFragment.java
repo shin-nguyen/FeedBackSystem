@@ -111,7 +111,9 @@ public class ActionQuestionFragment extends Fragment {
 
                 if (qsContent.isEmpty()) {
                     warningQuestion.setVisibility(View.VISIBLE);
-                } else {
+                } else if(topic==null){
+                    showFailDialog("Check your connection!!");
+                }else {
                     if (mission.equals(SystemConstant.ADD)) {
                         Question newQuestion = new Question(topic, qsContent);
 

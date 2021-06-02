@@ -201,6 +201,7 @@
             android:id="@+id/action_addModuleFragment_to_nav_module"
             app:destination="@id/nav_module" />
     </fragment>
+
     <fragment
         android:id="@+id/editEnrollmentFragment"
         android:name="com.gaf.project.fragment.EditEnrollmentFragment"
@@ -212,7 +213,7 @@
         android:label="fragment_detail_enrollment"
         tools:layout="@layout/fragment_detail_enrollment" />
     <fragment
-        android:id="@+id/doFeedbackFragment"
+        android:id="@+id/do_feedback_fragment"
         android:name="com.gaf.project.fragment.DoFeedbackFragment"
         android:label="fragment_do_feedback"
         tools:layout="@layout/fragment_do_feedback" />

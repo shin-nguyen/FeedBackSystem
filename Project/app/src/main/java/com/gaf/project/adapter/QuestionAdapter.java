@@ -58,11 +58,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
             return;
         }
 
-        String paddingContent = convertToWhitespace("Question Content: ");
+        String paddingContent = convertToWhitespace(holder.tvContent.getText().toString().trim(),"content");
+        String paddingTopicName = convertToWhitespace(holder.tvTopicName.getText().toString().trim(),"name");
+
         holder.topicId.setText(String.valueOf(question.getTopic().getTopicID()));
-        holder.topicName.setText(String.valueOf(question.getTopic().getTopicName()));
+        holder.topicName.setText(paddingTopicName+ (question.getTopic().getTopicName()));
         holder.questionId.setText(String.valueOf(question.getQuestionID()));
-        holder.questionContent.setText(paddingContent+String.valueOf(question.getQuestionContent()));
+        holder.questionContent.setText(paddingContent+ (question.getQuestionContent()));
 
         holder.btnEdit.setOnClickListener(v->{
             iClickItem.update(question);
@@ -82,7 +84,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
     }
 
     public class QuestionViewHolder extends RecyclerView.ViewHolder{
-        private TextView topicId, topicName, questionId, questionContent;
+        private TextView topicId, topicName, questionId, questionContent, tvTopicName, tvContent;
         private Button btnEdit, btnDelete;
 
         public QuestionViewHolder(@NonNull View itemView) {
@@ -92,20 +94,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
             topicName=itemView.findViewById(R.id.question_topic_name);
             questionId=itemView.findViewById(R.id.question_question_id);
             questionContent=itemView.findViewById(R.id.question_question_content);
+            tvTopicName=itemView.findViewById(R.id.txt_topic_name);
+            tvContent=itemView.findViewById(R.id.txt_content);
 
             btnEdit=itemView.findViewById(R.id.btn_edit_question);
             btnDelete=itemView.findViewById(R.id.btn_delete_question);
 
         }
-    }
-
-    public String convertToWhitespace (String string){
-        int error = 14;
-        String result="";
-        for(int i=0;i<=string.length()+error;i++){
-            result+=" ";
-        }
-        return result;
     }
 
     @Override
@@ -140,5 +135,21 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
                 notifyDataSetChanged();
             }
         };
+    }
+
+    public String convertToWhitespace (String string, String type){
+        int length = string.length();
+        if(type.equals("name")){
+            length+=11;
+        }
+        if(type.equals("content")){
+            length+=15;
+        }
+
+        String result="";
+        for(int i=0;i<=length;i++){
+            result+=" ";
+        }
+        return result;
     }
 }

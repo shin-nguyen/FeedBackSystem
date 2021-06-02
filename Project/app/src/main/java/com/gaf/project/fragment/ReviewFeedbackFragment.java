@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -30,6 +32,7 @@ import com.gaf.project.model.Topic;
 import com.gaf.project.service.FeedbackService;
 import com.gaf.project.utils.ApiUtils;
 import com.gaf.project.utils.SessionManager;
+import com.gaf.project.viewmodel.FeedBackViewModel;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -42,19 +45,18 @@ public class ReviewFeedbackFragment extends Fragment {
 
     private View view;
     private String mission;
-    private String message;
     private NavController navigation;
     Button saveOrEditButton;
     private Feedback feedback;
-    private FeedbackService feedbackService;
     private Set<Topic> topicSet;
+    private FeedBackViewModel feedBackViewModel;
     private SpannableStringBuilder spannable;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        feedbackService = ApiUtils.getFeedbackService();
+        feedBackViewModel = new ViewModelProvider(this).get(FeedBackViewModel.class);
     }
 
     @Nullable
@@ -117,47 +119,15 @@ public class ReviewFeedbackFragment extends Fragment {
         // Choose mission to set text view
         if (mission == SystemConstant.ADD){
             title.setText("Review New Feedback");
-            message = "Add Success!";
             //set event for adding
             saveOrEditButton.setOnClickListener(v->{
-                Call<Feedback> feedbackCall = feedbackService.create(feedback);
-                feedbackCall.enqueue(new Callback<Feedback>() {
-                    @Override
-                    public void onResponse(Call<Feedback> call, Response<Feedback> response) {
-                        if (response.isSuccessful()&&response.body()!=null) {
-                            showSuccessDialog(message);
-                            Log.e("Success","Add Feedback success");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Feedback> call, Throwable t) {
-                        Log.e("Error",t.getLocalizedMessage());
-                        showFailDialog("Error");
-                    }
-                });
+                showDialog(feedBackViewModel.add(feedback), "Add");
             });
         }
         else if (mission == SystemConstant.UPDATE){
             title.setText("Review Edit Feedback");
-            message = "Update Success!";
             saveOrEditButton.setOnClickListener(v-> {
-                Call<Feedback> feedbackCall = feedbackService.update(feedback);
-                feedbackCall.enqueue(new Callback<Feedback>() {
-                    @Override
-                    public void onResponse(Call<Feedback> call, Response<Feedback> response) {
-                        if (response.isSuccessful()&&response.body()!=null) {
-                            showSuccessDialog("Edit Success!");
-                            Log.e("Success","Update Class success");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Feedback> call, Throwable t) {
-                        Log.e("Can not update feedback",t.getLocalizedMessage());
-                        showFailDialog("Update fail!");
-                    }
-                });
+                showDialog(feedBackViewModel.update(feedback), "Update");
             });
         }
         else if (mission == SystemConstant.DETAIL){
@@ -175,6 +145,17 @@ public class ReviewFeedbackFragment extends Fragment {
         bundle.putSerializable("item", feedback);
         navigation = Navigation.findNavController(view);
         navigation.navigate(R.id.action_review_feedback_fragment_to_add_feedback_fragment, bundle);
+    }
+
+    public void showDialog(MutableLiveData<String> actionStatus, String action){
+        actionStatus.observe(getViewLifecycleOwner(),s -> {
+            if(s.equals(SystemConstant.SUCCESS)){
+                showSuccessDialog(action+" Success!!");
+            }else {
+                showFailDialog(action+" Fail!!");
+            }
+        });
+
     }
 
     public void showSuccessDialog(String message){

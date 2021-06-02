@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface TraineeAssignmentRepository extends JpaRepository<TraineeAssignment, TraineeAssignmentID> {
 
-    @Query("from TraineeAssignment  t where  t.primaryKey.assignment.registrationCode =:code and t.primaryKey.trainee.userName =:username")
-    TraineeAssignment compare(@Param("username")String username, @Param("code") String code);
+    @Query("select new java.lang.Boolean(count(*) > 0) from TraineeAssignment t where t.primaryKey.assignment.registrationCode =:code AND t.primaryKey.trainee.userName =:username")
+    boolean isCodeExist(@Param("username")String username, @Param("code") String code);
 }

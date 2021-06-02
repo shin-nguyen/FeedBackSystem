@@ -21,7 +21,9 @@ import com.gaf.project.service.QuestionService;
 import com.gaf.project.utils.ApiUtils;
 import com.gaf.project.model.Class;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,6 +36,8 @@ public class TopicTrainningAdapter extends RecyclerView.Adapter<TopicTrainningAd
     private List<Question> mListQuestion;
     private Module module;
     private Class mClass;
+    private Set<Question> Questions = new HashSet<>();
+
     public TopicTrainningAdapter(Module module,Class mClass) {
         this.module = module;
         this.mClass = mClass;
@@ -42,6 +46,7 @@ public class TopicTrainningAdapter extends RecyclerView.Adapter<TopicTrainningAd
     private Trainee trainee;
 
     private List<Answer> mListAnswer = new ArrayList<>();
+
     public  List<Answer> getmListAnswer() {
         return mListAnswer;
     }
@@ -83,6 +88,7 @@ public class TopicTrainningAdapter extends RecyclerView.Adapter<TopicTrainningAd
                 if (response.isSuccessful() && response.body()!=null){
                     mListQuestion=  response.body().getQuestions();
                     questionTopicTrainingAdapter.setData( mListQuestion);
+                    getmListQuestion(mListQuestion);
                 }
             }
 
@@ -94,6 +100,14 @@ public class TopicTrainningAdapter extends RecyclerView.Adapter<TopicTrainningAd
 
 
         holder.answerRecyclerView.setAdapter(questionTopicTrainingAdapter);
+    }
+
+    public void getmListQuestion(List<Question> mListQuestion) {
+        this.mListQuestion = mListQuestion;
+    }
+
+    public List<Question> questionList(){
+        return mListQuestion;
     }
 
     private void checkItem(Answer item) {

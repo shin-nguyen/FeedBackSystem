@@ -8,7 +8,6 @@ import com.gaf.feedbacksystem.utils.ObjectMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class TraineeAssignmentServiceImpl implements ITraineeAssignmentService {
@@ -23,12 +22,7 @@ public class TraineeAssignmentServiceImpl implements ITraineeAssignmentService {
     }
 
     @Override
-    public TraineeAssignmentDto checkIsAvailable(String username, String code) {
-        return ObjectMapperUtils.map(traineeAssignmentRepository.compare(username, code), TraineeAssignmentDto.class);
+    public boolean checkCodeByTraineeId(String username, String code) {
+        return traineeAssignmentRepository.isCodeExist(username, code);
     }
-
-//    @Override
-//    public void checkCodeIsAvailable(String username, String code) {
-//        traineeAssignmentRepository.compare(username, code);
-//    }
 }

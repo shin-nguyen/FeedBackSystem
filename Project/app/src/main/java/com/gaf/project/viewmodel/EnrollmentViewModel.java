@@ -5,10 +5,12 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Class;
 import com.gaf.project.model.Enrollment;
 import com.gaf.project.model.Trainee;
 import com.gaf.project.response.ClassResponse;
+import com.gaf.project.response.DeleteResponse;
 import com.gaf.project.service.ClassService;
 import com.gaf.project.utils.ApiUtils;
 
@@ -57,6 +59,51 @@ public class EnrollmentViewModel extends ViewModel {
                 Log.e("Error",t.getLocalizedMessage());
             }
         });
+    }
+
+    public MutableLiveData<String> update(int oldClass, int newClass, String username) {
+        MutableLiveData<String> actionStatus = new MutableLiveData<>();
+
+        Call<Class> enrollmentCall =  classService.updateTrainee(oldClass, newClass, username);
+            enrollmentCall.enqueue(new Callback<Class>() {
+                @Override
+                public void onResponse(Call<Class> call, Response<Class> response) {
+                    if (response.isSuccessful()&&response.body()!=null) {
+                        actionStatus.setValue(SystemConstant.SUCCESS);
+                        initData();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Class> call, Throwable t) {
+                    actionStatus.setValue(SystemConstant.FAIL);
+                    Log.e("Error",t.getLocalizedMessage());
+                }
+            });
+        return actionStatus;
+
+    }
+
+    public MutableLiveData<String> delete(String traineeUsername, int classId){
+        MutableLiveData<String> actionStatus = new MutableLiveData<>();
+
+        Call<Class> call =  classService.deleteTrainee(traineeUsername, classId);
+        call.enqueue(new Callback<Class>() {
+            @Override
+            public void onResponse(Call<Class> call, Response<Class> response) {
+                if (response.isSuccessful()&&response.body() != null){
+                    actionStatus.setValue(SystemConstant.SUCCESS);
+                    initData();
+                }
+            }
+            @Override
+            public void onFailure(Call<Class> call, Throwable t) {
+                actionStatus.setValue(SystemConstant.FAIL);
+                Log.e("Error",t.getLocalizedMessage());
+            }
+        });
+
+        return actionStatus;
     }
 
     public MutableLiveData<List<Enrollment>> getListEnrollmentLiveData(){

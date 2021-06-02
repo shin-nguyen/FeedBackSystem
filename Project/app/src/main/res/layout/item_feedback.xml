@@ -26,19 +26,12 @@
             android:orientation="horizontal">
 
             <TextView
-                style="@style/TextViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Feedback ID: "
-                android:textColor="@color/black"/>
-
-            <TextView
                 android:id="@+id/feedback_id"
-                style="@style/TextItemStyle"
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Feedback ID: "
+                android:textSize="20sp"
                 android:textColor="@color/black"/>
 
         </LinearLayout>
@@ -48,19 +41,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
-                style="@style/TextViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Title: "
-                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/feedback_title"
                 style="@style/TextItemStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"/>
+                android:text="Title: "
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
@@ -68,14 +56,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
-            <TextView
-                style="@style/TextViewStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="Admin ID: "
-                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/feedback_admin_id"
@@ -83,6 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginBottom="10dp"
                 android:layout_height="wrap_content"
+                android:text="Admin ID: "
                 android:textColor="@color/black"/>
 
         </LinearLayout>

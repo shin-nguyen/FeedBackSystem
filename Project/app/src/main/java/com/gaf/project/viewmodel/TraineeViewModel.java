@@ -47,4 +47,5 @@ public class TraineeViewModel extends ViewModel {
     public MutableLiveData<Trainee> getTraineeMutableLiveData() {
         return traineeMutableLiveData;
     }
+
 }

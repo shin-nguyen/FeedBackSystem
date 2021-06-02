@@ -52,6 +52,7 @@ public class ClassViewModel extends ViewModel {
         }
         setAdapter(call);
     }
+
     private void setAdapter(Call<ClassResponse> call){
 
         call.enqueue(new Callback<ClassResponse>() {
