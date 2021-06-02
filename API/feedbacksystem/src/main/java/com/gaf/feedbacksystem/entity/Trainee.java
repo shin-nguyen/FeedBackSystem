@@ -5,7 +5,6 @@ package com.gaf.feedbacksystem.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -28,14 +27,12 @@ public class Trainee{
     private  String email;
     private String password;
 
-    @Column(length = 50)
+
     private String phone;
     private String address;
     private boolean isActive;
     private Integer idSkill;
-    @Column(length = 50)
     private String activationCode;
-    @Column(length = 50)
     private String resetPasswordCode;
 
     // mappedBy trỏ tới tên biến  ở trong .

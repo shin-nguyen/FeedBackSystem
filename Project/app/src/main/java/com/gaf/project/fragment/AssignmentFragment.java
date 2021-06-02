@@ -18,8 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,7 +37,6 @@ import com.gaf.project.service.AssignmentService;
 import com.gaf.project.service.FeedbackService;
 import com.gaf.project.utils.ApiUtils;
 import com.gaf.project.utils.SessionManager;
-import com.gaf.project.viewmodel.AssignmentViewModel;
 
 
 import java.util.ArrayList;
@@ -54,14 +51,14 @@ import retrofit2.Response;
 public class AssignmentFragment extends Fragment{
 
     private View view;
+    private AssignmentService assignmentService;
     private RecyclerView recyclerViewAssignment;
     private AssignmentAdapter assignmentAdapter;
+    private List<Assignment> listAssignment;
     private LinearLayout searchFiled;
     private SearchView searchAssignment;
     private Button btnAdd, btnSearch;
     private Boolean homeRole;
-    private String userRole;
-    private AssignmentViewModel assignmentViewModel;
 
     public AssignmentFragment(){
     }
@@ -69,6 +66,7 @@ public class AssignmentFragment extends Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD
         assignmentViewModel = new ViewModelProvider(this).get(AssignmentViewModel.class);
     }
 
@@ -78,6 +76,9 @@ public class AssignmentFragment extends Fragment{
 
         //Update data every time you enter Fragment
         assignmentViewModel.initData();
+=======
+        assignmentService = ApiUtils.getAssignmentService();
+>>>>>>> parent of d8a46df (fix conflict)
     }
 
     @Override
@@ -85,10 +86,29 @@ public class AssignmentFragment extends Fragment{
                              ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_assignment, container, false);
 
+<<<<<<< HEAD
         //get role of current user from session manager
         userRole = SessionManager.getInstance().getUserRole();
+=======
+        searchFiled = view.findViewById(R.id.search_field);
+        searchAssignment = view.findViewById(R.id.sv_assignment);
+        btnAdd = view.findViewById(R.id.btn_add_assignment);
+        btnSearch = view.findViewById(R.id.btn_search);
 
-        initView();
+        String userRole = SessionManager.getInstance().getUserRole();
+        if(!userRole.equals(SystemConstant.ADMIN_ROLE)){
+            btnAdd.setVisibility(View.GONE);
+        }
+>>>>>>> parent of d8a46df (fix conflict)
+
+        try{
+            homeRole = getArguments().getBoolean("home_role");
+            if(homeRole==true) {
+                searchFiled.setVisibility(View.GONE);
+            }
+        }catch (Exception exception){
+            
+        }
 
         //declare recyclerview(view, adapter and set layout)
         recyclerViewAssignment = view.findViewById(R.id.rcv_assignment);
@@ -106,6 +126,7 @@ public class AssignmentFragment extends Fragment{
             }
         });
 
+<<<<<<< HEAD
         //if user is admin, get list all assignment, then put it in adapter
         if(userRole.equals(SystemConstant.ADMIN_ROLE)){
             assignmentViewModel.getListAssignmentLiveData().observe(getViewLifecycleOwner(), new Observer<List<Assignment>>() {
@@ -117,16 +138,19 @@ public class AssignmentFragment extends Fragment{
                     assignmentAdapter.setData(list);
                 }
             });
+=======
+        listAssignment = new ArrayList<>();
+
+        if(userRole.equals(SystemConstant.ADMIN_ROLE)){
+            Call<AssignmentResponse> call =  assignmentService.loadListAssignment();
+            setAssignmentAdapter(call);
+>>>>>>> parent of d8a46df (fix conflict)
         }
 
         //if user is trainer get list assignment of user, then put it in adapter
         if(userRole.equals(SystemConstant.TRAINER_ROLE)){
-            assignmentViewModel.getListAssignmentOfTrainerLiveData().observe(getViewLifecycleOwner(), new Observer<List<Assignment>>() {
-                @Override
-                public void onChanged(List<Assignment> list) {
-                    assignmentAdapter.setData(list);
-                }
-            });
+            Call<AssignmentResponse> call =  assignmentService.loadListAssignmentByTrainer();
+            setAssignmentAdapter(call);
         }
 
         //put adapter to recyclerview
@@ -161,23 +185,58 @@ public class AssignmentFragment extends Fragment{
         return view;
     }
 
+<<<<<<< HEAD
     /*set event to delete button
     *delete assignment and show dialog*/
+=======
+    public void showToast(String string){
+        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
+    }
+
+    public void showSuccessDialog(String message){
+        FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+        SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
+            @Override
+            public void changeFragment() {
+
+            }
+        });
+        newFragment.show(ft, "dialog success");
+    }
+
+    private void setAssignmentAdapter(Call<AssignmentResponse> call){
+        call.enqueue(new Callback<AssignmentResponse>() {
+            @Override
+            public void onResponse(Call<AssignmentResponse> call, Response<AssignmentResponse> response) {
+                if (response.isSuccessful()&&response.body()!=null){
+                    listAssignment = response.body().getAssignments();
+                    assignmentAdapter.setData(listAssignment);
+                    Log.e("Success","Assignment get success");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AssignmentResponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showToast("Call API fail!");
+            }
+        });
+    }
+
+>>>>>>> parent of d8a46df (fix conflict)
     private void clickDelete(Assignment item){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         if(checkToDelete(item)){
             final WarningDialog dialog = new WarningDialog(
                     () -> {
-                        assignmentViewModel.deleteAssignment(item);
-                        showDialog("Delete");
+                        callDeleteAssignment(item);
                     },
                     "An active Module and Class has been assigned to this assignment. Do you really want to delete this?");
             dialog.show(ft, "dialog success");
         }else {
             final WarningDialog dialog = new WarningDialog(
                     () -> {
-                        assignmentViewModel.deleteAssignment(item);
-                        showDialog("Delete");
+                        callDeleteAssignment(item);
                     },
                     "Do you want to delete this Assignment?");
             dialog.show(ft, "dialog success");
@@ -194,6 +253,7 @@ public class AssignmentFragment extends Fragment{
         Navigation.findNavController(view).navigate(R.id.action_nav_assignment_to_edit_assignment_fragment,bundle);
     }
 
+<<<<<<< HEAD
   /*check to delete assignment
     if assignment has a valid class or module and has not been deleted, it returns false and vice versa*/
     public Boolean checkToDelete(Assignment assignment){
@@ -218,6 +278,29 @@ public class AssignmentFragment extends Fragment{
             showFailDialog(action+" Fail!!");
         }
     }
+=======
+    private void  callDeleteAssignment(Assignment assignment){
+        Call<DeleteResponse> call =  assignmentService.delete(assignment.getMClass().getClassID(),
+                assignment.getModule().getModuleID(),
+                assignment.getTrainer().getUserName());
+        call.enqueue(new Callback<DeleteResponse>() {
+            @Override
+            public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
+                if (response.isSuccessful()&&response.body().getDeleted()){
+                    showSuccessDialog("Delete success!");
+                }
+            }
+            @Override
+            public void onFailure(Call<DeleteResponse> call, Throwable t) {
+                showFailDialog("Delete success!");
+                Log.e("Error",t.getLocalizedMessage());
+            }
+        });
+
+        reloadFragment();
+    }
+
+>>>>>>> parent of d8a46df (fix conflict)
 
     //show fail dialog
     public void showFailDialog(String message){
@@ -226,6 +309,7 @@ public class AssignmentFragment extends Fragment{
         newFragment.show(ft, "dialog fail");
     }
 
+<<<<<<< HEAD
     //show success dialog
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
@@ -239,6 +323,8 @@ public class AssignmentFragment extends Fragment{
     }
 
     //reload page
+=======
+>>>>>>> parent of d8a46df (fix conflict)
     public void reloadFragment(){
         if (getFragmentManager() != null) {
             getFragmentManager()
@@ -249,6 +335,7 @@ public class AssignmentFragment extends Fragment{
         }
     }
 
+<<<<<<< HEAD
     //declare all view
     private void initView(){
         searchFiled = view.findViewById(R.id.search_field);
@@ -267,6 +354,13 @@ public class AssignmentFragment extends Fragment{
             }
         }catch (Exception exception){
 
+=======
+    public Boolean checkToDelete(Assignment assignment){
+        if((assignment.getMClass().isDeleted()==false && assignment.getMClass().getEndTime().compareTo(new Date())>0)
+            || (assignment.getModule().isDeleted()==false && assignment.getModule().getEndTime().compareTo(new Date())>0)){
+            return true;
+>>>>>>> parent of d8a46df (fix conflict)
         }
+        return false;
     }
 }

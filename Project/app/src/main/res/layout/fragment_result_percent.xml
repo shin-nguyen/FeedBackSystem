@@ -104,9 +104,9 @@
                     android:textSize="18sp"/>
 
                 <TextView
-                    android:id="@+id/tvTopicName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="I. Training program and content"
                     android:textStyle="bold"/>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -115,9 +115,9 @@
                     android:layout_height="wrap_content"/>
 
                 <TextView
-                    android:id="@+id/tvTopicName1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="II. Trainer/Coach"
                     android:textStyle="bold"/>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -128,9 +128,9 @@
 
 
                 <TextView
-                    android:id="@+id/tvTopicName2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="III. Course organization"
                     android:textStyle="bold"/>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -139,9 +139,9 @@
                     android:layout_height="wrap_content"/>
 
                 <TextView
-                    android:id="@+id/tvTopicName3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="IV. Other"
                     android:textStyle="bold"/>
 
                 <androidx.recyclerview.widget.RecyclerView

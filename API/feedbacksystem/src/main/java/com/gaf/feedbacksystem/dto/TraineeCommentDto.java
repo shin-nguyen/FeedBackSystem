@@ -30,7 +30,7 @@ public class TraineeCommentDto {
     public void setModule(ModuleDto module) {
         getPrimaryKey().setModule(module);
     }
-    public TrainerDto getTrainee() {
+    public TrainerDto getTraine() {
         return getPrimaryKey().getTrainee();
     }
     public void setTrainee(TrainerDto trainee) {

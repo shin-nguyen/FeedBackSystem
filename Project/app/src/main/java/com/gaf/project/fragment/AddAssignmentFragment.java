@@ -6,9 +6,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.XmlRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,11 +32,6 @@ import com.gaf.project.service.ClassService;
 import com.gaf.project.service.ModuleService;
 import com.gaf.project.service.TrainerService;
 import com.gaf.project.utils.ApiUtils;
-import com.gaf.project.viewmodel.AssignmentViewModel;
-import com.gaf.project.viewmodel.ClassViewModel;
-import com.gaf.project.viewmodel.ModuleViewModel;
-import com.gaf.project.viewmodel.QuestionViewModel;
-import com.gaf.project.viewmodel.TrainerViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,14 +44,18 @@ public class AddAssignmentFragment extends Fragment {
 
     private View view;
     private Button btnSave,btnBack;
+    private AssignmentService assignmentService;
+    private ModuleService moduleService;
+    private ClassService classService;
+    private TrainerService trainerService;
+    private List<Module> moduleList;
+    private List<Class> classList;
+    private List<Trainer> trainerList;
+    private List<Assignment> assignmentList;
     private ArrayAdapter<Module> adapterModule;
     private ArrayAdapter<Class> adapterClass;
     private ArrayAdapter<Trainer> adapterTrainer;
     private Boolean flag = true;
-    private ClassViewModel classViewModel;
-    private ModuleViewModel moduleViewModel;
-    private TrainerViewModel trainerViewModel;
-    private AssignmentViewModel assignmentViewModel;
 
     public AddAssignmentFragment() {
         // Required empty public constructor
@@ -68,10 +64,10 @@ public class AddAssignmentFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        classViewModel = new ViewModelProvider(this).get(ClassViewModel.class);
-        moduleViewModel = new ViewModelProvider(this).get(ModuleViewModel.class);
-        trainerViewModel = new ViewModelProvider(this).get(TrainerViewModel.class);
-        assignmentViewModel = new ViewModelProvider(this).get(AssignmentViewModel.class);
+        assignmentService = ApiUtils.getAssignmentService();
+        moduleService = ApiUtils.getModuleService();
+        classService = ApiUtils.getClassService();
+        trainerService = ApiUtils.getTrainerService();
     }
 
     @Override
@@ -82,34 +78,64 @@ public class AddAssignmentFragment extends Fragment {
 
         //set data to spinner module
         final Spinner spnModule = (Spinner) view.findViewById(R.id.spinner_module_name);
-        moduleViewModel.getmListModuleLiveData().observe(getViewLifecycleOwner(), new Observer<List<Module>>() {
+        Call<ModuleResponse> callModule =  moduleService.loadModuleAdmin();
+        callModule.enqueue(new Callback<ModuleResponse>() {
             @Override
-            public void onChanged(List<Module> modules) {
-                adapterModule =
-                        new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, modules);
-                spnModule.setAdapter(adapterModule);
+            public void onResponse(Call<ModuleResponse> call, Response<ModuleResponse> response) {
+
+                    if (response.isSuccessful()&& response.body()!=null){
+                    moduleList = response.body().getModules();
+                    adapterModule =
+                            new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, moduleList);
+                    spnModule.setAdapter(adapterModule);
+                }
+            }
+            @Override
+            public void onFailure(Call<ModuleResponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showToast("Error");
             }
         });
 
         //set data to spinner class
         final Spinner spnClass = (Spinner) view.findViewById(R.id.spinner_class_name);
-        classViewModel.getListClassLiveData().observe(getViewLifecycleOwner(), new Observer<List<Class>>() {
+        Call<ClassResponse> callClass =  classService.loadListClass();
+        callClass.enqueue(new Callback<ClassResponse>() {
             @Override
-            public void onChanged(List<Class> classes) {
-                adapterClass =
-                        new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, classes);
-                spnClass.setAdapter(adapterClass);
+            public void onResponse(Call<ClassResponse> call, Response<ClassResponse> response) {
+
+                if (response.isSuccessful()&& response.body()!=null){
+                    classList = response.body().getClasss();
+                     adapterClass =
+                            new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, classList);
+                    spnClass.setAdapter(adapterClass);
+                }
+            }
+            @Override
+            public void onFailure(Call<ClassResponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showToast("Error");
             }
         });
 
         //set data to spinner trainer
         final Spinner spnTrainer = (Spinner) view.findViewById(R.id.spinner_trainer_id);
-        trainerViewModel.getListTrainerLiveData().observe(getViewLifecycleOwner(), new Observer<List<Trainer>>() {
+        Call<TrainerReponse> callTrainer =  trainerService.loadListTrainer();
+        callTrainer.enqueue(new Callback<TrainerReponse>() {
             @Override
-            public void onChanged(List<Trainer> trainers) {
-                adapterTrainer =
-                        new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item,trainers);
-                spnTrainer.setAdapter(adapterTrainer);
+            public void onResponse(Call<TrainerReponse> call, Response<TrainerReponse> response) {
+
+                if (response.isSuccessful()&& response.body()!=null){
+                    trainerList = response.body().getTrainers();
+                    adapterTrainer =
+                            new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, trainerList);
+                    spnTrainer.setAdapter(adapterTrainer);
+                }
+            }
+            @Override
+            public void onFailure(Call<TrainerReponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showToast("Error");
             }
         });
 
@@ -129,6 +155,7 @@ public class AddAssignmentFragment extends Fragment {
                 //create new assignment with data from view
                 Assignment newAssignment = new Assignment(code, module, trainer, mClass);
 
+<<<<<<< HEAD
                 /*if assignment already exist, show fail dialog
                  * else add assignment and show success dialog*/
                 if (assignmentViewModel.getListAssignment() == null) {
@@ -145,6 +172,34 @@ public class AddAssignmentFragment extends Fragment {
             }else {
                 showFailDialog("Check your connection!!");
             }
+=======
+            assignmentList = new ArrayList<>();
+            Call<AssignmentResponse> callListAssignment =  assignmentService.loadListAssignment();
+            callListAssignment.enqueue(new Callback<AssignmentResponse>() {
+                @Override
+                public void onResponse(Call<AssignmentResponse> call, Response<AssignmentResponse> response) {
+                    if (response.isSuccessful()&&response.body()!=null){
+                        assignmentList = response.body().getAssignments();
+                        flag = checkExistAssignment(assignmentList,newAssignment);
+                        if(flag){
+                            Call<Assignment> callAddAssignment = assignmentService.create(newAssignment);
+                            callAddAssignment(callAddAssignment);
+                        }else {
+                            showFailDialog("Assignment already exist!");
+                        }
+                        Log.e("Success","Assignment get success");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<AssignmentResponse> call, Throwable t) {
+                    Log.e("Error",t.getLocalizedMessage());
+                    showToast("Call API fail!");
+                }
+            });
+
+            reloadFragment();
+>>>>>>> parent of d8a46df (fix conflict)
         });
 
         //set event for button back - back to previous page
@@ -171,6 +226,7 @@ public class AddAssignmentFragment extends Fragment {
         return true;
     }
 
+<<<<<<< HEAD
     //show dialog when the action is finished
     public void showDialog(String action){
         if(assignmentViewModel.getActionStatus()==null){
@@ -184,6 +240,23 @@ public class AddAssignmentFragment extends Fragment {
             }
         }
 
+=======
+    public void callAddAssignment(Call<Assignment> call){
+        call.enqueue(new Callback<Assignment>() {
+            @Override
+            public void onResponse(Call<Assignment> call, Response<Assignment> response) {
+                if (response.isSuccessful()&&response.body()!=null) {
+                    showSuccessDialog("Add Success!");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Assignment> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showFailDialog("Error");
+            }
+        });
+>>>>>>> parent of d8a46df (fix conflict)
     }
 
     //show success dialog
@@ -192,7 +265,7 @@ public class AddAssignmentFragment extends Fragment {
         SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
             @Override
             public void changeFragment() {
-                Navigation.findNavController(view).navigate(R.id.action_add_assignment_fragment_to_nav_assignment);
+
             }
         });
         newFragment.show(ft, "dialog success");

@@ -41,7 +41,6 @@
         android:textStyle="bold"
         android:id="@+id/edt_email"/>
     <TextView
-        android:id="@+id/txt_error_username"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:paddingLeft="20dp"
@@ -49,7 +48,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
         android:text="@string/error_username"
-        android:visibility="gone" />
+        android:visibility="invisible" />
 
     <EditText
         android:layout_width="match_parent"
@@ -71,9 +70,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
         android:text="@string/error_pass"
-        android:visibility="gone"
-        android:id="@+id/txt_error_pass"
-
+        android:visibility="invisible"
         />
 
     <RelativeLayout

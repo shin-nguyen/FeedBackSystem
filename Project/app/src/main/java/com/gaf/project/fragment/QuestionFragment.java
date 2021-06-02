@@ -14,10 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Filter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -81,6 +79,15 @@ public class QuestionFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        topicViewModel.getListTopicLiveData().observe(getViewLifecycleOwner(), new Observer<List<Topic>>() {
+            @Override
+            public void onChanged(List<Topic> topics) {
+                sprTopic = view.findViewById(R.id.spinner_topic_name);
+                topicArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, topics);
+                sprTopic.setAdapter(topicArrayAdapter);
+            }
+        });
+
         recyclerViewQuestion = view.findViewById(R.id.rcv_question);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         recyclerViewQuestion.setLayoutManager(linearLayoutManager);
@@ -105,36 +112,6 @@ public class QuestionFragment extends Fragment {
         });
 
         recyclerViewQuestion.setAdapter(questionAdapter);
-
-        topicViewModel.getListTopicLiveData().observe(getViewLifecycleOwner(), new Observer<List<Topic>>() {
-            @Override
-            public void onChanged(List<Topic> topics) {
-                sprTopic = view.findViewById(R.id.spinner_topic_name);
-                Topic topic = new Topic(0,"Show All");
-                List<Topic> topicList = topics;
-                topicList.add(0,topic);
-                topicArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, topicList);
-                sprTopic.setAdapter(topicArrayAdapter);
-
-                sprTopic.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        Topic topic = topicArrayAdapter.getItem(position);
-                        questionAdapter.getFilter().filter(topic.getTopicName(), new Filter.FilterListener() {
-                            @Override
-                            public void onFilterComplete(int count) {
-
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
-            }
-        });
 
         btnAdd = view.findViewById(R.id.btn_add_question);
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -199,8 +176,8 @@ public class QuestionFragment extends Fragment {
     }
 
     public void showDialog(String action){
-        Boolean actionStatus = questionViewModel.getActionStatus().booleanValue();
-        if(actionStatus){
+        Boolean actionStatus = questionViewModel.getActionStatus();
+        if(actionStatus == true){
             showSuccessDialog(action+" Success!!");
         }else {
             showFailDialog(action+" Fail!!");

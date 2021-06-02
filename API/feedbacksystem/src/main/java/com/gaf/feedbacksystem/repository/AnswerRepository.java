@@ -18,4 +18,5 @@ public interface AnswerRepository extends JpaRepository<Answer, AnswerID> {
     List<Answer> findByMClassAndModuleAndQuestion(@Param("idClass") Integer idClass,
                                                   @Param("idModule") Integer idModule,
                                                   @Param("idQuestion") Integer idQuestion);
+
 }

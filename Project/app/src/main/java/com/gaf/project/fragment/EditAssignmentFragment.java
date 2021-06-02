@@ -5,9 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,8 +28,6 @@ import com.gaf.project.response.TrainerReponse;
 import com.gaf.project.service.AssignmentService;
 import com.gaf.project.service.TrainerService;
 import com.gaf.project.utils.ApiUtils;
-import com.gaf.project.viewmodel.AssignmentViewModel;
-import com.gaf.project.viewmodel.TrainerViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +40,14 @@ public class EditAssignmentFragment extends Fragment {
     private View view;
     private Button btnSave, btnBack;
     private EditText classId, className, moduleId, moduleName;
+    private AssignmentService assignmentService;
+    private TrainerService trainerService;
+    private List<Trainer> trainerList;
+    private List<Assignment> assignmentList;
     private ArrayAdapter<Trainer> adapterTrainer;
     private Spinner spnTrainer;
     private Assignment assignment;
     private Boolean flag = true;
-    private AssignmentViewModel assignmentViewModel;
-    private TrainerViewModel trainerViewModel;
 
     public EditAssignmentFragment() {
         // Required empty public constructor
@@ -59,8 +56,8 @@ public class EditAssignmentFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        assignmentViewModel = new ViewModelProvider(this).get(AssignmentViewModel.class);
-        trainerViewModel = new ViewModelProvider(this).get(TrainerViewModel.class);
+        assignmentService = ApiUtils.getAssignmentService();
+        trainerService = ApiUtils.getTrainerService();
     }
 
     @Override
@@ -81,15 +78,24 @@ public class EditAssignmentFragment extends Fragment {
         moduleId.setText(String.valueOf(module.getModuleID()));
         moduleName.setText(String.valueOf(module.getModuleName()));
 
-        trainerViewModel.getListTrainerLiveData().observe(getViewLifecycleOwner(), new Observer<List<Trainer>>() {
+        Call<TrainerReponse> callTrainer =  trainerService.loadListTrainer();
+        callTrainer.enqueue(new Callback<TrainerReponse>() {
             @Override
-            public void onChanged(List<Trainer> trainers) {
-                adapterTrainer =
-                        new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, trainers);
-                spnTrainer.setAdapter(adapterTrainer);
-                int spnPosition = -1;
-                spnPosition = adapterTrainer.getPosition(trainer);
-                spnTrainer.setSelection(spnPosition);
+            public void onResponse(Call<TrainerReponse> call, Response<TrainerReponse> response) {
+                if (response.isSuccessful()&& response.body()!=null){
+                    trainerList = response.body().getTrainers();
+                    adapterTrainer =
+                            new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, trainerList);
+                    spnTrainer.setAdapter(adapterTrainer);
+                    int spnPosition = -1;
+                    spnPosition = adapterTrainer.getPosition(trainer);
+                    spnTrainer.setSelection(spnPosition);
+                };
+            }
+            @Override
+            public void onFailure(Call<TrainerReponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showToast("Error");
             }
         });
 
@@ -97,6 +103,7 @@ public class EditAssignmentFragment extends Fragment {
             String trainerName = assignment.getTrainer().getUserName();
 
             Trainer selectedTrainer = (Trainer) spnTrainer.getSelectedItem();
+<<<<<<< HEAD
             if(selectedTrainer==null){
                 showFailDialog("Check your connection!!");
             }else {
@@ -114,6 +121,34 @@ public class EditAssignmentFragment extends Fragment {
                     }
                 }
             }
+=======
+            assignment.setTrainer(selectedTrainer);
+
+            assignmentList = new ArrayList<>();
+            Call<AssignmentResponse> callListAssignment =  assignmentService.loadListAssignment();
+            callListAssignment.enqueue(new Callback<AssignmentResponse>() {
+                @Override
+                public void onResponse(Call<AssignmentResponse> call, Response<AssignmentResponse> response) {
+                    if (response.isSuccessful()&&response.body()!=null){
+                        assignmentList = response.body().getAssignments();
+                        flag = checkExistAssignment(assignmentList,assignment);
+                        if(flag){
+                            Call<Assignment> callAddAssignment = assignmentService.create(assignment);
+                            callUpdateAssignment(trainerName);
+                        }else {
+                            showFailDialog("Assignment already exist!");
+                        }
+                        Log.e("Success","Assignment get success");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<AssignmentResponse> call, Throwable t) {
+                    Log.e("Error",t.getLocalizedMessage());
+                    showToast("Call API fail!");
+                }
+            });
+>>>>>>> parent of d8a46df (fix conflict)
         });
 
         btnBack.setOnClickListener(view1 -> {
@@ -135,6 +170,7 @@ public class EditAssignmentFragment extends Fragment {
         return true;
     }
 
+<<<<<<< HEAD
     //show dialog when the action is finished
     public void showDialog(String action){
         if(assignmentViewModel.getActionStatus()==null){
@@ -148,6 +184,34 @@ public class EditAssignmentFragment extends Fragment {
             }
         }
 
+=======
+    public void callUpdateAssignment(String trainerName){
+        Call<Assignment> call =  assignmentService.update(trainerName,assignment);
+        call.enqueue(new Callback<Assignment>() {
+            @Override
+            public void onResponse(Call<Assignment> call, Response<Assignment> response) {
+                if (response.isSuccessful()&&response.body()!=null) {
+                    showSuccessDialog("Edit Success!");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Assignment> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showFailDialog("Assignment already exist!");
+            }
+        });
+    }
+
+    private void initView(View view) {
+        classId = view.findViewById(R.id.txt_class_id);
+        className = view.findViewById(R.id.txt_class_name);
+        moduleId = view.findViewById(R.id.txt_module_id);
+        moduleName = view.findViewById(R.id.txt_module_name);
+        spnTrainer = view.findViewById(R.id.spinner_trainer_id);
+        btnSave = view.findViewById(R.id.btn_save);
+        btnBack= view.findViewById(R.id.btn_back);
+>>>>>>> parent of d8a46df (fix conflict)
     }
 
     public void showSuccessDialog(String message){
@@ -155,7 +219,7 @@ public class EditAssignmentFragment extends Fragment {
         SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
             @Override
             public void changeFragment() {
-                Navigation.findNavController(view).navigate(R.id.action_edit_assignment_fragment_to_nav_assignment);
+
             }
         });
         newFragment.show(ft, "dialog success");
@@ -169,15 +233,5 @@ public class EditAssignmentFragment extends Fragment {
 
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
-    }
-
-    private void initView(View view) {
-        classId = view.findViewById(R.id.txt_class_id);
-        className = view.findViewById(R.id.txt_class_name);
-        moduleId = view.findViewById(R.id.txt_module_id);
-        moduleName = view.findViewById(R.id.txt_module_name);
-        spnTrainer = view.findViewById(R.id.spinner_trainer_id);
-        btnSave = view.findViewById(R.id.btn_save);
-        btnBack= view.findViewById(R.id.btn_back);
     }
 }

@@ -27,7 +27,7 @@ public class EnrollmentViewModel extends ViewModel {
     private MutableLiveData<List<Enrollment>> mListEnrollmentLiveData;
     private MutableLiveData<List<Class>> mListClassLiveData;
     private List<Enrollment> mListEnrollment;
-    private List<Class> mListClass;
+    private List<Class> mlistClass;
 
     public EnrollmentViewModel(){
         classService = ApiUtils.getClassService();
@@ -38,19 +38,19 @@ public class EnrollmentViewModel extends ViewModel {
 
     public void initData(){
         mListEnrollment = new ArrayList<>();
-        mListClass= new ArrayList<>();
+        mlistClass = new ArrayList<>();
         Call<ClassResponse> call =  classService.loadListClass();
         call.enqueue(new Callback<ClassResponse>() {
             @Override
             public void onResponse(Call<ClassResponse> call, Response<ClassResponse> response) {
-                mListClass = response.body().getClasss();
-                if (mListClass!=null) {
-                    for (Class mClass:mListClass) {
+                mlistClass = response.body().getClasss();
+                if (mlistClass!=null) {
+                    for (Class mClass:mlistClass) {
                         for (Trainee trainee : mClass.getTrainees())
                             mListEnrollment.add(new Enrollment(mClass,trainee));
                     }
                     mListEnrollmentLiveData.setValue(mListEnrollment);
-                    mListClassLiveData.setValue(mListClass);
+                    mListClassLiveData.setValue(mlistClass);
                 }
             }
 

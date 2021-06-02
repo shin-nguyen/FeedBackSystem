@@ -5,9 +5,12 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+<<<<<<< HEAD
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+=======
+>>>>>>> parent of d8a46df (fix conflict)
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,11 +30,16 @@ import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
 import com.gaf.project.model.Admin;
+import com.gaf.project.model.Class;
 import com.gaf.project.model.Feedback;
 import com.gaf.project.model.Module;
-import com.gaf.project.viewmodel.AdminViewModel;
-import com.gaf.project.viewmodel.FeedBackViewModel;
-import com.gaf.project.viewmodel.ModuleViewModel;
+import com.gaf.project.response.AdminResponse;
+import com.gaf.project.response.FeedbackResponse;
+import com.gaf.project.response.ModuleResponse;
+import com.gaf.project.service.AdminService;
+import com.gaf.project.service.FeedbackService;
+import com.gaf.project.service.ModuleService;
+import com.gaf.project.utils.ApiUtils;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -40,12 +48,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class AddModuleFragment extends Fragment {
     private EditText mName;
     private TextView mStartDate,mEndDate;
     private TextView mFeedbackStartDate,mFeedbackEndDate;
 
-    private TextView mNameWarning, mStartDateWaring, mEndDateWarning,mFeedbackStartDateWarning, mFeedbackEndDateWarning;
+    private TextView mNameWarning, mStartDateWaring, mEndDateWarning;
+
     private Spinner spnAdmin,spnFeedbackTitle;
     private ImageButton btnStartDate, btnEndDate;
     private ImageButton btnFeedbackStartDate, btnFeedbackEndDate;
@@ -57,10 +70,9 @@ public class AddModuleFragment extends Fragment {
     private DatePickerDialog datePickerDialog;
     private Date planDate;
 
-    private ModuleViewModel moduleViewModel;
-    private AdminViewModel adminViewModel;
-    private FeedBackViewModel feedBackViewModel;
-
+    private ModuleService moduleService;
+    private AdminService adminService;
+    private FeedbackService feedbackService;
     private String mission;
 
     private TextView mTitle;
@@ -68,9 +80,6 @@ public class AddModuleFragment extends Fragment {
     private  View view;
     private ArrayAdapter<Admin> adminAdapter;
     private ArrayAdapter<Feedback> feedbackAdapter;
-
-    Module mModuleEdit = null;
-
     public AddModuleFragment() {
         // Required empty public constructor
     }
@@ -79,17 +88,9 @@ public class AddModuleFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        moduleViewModel = new ViewModelProvider(this).get(ModuleViewModel.class);
-        adminViewModel = new ViewModelProvider(this).get(AdminViewModel.class);
-        feedBackViewModel = new ViewModelProvider(this).get(FeedBackViewModel.class);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        moduleViewModel.initData();
-        adminViewModel.initData();
-        feedBackViewModel.initData();
+        moduleService = ApiUtils.getModuleService();
+        adminService = ApiUtils.getAdminService();
+        feedbackService = ApiUtils.getFeedbackService();
     }
 
     @Override
@@ -98,7 +99,7 @@ public class AddModuleFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_add_module, container, false);
         initComponents(view);
-
+        Module mModuleEdit = null;
 
         mission = getArguments().getString("mission");
         if(mission.equals(SystemConstant.ADD)){
@@ -126,34 +127,99 @@ public class AddModuleFragment extends Fragment {
         }
 
 
+<<<<<<< HEAD
 
         adminViewModel.getmListAdminLiveData().observe(getViewLifecycleOwner(),admins -> {
             adminAdapter =
                     new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, admins);
             spnAdmin.setAdapter(adminAdapter);
+=======
+                idModule = mModuleEdit.getModuleID();
+                mName.setText(mModuleEdit.getModuleName());
 
-            if (mModuleEdit!=null){
-                Integer postionAdminAdapter = adminAdapter.getPosition(mModuleEdit.getAdmin());
-                spnAdmin.setSelection(postionAdminAdapter);
+                mStartDate.setEnabled(false);
+                Log.e("Success","Get Class Success");
             }
+        }
+        catch (Exception ex){
+            Log.e("Error",ex.getLocalizedMessage());
+        }
 
-        });
+>>>>>>> parent of d8a46df (fix conflict)
 
+        Call<AdminResponse> callAdmin =  adminService.loadListAdmin();
+            callAdmin.enqueue(new Callback<AdminResponse>() {
+                @Override
+                public void onResponse(Call<AdminResponse> call, Response<AdminResponse> response) {
+
+                    if (response.isSuccessful()&& response.body()!=null){
+                        adminList = response.body().getAdmins();
+                        adminAdapter =
+                                new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, adminList);
+                        spnAdmin.setAdapter(adminAdapter);
+                    }
+                }
+                @Override
+                public void onFailure(Call<AdminResponse> call, Throwable t) {
+                    Log.e("Error",t.getLocalizedMessage());
+                    showToast("Error");
+                }
+            });
+
+<<<<<<< HEAD
         feedBackViewModel.getListFeedBackLiveData().observe(getViewLifecycleOwner(),feedbacks -> {
             feedbackAdapter =
                     new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, feedbacks);
             spnFeedbackTitle.setAdapter(feedbackAdapter);
+=======
+        Call<FeedbackResponse> callFeedback =  feedbackService.getListFeedback();
 
-            if (mModuleEdit!=null){
-                Integer postionFeedbackAdapter = feedbackAdapter.getPosition(mModuleEdit.getFeedback());
-                spnFeedbackTitle.setSelection(postionFeedbackAdapter);
-            }
-        });
+            callFeedback.enqueue(new Callback<FeedbackResponse>() {
+                @Override
+                public void onResponse(Call<FeedbackResponse> call, Response<FeedbackResponse> response) {
+
+                    if (response.isSuccessful()&& response.body()!=null){
+                        feedbackList = response.body().getFeedbacks();
+                        feedbackAdapter =
+                                new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, feedbackList);
+                        spnFeedbackTitle.setAdapter(feedbackAdapter);
+                    }
+                }
+                @Override
+                public void onFailure(Call<FeedbackResponse> call, Throwable t) {
+                    Log.e("Error",t.getLocalizedMessage());
+                    showToast("Error");
+                }
+            });
+>>>>>>> parent of d8a46df (fix conflict)
+
 
         btnSave.setOnClickListener(v->{
-            Boolean validateFlag = check();
+
+            mNameWarning.setVisibility(View.GONE);
+            mStartDateWaring.setVisibility(View.GONE);
+            mEndDateWarning.setVisibility(View.GONE);
+
+            Boolean validateFlag = true;
+
+            if(mName.getText().toString().isEmpty()){
+                mNameWarning.setVisibility(View.VISIBLE);
+                validateFlag=false;
+            }
+
+
+            if(mStartDate.getText().toString().isEmpty()){
+                mStartDateWaring.setVisibility(View.VISIBLE);
+                validateFlag=false;
+            }
+
+            if(mEndDate.getText().toString().isEmpty()){
+                mEndDateWarning.setVisibility(View.VISIBLE);
+                validateFlag=false;
+            }
 
             if(validateFlag){
+<<<<<<< HEAD
                 String name = mName.getText().toString().trim();
 
                 Date startDate = dateToTextView(mStartDate);
@@ -171,6 +237,86 @@ public class AddModuleFragment extends Fragment {
                 else if(mission.equals(SystemConstant.ADD)){
                     Module mModule = new Module(admin,name,startDate,endDate,feedbackStartDate,feedbackEndDate,feedback);
                     showDialog(moduleViewModel.add(mModule),"Update");
+=======
+
+                try{
+                    String name = mName.getText().toString().trim();
+
+                    DateFormat dfs = new SimpleDateFormat("MM/dd/yyyy");
+                    Date startDate = new Date();
+                    try {
+                        startDate = dfs.parse(mStartDate.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    Date endDate = new Date();
+                    try {
+                        endDate = dfs.parse(mEndDate.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    Date feedbackStartDate = new Date();
+                    try {
+                        feedbackStartDate = dfs.parse(mFeedbackStartDate.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    Date feedbackEndDate = new Date();
+                    try {
+                        feedbackEndDate = dfs.parse(mFeedbackEndDate.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    if(mission.equals(SystemConstant.UPDATE)){
+
+                        Admin admin = (Admin) spnAdmin.getSelectedItem();
+                        Feedback feedback = (Feedback) spnFeedbackTitle.getSelectedItem();
+                        Module mModule = new Module(idModule,admin,name,startDate,endDate,feedbackStartDate,feedbackEndDate,feedback)   ;
+                        Call<Module> call =  moduleService.update( mModule );
+                        call.enqueue(new Callback<Module>() {
+                            @Override
+                            public void onResponse(Call<Module> call, Response<Module> response) {
+                                if (response.isSuccessful()&&response.body()!=null) {
+                                    showSuccessDialog("Edit Success!");
+                                    Log.e("Success","Update Class success");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Module> call, Throwable t) {
+                                Log.e("Error",t.getLocalizedMessage());
+                                showFailDialog("Error");
+                            }
+                        });
+                        Log.e("Success","Send Class success");
+                    }
+                    else if(mission.equals(SystemConstant.ADD)){
+                        Admin admin = (Admin) spnAdmin.getSelectedItem();
+                        Feedback feedback = (Feedback) spnFeedbackTitle.getSelectedItem();
+                        Module mModule = new Module(admin,name,startDate,endDate,feedbackStartDate,feedbackEndDate,feedback)   ;
+                        Call<Module> call =  moduleService.create( mModule );
+                        call.enqueue(new Callback<Module>() {
+                            @Override
+                            public void onResponse(Call<Module> call, Response<Module> response) {
+                                if (response.isSuccessful()&&response.body()!=null) {
+                                    showSuccessDialog("Add Success!");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Module> call, Throwable t) {
+                                Log.e("Error",t.getLocalizedMessage());
+                                showFailDialog("Error");
+                            }
+                        });
+                    }
+                }catch (Exception ex){
+
+>>>>>>> parent of d8a46df (fix conflict)
                 }
             }
         });
@@ -198,6 +344,7 @@ public class AddModuleFragment extends Fragment {
         return  view;
     }
 
+<<<<<<< HEAD
     private Date dateToTextView(TextView mDate) {
         DateFormat dfs = new SimpleDateFormat("MM/dd/yyyy");
         Date date = new Date();
@@ -285,6 +432,8 @@ public class AddModuleFragment extends Fragment {
 
     }
 
+=======
+>>>>>>> parent of d8a46df (fix conflict)
     private void openDate(TextView mDate,View v) {
         calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -311,8 +460,11 @@ public class AddModuleFragment extends Fragment {
         mNameWarning = view.findViewById(R.id.txt_module_name_warning);
         mStartDateWaring=view.findViewById(R.id.txt_start_date_warning);
         mEndDateWarning=view.findViewById(R.id.txt_end_date_warning);
+<<<<<<< HEAD
         mFeedbackStartDateWarning = view.findViewById(R.id.txt_feedback_start_date_warning);
         mFeedbackEndDateWarning = view.findViewById(R.id.txt_feedback_end_date_warning);
+=======
+>>>>>>> parent of d8a46df (fix conflict)
 
         mStartDate = view.findViewById(R.id.txt_start_date);
         mEndDate = view.findViewById(R.id.txt_end_date);
@@ -343,8 +495,11 @@ public class AddModuleFragment extends Fragment {
     }
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        SuccessDialog newFragment = new SuccessDialog(message, () -> {
-            Navigation.findNavController(view).navigate(R.id.action_addModuleFragment_to_nav_module);
+        SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
+            @Override
+            public void changeFragment() {
+
+            }
         });
         newFragment.show(ft, "dialog success");
     }

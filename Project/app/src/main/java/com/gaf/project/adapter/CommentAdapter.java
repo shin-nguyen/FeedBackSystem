@@ -67,7 +67,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
             tvCommentNo = itemView.findViewById(R.id.tvCommentNo);
             tvCommentTraineeID = itemView.findViewById(R.id.tvCommentTraineeID);
-            tvCommentContent = itemView.findViewById(R.id.tvCommentContent);
+            tvCommentContent = itemView.findViewById(R.id.tvQuestionContent);
         }
     }
 }

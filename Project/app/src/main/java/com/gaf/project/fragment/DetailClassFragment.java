@@ -47,8 +47,8 @@ public class DetailClassFragment extends Fragment {
     private List<Trainee> traineeList;
     private TraineeAdapter adapter;
     private  View view;
-
     public DetailClassFragment() {
+        // Required empty public constructor
     }
 
     @Override
@@ -59,9 +59,12 @@ public class DetailClassFragment extends Fragment {
         initComponents(view);
         Class mClass =new Class();
         adapter = new TraineeAdapter();
+
         traineeList = new ArrayList<>();
 
-
+        btnBack.setOnClickListener(v->{
+            getActivity().onBackPressed();
+        });
 
         try {
             mClass = (Class) getArguments().getSerializable("mClass");
@@ -77,12 +80,9 @@ public class DetailClassFragment extends Fragment {
 //            showToast("Error");
         }
 
-        btnBack.setOnClickListener(v->{
-            getActivity().onBackPressed();
-        });
-
         //Set layout manager -> recyclerView Status
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
+        rcvTrainee = view.findViewById(R.id.rcv_info_class);
         rcvTrainee.setLayoutManager(linearLayoutManager);
 
         adapter.setData(traineeList);
@@ -94,7 +94,6 @@ public class DetailClassFragment extends Fragment {
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }
     private void initComponents(View view) {
-        rcvTrainee = view.findViewById(R.id.rcv_info_class);
         mId = (TextView)view.findViewById(R.id.txt_class_id);
         mName = (TextView)view.findViewById(R.id.txt_class_name);
         btnBack  = (Button)view.findViewById(R.id.btn_back);

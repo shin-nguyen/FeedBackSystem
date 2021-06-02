@@ -1,33 +1,25 @@
 package com.gaf.project;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gaf.project.authentication.AuthenticationRequest;
 import com.gaf.project.authentication.AuthenticationResponse;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.fragment.ModuleFragment;
-import com.gaf.project.model.Trainee;
 import com.gaf.project.service.AuthenticationService;
-import com.gaf.project.service.TraineeService;
-import com.gaf.project.service.TrainerService;
 import com.gaf.project.utils.ApiUtils;
 import com.gaf.project.utils.SessionManager;
-import com.gaf.project.viewmodel.AuthenticationViewModel;
-import com.gaf.project.viewmodel.TraineeViewModel;
 
 import java.util.Optional;
 
@@ -41,10 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnSignIn;
     private CheckBox cbRememberMe;
     private Spinner pnRole;
-    private TextView  errorPass, errorUserName;
-
-    private TraineeViewModel traineeViewModel;
-    private AuthenticationViewModel authenticationViewModel;
+    private AuthenticationService authenticationService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +44,13 @@ public class LoginActivity extends AppCompatActivity {
         addValues();
         addEvent();
     }
+
     private void addValues() {
         edtEmail.setText("thao");
         edtPassword.setText("1234");
 
         String[] role = {SystemConstant.ADMIN_ROLE,SystemConstant.TRAINEE_ROLE,SystemConstant.TRAINER_ROLE};
-        ArrayAdapter<CharSequence> roleAdapter = new ArrayAdapter<>(getApplication(),
+        ArrayAdapter<CharSequence> roleAdapter = new ArrayAdapter<CharSequence>(getApplication(),
                 R.layout.simple_spinner_item_role, role );
 
         roleAdapter.setDropDownViewResource(R.layout.simple_list_item_dropdown);
@@ -69,17 +59,14 @@ public class LoginActivity extends AppCompatActivity {
 
     //get all view in activity
     public void addControls(){
-        traineeViewModel = new ViewModelProvider(this).get(TraineeViewModel.class);
-        authenticationViewModel = new ViewModelProvider(this).get(AuthenticationViewModel.class);
-
         getSupportActionBar().hide();
         edtEmail = findViewById(R.id.edt_email);
         edtPassword = findViewById(R.id.edt_password);
         btnSignIn = findViewById(R.id.btn_sign_in);
         cbRememberMe = findViewById(R.id.cb_remember_me);
         pnRole = findViewById(R.id.spinner_role);
-        errorUserName = findViewById(R.id.txt_error_username);
-        errorPass = findViewById(R.id.txt_error_pass);
+
+        authenticationService = ApiUtils.getAuthenticationService();
     }
     //set event for views
     public void addEvent(){
@@ -91,38 +78,43 @@ public class LoginActivity extends AppCompatActivity {
             final Boolean remember = cbRememberMe.isChecked();
             final String role = pnRole.getSelectedItem().toString();
 
-            Boolean flag = check(username,password);
-            if (flag){
+            //if the user has not entered the complete information
+            if(TextUtils.isEmpty(username)) {
+            }
+            if(TextUtils.isEmpty(password)){
+            }
+            else {
                 AuthenticationRequest authenticationRequest =
                         new AuthenticationRequest(username,password,role,remember);
 
-                authenticationViewModel.initData(authenticationRequest);
-                authenticationViewModel.getAuthenticationResponseMutableLiveData().observe(this,
-                        authenticationResponse -> {
-                            setSession(authenticationResponse, username, role);
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                        }
-                );
+                authenticationService.login(authenticationRequest)
+                        .enqueue( new Callback<AuthenticationResponse>() {
+                            @Override
+                            public void onResponse(Call<AuthenticationResponse> call, Response<AuthenticationResponse> response) {
+
+                                if (response.isSuccessful()&&response.body()!=null){
+                                    AuthenticationResponse authenticationResponse = response.body();
+
+                                    setSession(authenticationResponse, username, role);
+                                    Log.e("Success",authenticationResponse.getJwt());
+
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<AuthenticationResponse> call, Throwable t) {
+                                Log.e("Error",t.getLocalizedMessage());
+                                showToast("Error");
+                            }
+                        });
             }
+
+//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//            startActivity(intent);
         });
-    }
 
-    private Boolean check(String username, String password) {
-        Boolean flag =true;
-        errorPass.setVisibility(View.GONE);
-        errorUserName.setVisibility(View.GONE);
-
-        //if the user has not entered the complete information
-        if(TextUtils.isEmpty(username)) {
-            errorUserName.setVisibility(View.VISIBLE);
-            flag =false;
-        }
-        if(TextUtils.isEmpty(password)){
-            errorPass.setVisibility(View.VISIBLE);
-            flag =false;
-        }
-        return  flag;
     }
 
     private void setSession(AuthenticationResponse authenticationResponse, String username, String role) {
@@ -133,12 +125,6 @@ public class LoginActivity extends AppCompatActivity {
         SessionManager.getInstance().setUserName(username);
         SessionManager.getInstance().setUserRole(role);
 
-        if (role.equals(SystemConstant.TRAINEE_ROLE)){
-            traineeViewModel.initData();
-            traineeViewModel.getTraineeMutableLiveData().observe(this,trainee -> {
-                SessionManager.getInstance().setTrainee(trainee);
-            });
-        }
 //        edtPassword.setText("");
 //        edtEmail.setText("");
     }

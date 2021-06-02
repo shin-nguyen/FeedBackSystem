@@ -3,9 +3,12 @@ package com.gaf.project.viewmodel;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.gaf.project.dialog.SuccessDialog;
+import com.gaf.project.fragment.AssignmentFragment;
 import com.gaf.project.model.Question;
 import com.gaf.project.response.DeleteResponse;
 import com.gaf.project.response.QuestionResponse;
@@ -52,14 +55,12 @@ public class QuestionViewModel extends ViewModel {
     }
 
     public void addQuestion(Question question){
-        setActionStatus(true);
         Call<Question> call = questionService.create(question);
         call.enqueue(new Callback<Question>() {
             @Override
             public void onResponse(Call<Question> call, Response<Question> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     initData();
-                    setActionStatus(false);
                     Log.e("Success", "Success");
                 }
             }
@@ -72,14 +73,12 @@ public class QuestionViewModel extends ViewModel {
     }
 
     public void updateQuestion(Question question){
-        setActionStatus(true);
         Call<Question> call = questionService.update(question);
         call.enqueue(new Callback<Question>() {
             @Override
             public void onResponse(Call<Question> call, Response<Question> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     initData();
-                    setActionStatus(false);
                     Log.e("Success", "Success");
                 }
             }
@@ -92,13 +91,14 @@ public class QuestionViewModel extends ViewModel {
     }
 
     public void deleteQuestion(Question question){
-        setActionStatus(true);
+        setActionStatus(false);
         Call<DeleteResponse> call =  questionService.delete(question.getQuestionID());
         call.enqueue(new Callback<DeleteResponse>() {
             @Override
             public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
                 if (response.isSuccessful()&&response.body().getDeleted()){
                     initData();
+                    setActionStatus(true);
                     Log.e("Success", "Success");
                 }
             }
@@ -120,9 +120,5 @@ public class QuestionViewModel extends ViewModel {
 
     public void setActionStatus(Boolean actionStatus) {
         this.actionStatus = actionStatus;
-    }
-
-    public List<Question> getListQuestion() {
-        return mListQuestion;
     }
 }

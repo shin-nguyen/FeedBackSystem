@@ -2,17 +2,12 @@ package com.gaf.project.utils;
 
 import android.content.Context;
 
-import com.gaf.project.constant.SystemConstant;
-import com.gaf.project.model.Trainee;
-import com.google.gson.Gson;
-
 public class SessionManager {
 
     private static final String USER_NAME ="USER_NAME";
     private static final String REMEMBER_ME ="REMEMBER_ME";
     private static final String IS_LOGIN ="IS_LOGIN";
     private static final String USER_ROLE ="USER_ROLE";
-
 
     private MySharedPreferences mySharedPreferences;
     private static SessionManager instance;
@@ -60,13 +55,4 @@ public class SessionManager {
     public String getUserRole() {
         return SessionManager.getInstance().mySharedPreferences.getStringValue(USER_ROLE);
     }
-
-    public Trainee getTrainee(){
-        return SessionManager.getInstance().mySharedPreferences.getTrainee(SystemConstant.TRAINEE_ROLE);
-    }
-
-    public void setTrainee(Trainee trainee) {
-        SessionManager.getInstance().mySharedPreferences.setTrainee(SystemConstant.TRAINEE_ROLE,trainee);
-    }
-
 }

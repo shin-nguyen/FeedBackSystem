@@ -83,12 +83,36 @@ public class TraineeHomeFragment extends Fragment {
         return view;
     }
 
+<<<<<<< HEAD
+=======
+    private void setAssignmentAdapter(Call<AssignmentResponse> call){
+        call.enqueue(new Callback<AssignmentResponse>() {
+            @Override
+            public void onResponse(Call<AssignmentResponse> call, Response<AssignmentResponse> response) {
+                if (response.isSuccessful()&&response.body()!=null){
+                    listAssignment = response.body().getAssignments();
+                    feedbackTraineeAdapter.setData(listAssignment);
+                    Log.e("Success","Assignment get success");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AssignmentResponse> call, Throwable t) {
+                Log.e("Error",t.getLocalizedMessage());
+                showToast("Call API fail!");
+            }
+        });
+    }
+
+>>>>>>> parent of d8a46df (fix conflict)
     private void doFeedback(Assignment item) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("item", item);
 
         Navigation.findNavController(view).navigate(R.id.action_nav_trainee_home_fragment_to_doFeedbackFragment,bundle);
     }
-
+    public void showToast(String string){
+        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
+    }
 
 }

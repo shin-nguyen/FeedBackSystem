@@ -1,17 +1,24 @@
 package com.gaf.project;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.gaf.project.constant.SystemConstant;
+import com.gaf.project.dialog.SuccessDialog;
 import com.gaf.project.fragment.JoinFragment;
 import com.gaf.project.utils.SessionManager;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -87,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_homepage, R.id.nav_assignment, R.id.nav_class, R.id.nav_module,
                 R.id.nav_enrollment,R.id.nav_feedback, R.id.nav_result, R.id.nav_question,
                 R.id.nav_contact,R.id.nav_join,R.id.nav_log_out,
-                R.id.add_feedback_fragment, R.id.add_assignment_fragment, R.id.action_question_fragment,
+                R.id.add_feedback_fragment, R.id.add_assignment_fragment, R.id.add_question_fragment,
                 R.id.edit_assignment_fragment,R.id.add_class_fragment,R.id.nav_trainee_home_fragment,R.id.detailClassFragment,
                 R.id.addModuleFragment, R.id.review_feedback_fragment, R.id.detailEnrollmentFragment, R.id.editEnrollmentFragment,
                 R.id.do_feedback_fragment)
@@ -106,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
                     dialogFragment.setCancelable(false);
                     dialogFragment.show(getSupportFragmentManager(), "join");
                 }
-
                 NavigationUI.onNavDestinationSelected(item, navController);
                 drawer.closeDrawer(GravityCompat.START);
                 return true;

@@ -13,12 +13,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Comment implements Serializable {
+
     @SerializedName("module")
     @Expose
     private Module module;
     @SerializedName("trainee")
     @Expose
-    private Trainee trainee;
+    private Trainer trainee;
     @SerializedName("mClass")
     @Expose
     private Class mClass;

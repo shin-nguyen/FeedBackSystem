@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,16 +15,13 @@ import com.gaf.project.R;
 import com.gaf.project.model.Assignment;
 import com.gaf.project.model.Question;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.QuestionViewHolder> implements Filterable {
+public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.QuestionViewHolder> {
 
     private List<Question> mListQuestion;
-    private List<Question> mListQuestionOld;
 
     private QuestionAdapter.IClickItem iClickItem;
-
     public interface IClickItem{
         void update(Question item);
         void delete(Question item);
@@ -37,7 +32,6 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
 
     public void setData(List<Question> list){
         this.mListQuestion = list;
-        this.mListQuestionOld = list;
         notifyDataSetChanged();
     }
 
@@ -103,6 +97,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
         }
     }
 
+<<<<<<< HEAD
     @Override
     public Filter getFilter() {
         return new Filter() {
@@ -148,6 +143,12 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
 
         String result="";
         for(int i=0;i<=length;i++){
+=======
+    public String convertToWhitespace (String string){
+        int error = 14;
+        String result="";
+        for(int i=0;i<=string.length()+error;i++){
+>>>>>>> parent of d8a46df (fix conflict)
             result+=" ";
         }
         return result;

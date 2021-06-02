@@ -8,7 +8,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="horizontal"
         android:layout_margin="8dp"
         android:padding="8dp">
@@ -23,14 +24,19 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tvNote"
+        android:id="@+id/tvTest"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Test"
+        android:textSize="30sp"
+        android:textColor="@color/search_box_border"
+        android:gravity="center"/>
 
     <LinearLayout
-        android:id="@+id/layMain"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="5"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -41,10 +47,16 @@
             android:layout_margin="8dp">
 
             <TextView
-                android:id="@+id/tvTopicName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:text="Training program and content"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="(noi dung dao tao)"/>
 
             <lecho.lib.hellocharts.view.PieChartView
                 android:id="@+id/chart1"
@@ -53,11 +65,17 @@
                 android:layout_gravity="center"/>
 
             <TextView
-                android:id="@+id/tvTopicName1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:text="Course organization"
                 android:layout_marginTop="32dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="(to chuc khoa hoc)"/>
 
             <lecho.lib.hellocharts.view.PieChartView
                 android:id="@+id/chart2"
@@ -75,7 +93,12 @@
             android:layout_margin="8dp">
 
             <TextView
-                android:id="@+id/tvTopicName2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Trainer Coach"/>
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"/>
@@ -87,12 +110,16 @@
                 android:layout_gravity="center"/>
 
             <TextView
-                android:id="@+id/tvTopicName3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Other"
                 android:layout_marginTop="32dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"/>
 
             <lecho.lib.hellocharts.view.PieChartView
                 android:id="@+id/chart4"
