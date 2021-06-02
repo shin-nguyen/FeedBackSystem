@@ -69,10 +69,12 @@ public class AddFeedBackFragment extends Fragment {
     private Spinner spnFeedbackType;
     private EditText feedbackTitle;
     private ArrayAdapter<TypeFeedback> typeFeedbackArrayAdapter;
-    private Button  btnBack,btnReview;
+    private Button  btnBack, btnReview;
     private Integer idFb;
     private TypeFeedbackViewModel typeFeedbackViewModel;
     private TopicViewModel topicViewModel;
+
+    Feedback mFeedbackEdit = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,10 +89,13 @@ public class AddFeedBackFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.add_feedback, container, false);
         initComponents(view);
-        Feedback mFeedbackEdit = null;
 
+        //create bundle to put mission or item feedback to next fragment
         Bundle bundle = new Bundle();
+
+        //get mission from bundle(add, update)
         mission = getArguments().getString("mission");
+
         // Choose mission to set text view
         if(mission.equals(SystemConstant.ADD)){
             title.setText("Create New Feedback");
@@ -98,13 +103,14 @@ public class AddFeedBackFragment extends Fragment {
         }
         else  if(mission.equals(SystemConstant.UPDATE)){
             title.setText("Edit New Feedback");
+
             bundle.putString("mission", SystemConstant.UPDATE);
 
             try {
                 mFeedbackEdit = (Feedback) getArguments().getSerializable("item");
                 if (mFeedbackEdit != null) {
                     idFb = mFeedbackEdit.getFeedbackID();
-                    Log.e("Success","Get Class Success");
+                    feedbackTitle.setText(mFeedbackEdit.getTitle());
                 }
             }
             catch (Exception ex){
@@ -119,6 +125,10 @@ public class AddFeedBackFragment extends Fragment {
             public void onChanged(List<TypeFeedback> typeFeedbacks) {
                 typeFeedbackArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, typeFeedbacks);
                 spnFeedbackType.setAdapter(typeFeedbackArrayAdapter);
+
+                if (mFeedbackEdit != null){
+                    spnFeedbackType.setSelection(typeFeedbackArrayAdapter.getPosition(mFeedbackEdit.getTypeFeedback()));
+                }
             }
         });
 
@@ -145,6 +155,7 @@ public class AddFeedBackFragment extends Fragment {
                 return;
             }
 
+            //check is user choose question per topic
             if (listTopic.size() == topicAdapter.getmListTopic().size()){
                 TypeFeedback typeFeedback = (TypeFeedback) spnFeedbackType.getSelectedItem();
                 List<Question> questionList = topicAdapter.getmListQuestion();

@@ -52,7 +52,7 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ModuleView
         }
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat timeFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("dd/MM/yyyy");
 
 
         holder.id.setText(String.valueOf(module.getModuleID()));

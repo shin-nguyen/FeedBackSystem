@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -141,15 +142,13 @@ public class ClassFragment extends Fragment {
         if (checkDeleteFlag) {
             dialog = new WarningDialog(
                     () -> {
-                        classViewModel.deleted(item);
-                        showDialog("Delete");
+                        showDialog(classViewModel.deleted(item),"Delete");
                     },
-                    "Class is operating. Do you readly want to delete this class?");
+                    "Class is operating. Do you really want to delete this class?");
         } else {
             dialog = new WarningDialog(
                     () -> {
-                        classViewModel.deleted(item);
-                        showDialog("Delete");
+                        showDialog( classViewModel.deleted(item),"Delete");
                     },
                     "Do you want to delete this item?");
         }
@@ -164,14 +163,17 @@ public class ClassFragment extends Fragment {
         return  true;
     }
 
-    public void showDialog(String action){
-        Boolean actionStatus = classViewModel.getActionStatus().booleanValue();
-        if(actionStatus){
-            showSuccessDialog(action+" Success!!");
-        }else {
-            showFailDialog(action+" Fail!!");
-        }
+    public void showDialog(MutableLiveData<String> actionStatus, String action){
+        actionStatus.observe(getViewLifecycleOwner(),s -> {
+            if(s.equals(SystemConstant.SUCCESS)){
+                showSuccessDialog(action+" Success!!");
+            }else {
+                showFailDialog(action+" Fail!!");
+            }
+        });
+
     }
+
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }

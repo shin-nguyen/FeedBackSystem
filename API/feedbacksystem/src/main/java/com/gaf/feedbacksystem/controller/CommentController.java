@@ -34,7 +34,7 @@ public class CommentController {
             return  commentService.save(traineeCommentDto);
         }
         catch (MyResourceNotFoundException exc) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Classes Not Found", exc);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comment Not Found", exc);
         }
     }
 

@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,7 +47,6 @@ public class ModuleFragment extends Fragment {
     private View view;
     private RecyclerView rcvModule;
     private ModuleAdapter adapter;
-    private List<Module> moduleList;
     private ModuleViewModel moduleViewModel;
     private  String userRole;
     private Button btnAddModule;
@@ -128,15 +128,14 @@ public class ModuleFragment extends Fragment {
         if (checkDeleteFlag) {
             dialog = new WarningDialog(
                     () -> {
-                        moduleViewModel.delete(item);
-                        showDialog("Delete");
+                        showDialog(moduleViewModel.delete(item),"Delete");
                     },
                     "This Module has been started. You readly want to delete this Module?");
         } else {
             dialog = new WarningDialog(
                     () -> {
-                        moduleViewModel.delete(item);
-                        showDialog("Delete");
+                        ;
+                        showDialog(moduleViewModel.delete(item),"Delete");
                     },
                     "Do you want to delete this Module?");
         }
@@ -151,13 +150,15 @@ public class ModuleFragment extends Fragment {
         return  true;
     }
 
-    public void showDialog(String action){
-        Boolean actionStatus = moduleViewModel.getActionStatus().booleanValue();
-        if(actionStatus){
-            showSuccessDialog(action+" Success!!");
-        }else {
-            showFailDialog(action+" Fail!!");
-        }
+    public void showDialog(MutableLiveData<String> actionStatus, String action){
+        actionStatus.observe(getViewLifecycleOwner(),s -> {
+            if(s.equals(SystemConstant.SUCCESS)){
+                showSuccessDialog(action+" Success!!");
+            }else {
+                showFailDialog(action+" Fail!!");
+            }
+        });
+
     }
 
     public void showToast(String string){

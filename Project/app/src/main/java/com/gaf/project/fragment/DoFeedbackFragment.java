@@ -1,5 +1,6 @@
 package com.gaf.project.fragment;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,8 +74,10 @@ public class DoFeedbackFragment extends Fragment {
         try {
             assignment = (Assignment) getArguments().getSerializable("item");
             if (assignment != null) {
-                moduleName.setText(assignment.getModule().getModuleName());
-                className.setText(assignment.getMClass().getClassName());
+                moduleName.setText("Module: " + assignment.getModule().getModuleName());
+
+                className.setText("Class: " + assignment.getMClass().getClassName());
+
                 trainerName.setText(assignment.getTrainer().getName());
                 Log.e("Success","Get Class Success");
             }
@@ -91,6 +97,7 @@ public class DoFeedbackFragment extends Fragment {
                 if (response.isSuccessful()&& response.body()!=null){
                     topicList = response.body().getTopic();
                     topicTrainningAdapter.setData(topicList);
+                    setTopic(topicList);
                 }
             }
 
@@ -107,10 +114,12 @@ public class DoFeedbackFragment extends Fragment {
             Trainee trainee = SessionManager.getInstance().getTrainee();
             Comment comment = new Comment(assignment.getModule(),trainee,assignment.getMClass(),textComment);
 
-            List<Answer> mList = topicTrainningAdapter.getmListAnswer();
+            List<Answer> mListAnswer = topicTrainningAdapter.getmListAnswer();
 
-            if (textComment.isEmpty() || mList.size() != assignment.getModule().getFeedback().getQuestions().size()){
-                showFailDialog("Please complete your feedback");
+            int numberQuestion = assignment.getModule().getFeedback().getQuestions().size() * topicList.size();
+
+            if (textComment.isEmpty() || mListAnswer.size() != numberQuestion){
+                showFailDialog("Please complete your feedback!");
                 return;
             }
 
@@ -119,7 +128,7 @@ public class DoFeedbackFragment extends Fragment {
                 @Override
                 public void onResponse(Call<Comment> call, Response<Comment> response) {
                     if (response.isSuccessful()&& response.body()!=null){
-                        showSuccessDialog("Success");
+                        showSuccessDialog("Submit Feedback Success");
                     }
                 }
 
@@ -130,7 +139,7 @@ public class DoFeedbackFragment extends Fragment {
             });
 
 
-            Call<AnswerResponse> answerResponseCall = answerService.addAll(mList);
+            Call<AnswerResponse> answerResponseCall = answerService.addAll(mListAnswer);
             answerResponseCall.enqueue(new Callback<AnswerResponse>() {
                 @Override
                 public void onResponse(Call<AnswerResponse> call, Response<AnswerResponse> response) {
@@ -145,6 +154,10 @@ public class DoFeedbackFragment extends Fragment {
         });
         rcvAnswerInFeedbackTrainee.setAdapter(topicTrainningAdapter);
         return view;
+    }
+
+    private void setTopic(List<Topic> topicList) {
+        this.topicList = topicList;
     }
 
     private void initComponents(View view) {

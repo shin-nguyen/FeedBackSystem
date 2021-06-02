@@ -54,10 +54,8 @@ public class TraineeAssignmentController {
             }
             TraineeAssignmentDto traineeAssignmentDto = new TraineeAssignmentDto();
             boolean isCodeAvailable = traineeAssignmentService.checkCodeByTraineeId(username, code);
-            //traineeAssignmentDto = traineeAssignmentService.checkIsAvailable(username, code);
                 try {
                     //check have trainee joined class
-//                    if (traineeAssignmentDto != null){
                     if (isCodeAvailable == true){
                         response.put("added", 0);
                     }else
