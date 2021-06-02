@@ -59,7 +59,7 @@ public class ClassServiceImpl implements IClassService {
 
 		oldClass.setClassName(classDto.getClassName());
 		oldClass.setCapacity(classDto.getCapacity());
-
+		oldClass.setEndTime(classDto.getEndTime());
 		return ObjectMapperUtils.map(classRepository.save(oldClass), ClassDto.class);
 	}
 	@Override

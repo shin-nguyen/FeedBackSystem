@@ -75,9 +75,7 @@ public class DoFeedbackFragment extends Fragment {
             assignment = (Assignment) getArguments().getSerializable("item");
             if (assignment != null) {
                 moduleName.setText("Module: " + assignment.getModule().getModuleName());
-
                 className.setText("Class: " + assignment.getMClass().getClassName());
-
                 trainerName.setText(assignment.getTrainer().getName());
                 Log.e("Success","Get Class Success");
             }

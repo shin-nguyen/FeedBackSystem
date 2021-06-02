@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -56,7 +57,7 @@ public class Class implements Serializable {
 
     @SerializedName("trainees")
     @Expose
-    private Set<Trainee> trainees = null;
+    private List<Trainee> trainees = null;
 
     @Override
     public String toString() {

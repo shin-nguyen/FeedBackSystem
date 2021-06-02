@@ -22,18 +22,12 @@ insert trainer value('nghia','langde@gmail.com','dangvannghia','$2y$12$kxOPzw5uh
 '1234','NhaTrang',1,true,true,'0918948074','1234');
 
 select * from trainee;
-insert trainee value('thao','thaole301000@gmail.com','thao','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
-'1234','TanThanh',1,true,'0918948074','1234');
-insert trainee value('hung','hung@gmail.com','hung','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
-'1234','NT',1,true,'0918948074','1234');
-insert trainee value('thong','thong@gmail.com','thong','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
-'1234','NT',1,true,'0918948074','1234');
-insert trainee value('kai','kai@gmail.com','kai','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
-'1234','NT',1,true,'0918948074','1234');
-insert trainee value('nghia','nghia@gmail.com','nghia','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
-'1234','NT',1,true,'0918948074','1234');
-insert trainee value('langde','nghia@gmail.com','langde','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu',
-'1234','NT',1,true,'0918948074','1234');
+insert trainee value('thao','1234','CuChi','thaole301000@gmail.com',1,true,'thao','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu','0918948074','1234');
+insert trainee value('hung','1234','CuChi','thaole301000@gmail.com',1,true,'hung','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu','0918948074','1234');
+insert trainee value('thong','1234','CuChi','thaole301000@gmail.com',1,true,'thong','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu','0918948074','1234');
+insert trainee value('kai','1234','CuChi','thaole301000@gmail.com',1,true,'kai','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu','0918948074','1234');
+insert trainee value('nghia','1234','CuChi','thaole301000@gmail.com',1,true,'nghia','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu','0918948074','1234');
+insert trainee value('langde','1234','CuChi','thaole301000@gmail.com',1,true,'langde','$2y$12$kxOPzw5uh02.8e1XyMt1UO0pV.Eriyoqx137fPMWLd0f.9eRsUczu','0918948074','1234');
 
 select * from Type_Feedback;
 insert Type_Feedback value(1,false,"TheLoaiA");
