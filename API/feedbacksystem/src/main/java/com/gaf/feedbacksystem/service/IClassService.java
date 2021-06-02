@@ -17,4 +17,6 @@ public interface IClassService {
 	ClassDto updateTrainee(Integer oldIdClass, Integer newIdClass, String idTrainee);
 
 	ClassDto deleteTrainee(String idTrainee,Integer idClass);
+
+	ClassDto addEnrollment(String idTrainee,Integer idClass);
 }

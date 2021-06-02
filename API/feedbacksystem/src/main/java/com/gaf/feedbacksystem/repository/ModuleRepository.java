@@ -23,10 +23,11 @@ public interface ModuleRepository  extends JpaRepository<Module,Integer> {
     @Query("from Module  where isDeleted=false")
     List<Module> findAllByDeletedIsFalse();
 
-    @Query("select m from Module m join Assignment a on m.moduleID = a.primaryKey.module.moduleID and a.primaryKey.trainer.userName = :userName")
+    @Query("select m from Module m join Assignment a on m.moduleID = a.primaryKey.module.moduleID and a.primaryKey.trainer.userName = :userName and m.isDeleted=false")
     List<Module> findAllByTrainer(@Param("userName") String userName);
 
-//    @Query("select m from Module m  join Assignment assignment on m.moduleID = assignment.primaryKey.module.moduleID join fetch Class c join fetch c.trainees enrollment where enrollment.userName = :userName")
-//    List<Module> findAllByTrainee(@Param("userName") String userName);
+    @Query("select m from Module m  join Assignment assignment on m.moduleID = assignment.primaryKey.module.moduleID join TraineeAssignment ta on ta.primaryKey.assignment.registrationCode = assignment.registrationCode and ta.primaryKey.trainee.userName = :userName and m.isDeleted=false ")
+    List<Module> findAllByTrainee(@Param("userName") String userName);
 
+    Module findByModuleID(Integer id);
 }

@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
@@ -15,33 +16,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gaf.project.R;
+import com.gaf.project.constant.MessConstant;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
 import com.gaf.project.model.Class;
-import com.gaf.project.response.ClassResponse;
-import com.gaf.project.service.ClassService;
-import com.gaf.project.utils.ApiUtils;
 import com.gaf.project.viewmodel.ClassViewModel;
-import com.gaf.project.viewmodel.QuestionViewModel;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class AddClassFragment extends Fragment {
 
@@ -80,6 +71,7 @@ public class AddClassFragment extends Fragment {
         if(mission.equals(SystemConstant.ADD)){
             mTitle.setText("Add Class");
         }
+        else
         if(mission.equals(SystemConstant.UPDATE)){
             mTitle.setText("Edit Class");
             try {
@@ -88,11 +80,12 @@ public class AddClassFragment extends Fragment {
                     SimpleDateFormat myFra = new SimpleDateFormat("MM/dd/yyyy");
                     idClass = mClassEdit.getClassID();
                     mName.setText(mClassEdit.getClassName());
-                    mCapacity.setText(mClassEdit.getCapacity());
+                    mCapacity.setText(mClassEdit.getCapacity().toString());
                     mStartDate.setText(myFra.format(mClassEdit.getStartTime()));
                     mEndDate.setText(myFra.format(mClassEdit.getEndTime()));
 
                     mStartDate.setEnabled(false);
+                    btnStartDate.setEnabled(false);
                 }
             }
             catch (Exception ex){
@@ -111,13 +104,11 @@ public class AddClassFragment extends Fragment {
 
                 if(mission.equals(SystemConstant.UPDATE)){
                     Class mClass = new Class(idClass,name,capacity,startDate,endDate)   ;
-                    classViewModel.update(mClass);
-
-                    showDialog("Edit");
+                    showDialog(classViewModel.update(mClass),"Edit");
                 }
                 else if(mission.equals(SystemConstant.ADD)){
                     Class mClass = new Class(name,capacity,startDate,endDate);
-                    classViewModel.add(mClass);
+                    showDialog(classViewModel.add(mClass),"Add");
                 }
             }
         });
@@ -160,46 +151,40 @@ public class AddClassFragment extends Fragment {
 
         if(mName.getText().toString().isEmpty()||mName.getText().toString().length()>255){
             mNameWarning.setVisibility(View.VISIBLE);
-            return !flag;
+            flag = false;
         }
 
-        if(mCapacity.getText().toString().isEmpty()||Integer.valueOf(mCapacity.getText().toString())>0){
+        if(mCapacity.getText().toString().isEmpty()||Integer.valueOf(mCapacity.getText().toString())<0){
             mCapacityWarning.setVisibility(View.VISIBLE);
-            return !flag;
-        }
-
-        if(mStartDate.getText().toString().isEmpty()){
-            mStartDateWaring.setVisibility(View.VISIBLE);
-            return !flag;
+            flag = false;
         }
 
         DateFormat dfs = new SimpleDateFormat("MM/dd/yyyy");
         Date startDate = new Date();
         try {
             startDate= dfs.parse(mStartDate.getText().toString());
-            if (startDate.compareTo(new Date())<0){
+            if (startDate.compareTo(new Date())<0&&!mission.equals(SystemConstant.UPDATE)){
                 mStartDateWaring.setVisibility(View.VISIBLE);
-                return !flag;
+                mStartDateWaring.setText(MessConstant.DATE_NOW);
+                flag = false;
             }
         } catch (ParseException e) {
             mStartDateWaring.setVisibility(View.VISIBLE);
-            return !flag;
-        }
-
-        if(mEndDate.getText().toString().isEmpty()){
-            mEndDateWarning.setVisibility(View.VISIBLE);
-            return !flag;
+            mStartDateWaring.setText(MessConstant.DATE_NULL);
+            flag = false;
         }
 
         try {
             Date date = dfs.parse(mEndDate.getText().toString());
             if (date.compareTo(startDate)<0){
                 mEndDateWarning.setVisibility(View.VISIBLE);
-                return !flag;
+                mEndDateWarning.setText(MessConstant.DATE_NOW);
+                flag = false;
             }
         } catch (ParseException e) {
             mEndDateWarning.setVisibility(View.VISIBLE);
-            return !flag;
+            mEndDateWarning.setText(MessConstant.DATE_NULL);
+            flag = false;
         }
 
         return  flag;
@@ -241,13 +226,15 @@ public class AddClassFragment extends Fragment {
         btnStartDate =(ImageButton) view.findViewById(R.id.btn_add_start_date);
         btnEndDate =(ImageButton) view.findViewById(R.id.btn_add_end_date);
     }
-    public void showDialog(String action){
-        Boolean actionStatus = classViewModel.getActionStatus().booleanValue();
-        if(actionStatus){
-            showSuccessDialog(action+" Success!!");
-        }else {
-            showFailDialog(action+" Fail!!");
-        }
+    public void showDialog(MutableLiveData<String> actionStatus, String action){
+        actionStatus.observe(getViewLifecycleOwner(),s -> {
+            if(s.equals(SystemConstant.SUCCESS)){
+                showSuccessDialog(action+" Success!!");
+            }else {
+                showFailDialog(action+" Fail!!");
+            }
+        });
+
     }
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();

@@ -23,6 +23,7 @@ public interface ClazzRepository extends JpaRepository<Class, Integer> {
     List<Class> findAllByTrainee(@Param("userName") String userName);
 
     Class findByClassID(Integer classID);
+
     @Transactional
     @Modifying
     @Query("update Class set isDeleted =true where classID = :id ")

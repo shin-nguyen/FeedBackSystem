@@ -1,12 +1,9 @@
 package com.gaf.project.fragment;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
@@ -15,22 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.anychart.AnyChart;
 import com.gaf.project.R;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Class;
 import com.gaf.project.model.Module;
-import com.gaf.project.model.Trainer;
 import com.gaf.project.response.ClassResponse;
 import com.gaf.project.response.ModuleResponse;
 import com.gaf.project.service.ClassService;
 import com.gaf.project.service.ModuleService;
-import com.gaf.project.service.TrainerService;
 import com.gaf.project.utils.ApiUtils;
 import com.gaf.project.utils.SessionManager;
 
@@ -40,6 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+//fragment to show statistics for admin, trainer in nav_result
 public class ResultFragment extends Fragment {
 
     private Button btnShowOverview, btnViewComment, btnShowDetail;
@@ -75,15 +68,20 @@ public class ResultFragment extends Fragment {
         btnViewComment = view.findViewById(R.id.btnViewComment);
         btnShowDetail = view.findViewById(R.id.btnShowDetail);
 
+        //default hides btnViewComment
         btnViewComment.setVisibility(view.INVISIBLE);
+
+        //default have fragment Result by pie chart, but no data
         Fragment fragPieChart = new ResultPieChartFragment();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.statistics_fragment_container, fragPieChart).commit();
 
+        //get Role of user
         userRole = SessionManager.getInstance().getUserRole();
 
+        //set up spinner Class for role
         final Spinner spnClass = (Spinner) view.findViewById(R.id.spinner_class_name);
-
+        //role: admin, display all classes
         if(userRole.equals(SystemConstant.ADMIN_ROLE)){
 
             Call<ClassResponse> callClass =  classService.loadListClass();
@@ -106,6 +104,7 @@ public class ResultFragment extends Fragment {
                     }
                 });}).run();
         }
+        //role: trainer, display classes of this trainer
         else if(userRole.equals(SystemConstant.TRAINER_ROLE)){
 
             Call<ClassResponse> callClass =  classService.loadListClassByTrainer();
@@ -130,8 +129,9 @@ public class ResultFragment extends Fragment {
 
         }
 
+        //set up spinner Module for role
         final Spinner spnModule = (Spinner) view.findViewById(R.id.spinner_module_name);
-
+        //role: admin, display all modules
         if(userRole.equals(SystemConstant.ADMIN_ROLE)) {
 
             Call<ModuleResponse> callModule = moduleService.loadModuleAdmin();
@@ -157,6 +157,7 @@ public class ResultFragment extends Fragment {
             }).run();
 
         }
+        //role: trainer, display modules of this trainer
         else if(userRole.equals(SystemConstant.TRAINER_ROLE)){
 
             Call<ModuleResponse> callModule = moduleService.loadModuleTrainer();
@@ -183,72 +184,80 @@ public class ResultFragment extends Fragment {
 
         }
 
+        //button Show pieChart
         btnShowOverview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                //hide btnViewComment if it's not hidden
                 btnViewComment.setVisibility(view.INVISIBLE);
 
+                //get 2 params: class and module are chosen
                 Module module = (Module) spnModule.getSelectedItem();
                 Class mClass = (Class) spnClass.getSelectedItem();
 
+                //send 2 params: class and module are chosen
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("class", mClass);
                 bundle.putSerializable("module", module);
 
+                //display fragment Result by pie chart
                 Fragment fragPieChart = new ResultPieChartFragment();
                 fragPieChart.setArguments(bundle);
-
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                 transaction.replace(R.id.statistics_fragment_container, fragPieChart).commit();
-
             }
         });
 
+        //button View Comment
         btnViewComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                //hide btnViewComment
                 btnViewComment.setVisibility(view.INVISIBLE);
 
+                //get 2 params: class and module are chosen
                 Module module = (Module) spnModule.getSelectedItem();
                 Class mClass = (Class) spnClass.getSelectedItem();
 
+                //send 2 params: class and module are chosen
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("class", mClass);
                 bundle.putSerializable("module", module);
 
+                //display fragment View all comments for class and module
                 Fragment fragViewCmt = new ViewCommentFragment();
                 fragViewCmt.setArguments(bundle);
-
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                 transaction.replace(R.id.statistics_fragment_container, fragViewCmt).commit();
-
             }
         });
 
+        //button show statistics by percent
         btnShowDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                //display btnViewComment
                 btnViewComment.setVisibility(view.VISIBLE);
 
+                //get 2 params: class and module are chosen
                 Module module = (Module) spnModule.getSelectedItem();
                 Class mClass = (Class) spnClass.getSelectedItem();
 
+                //send 2 params: class and module are chosen
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("class", mClass);
                 bundle.putSerializable("module", module);
 
+                //display fragment Result by percent for class and module
                 Fragment fragPercent = new ResultPercentFragment();
                 fragPercent.setArguments(bundle);
-
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                 transaction.replace(R.id.statistics_fragment_container, fragPercent).commit();
-
             }
         });
-
         return view;
     }
 

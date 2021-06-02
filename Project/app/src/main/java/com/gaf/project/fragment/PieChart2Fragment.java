@@ -31,6 +31,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+//fragment to show pie chart for topic, it's in fragment ResultPieChart
 public class PieChart2Fragment extends Fragment{
 
     private TextView tvTopicName1, tvTopicName2, tvTopicName3, tvTopicName4;
@@ -70,9 +71,12 @@ public class PieChart2Fragment extends Fragment{
         pieChartView4 = view.findViewById(R.id.chart4);
 
         if(getArguments() != null) {
+
+            //receive data: list Answers
             answerList = new ArrayList<>();
             answerList = (List<Answer>) getArguments().getSerializable("listAnswer");
 
+            //get list Topic
             topicList = new ArrayList<>();
             Call<TopicResponse> callTopic =  topicService.loadListTopic();
             callTopic.enqueue(new Callback<TopicResponse>() {
@@ -86,6 +90,7 @@ public class PieChart2Fragment extends Fragment{
                         tvTopicName3.setText(topicList.get(2).getTopicName());
                         tvTopicName4.setText(topicList.get(3).getTopicName());
 
+                        //set up pie chart for 4 topics
                         for(int i=1; i<=4; i++){
                             setupPieChartTopic(view, answerList, i);
                         }
@@ -102,8 +107,10 @@ public class PieChart2Fragment extends Fragment{
         return view;
     }
 
+    //set up pie char for topic
     private void setupPieChartTopic(View view, List<Answer> answerList, int topicId) {
 
+        //select list answers by topic
         answerListByTopic = new ArrayList<>();
         for(int i=0; i<answerList.size(); i++){
             if(answerList.get(i).getQuestion().getTopic().getTopicID() == topicId){
@@ -111,13 +118,16 @@ public class PieChart2Fragment extends Fragment{
             }
         }
 
+        //make pie chart for list answers by topic
         doPieChart(view, answerListByTopic, topicId);
     }
 
+    //make pie chart for list answers by topic
     private void doPieChart(View view, List<Answer> li, int topicId) {
 
         List pieData = new ArrayList<>();
 
+        //if list answers by topic have no answer, don't have pie chart
         int answerSum = li.size();
         if(answerSum == 0){
             if(topicId == 1){
@@ -135,6 +145,7 @@ public class PieChart2Fragment extends Fragment{
             return;
         }
 
+        //pie chart have 5 values: 0,1,2,3,4 and there are their labels
         List<String> valueNames = new ArrayList<>();
         valueNames.add("Strongly Disagree");
         valueNames.add("Disagree");
@@ -142,6 +153,7 @@ public class PieChart2Fragment extends Fragment{
         valueNames.add("Agree");
         valueNames.add("Strongly Agree");
 
+        //calculate percent
         for (int i=0; i<5; i++){
             int count = 0;
             for(int k=0; k<li.size(); k++){
@@ -151,10 +163,13 @@ public class PieChart2Fragment extends Fragment{
             }
 
             Integer value = count;
+
+            //if value = 0
             if (value==0){
                 continue;
             }
 
+            //if value != 0
             String name  =  valueNames.get(i);
             Integer color = SystemConstant.color[(4-i) % SystemConstant.lengthColor];
             Double percent = (double)value/(double)answerSum*100;
@@ -162,11 +177,13 @@ public class PieChart2Fragment extends Fragment{
             pieData.add(new SliceValue(value, color).setLabel(getLabel.apply(name,String.format("%.1f",percent))));
         }
 
+        //set up pie chart
         PieChartData pieChartData = new PieChartData(pieData);
         pieChartData.setHasLabels(true);
         pieChartData.setValueLabelBackgroundEnabled(false);
         pieChartData.setValueLabelTextSize(6);
 
+        //set up pie chart view for topic
         if(topicId == 1){
             pieChartView1.setPieChartData(pieChartData);
         }
@@ -181,6 +198,7 @@ public class PieChart2Fragment extends Fragment{
         }
     }
 
+    //format the label on chart
     BiFunction<String,String,String> getLabel = (String name, String value)->{
         return value+"%";
     };

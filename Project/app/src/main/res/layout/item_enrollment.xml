@@ -28,14 +28,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Trainee ID: " />
+                android:text="Trainee ID: "
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/txt_trainee_id"
                 style="@style/TextItemStyle"
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
@@ -48,13 +50,15 @@
                 style="@style/TextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Trainee Name: " />
+                android:text="Trainee Name: "
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/txt_trainee_name"
                 style="@style/TextItemStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
@@ -67,13 +71,15 @@
                 style="@style/TextViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Class ID: " />
+                android:text="Class ID: "
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/txt_class_id"
                 style="@style/TextItemStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
@@ -87,13 +93,15 @@
                 style="@style/TextViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Class Name: " />
+                android:text="Class Name: "
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/txt_class_name"
                 style="@style/TextItemStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 

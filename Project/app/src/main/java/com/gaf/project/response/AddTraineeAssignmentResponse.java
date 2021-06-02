@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddTraineeAssignmentResponse {
-    private Boolean added;
+    private Integer added;
 }

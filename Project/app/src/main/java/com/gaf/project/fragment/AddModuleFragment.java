@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gaf.project.R;
+import com.gaf.project.constant.MessConstant;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
@@ -64,8 +66,6 @@ public class AddModuleFragment extends Fragment {
     private TextView mTitle;
     Integer idModule;
     private  View view;
-    private List<Admin> adminList;
-    private List<Feedback> feedbackList;
     private ArrayAdapter<Admin> adminAdapter;
     private ArrayAdapter<Feedback> feedbackAdapter;
 
@@ -106,25 +106,30 @@ public class AddModuleFragment extends Fragment {
         }
         if(mission.equals(SystemConstant.UPDATE)){
             mTitle.setText("Edit Module");
-        }
+            try {
+                mModuleEdit = (Module) getArguments().getSerializable("mModule");
+                if (mModuleEdit != null) {
+                    SimpleDateFormat myFra = new SimpleDateFormat("MM/dd/yyyy");
 
-        try {
-            mModuleEdit = (Module) getArguments().getSerializable("mModule");
-            if (mModuleEdit != null) {
+                    idModule = mModuleEdit.getModuleID();
+                    mName.setText(mModuleEdit.getModuleName());
 
-                idModule = mModuleEdit.getModuleID();
-                mName.setText(mModuleEdit.getModuleName());
-                mStartDate.setEnabled(false);
+                    mStartDate.setText(myFra.format(mModuleEdit.getStartTime()));
+                    mEndDate.setText(myFra.format(mModuleEdit.getEndTime()));
+                    mFeedbackStartDate.setText(myFra.format(mModuleEdit.getFeedbackStartTime()));
+                    mFeedbackEndDate.setText(myFra.format(mModuleEdit.getFeedbackEndTime()));
+                }
+            }
+            catch (Exception ex){
+                Log.e("Error",ex.getLocalizedMessage());
             }
         }
-        catch (Exception ex){
-            Log.e("Error",ex.getLocalizedMessage());
-        }
+
+
 
         adminViewModel.getmListAdminLiveData().observe(getViewLifecycleOwner(),admins -> {
-            adminList = admins;
             adminAdapter =
-                    new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, adminList);
+                    new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, admins);
             spnAdmin.setAdapter(adminAdapter);
 
             if (mModuleEdit!=null){
@@ -135,9 +140,8 @@ public class AddModuleFragment extends Fragment {
         });
 
         feedBackViewModel.getListFeedBackLiveData().observe(getViewLifecycleOwner(),feedbacks -> {
-            feedbackList = feedbacks;
             feedbackAdapter =
-                    new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, feedbackList);
+                    new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, feedbacks);
             spnFeedbackTitle.setAdapter(feedbackAdapter);
 
             if (mModuleEdit!=null){
@@ -159,13 +163,14 @@ public class AddModuleFragment extends Fragment {
 
                 Admin admin = (Admin) spnAdmin.getSelectedItem();
                 Feedback feedback = (Feedback) spnFeedbackTitle.getSelectedItem();
+
                 if(mission.equals(SystemConstant.UPDATE)){
                     Module mModule = new Module(idModule,admin,name,startDate,endDate,feedbackStartDate,feedbackEndDate,feedback)   ;
-                    moduleViewModel.update(mModule);
+                    showDialog(moduleViewModel.update(mModule),"Edit");
                 }
                 else if(mission.equals(SystemConstant.ADD)){
-                    Module mModule = new Module(admin,name,startDate,endDate,feedbackStartDate,feedbackEndDate,feedback)   ;
-                    moduleViewModel.add(mModule);
+                    Module mModule = new Module(admin,name,startDate,endDate,feedbackStartDate,feedbackEndDate,feedback);
+                    showDialog(moduleViewModel.add(mModule),"Update");
                 }
             }
         });
@@ -215,76 +220,65 @@ public class AddModuleFragment extends Fragment {
 
         if(mName.getText().toString().isEmpty()){
             mNameWarning.setVisibility(View.VISIBLE);
-            return  !flag;
-        }
-
-        if(mStartDate.getText().toString().isEmpty()){
-            mStartDateWaring.setVisibility(View.VISIBLE);
-            return !flag;
+            flag = false;
         }
 
         DateFormat dfs = new SimpleDateFormat("MM/dd/yyyy");
         Date startDate = new Date();
         try {
             startDate= dfs.parse(mStartDate.getText().toString());
-            if (startDate.compareTo(new Date())<0){
+            if (startDate.compareTo(new Date())<0&&!mission.equals(SystemConstant.UPDATE)){
                 mStartDateWaring.setVisibility(View.VISIBLE);
-                return !flag;
+                mStartDateWaring.setText(MessConstant.DATE_NOW);
+                flag = false;
             }
         } catch (ParseException e) {
             mStartDateWaring.setVisibility(View.VISIBLE);
-            return !flag;
+            mStartDateWaring.setText(MessConstant.DATE_NULL);
+            flag = false;
         }
 
-        if(mEndDate.getText().toString().isEmpty()){
-            mEndDateWarning.setVisibility(View.VISIBLE);
-            return !flag;
-        }
 
         try {
             Date date = dfs.parse(mEndDate.getText().toString());
             if (date.compareTo(startDate)<0){
                 mEndDateWarning.setVisibility(View.VISIBLE);
-                return !flag;
+                mEndDateWarning.setText(MessConstant.DATE_NOW);
+                flag = false;
             }
         } catch (ParseException e) {
             mEndDateWarning.setVisibility(View.VISIBLE);
-            return !flag;
+            mEndDateWarning.setText(MessConstant.DATE_NULL);
+            flag = false;
         }
-
-
-        if(mFeedbackStartDate.getText().toString().isEmpty()){
-            mFeedbackStartDateWarning.setVisibility(View.VISIBLE);
-            return !flag;
-        }
-
 
         Date feedbackStartDate = new Date();
         try {
             feedbackStartDate= dfs.parse(mFeedbackStartDate.getText().toString());
-            if (feedbackStartDate.compareTo(new Date())<0){
+            if (feedbackStartDate.compareTo(new Date())<0&&!mission.equals(SystemConstant.UPDATE)){
                 mFeedbackStartDateWarning.setVisibility(View.VISIBLE);
-                return !flag;
+                mFeedbackStartDateWarning.setText(MessConstant.DATE_FEEDBACK_START_NOW);
+                flag = false;
+
             }
         } catch (ParseException e) {
             mFeedbackStartDateWarning.setVisibility(View.VISIBLE);
-            return !flag;
-        }
-
-        if(mFeedbackEndDate.getText().toString().isEmpty()){
-            mFeedbackEndDateWarning.setVisibility(View.VISIBLE);
-            return !flag;
+            mFeedbackStartDateWarning.setText(MessConstant.DATE_NULL);
+            flag = false;
         }
 
         try {
             Date date = dfs.parse(mFeedbackEndDate.getText().toString());
             if (date.compareTo(startDate)<0){
                 mFeedbackEndDateWarning.setVisibility(View.VISIBLE);
-                return !flag;
+                mFeedbackEndDateWarning.setText(MessConstant.DATE_FEEDBACK_END_NOW);
+                flag = false;
+
             }
         } catch (ParseException e) {
             mFeedbackEndDateWarning.setVisibility(View.VISIBLE);
-            return !flag;
+            mFeedbackEndDateWarning.setText(MessConstant.DATE_NULL);
+            flag = false;
         }
 
         return flag;
@@ -318,7 +312,7 @@ public class AddModuleFragment extends Fragment {
         mStartDateWaring=view.findViewById(R.id.txt_start_date_warning);
         mEndDateWarning=view.findViewById(R.id.txt_end_date_warning);
         mFeedbackStartDateWarning = view.findViewById(R.id.txt_feedback_start_date_warning);
-        mFeedbackEndDate = view.findViewById(R.id.txt_feedback_end_date_warning);
+        mFeedbackEndDateWarning = view.findViewById(R.id.txt_feedback_end_date_warning);
 
         mStartDate = view.findViewById(R.id.txt_start_date);
         mEndDate = view.findViewById(R.id.txt_end_date);
@@ -335,6 +329,16 @@ public class AddModuleFragment extends Fragment {
 
         btnSave  =(Button)view.findViewById(R.id.btn_save_module);
         btnBack  = (Button)view.findViewById(R.id.btn_back);
+
+    }
+    public void showDialog(MutableLiveData<String> actionStatus, String action){
+        actionStatus.observe(getViewLifecycleOwner(),s -> {
+            if(s.equals(SystemConstant.SUCCESS)){
+                showSuccessDialog(action+" Success!!");
+            }else {
+                showFailDialog(action+" Fail!!");
+            }
+        });
 
     }
     public void showSuccessDialog(String message){

@@ -30,6 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+//fragment to show pie chart for result, it's in fragment ResultFragment
 public class ResultPieChartFragment extends Fragment {
 
     private View view;
@@ -58,9 +59,12 @@ public class ResultPieChartFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_result_pie_chart, container, false);
 
         if(getArguments() != null) {
+
+            //receive data
             Class mClass = (Class) getArguments().getSerializable("class");
             Module module = (Module) getArguments().getSerializable("module");
 
+            //load list answers for PieChart1Fragment, PieChart2Fragment
             answerList = new ArrayList<>();
             Call<AnswerResponse> callAnswer =  answerService.loadListAnswer(mClass.getClassID(), module.getModuleID());
             callAnswer.enqueue(new Callback<AnswerResponse>() {
@@ -70,6 +74,7 @@ public class ResultPieChartFragment extends Fragment {
                     if (response.isSuccessful()&& response.body()!=null){
                         answerList = response.body().getAnswers();
 
+                        //list answer of active question (question.isDelete = false)
                         answerListActive = new ArrayList<>();
                         for(int i=0; i<answerList.size(); i++){
                             if(answerList.get(i).getQuestion().isDeleted()==false){
@@ -77,10 +82,10 @@ public class ResultPieChartFragment extends Fragment {
                             }
                         }
 
+                        //send data
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("listAnswer", (Serializable) answerListActive);
                         bundle.putString("className", mClass.getClassName());
-
 
                         Fragment frag1 = new PieChart1Fragment();
                         Fragment frag2 = new PieChart2Fragment();
@@ -88,10 +93,10 @@ public class ResultPieChartFragment extends Fragment {
                         frag1.setArguments(bundle);
                         frag2.setArguments(bundle);
 
+                        //set up a view pager to slide 2 fragment: PieChart1Fragment, PieChart2Fragment
                         vpPieChart = view.findViewById(R.id.vpPieChart);
                         vpAdapter = new ViewPageAdapter(getActivity().getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, frag1, frag2);
                         vpPieChart.setAdapter(vpAdapter);
-
                     }
                 }
                 @Override
@@ -101,7 +106,6 @@ public class ResultPieChartFragment extends Fragment {
                 }
             });
         }
-
         return view;
     }
 

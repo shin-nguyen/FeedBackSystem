@@ -2,12 +2,14 @@ package com.gaf.project.viewmodel;
 
 import android.util.Log;
 
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.gaf.project.dialog.SuccessDialog;
 import com.gaf.project.model.Feedback;
+import com.gaf.project.response.DeleteResponse;
 import com.gaf.project.response.FeedbackResponse;
-import com.gaf.project.response.QuestionResponse;
 import com.gaf.project.service.FeedbackService;
 import com.gaf.project.utils.ApiUtils;
 
@@ -22,11 +24,11 @@ public class FeedBackViewModel extends ViewModel {
     private FeedbackService feedbackService;
     private MutableLiveData<List<Feedback>> mListFeedBackLiveData;
     private List<Feedback> mListFeedBack;
+    private Boolean status;
 
     public FeedBackViewModel() {
         feedbackService = ApiUtils.getFeedbackService();
         mListFeedBackLiveData = new MutableLiveData<>();
-
         initData();
     }
 

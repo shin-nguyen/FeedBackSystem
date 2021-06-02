@@ -22,4 +22,8 @@ public class Enrollment implements Serializable {
     @SerializedName("trainee")
     @Expose
     private Trainee trainee;
+
+    public String getClassName() {
+        return mClass.getClassName();
+    }
 }

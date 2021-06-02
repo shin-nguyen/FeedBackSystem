@@ -3,10 +3,12 @@ package com.gaf.feedbacksystem.controller;
 import com.gaf.feedbacksystem.MyResourceNotFoundException;
 import com.gaf.feedbacksystem.constant.SystemConstant;
 import com.gaf.feedbacksystem.dto.AssignmentDto;
+import com.gaf.feedbacksystem.dto.ClassDto;
 import com.gaf.feedbacksystem.dto.TraineeAssignmentDto;
 import com.gaf.feedbacksystem.dto.TraineeDto;
 import com.gaf.feedbacksystem.entity.TraineeAssignment;
 import com.gaf.feedbacksystem.service.IAssignmentService;
+import com.gaf.feedbacksystem.service.IClassService;
 import com.gaf.feedbacksystem.service.ITraineeAssignmentService;
 import com.gaf.feedbacksystem.service.ITraineeService;
 import lombok.extern.java.Log;
@@ -35,6 +37,8 @@ public class TraineeAssignmentController {
     private ITraineeService traineeService;
     @Autowired
     private IAssignmentService assignmentService;
+    @Autowired
+    private IClassService classService;
 
     @PostMapping(value = "/{username}/{code}")
     @PreAuthorize("hasRole(\"" + SystemConstant.TRAINEE_ROLE + "\")")
@@ -48,23 +52,27 @@ public class TraineeAssignmentController {
                 throw new MyResourceNotFoundException();
             }
 
-            TraineeAssignmentDto traineeAssignmentDto = traineeAssignmentService.checkIsAvailable(username, code);
+//            TraineeAssignmentDto traineeAssignmentDto = traineeAssignmentService.checkIsAvailable(username, code);
                 try {
                     //check have trainee joined class
-                    if (traineeAssignmentDto != null){
-                        response.put("added", 0);
-                    }else
-                    // assignment is null, it's mean invalid code
+//                    if (traineeAssignmentDto != null){
+//                        response.put("added", 0);
+//                    }else
+
+                    //if  is null, it's mean invalid code
                     if (assignmentDto == null){
                         response.put("added", 1);
                     }
                     //code is available in assignment, so add to trainee_assignment
                     else if (assignmentDto.getRegistrationCode().equals(code)){
-                        TraineeAssignmentDto traineeAssignmentDto1 = new TraineeAssignmentDto();
-                        traineeAssignmentDto1.setAssignment(assignmentDto);
-                        traineeAssignmentDto1.setTrainee(traineeDto);
+                        ClassDto classDto = classService.findById(assignmentDto.getmClass().getClassID());
 
-                        traineeAssignmentService.save(traineeAssignmentDto1);
+                        TraineeAssignmentDto traineeAssignmentDto = new TraineeAssignmentDto();
+                        traineeAssignmentDto.setAssignment(assignmentDto);
+                        traineeAssignmentDto.setTrainee(traineeDto);
+
+                        classService.addEnrollment(traineeDto.getUserName(), classDto.getClassID());
+                        traineeAssignmentService.save(traineeAssignmentDto);
 
                         response.put("added", 2);
                     }

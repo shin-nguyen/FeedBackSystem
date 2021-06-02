@@ -23,11 +23,11 @@ import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.view.PieChartView;
 
+//fragment to show a total pie chart for all feedback, it's in ResultPieChart
 public class PieChart1Fragment extends Fragment {
 
     private TextView tvClassName;
     private PieChartView pieChartView;
-    private View layNote;
     private List<Answer> answerList;
 
     private View view;
@@ -46,27 +46,32 @@ public class PieChart1Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_pie_chart1, container, false);
+
         if(getArguments() != null) {
 
+            //receive data: list answers
             answerList = (List<Answer>) getArguments().getSerializable("listAnswer");
             String className = getArguments().getString("className");
 
+            //set tittle for Class name
             tvClassName = view.findViewById(R.id.tvClassName);
-            pieChartView = view.findViewById(R.id.chart);
-            layNote = view.findViewById(R.id.layNote);
-
             tvClassName.setText(className);
 
+            pieChartView = view.findViewById(R.id.chart);
+
+            //set up pie chart with list answers
             setupPieChart(view, answerList);
         }
 
         return view;
     }
 
+    //set up pie chart
     private void setupPieChart(View view, List<Answer> answerList) {
 
         List pieData = new ArrayList<>();
 
+        //pie chart have 5 values: 0,1,2,3,4 and there are their labels
         List<String> valueNames = new ArrayList<>();
         valueNames.add("Strongly Disagree");
         valueNames.add("Disagree");
@@ -76,6 +81,7 @@ public class PieChart1Fragment extends Fragment {
 
         int answerSum = answerList.size();
 
+        //calculate percent
         for (int i=0; i<5; i++){
 
             int count = 0;
@@ -97,6 +103,7 @@ public class PieChart1Fragment extends Fragment {
             pieData.add(new SliceValue(value, color).setLabel(getLabel.apply(name,String.format("%.1f",percent))));
         }
 
+        //set up pie chart
         PieChartData pieChartData = new PieChartData(pieData);
         pieChartData.setHasLabels(true);
         pieChartData.setValueLabelBackgroundEnabled(false);
@@ -104,6 +111,7 @@ public class PieChart1Fragment extends Fragment {
         pieChartView.setPieChartData(pieChartData);
     }
 
+    //format the label on chart
     BiFunction<String,String,String> getLabel = (String name, String value)->{
         return value+"%";
     };

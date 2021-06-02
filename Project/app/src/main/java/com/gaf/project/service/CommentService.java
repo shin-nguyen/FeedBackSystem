@@ -1,7 +1,6 @@
 package com.gaf.project.service;
 
 import com.gaf.project.model.Comment;
-import com.gaf.project.model.Module;
 import com.gaf.project.response.CommentResponse;
 
 import retrofit2.Call;

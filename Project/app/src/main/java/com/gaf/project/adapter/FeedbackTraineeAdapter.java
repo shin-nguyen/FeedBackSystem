@@ -57,7 +57,7 @@ public class FeedbackTraineeAdapter extends RecyclerView.Adapter<FeedbackTrainee
         holder.classId.setText(String.valueOf(assignment.getMClass().getClassID()));
         holder.className.setText(assignment.getMClass().getClassName());
         holder.moduleId.setText(assignment.getModule().getModuleID().toString());
-        holder.endTime.setText(dateFormat.format(assignment.getModule().getFeedbackEndTime()));
+        holder.endTime.setText(dateFormat.format(assignment.getModule(). getFeedbackEndTime()));
         holder.moduleName.setText(assignment.getModule().getModuleName());
 
         holder.status.setText("InComplete");
