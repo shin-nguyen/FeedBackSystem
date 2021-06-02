@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.XmlRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -21,7 +20,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.gaf.project.R;
-import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
 import com.gaf.project.model.Assignment;
@@ -133,19 +131,23 @@ public class AddAssignmentFragment extends Fragment {
 
                 /*if assignment already exist, show fail dialog
                  * else add assignment and show success dialog*/
-                flag = checkExistAssignment(assignmentViewModel.getListAssignment(), newAssignment);
-                if (flag) {
-                    showDialog(assignmentViewModel.addAssignment(newAssignment),"Add Assignment");
+                if (assignmentViewModel.getListAssignment() == null) {
+                    showDialog("Check your connection!!");
                 } else {
-                    showFailDialog("Assignment already exist!");
+                    flag = checkExistAssignment(assignmentViewModel.getListAssignment(), newAssignment);
+                    if (flag) {
+                        assignmentViewModel.addAssignment(newAssignment);
+                        showDialog("Add Assignment");
+                    } else {
+                        showFailDialog("Assignment already exist!");
+                    }
                 }
-
             }else {
                 showFailDialog("Check your connection!!");
             }
         });
 
-        //set event for button back -   back to previous page
+        //set event for button back - back to previous page
         btnBack= view.findViewById(R.id.btn_back);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,14 +172,18 @@ public class AddAssignmentFragment extends Fragment {
     }
 
     //show dialog when the action is finished
-    public void showDialog(MutableLiveData<String> actionStatus, String action){
-        actionStatus.observe(getViewLifecycleOwner(),s -> {
-            if(s.equals(SystemConstant.SUCCESS)){
+    public void showDialog(String action){
+        if(assignmentViewModel.getActionStatus()==null){
+            showFailDialog("Check your connection!!");
+        }else {
+            Boolean actionStatus = assignmentViewModel.getActionStatus().booleanValue();
+            if(actionStatus){
                 showSuccessDialog(action+" Success!!");
             }else {
                 showFailDialog(action+" Fail!!");
             }
-        });
+        }
+
     }
 
     //show success dialog

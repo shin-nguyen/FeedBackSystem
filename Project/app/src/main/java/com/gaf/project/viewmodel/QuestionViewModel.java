@@ -6,7 +6,6 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Question;
 import com.gaf.project.response.DeleteResponse;
 import com.gaf.project.response.QuestionResponse;
@@ -25,6 +24,7 @@ public class QuestionViewModel extends ViewModel {
     private QuestionService questionService;
     private MutableLiveData<List<Question>> mListQuestionLiveData;
     private List<Question> mListQuestion;
+    private Boolean actionStatus;
 
     public QuestionViewModel() {
         questionService = ApiUtils.getQuestionService();
@@ -51,16 +51,15 @@ public class QuestionViewModel extends ViewModel {
         });
     }
 
-    public MutableLiveData<String> addQuestion(Question question){
-        MutableLiveData<String> actionStatus = new MutableLiveData<>();
-
+    public void addQuestion(Question question){
+        setActionStatus(true);
         Call<Question> call = questionService.create(question);
         call.enqueue(new Callback<Question>() {
             @Override
             public void onResponse(Call<Question> call, Response<Question> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     initData();
-                    actionStatus.setValue(SystemConstant.SUCCESS);
+                    setActionStatus(false);
                     Log.e("Success", "Success");
                 }
             }
@@ -68,62 +67,59 @@ public class QuestionViewModel extends ViewModel {
             @Override
             public void onFailure(Call<Question> call, Throwable t) {
                 Log.e("Error", t.getLocalizedMessage());
-                actionStatus.setValue(SystemConstant.FAIL);
             }
         });
-
-        return actionStatus;
     }
 
-    public MutableLiveData<String> updateQuestion(Question question){
-        MutableLiveData<String> actionStatus = new MutableLiveData<>();
-
+    public void updateQuestion(Question question){
+        setActionStatus(true);
         Call<Question> call = questionService.update(question);
         call.enqueue(new Callback<Question>() {
             @Override
             public void onResponse(Call<Question> call, Response<Question> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     initData();
-                    actionStatus.setValue(SystemConstant.SUCCESS);
+                    setActionStatus(false);
                     Log.e("Success", "Success");
                 }
             }
 
             @Override
             public void onFailure(Call<Question> call, Throwable t) {
-                actionStatus.setValue(SystemConstant.FAIL);
                 Log.e("Error", t.getLocalizedMessage());
             }
         });
-
-        return actionStatus;
     }
 
-    public MutableLiveData<String> deleteQuestion(Question question){
-        MutableLiveData<String> actionStatus = new MutableLiveData<>();
-
+    public void deleteQuestion(Question question){
+        setActionStatus(true);
         Call<DeleteResponse> call =  questionService.delete(question.getQuestionID());
         call.enqueue(new Callback<DeleteResponse>() {
             @Override
             public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
                 if (response.isSuccessful()&&response.body().getDeleted()){
                     initData();
-                    actionStatus.setValue(SystemConstant.SUCCESS);
                     Log.e("Success", "Success");
                 }
             }
             @Override
             public void onFailure(Call<DeleteResponse> call, Throwable t) {
-                actionStatus.setValue(SystemConstant.FAIL);
                 Log.e("Error",t.getLocalizedMessage());
+                setActionStatus(false);
             }
         });
-
-        return actionStatus;
     }
 
     public MutableLiveData<List<Question>> getListQuestionLiveData() {
         return mListQuestionLiveData;
+    }
+
+    public Boolean getActionStatus() {
+        return actionStatus;
+    }
+
+    public void setActionStatus(Boolean actionStatus) {
+        this.actionStatus = actionStatus;
     }
 
     public List<Question> getListQuestion() {

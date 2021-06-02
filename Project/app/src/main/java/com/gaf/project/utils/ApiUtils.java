@@ -19,9 +19,13 @@ import com.gaf.project.service.TypeFeedbackService;
 public class ApiUtils {
 
     //Dia chi may host
+<<<<<<< HEAD
 
     public static final String BASE_URL = "http://192.168.1.3:8080/";
 
+=======
+    public static final String BASE_URL = "http://192.168.1.3:8080/";
+>>>>>>> parent of fa7f6d3 (kai: done)
 
     public static AuthenticationService getAuthenticationService() {
         return RetrofitConfig.getInstance().buildRetrofit().create(AuthenticationService.class);

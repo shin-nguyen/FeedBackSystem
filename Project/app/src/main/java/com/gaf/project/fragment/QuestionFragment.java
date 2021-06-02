@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -48,7 +47,6 @@ public class QuestionFragment extends Fragment {
     private QuestionAdapter questionAdapter;
     private ArrayAdapter<Topic> topicArrayAdapter;
     private List<Feedback> feedbackList;
-    private List<Topic> topicList;
     private Button btnAdd;
     private Spinner sprTopic;
     private Boolean checkDeleteFlag = false;
@@ -69,8 +67,6 @@ public class QuestionFragment extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-
-        //Update data every time you enter Fragment
         questionViewModel.initData();
     }
 
@@ -85,10 +81,10 @@ public class QuestionFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //declare recyclerview(view, adapter and set layout)
         recyclerViewQuestion = view.findViewById(R.id.rcv_question);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         recyclerViewQuestion.setLayoutManager(linearLayoutManager);
+
         questionAdapter = new QuestionAdapter(new QuestionAdapter.IClickItem() {
             @Override
             public void update(Question item) {
@@ -101,7 +97,6 @@ public class QuestionFragment extends Fragment {
             }
         });
 
-        //set data for question adapter
         questionViewModel.getListQuestionLiveData().observe(getViewLifecycleOwner(), new Observer<List<Question>>() {
             @Override
             public void onChanged(List<Question> questions) {
@@ -109,32 +104,18 @@ public class QuestionFragment extends Fragment {
             }
         });
 
-        //set data for recyclerview
         recyclerViewQuestion.setAdapter(questionAdapter);
 
-        //get topic and set filter
         topicViewModel.getListTopicLiveData().observe(getViewLifecycleOwner(), new Observer<List<Topic>>() {
             @Override
             public void onChanged(List<Topic> topics) {
                 sprTopic = view.findViewById(R.id.spinner_topic_name);
-
-                //create default topic to filter
                 Topic topic = new Topic(0,"Show All");
+                List<Topic> topicList = topics;
+                topicList.add(0,topic);
+                topicArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, topicList);
+                sprTopic.setAdapter(topicArrayAdapter);
 
-                try {
-                    topics.remove(topic); //remove default value
-                } finally {
-
-                    //create new list topic and add default value to it
-                    topicList = topics;
-                    topicList.add(0,topic);
-
-                    //set data for topic spinner
-                    topicArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, topicList);
-                    sprTopic.setAdapter(topicArrayAdapter);
-                }
-
-                //set filter on item selected
                 sprTopic.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -155,7 +136,6 @@ public class QuestionFragment extends Fragment {
             }
         });
 
-        ////go to add question page
         btnAdd = view.findViewById(R.id.btn_add_question);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,7 +148,6 @@ public class QuestionFragment extends Fragment {
         });
     }
 
-    ////go to update question page
     private void clickUpdate(Question item) {
         Bundle bundle = new Bundle();
         bundle.putString("mission", SystemConstant.UPDATE);
@@ -182,7 +161,6 @@ public class QuestionFragment extends Fragment {
         countUse = 0;
         checkDeleteFlag = false;
 
-        //get list feedback
         feedBackViewModel.getListFeedBackLiveData().observe(getViewLifecycleOwner(), new Observer<List<Feedback>>() {
             @Override
             public void onChanged(List<Feedback> feedbacks) {
@@ -191,27 +169,27 @@ public class QuestionFragment extends Fragment {
         });
 
         for (Feedback m : feedbackList) {
-            Collection<Question> questions = m.getQuestions(); //foreach feedback in list, get list question of feedback
+            Collection<Question> questions = m.getQuestions();
             for (Question question : questions) {
-                if (question.equals(item)) {    //if question exist set check = true and increase count
+                if (question.equals(item)) {
                     checkDeleteFlag = true;
                     countUse++;
                 }
 
-                //show dialog
                 FragmentTransaction ft = getParentFragmentManager().beginTransaction();
                 final WarningDialog dialog;
-                if (checkDeleteFlag) {      //check delete flag and show warning to delete
+                if (checkDeleteFlag) {
                     dialog = new WarningDialog(
                             () -> {
-                                showDialog(questionViewModel.deleteQuestion(item),"Delete");
+                                questionViewModel.deleteQuestion(item);
+                                showDialog("Delete");
                             },
                             "This Question is in use with " + countUse + " Feedback.You really want to delete this Question?");
                 } else {
                     dialog = new WarningDialog(
                             () -> {
-
-                                showDialog(questionViewModel.deleteQuestion(item),"Delete");
+                                questionViewModel.deleteQuestion(item);
+                                showDialog("Delete");
                             },
                             "Do you want to delete this Question?");
                 }
@@ -220,23 +198,19 @@ public class QuestionFragment extends Fragment {
         }
     }
 
-    //show dialog when the action is finished
-    public void showDialog(MutableLiveData<String> actionStatus, String action){
-        actionStatus.observe(getViewLifecycleOwner(),s -> {
-            if(s.equals(SystemConstant.SUCCESS)){
-                showSuccessDialog(action+" Success!!");
-            }else {
-                showFailDialog(action+" Fail!!");
-            }
-        });
+    public void showDialog(String action){
+        Boolean actionStatus = questionViewModel.getActionStatus().booleanValue();
+        if(actionStatus){
+            showSuccessDialog(action+" Success!!");
+        }else {
+            showFailDialog(action+" Fail!!");
+        }
     }
 
-    //show toast
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }
 
-    //show success dialog
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
@@ -248,7 +222,6 @@ public class QuestionFragment extends Fragment {
         newFragment.show(ft, "dialog success");
     }
 
-    //show fail dialog
     public void showFailDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         FailDialog newFragment = new FailDialog(message);

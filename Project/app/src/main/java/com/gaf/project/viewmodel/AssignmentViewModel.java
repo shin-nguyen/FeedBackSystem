@@ -5,7 +5,6 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.model.Assignment;
 import com.gaf.project.response.AssignmentResponse;
 import com.gaf.project.response.DeleteResponse;
@@ -25,6 +24,7 @@ public class AssignmentViewModel extends ViewModel {
     private MutableLiveData<List<Assignment>> mListAssignmentOfTraineeLiveData;
     private List<Assignment> mListAssignment;
     private List<Assignment> mListAssignmentOfTrainer;
+    private Boolean actionStatus;
 
     public AssignmentViewModel() {
         assignmentService = ApiUtils.getAssignmentService();
@@ -73,6 +73,7 @@ public class AssignmentViewModel extends ViewModel {
         });
     }
 
+<<<<<<< HEAD
     public void initDataByTrainee(){
         Call<AssignmentResponse> call =  assignmentService.loadListAssignmentByTrainee();
         call.enqueue(new Callback<AssignmentResponse>() {
@@ -94,52 +95,50 @@ public class AssignmentViewModel extends ViewModel {
     public MutableLiveData<String> addAssignment(Assignment assignment){
         MutableLiveData<String> actionStatus = new MutableLiveData<>();
 
+=======
+    public void addAssignment(Assignment assignment){
+        setActionStatus(true);
+>>>>>>> parent of fa7f6d3 (kai: done)
         Call<Assignment> call = assignmentService.create(assignment);
         call.enqueue(new Callback<Assignment>() {
             @Override
             public void onResponse(Call<Assignment> call, Response<Assignment> response) {
                 if (response.isSuccessful()&&response.body()!=null) {
+                    setActionStatus(true);
                     initData();
-                    actionStatus.setValue(SystemConstant.SUCCESS);
                 }
             }
 
             @Override
             public void onFailure(Call<Assignment> call, Throwable t) {
                 Log.e("Error",t.getLocalizedMessage());
-                actionStatus.setValue(SystemConstant.FAIL);
+                setActionStatus(false);
             }
         });
-
-        return actionStatus;
     }
 
-    public MutableLiveData<String> updateAssignment(String trainerName, Assignment assignment){
-        MutableLiveData<String> actionStatus = new MutableLiveData<>();
-
+    public void updateAssignment(String trainerName, Assignment assignment){
+        setActionStatus(true);
         Call<Assignment> call =  assignmentService.update(trainerName,assignment);
         call.enqueue(new Callback<Assignment>() {
             @Override
             public void onResponse(Call<Assignment> call, Response<Assignment> response) {
                 if (response.isSuccessful()&&response.body()!=null) {
+                    setActionStatus(true);
                     initData();
-                    actionStatus.setValue(SystemConstant.SUCCESS);
                 }
             }
 
             @Override
             public void onFailure(Call<Assignment> call, Throwable t) {
                 Log.e("Error",t.getLocalizedMessage());
-                actionStatus.setValue(SystemConstant.FAIL);
+                setActionStatus(false);
             }
         });
-
-        return actionStatus;
     }
 
-    public MutableLiveData deleteAssignment(Assignment assignment){
-        MutableLiveData<String> actionStatus = new MutableLiveData<>();
-
+    public void deleteAssignment(Assignment assignment){
+        setActionStatus(true);
         Call<DeleteResponse> call =  assignmentService.delete(assignment.getMClass().getClassID(),
                 assignment.getModule().getModuleID(),
                 assignment.getTrainer().getUserName());
@@ -147,18 +146,16 @@ public class AssignmentViewModel extends ViewModel {
             @Override
             public void onResponse(Call<DeleteResponse> call, Response<DeleteResponse> response) {
                 if (response.isSuccessful()&&response.body().getDeleted()){
+                    setActionStatus(true);
                     initData();
-                    actionStatus.setValue(SystemConstant.SUCCESS);
                 }
             }
             @Override
             public void onFailure(Call<DeleteResponse> call, Throwable t) {
+                setActionStatus(false);
                 Log.e("Error",t.getLocalizedMessage());
-                actionStatus.setValue(SystemConstant.FAIL);
             }
         });
-
-        return actionStatus;
     }
 
     public MutableLiveData<List<Assignment>> getListAssignmentLiveData() {
@@ -168,9 +165,21 @@ public class AssignmentViewModel extends ViewModel {
     public MutableLiveData<List<Assignment>> getListAssignmentOfTrainerLiveData() {
         return mListAssignmentOfTrainerLiveData;
     }
+<<<<<<< HEAD
     public MutableLiveData<List<Assignment>> getListAssignmentOfTraineeLiveData() {
         return mListAssignmentOfTraineeLiveData;
     }
+=======
+
+    public Boolean getActionStatus() {
+        return actionStatus;
+    }
+
+    public void setActionStatus(Boolean actionStatus) {
+        this.actionStatus = actionStatus;
+    }
+
+>>>>>>> parent of fa7f6d3 (kai: done)
     public List<Assignment> getListAssignment() {
         return mListAssignment;
     }

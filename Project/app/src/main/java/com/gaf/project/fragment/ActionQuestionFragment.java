@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -74,19 +73,15 @@ public class ActionQuestionFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.action_question, container, false);
 
-        //declare view
         initView();
 
-        //get mission from bundle
         mission = getArguments().getString("mission");
 
-        //if mission is add, set title is add question and textview topic name
         if(mission.equals(SystemConstant.ADD)) {
             title.setText("Add Question");
             topicName.setVisibility(View.GONE);
         }
 
-        //if mission s update, set title is edit question, hide topic spinner and set topic name and question content
         if(mission.equals(SystemConstant.UPDATE)) {
 
             question= (Question) getArguments().getSerializable("item");
@@ -97,7 +92,6 @@ public class ActionQuestionFragment extends Fragment {
             questionContent.setText(question.getQuestionContent());
         }
 
-        //set data for spinner topic
         topicViewModel.getListTopicLiveData().observe(getViewLifecycleOwner(), new Observer<List<Topic>>() {
             @Override
             public void onChanged(List<Topic> topics) {
@@ -106,40 +100,37 @@ public class ActionQuestionFragment extends Fragment {
             }
         });
 
-        //set event for button save
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //hide warning
                 warningQuestion.setVisibility(View.GONE);
 
-                //get topic and content from view
                 Topic topic = (Topic) sprTopic.getSelectedItem();
                 String qsContent = String.valueOf(questionContent.getText());
 
                 if (qsContent.isEmpty()) {
-                    warningQuestion.setVisibility(View.VISIBLE); //if content is empty show warning
+                    warningQuestion.setVisibility(View.VISIBLE);
+                } else if(topic==null){
+                    showFailDialog("Check your connection!!");
                 }else {
-                    //if mission is add create new question with information from view and add it to database, then show dialog
                     if (mission.equals(SystemConstant.ADD)) {
                         Question newQuestion = new Question(topic, qsContent);
 
-                        //if question already exist, show warning, else add it to database
                         if(checkQuestion(newQuestion,questionViewModel.getListQuestion())){
-                            showDialog(questionViewModel.addQuestion(newQuestion),"Add");
+                            questionViewModel.addQuestion(newQuestion);
+                            showDialog("Add");
                         }else {
                             showFailDialog("Question already exist!!");
                         }
                     }
 
-                    // //if mission is update, edit new question with content from view and update it, then show dialog
                     if (mission.equals(SystemConstant.UPDATE)) {
                         question.setQuestionContent(qsContent);
 
-                        // //if question already exist, show warning, else update it
                         if(checkQuestion(question,questionViewModel.getListQuestion())){
-                            showDialog(questionViewModel.updateQuestion(question),"Edit");
+                            questionViewModel.updateQuestion(question);
+                            showDialog("Edit");
                         }else {
                             showFailDialog("Question already exist!!");
                         }
@@ -148,7 +139,6 @@ public class ActionQuestionFragment extends Fragment {
             }
         });
 
-        //set even for button back - back to previous page
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,7 +149,6 @@ public class ActionQuestionFragment extends Fragment {
         return view;
     }
 
-    //declare all view
     public void initView(){
         title = view.findViewById(R.id.txt_title);
         warningQuestion = view.findViewById(R.id.warning_question_content);
@@ -171,8 +160,6 @@ public class ActionQuestionFragment extends Fragment {
         btnSave = view.findViewById(R.id.btn_save);
     }
 
-    /*check question
-    * if question already exist return false and and vice versa*/
     public Boolean checkQuestion(Question question, List<Question> questionList){
         for(Question qs : questionList){
             if(qs.getTopic().equals(question.getTopic()) && qs.getQuestionContent().equals(question.getQuestionContent())){
@@ -182,18 +169,15 @@ public class ActionQuestionFragment extends Fragment {
         return true;
     }
 
-    //show dialog when the action is finished
-    public void showDialog(MutableLiveData<String> actionStatus, String action){
-        actionStatus.observe(getViewLifecycleOwner(),s -> {
-            if(s.equals(SystemConstant.SUCCESS)){
-                showSuccessDialog(action+" Success!!");
-            }else {
-                showFailDialog(action+" Fail!!");
-            }
-        });
+    public void showDialog(String action){
+        Boolean actionStatus = questionViewModel.getActionStatus().booleanValue();
+        if(actionStatus){
+            showSuccessDialog(action+" Success!!");
+        }else {
+            showFailDialog(action+" Fail!!");
+        }
     }
 
-    //show success dialog
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
@@ -205,19 +189,16 @@ public class ActionQuestionFragment extends Fragment {
         newFragment.show(ft, "dialog success");
     }
 
-    //show fail dialog
     public void showFailDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         FailDialog newFragment = new FailDialog(message);
         newFragment.show(ft, "dialog fail");
     }
 
-    //show toast
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }
 
-    //reload page
     public void reloadFragment(){
         if (getFragmentManager() != null) {
             getFragmentManager()
