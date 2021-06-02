@@ -1,20 +1,16 @@
 package com.gaf.project.fragment;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,40 +19,23 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gaf.project.R;
-import com.gaf.project.adapter.AssignmentAdapter;
 import com.gaf.project.adapter.QuestionAdapter;
 import com.gaf.project.constant.SystemConstant;
 import com.gaf.project.dialog.FailDialog;
 import com.gaf.project.dialog.SuccessDialog;
 import com.gaf.project.dialog.WarningDialog;
-import com.gaf.project.model.Assignment;
 import com.gaf.project.model.Feedback;
 import com.gaf.project.model.Question;
 import com.gaf.project.model.Topic;
-import com.gaf.project.response.ClassResponse;
-import com.gaf.project.response.DeleteResponse;
-import com.gaf.project.response.FeedbackResponse;
-import com.gaf.project.response.QuestionResponse;
-import com.gaf.project.response.TopicResponse;
-import com.gaf.project.service.FeedbackService;
-import com.gaf.project.service.QuestionService;
-import com.gaf.project.service.TopicService;
-import com.gaf.project.utils.ApiUtils;
 import com.gaf.project.viewmodel.FeedBackViewModel;
 import com.gaf.project.viewmodel.QuestionViewModel;
 import com.gaf.project.viewmodel.TopicViewModel;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class QuestionFragment extends Fragment {
 

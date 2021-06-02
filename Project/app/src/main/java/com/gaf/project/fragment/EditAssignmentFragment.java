@@ -97,16 +97,23 @@ public class EditAssignmentFragment extends Fragment {
             String trainerName = assignment.getTrainer().getUserName();
 
             Trainer selectedTrainer = (Trainer) spnTrainer.getSelectedItem();
-            assignment.setTrainer(selectedTrainer);
-
-            flag = checkExistAssignment(assignmentViewModel.getListAssignment(),assignment);
-            if(flag){
-                assignmentViewModel.updateAssignment(trainerName,assignment);
-                showDialog("Edit Assignment");
+            if(selectedTrainer==null){
+                showFailDialog("Check your connection!!");
             }else {
-                showFailDialog("Assignment already exist!");
+                assignment.setTrainer(selectedTrainer);
+
+                if(assignmentViewModel.getListAssignment()==null){
+                    showFailDialog("Check your connection!!");
+                }else{
+                    flag = checkExistAssignment(assignmentViewModel.getListAssignment(),assignment);
+                    if(flag){
+                        assignmentViewModel.updateAssignment(trainerName,assignment);
+                        showDialog("Edit Assignment");
+                    }else {
+                        showFailDialog("Assignment already exist!");
+                    }
+                }
             }
-            Log.e("Success","Assignment get success");
         });
 
         btnBack.setOnClickListener(view1 -> {
@@ -116,6 +123,7 @@ public class EditAssignmentFragment extends Fragment {
         return view;
     }
 
+    //check the existence of the assignment, return false if the assignment already exists and vice versa
     public Boolean checkExistAssignment(List<Assignment> list, Assignment assignment){
         for(Assignment ass : list){
             if(ass.getTrainer().equals(assignment.getTrainer())
@@ -127,13 +135,19 @@ public class EditAssignmentFragment extends Fragment {
         return true;
     }
 
+    //show dialog when the action is finished
     public void showDialog(String action){
-        Boolean actionStatus = assignmentViewModel.getActionStatus().booleanValue();
-        if(actionStatus){
-            showSuccessDialog(action+" Success!!");
+        if(assignmentViewModel.getActionStatus()==null){
+            showFailDialog("Check your connection!!");
         }else {
-            showFailDialog(action+" Fail!!");
+            Boolean actionStatus = assignmentViewModel.getActionStatus().booleanValue();
+            if(actionStatus){
+                showSuccessDialog(action+" Success!!");
+            }else {
+                showFailDialog(action+" Fail!!");
+            }
         }
+
     }
 
     public void showSuccessDialog(String message){

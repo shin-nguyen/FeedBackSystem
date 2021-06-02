@@ -63,10 +63,14 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
             return;
         }
 
+        String paddingClass = convertToWhitespace(holder.tvClassName.getText().toString().trim(),"class");
+        String paddingCourse = convertToWhitespace(holder.tvCourseName.getText().toString().trim(),"course");
+        String paddingTrainer = convertToWhitespace(holder.tvTrainerName.getText().toString().trim(),"trainer");
+
         holder.assignmentNo.setText(String.valueOf(position));
-        holder.className.setText(String.valueOf(assignment.getMClass().getClassName()));
-        holder.courseName.setText(String.valueOf(assignment.getModule().getModuleName()));
-        holder.trainerName.setText(String.valueOf(assignment.getTrainer().getName()));
+        holder.className.setText(paddingClass + (assignment.getMClass().getClassName()));
+        holder.courseName.setText(paddingCourse + (assignment.getModule().getModuleName()));
+        holder.trainerName.setText(paddingTrainer + (assignment.getTrainer().getName()));
         holder.registrationCode.setText(assignment.getRegistrationCode());
 
         holder.btnEdit.setOnClickListener(v->{
@@ -87,7 +91,7 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
 
     public class AssignmentViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView assignmentNo, courseName, className, trainerName, registrationCode;
+        private TextView assignmentNo, courseName, className, trainerName, registrationCode, tvCourseName, tvClassName, tvTrainerName;
         private Button btnEdit, btnDelete;
 
         public AssignmentViewHolder(@NonNull View itemView) {
@@ -98,6 +102,10 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
             className =itemView.findViewById(R.id.assignment_class_name);
             trainerName =itemView.findViewById(R.id.assignment_trainer_name);
             registrationCode =itemView.findViewById(R.id.assignment_registration_code);
+            tvCourseName =itemView.findViewById(R.id.txt_course_name);
+            tvClassName =itemView.findViewById(R.id.txt_class_name);
+            tvTrainerName =itemView.findViewById(R.id.txt_trainer_name);
+
             btnEdit=itemView.findViewById(R.id.btn_edit_assignment);
             btnDelete=itemView.findViewById(R.id.btn_delete_assignment);
 
@@ -144,5 +152,27 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.As
                 notifyDataSetChanged();
             }
         };
+    }
+
+    public String convertToWhitespace (String string, String type){
+        int length = string.length();
+
+        if(type.equals("course")){
+            length+=13;
+        }
+
+        if(type.equals("class")){
+            length+=11;
+        }
+
+        if(type.equals("trainer")){
+            length+=12;
+        }
+
+        String result="";
+        for(int i=0;i<=length;i++){
+            result+=" ";
+        }
+        return result;
     }
 }
