@@ -7,6 +7,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,7 +44,6 @@ import retrofit2.Response;
 
 
 public class EditEnrollmentFragment extends Fragment {
-    //private ClassService classService;
     private Button btnSave, btnBack;
     private Spinner spnClass;
     private EditText traineeId,traineeName;
@@ -51,6 +52,7 @@ public class EditEnrollmentFragment extends Fragment {
     private ArrayAdapter<Class> classAdapter;
     private EnrollmentViewModel enrollmentViewModel;
     private ClassViewModel classViewModel;
+    private NavController navigation;
 
     public EditEnrollmentFragment() {
         // Required empty public constructor
@@ -58,7 +60,6 @@ public class EditEnrollmentFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //classService = ApiUtils.getClassService();
         enrollmentViewModel = new ViewModelProvider(this).get(EnrollmentViewModel.class);
         classViewModel = new ViewModelProvider(this).get(ClassViewModel.class);
     }
@@ -69,66 +70,30 @@ public class EditEnrollmentFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_enrollment, container, false);
 
+        //initialize variables in view
         initView(view);
 
+        //get enrollment from previous fragment
         enrollment = (Enrollment) getArguments().getSerializable("item");
         traineeId.setText(enrollment.getTrainee().getUserName());
         traineeName.setText(enrollment.getTrainee().getName());
 
-        classViewModel.getListClassLiveData().observe(getViewLifecycleOwner(), new Observer<List<Class>>() {
-            @Override
-            public void onChanged(List<Class> classes) {
-                classAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, classes);
-                spnClass.setAdapter(classAdapter);
+        //get list class from view model
+        classViewModel.getListClassLiveData().observe(getViewLifecycleOwner(), classes -> {
+            classAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, classes);
+            spnClass.setAdapter(classAdapter);
 
-                int spnPosition = -1;
-                spnPosition = classAdapter.getPosition(enrollment.getMClass());
-                spnClass.setSelection(spnPosition);
-            }
+            int spnPosition = -1;
+            spnPosition = classAdapter.getPosition(enrollment.getMClass());
+            spnClass.setSelection(spnPosition);
         });
-//        Call<ClassResponse> callClass =  classService.loadListClass();
-//        callClass.enqueue(new Callback<ClassResponse>() {
-//            @Override
-//            public void onResponse(Call<ClassResponse> call, Response<ClassResponse> response) {
-//                    if (response.isSuccessful()&& response.body()!=null){
-//                        classList = response.body().getClasss();
-//                        classAdapter =
-//                                new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, classList);
-//                        spnClass.setAdapter(classAdapter);
-//
-//                        int spnPosition = -1;
-//                        spnPosition = classAdapter.getPosition(enrollment.getMClass());
-//                        spnClass.setSelection(spnPosition);
-//
-//                    }
-//            }
-//            @Override
-//            public void onFailure(Call<ClassResponse> call, Throwable t) {
-//                Log.e("Error",t.getLocalizedMessage());
-//                showToast("Error");
-//            }
-//        });
 
+        //set event for save button
         btnSave.setOnClickListener(v->{
             Integer oldClass = enrollment.getMClass().getClassID();
             Integer newClass = ((Class) spnClass.getSelectedItem()).getClassID();
 
             showDialog(enrollmentViewModel.update(oldClass, newClass, enrollment.getTrainee().getUserName()), "Update");
-//            Call<Class> enrollmentCall =  classService.updateTrainee(oldClass,newClass,enrollment.getTrainee().getUserName());
-//            enrollmentCall.enqueue(new Callback<Class>() {
-//                @Override
-//                public void onResponse(Call<Class> call, Response<Class> response) {
-//                    if (response.isSuccessful()&&response.body()!=null) {
-//                        showSuccessDialog("Edit Success!");
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Call<Class> call, Throwable t) {
-//                    Log.e("Error",t.getLocalizedMessage());
-//                    showFailDialog("Assignment already exist!");
-//                }
-//            });
         });
 
         btnBack.setOnClickListener(view1 -> {
@@ -154,7 +119,6 @@ public class EditEnrollmentFragment extends Fragment {
                 showFailDialog(action+" Fail!!");
             }
         });
-
     }
 
     public void showSuccessDialog(String message){
@@ -162,7 +126,7 @@ public class EditEnrollmentFragment extends Fragment {
         SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
             @Override
             public void changeFragment() {
-
+                goToView();
             }
         });
         newFragment.show(ft, "dialog success");
@@ -176,5 +140,10 @@ public class EditEnrollmentFragment extends Fragment {
 
     public void showToast(String string){
         Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
+    }
+
+    public void goToView(){
+        navigation = Navigation.findNavController(getView());
+        navigation.navigate(R.id.action_editEnrollmentFragment_to_nav_enrollment);
     }
 }

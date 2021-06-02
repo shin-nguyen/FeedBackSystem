@@ -26,7 +26,7 @@
         <item
             android:id="@+id/nav_module"
             android:title="MODULE"
-            android:icon="@drawable/ic_baseline_group_24"/>
+            android:icon="@drawable/ic_module"/>
         <item
             android:id="@+id/nav_enrollment"
             android:title="ENROLLMENT"
@@ -50,7 +50,7 @@
         <item
             android:id="@+id/nav_join"
             android:title="JOIN"
-            android:icon="@drawable/ic_baseline_group_24"/>
+            android:icon="@drawable/ic_pen"/>
         <item
             android:id="@+id/nav_log_out"
             android:icon="@drawable/ic_exit"

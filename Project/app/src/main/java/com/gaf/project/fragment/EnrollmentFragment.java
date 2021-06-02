@@ -58,8 +58,6 @@ public class EnrollmentFragment extends Fragment {
     private EnrollmentAdapter enrollmentAdapter;
     private Spinner spnClass  ;
     private ArrayAdapter<Class> enrollmentArrayAdapter;
-    private Button btnAddEnrollment;
-    private TextView title;
     private EnrollmentViewModel enrollmentViewModel;
 
     @Override
@@ -73,8 +71,6 @@ public class EnrollmentFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_enrollment, container, false);
-        btnAddEnrollment = view.findViewById(R.id.btn_add_enrollment);
-        title = view.findViewById(R.id.txt_title);
         spnClass = view.findViewById(R.id.spinner_class);
 
         enrollmentAdapter =  new EnrollmentAdapter(new EnrollmentAdapter.IClickItem() {
@@ -99,24 +95,18 @@ public class EnrollmentFragment extends Fragment {
         recyclerViewEnrollment.setLayoutManager(linearLayoutManager);
 
         //get list class from view model to set spinner
-        enrollmentViewModel.getListClassLiveData().observe(getViewLifecycleOwner(), new Observer<List<Class>>() {
-            @Override
-            public void onChanged(List<Class> classes) {
-                Class clazz = new Class("All", 0, new Date(), new Date());
-                List<Class> classList = classes;
+        enrollmentViewModel.getListClassLiveData().observe(getViewLifecycleOwner(), classes -> {
+            Class clazz = new Class(0, "All");
+            List<Class> classList = classes;
+            if (classList.contains(clazz) == false){
                 classList.add(0, clazz);
-                enrollmentArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, classList);
-                spnClass.setAdapter(enrollmentArrayAdapter);
             }
+            enrollmentArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, classList);
+            spnClass.setAdapter(enrollmentArrayAdapter);
         });
 
         //get list enrollment from view model to show list
-        enrollmentViewModel.getListEnrollmentLiveData().observe(getViewLifecycleOwner(), new Observer<List<Enrollment>>() {
-            @Override
-            public void onChanged(List<Enrollment> enrollments) {
-                enrollmentAdapter.setData(enrollments);
-            }
-        });
+        enrollmentViewModel.getListEnrollmentLiveData().observe(getViewLifecycleOwner(), enrollments -> enrollmentAdapter.setData(enrollments));
 
         recyclerViewEnrollment.setAdapter(enrollmentAdapter);
 
@@ -124,14 +114,9 @@ public class EnrollmentFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Class clazz = enrollmentArrayAdapter.getItem(position);
-                enrollmentAdapter.getFilter().filter(clazz.getClassName(), new Filter.FilterListener() {
-                    @Override
-                    public void onFilterComplete(int count) {
-
-                    }
+                enrollmentAdapter.getFilter().filter(clazz.getClassName(), count -> {
                 });
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -182,11 +167,7 @@ public class EnrollmentFragment extends Fragment {
 
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
-            @Override
-            public void changeFragment() {
-
-            }
+        SuccessDialog newFragment = new SuccessDialog(message, () -> {
         });
         newFragment.show(ft, "dialog success");
     }

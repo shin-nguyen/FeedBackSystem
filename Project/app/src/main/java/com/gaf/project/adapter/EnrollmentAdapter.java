@@ -1,5 +1,9 @@
 package com.gaf.project.adapter;
 
+import android.graphics.Typeface;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,10 +95,29 @@ public class EnrollmentAdapter extends RecyclerView.Adapter<EnrollmentAdapter.En
         if (enrollment == null)
             return;
 
-        holder.classId.setText(enrollment.getMClass().getClassID().toString());
-        holder.className.setText(enrollment.getMClass().getClassName());
-        holder.traineeId.setText(enrollment.getTrainee().getUserName());
-        holder.traineeName.setText(enrollment.getTrainee().getName());
+        String stringOfClassId = "Class ID: ";
+        SpannableStringBuilder classId = new SpannableStringBuilder(stringOfClassId);
+        classId.setSpan(new StyleSpan(Typeface.BOLD), 0, stringOfClassId.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        classId.append(enrollment.getMClass().getClassID().toString());
+        holder.classId.setText(classId);
+
+        String stringOfClassName = "Class Name: ";
+        SpannableStringBuilder className = new SpannableStringBuilder(stringOfClassName);
+        className.setSpan(new StyleSpan(Typeface.BOLD), 0, stringOfClassName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        className.append(enrollment.getClassName());
+        holder.className.setText(className);
+
+        String stringOfTraineeId = "Trainee ID: ";
+        SpannableStringBuilder traineeId = new SpannableStringBuilder(stringOfTraineeId);
+        traineeId.setSpan(new StyleSpan(Typeface.BOLD), 0, stringOfClassId.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        traineeId.append(enrollment.getTrainee().getUserName());
+        holder.traineeId.setText(traineeId);
+
+        String stringOfTraineeName = "Trainee Name: ";
+        SpannableStringBuilder traineeName = new SpannableStringBuilder(stringOfTraineeName);
+        traineeName.setSpan(new StyleSpan(Typeface.BOLD), 0, stringOfTraineeName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        traineeName.append(enrollment.getTrainee().getName());
+        holder.traineeName.setText(traineeName);
 
         holder.detailButton.setOnClickListener(v -> {
             iClickItem.detail(enrollment);

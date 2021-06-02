@@ -69,27 +69,28 @@ public class JoinFragment extends DialogFragment {
     }
 
     private void joinInClass(String code) {
-//        Toast.makeText(getContext(), code, Toast.LENGTH_LONG).show();
-        //
         String userName = SessionManager.getInstance().getUserName();
         Call<AddTraineeAssignmentResponse> addTraineeAssignmentCall = traineeAssignmentService.create(userName, code);
         addTraineeAssignmentCall.enqueue(new Callback<AddTraineeAssignmentResponse>() {
             @Override
             public void onResponse(Call<AddTraineeAssignmentResponse> call, Response<AddTraineeAssignmentResponse> response) {
                 if (response.isSuccessful()&&response.body().getAdded() == null){
-                    showFailDialog("Some thing went wrong");
+                    showFailDialog("Error");
                 }
+                //join success
                 else if (response.isSuccessful()&&response.body().getAdded() == 2){
                     showSuccessDialog("Join success!");
                 }
+                //invalid registration code
                 else if (response.isSuccessful()&&response.body().getAdded() == 1){
                     showFailDialog("Invalid Registration Code!!!");
                 }
+                //trainee have already join this class
                 else if (response.isSuccessful()&&response.body().getAdded() == 0){
                     showFailDialog("You already join this module, please try another!!!");
                 }
                 else if (response.body() != null){
-                    showFailDialog("Error");
+                    showFailDialog("Some thing went wrong");
                 }
             }
 
@@ -102,11 +103,7 @@ public class JoinFragment extends DialogFragment {
 
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
-            @Override
-            public void changeFragment() {
-
-            }
+        SuccessDialog newFragment = new SuccessDialog(message, () -> {
         });
         newFragment.show(ft, "dialog success");
     }

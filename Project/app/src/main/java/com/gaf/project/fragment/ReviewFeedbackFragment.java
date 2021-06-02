@@ -64,6 +64,7 @@ public class ReviewFeedbackFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.review_feedback, container, false);
 
+        //set event for back button
         Button backButton = view.findViewById(R.id.btn_back);
         backButton.setOnClickListener(v -> getActivity().onBackPressed());
 
@@ -74,19 +75,22 @@ public class ReviewFeedbackFragment extends Fragment {
         TextView adminId = view.findViewById(R.id.txt_admin_id);
         TextView item = view.findViewById(R.id.txt_topic_question);
 
-
+        //get mission, feedback from previous fragment
         mission = getArguments().getString("mission");
         feedback = (Feedback) getArguments().getSerializable("feedback");
         feedbackTitle.setText(feedback.getTitle());
 
+        //get user name
         String userName = SessionManager.getInstance().getUserName();
         adminId.setText(userName);
 
+        //get topic from feedback.question
         topicSet = new HashSet<>();
         for (Question question:feedback.getQuestions()) {
             topicSet.add(question.getTopic());
         }
 
+        //set text to get question and topic
         SpannableStringBuilder sb = new SpannableStringBuilder("");
         //StringBuilder sb = new StringBuilder();
 
@@ -147,6 +151,7 @@ public class ReviewFeedbackFragment extends Fragment {
         navigation.navigate(R.id.action_review_feedback_fragment_to_add_feedback_fragment, bundle);
     }
 
+    //check to choose dialog
     public void showDialog(MutableLiveData<String> actionStatus, String action){
         actionStatus.observe(getViewLifecycleOwner(),s -> {
             if(s.equals(SystemConstant.SUCCESS)){
@@ -160,12 +165,7 @@ public class ReviewFeedbackFragment extends Fragment {
 
     public void showSuccessDialog(String message){
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        SuccessDialog newFragment = new SuccessDialog(message, new SuccessDialog.IClick() {
-            @Override
-            public void changeFragment() {
-                goToView();
-            }
-        });
+        SuccessDialog newFragment = new SuccessDialog(message, () -> goToView());
         newFragment.show(ft, "dialog success");
     }
 
@@ -173,10 +173,6 @@ public class ReviewFeedbackFragment extends Fragment {
         FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         FailDialog newFragment = new FailDialog(message);
         newFragment.show(ft, "dialog fail");
-    }
-
-    public void showToast(String string){
-        Toast.makeText(getContext(),string,Toast.LENGTH_LONG).show();
     }
 
     public void goToView(){

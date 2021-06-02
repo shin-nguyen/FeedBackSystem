@@ -45,7 +45,7 @@
                 style="@style/TextViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Course Name: "
+                android:text="Module Name: "
                 android:id="@+id/txt_course_name"/>
 
             <TextView
